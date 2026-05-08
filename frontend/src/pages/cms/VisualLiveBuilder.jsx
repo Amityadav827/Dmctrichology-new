@@ -98,21 +98,40 @@ export default function VisualLiveBuilder() {
 
         // Fetch current data first to avoid overwriting other fields
         const { data: currentData } = await axios.get(endpoint);
-        const existingData = currentData.data || {};
+        const rawExisting = currentData.data || {};
+
+        // CRITICAL: Deep-clone via JSON to strip Mongoose document wrappers.
+        // Mongoose subdocuments (e.g. services[0]) cannot be mutated directly
+        // via bracket notation — they need to be plain JS objects first.
+        const existingData = JSON.parse(JSON.stringify(rawExisting));
         
         // Merge updates
         const updatedPayload = { ...existingData };
         
         Object.keys(updates).forEach(path => {
-          // Simple nested path handling (e.g. "slides.0.title")
+          // Nested path handling (e.g. "services.0.title", "slides.0.title")
           if (path.includes('.')) {
             const parts = path.split('.');
             let current = updatedPayload;
             for (let i = 0; i < parts.length - 1; i++) {
-              if (!current[parts[i]]) current[parts[i]] = isNaN(parts[i+1]) ? {} : [];
-              current = current[parts[i]];
+              const key = parts[i];
+              const nextKey = parts[i + 1];
+              // If next key is a number index, ensure current slot is an array
+              if (!current[key]) {
+                current[key] = isNaN(nextKey) ? {} : [];
+              }
+              // Ensure the indexed slot exists as a plain object
+              if (!isNaN(nextKey) && Array.isArray(current[key])) {
+                const idx = parseInt(nextKey, 10);
+                if (current[key][idx] === undefined || current[key][idx] === null) {
+                  current[key][idx] = {};
+                }
+              }
+              current = current[key];
             }
-            current[parts[parts.length - 1]] = updates[path];
+            if (current !== undefined && current !== null) {
+              current[parts[parts.length - 1]] = updates[path];
+            }
           } else {
             updatedPayload[path] = updates[path];
           }

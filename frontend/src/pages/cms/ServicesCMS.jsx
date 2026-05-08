@@ -23,7 +23,11 @@ export default function ServicesCMS() {
     try {
       const { data: res } = await axios.get("/services");
       if (res.success && res.data) {
-        setData(res.data);
+        // Normalize: always ensure services is an array
+        setData({
+          ...res.data,
+          services: Array.isArray(res.data.services) ? res.data.services : []
+        });
       }
     } catch (error) {
       toast.error("Failed to load Services settings");
@@ -38,40 +42,45 @@ export default function ServicesCMS() {
   };
 
   const handleServiceChange = (index, field, value) => {
-    const updated = [...data.services];
+    const current = Array.isArray(data.services) ? data.services : [];
+    const updated = [...current];
     updated[index] = { ...updated[index], [field]: value };
     setData({ ...data, services: updated });
   };
 
   const addService = () => {
+    const current = Array.isArray(data.services) ? data.services : [];
     setData({
       ...data,
-      services: [
-        ...data.services,
-        { title: "", image: "", link: "#" },
-      ],
+      services: [...current, { title: "", image: "", link: "#" }],
     });
   };
 
   const removeService = (index) => {
-    const updated = data.services.filter((_, i) => i !== index);
+    const current = Array.isArray(data.services) ? data.services : [];
+    const updated = current.filter((_, i) => i !== index);
     setData({ ...data, services: updated });
   };
 
   const handleSave = async () => {
     setSaving(true);
     try {
+      const safeServices = Array.isArray(data.services) ? data.services : [];
       const payload = {
         subtitle: data.subtitle,
         title: data.title,
         viewAllText: data.viewAllText,
         viewAllLink: data.viewAllLink,
-        services: data.services,
+        services: safeServices,
       };
       const { data: res } = await axios.put("/services", payload);
       if (res.success) {
         toast.success("Services section saved successfully");
-        setData(res.data);
+        // Normalize on response too
+        setData({
+          ...res.data,
+          services: Array.isArray(res.data.services) ? res.data.services : []
+        });
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update Services");
@@ -199,7 +208,7 @@ export default function ServicesCMS() {
           </div>
 
           <div className="space-y-6">
-            {data.services.map((service, index) => (
+            {(Array.isArray(data.services) ? data.services : []).map((service, index) => (
               <div key={index} className="border p-6 rounded-xl bg-gray-50 relative group">
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-sm font-bold text-gray-600">
@@ -272,7 +281,7 @@ export default function ServicesCMS() {
               </div>
             ))}
 
-            {data.services.length === 0 && (
+            {(!Array.isArray(data.services) || data.services.length === 0) && (
               <div className="text-center py-12 bg-white rounded-xl border-2 border-dashed border-gray-200">
                 <ImageIcon className="h-10 w-10 text-gray-300 mx-auto mb-3" />
                 <p className="text-sm text-gray-400 font-medium">

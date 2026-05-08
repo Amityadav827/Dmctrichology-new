@@ -35,12 +35,14 @@ export default function ServiceSlider() {
   const subtitle = data ? (data.subtitle || '') : 'SERVICES';
   const viewAllText = data ? (data.viewAllText || 'View All') : 'View All';
   const viewAllLink = data ? (data.viewAllLink || '#') : '#';
-  const services = (data && data.services && data.services.length > 0)
-    ? data.services
+  // Always ensure services is an array — defend against undefined/null from API
+  const safeServices = Array.isArray(data?.services) ? data.services : null;
+  const services = (safeServices && safeServices.length > 0)
+    ? safeServices
     : defaultServices;
 
-  // Duplicate for infinite loop effect
-  const duplicatedServices = [...services, ...services];
+  // Duplicate for infinite loop effect — only when enough items exist
+  const duplicatedServices = services.length >= 2 ? [...services, ...services] : [...services];
 
   return (
     <EditableSection sectionId="services" label="Services Slider">
