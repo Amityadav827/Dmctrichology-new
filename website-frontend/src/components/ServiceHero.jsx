@@ -6,11 +6,13 @@ const ServiceHero = ({ data }) => {
   const heroData = data || {};
   const pageTitle = heroData.pageTitle || 'Service';
   const breadcrumbText = heroData.breadcrumbText || 'Home / Service';
+  const bannerImage = heroData.bannerImage || 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png';
 
   return (
     <section 
       data-section-id="service-hero"
       className="service-hero-premium"
+      style={{ backgroundImage: `url(${bannerImage})` }}
     >
       <div className="max-w-[1400px] mx-auto">
         <h1 className="service-hero-title">

@@ -1,11 +1,20 @@
 /* ===================== SERVICE PAGE PREMIUM STYLES ===================== */
 .service-hero-premium {
-  background-color: #E8EBF3; /* Light blue/gray from reference */
-  padding: 100px 5% 60px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 140px 5% 80px;
   text-align: center;
   position: relative;
   z-index: 10;
-  margin-top: 100px; /* Offset for floating header */
+}
+
+.service-hero-premium::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.6));
+  z-index: -1;
 }
 
 .service-hero-title {
@@ -81,6 +90,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .filter-item:hover .filter-radio {
@@ -89,14 +99,14 @@
 
 .filter-item.active .filter-radio {
   border-color: #000;
-  background: #000;
+  background: transparent;
 }
 
 .filter-item.active .filter-radio::after {
   content: '';
-  width: 6px;
-  height: 6px;
-  background: #fff;
+  width: 10px;
+  height: 10px;
+  background: #000;
   border-radius: 50%;
 }
 
