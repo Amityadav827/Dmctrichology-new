@@ -130,6 +130,16 @@ export default function VisualLiveBuilder() {
     };
   }, [sections]);
 
+  // Sync state BACK to iframe whenever siteConfig changes
+  useEffect(() => {
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      iframeRef.current.contentWindow.postMessage({
+        type: 'UPDATE_CONFIG',
+        payload: siteConfig
+      }, '*');
+    }
+  }, [siteConfig]);
+
   const persistChanges = async () => {
     const sectionsToUpdate = Object.keys(pendingChanges.current);
     if (sectionsToUpdate.length === 0) return;
@@ -391,16 +401,38 @@ export default function VisualLiveBuilder() {
                             'Press & Media Section': '/cms/press-media',
                             'Footer Section': '/cms/footer',
                             'Service Banner': '/cms/service-hero',
-                            'Service Grid': '/cms/service-listing',
+                            'Services Grid': '/cms/service-listing',
                             'Service Categories': '/cms/service-categories'
                           };
                           if(routeMap[activeSection.label]) navigate(routeMap[activeSection.label]);
                         }}
-                        className="w-full py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
+                        className="w-full py-3 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-200"
                       >
-                        <SettingsIcon size={14} /> Open Full Form Editor
+                        <Plus size={14} /> {activeSection.label === 'Services Grid' ? 'Add / Manage Services' : 'Open Full Form Editor'}
                       </button>
                     </div>
+
+                    {activeSection.label === 'Services Grid' && (
+                        <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                             <h5 className="text-[10px] font-black text-slate-400 uppercase mb-3">Quick Actions</h5>
+                             <div className="space-y-2">
+                                <button 
+                                    onClick={() => navigate('/cms/service-listing')}
+                                    className="w-full py-2 bg-white border border-slate-200 rounded-lg text-[11px] font-bold text-slate-700 hover:border-blue-300 transition-all flex items-center justify-between px-3"
+                                >
+                                    <span>Manage Service Cards</span>
+                                    <ChevronLeft size={14} className="rotate-180 text-slate-300" />
+                                </button>
+                                <button 
+                                    onClick={() => navigate('/cms/service-categories')}
+                                    className="w-full py-2 bg-white border border-slate-200 rounded-lg text-[11px] font-bold text-slate-700 hover:border-blue-300 transition-all flex items-center justify-between px-3"
+                                >
+                                    <span>Manage Categories</span>
+                                    <ChevronLeft size={14} className="rotate-180 text-slate-300" />
+                                </button>
+                             </div>
+                        </div>
+                    )}
 
                     <div className="space-y-4">
                        <div className="p-4 border border-blue-100 bg-blue-50/30 rounded-2xl">
