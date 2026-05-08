@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Save, Globe, Plus, Trash2, MoveUp, MoveDown, Layout, Image as ImageIcon, Settings } from "lucide-react";
-import api from "../../../api/client";
+import api from "../../api/client";
 import { toast } from "react-hot-toast";
 
 const GradeSliderCMS = () => {
