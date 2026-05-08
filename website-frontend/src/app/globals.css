@@ -455,27 +455,28 @@ a {
 /* ===================== HEADER ===================== */
 .header {
   background-color: transparent;
-  padding: 20px 5%;
+  padding: 30px 4%; /* Increased padding for more breathing room */
   position: absolute;
-  top: 40px;
+  top: 30px; /* Floating from the top */
   left: 0;
   right: 0;
   z-index: 100;
   display: flex;
   justify-content: center;
-  box-shadow: none;
+  transition: all 0.3s ease;
 }
 
 .header-container {
   background-color: #ffffff;
-  padding: 10px;
+  padding: 12px 30px; /* Spacious horizontal padding */
   border-radius: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1400px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  max-width: 1300px; /* Balanced max-width */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); /* Premium subtle shadow */
+  border: 1px solid rgba(0,0,0,0.03); /* Soft border for definition */
 }
 
 .logo img {

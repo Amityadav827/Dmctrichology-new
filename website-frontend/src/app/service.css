@@ -3,38 +3,66 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 140px 5% 80px;
+  padding: 260px 5% 160px; /* Maximum luxury spaciousness */
   text-align: center;
   position: relative;
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 550px;
 }
 
 .service-hero-premium::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.6));
+  background: linear-gradient(to bottom, #F5F7FA, #E8EBF3); /* Light premium medical gray gradient */
   z-index: -1;
+  opacity: 1;
 }
 
 .service-hero-title {
   font-family: 'Marcellus', serif !important;
-  font-size: 56px !important;
-  color: #000000 !important;
-  margin-bottom: 12px !important;
+  font-size: 84px !important; /* Bold luxury scale */
+  color: #111111 !important;
+  margin: 0 0 24px !important;
   text-transform: capitalize !important;
   font-weight: 400 !important;
+  letter-spacing: -1px !important; /* Elegant tighter spacing for large text */
+  line-height: 1.1 !important;
 }
 
 .service-hero-breadcrumb {
   font-family: 'Marcellus', serif !important;
-  font-size: 14px !important;
-  color: #333333 !important;
-  opacity: 0.8 !important;
+  font-size: 18px !important;
+  color: #555555 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 8px !important;
+  gap: 12px !important;
+  font-weight: 400 !important;
+  opacity: 0.9 !important;
+}
+
+.service-hero-breadcrumb a {
+  color: #888888 !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.service-hero-breadcrumb a:hover {
+  color: #111111 !important;
+}
+
+.service-hero-breadcrumb .sep {
+  color: #cccccc !important;
+  font-size: 14px !important;
+}
+
+.service-hero-breadcrumb .current {
+  color: #333333 !important;
 }
 
 .service-page-container {
@@ -248,7 +276,12 @@
   }
   
   .service-hero-premium {
-    padding-top: 140px;
+    padding: 180px 5% 100px;
+    min-height: 400px;
+  }
+  
+  .service-hero-title {
+    font-size: 56px !important;
   }
 }
 
@@ -261,5 +294,18 @@
   .service-card-image-box {
     width: 100%;
     height: 180px;
+  }
+
+  .service-hero-premium {
+    padding: 160px 5% 80px;
+    min-height: 350px;
+  }
+  
+  .service-hero-title {
+    font-size: 40px !important;
+  }
+
+  .service-hero-breadcrumb {
+    font-size: 14px !important;
   }
 }
