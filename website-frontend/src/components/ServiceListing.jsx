@@ -1,18 +1,14 @@
 "use client";
+import React, { useState } from 'react';
 import { Star, Clock, ChevronRight } from 'lucide-react';
 import { EditableText } from '../context/BuilderContext';
 
 const ServiceListing = ({ services = [], categories = [] }) => {
   const [activeCategory, setActiveCategory] = useState('all');
-  const [filteredServices, setFilteredServices] = useState(services);
 
-  useEffect(() => {
-    if (activeCategory === 'all') {
-      setFilteredServices(services);
-    } else {
-      setFilteredServices(services.filter(s => s.category === activeCategory));
-    }
-  }, [activeCategory, services]);
+  const filteredServices = activeCategory === 'all' 
+    ? services 
+    : services.filter(s => s.category === activeCategory);
 
   return (
     <section data-section-id="service-listing" className="py-20 bg-white">

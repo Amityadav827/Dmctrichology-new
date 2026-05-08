@@ -26,4 +26,6 @@ const EditableText = React.forwardRef(({ sectionId, fieldPath, children, tag: Ta
   );
 });
 
+EditableText.displayName = 'EditableText';
+
 export default EditableText;

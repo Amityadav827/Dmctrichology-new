@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
-import { Plus, Trash2, Edit2, Save, X, Loader2, Star, Clock, Image as ImageIcon } from "lucide-react";
+import { Plus, Trash2, Edit2, Save, X, Loader2, Star, Clock } from "lucide-react";
 
 export default function ServiceListingCMS() {
   const [services, setServices] = useState([]);

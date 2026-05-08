@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
-import { Save, Loader2, Image as ImageIcon } from "lucide-react";
+import { Save, Loader2 } from "lucide-react";
 
 export default function ServiceHeroCMS() {
   const [hero, setHero] = useState({
