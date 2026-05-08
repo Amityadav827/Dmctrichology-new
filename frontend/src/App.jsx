@@ -32,6 +32,7 @@ import HeroCMS from "./pages/cms/HeroCMS";
 import PageCompositionEditor from "./pages/cms/PageCompositionEditor";
 import AboutUsCMS from "./pages/cms/AboutUsCMS";
 import ServicesCMS from "./pages/cms/ServicesCMS";
+import MarqueeFeaturesCMS from "./pages/cms/MarqueeFeaturesCMS";
 import VisualLiveBuilder from "./pages/cms/VisualLiveBuilder";
 
 import RedirectList from "./pages/RedirectList";
@@ -67,6 +68,14 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <ServicesCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/marquee-features"
+          element={
+            <ProtectedRoute permission="cms">
+              <MarqueeFeaturesCMS />
             </ProtectedRoute>
           }
         />

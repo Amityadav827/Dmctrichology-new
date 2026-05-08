@@ -38,6 +38,7 @@ const topbarRoutes = require("./routes/topbarRoutes");
 const headerRoutes = require("./routes/headerRoutes");
 const pageCompositionRoutes = require("./routes/pageCompositionRoutes");
 const aboutUsRoutes = require("./routes/aboutUsRoutes");
+const marqueeRoutes = require("./routes/marqueeRoutes");
 const sectionRoutes = require("./routes/sectionRoutes");
 
 // Database Connection
@@ -143,6 +144,7 @@ app.use("/api/topbar", topbarRoutes);
 app.use("/api/header", headerRoutes);
 app.use("/api/page-compositions", pageCompositionRoutes);
 app.use("/api/about-us", aboutUsRoutes);
+app.use("/api/marquee-features", marqueeRoutes);
 app.use("/api/sections", sectionRoutes);
 
 // SEO

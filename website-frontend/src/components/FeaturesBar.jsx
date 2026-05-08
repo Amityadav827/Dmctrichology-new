@@ -1,44 +1,94 @@
-import React from 'react';
+"use client";
 
-const featureImages = [
-  "https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/dujziywmelzwixisgvyb.png",
-  "https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/rhqehubr894icsuzfcew.png",
-  "https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/gqnszoyafmildmq6l9mm.png",
-  "https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/eqmyy5zthf9zi92xyvxm.png",
-  "https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/oihmmdhj7lbltqp9qgrj.png",
-  "https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/pdc64p00mfiv0080ippb.png"
+import React, { useState, useEffect } from 'react';
+import { fetchMarqueeFeatures } from '../services/api';
+import EditableSection from './Editable/EditableSection';
+import EditableText from './Editable/EditableText';
+
+const defaultItems = [
+  { title: 'At-Home Sessions', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/dujziywmelzwixisgvyb.png', link: '', enabled: true },
+  { title: 'Dermatologist Monitored', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/rhqehubr894icsuzfcew.png', link: '', enabled: true },
+  { title: 'Shark Tank Approved', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/gqnszoyafmildmq6l9mm.png', link: '', enabled: true },
+  { title: 'US FDA Approved', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/eqmyy5zthf9zi92xyvxm.png', link: '', enabled: true },
+  { title: 'Quick & Lasting Results', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/oihmmdhj7lbltqp9qgrj.png', link: '', enabled: true },
+  { title: '100% Safe', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/pdc64p00mfiv0080ippb.png', link: '', enabled: true }
 ];
 
 export default function FeaturesBar() {
-  // Duplicate images for infinite loop
-  const displayImages = [...featureImages, ...featureImages];
+  const [data, setData] = useState(null);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    fetchMarqueeFeatures().then(res => {
+      if (res && res.success && res.data) {
+        setData(res.data);
+      }
+    });
+  }, []);
+
+  // Only fallback to defaults when data === null (not loaded yet)
+  const safeItems = Array.isArray(data?.items) ? data.items : null;
+  const activeItems = (safeItems && safeItems.length > 0)
+    ? safeItems.filter(item => item.enabled !== false)
+    : defaultItems;
+
+  const speed = data?.marqueeSpeed || 30;
+  const pauseOnHover = data?.pauseOnHover !== false;
+  const bgColor = data ? (data.backgroundColor || 'transparent') : 'transparent';
+  const paddingTop = data ? (data.paddingTop || '60px') : '60px';
+  const paddingBottom = data ? (data.paddingBottom || '60px') : '60px';
+
+  // Duplicate for seamless infinite loop — need at least 2 sets
+  const displayItems = activeItems.length > 0
+    ? [...activeItems, ...activeItems]
+    : [];
+
+  const marqueeStyle = {
+    display: 'inline-flex',
+    gap: '30px',
+    animation: `marquee ${speed}s linear infinite`,
+    animationPlayState: paused ? 'paused' : 'running',
+  };
 
   return (
-    <section className="features-bar" style={{ 
-      padding: '60px 0', 
-      backgroundColor: 'transparent', 
-      overflow: 'hidden' 
-    }}>
-      <div className="marquee-container" style={{ width: '100%', overflow: 'hidden' }}>
-        <div className="marquee-content">
-          {displayImages.map((src, index) => (
-            <div key={index} style={{ 
-              flex: '0 0 auto',
-              width: '200px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginRight: '40px'
-            }}>
-              <img 
-                src={src} 
-                alt={`Certification ${index + 1}`} 
-                style={{ width: '100%', height: 'auto', objectFit: 'contain' }} 
-              />
-            </div>
-          ))}
+    <EditableSection sectionId="marquee-features" label="Marquee Features">
+      <section
+        className="features-bar"
+        style={{
+          padding: `${paddingTop} 0 ${paddingBottom} 0`,
+          backgroundColor: bgColor,
+          overflow: 'hidden'
+        }}
+      >
+        <div
+          className="marquee-container"
+          style={{ width: '100%', overflow: 'hidden' }}
+          onMouseEnter={() => pauseOnHover && setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
+          <div className="marquee-content" style={marqueeStyle}>
+            {displayItems.map((item, index) => (
+              <div
+                key={index}
+                style={{
+                  flex: '0 0 auto',
+                  width: '200px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: '40px'
+                }}
+              >
+                <img
+                  src={item.icon}
+                  alt={item.title || `Feature ${(index % activeItems.length) + 1}`}
+                  style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </EditableSection>
   );
 }
