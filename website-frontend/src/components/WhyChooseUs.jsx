@@ -22,6 +22,9 @@ const WhyChooseUs = () => {
     });
   }, []);
 
+  // Section level enable/disable
+  if (data && data.enabled === false) return null;
+
   // Fallbacks only when data === null (not yet loaded from DB)
   const title = data ? (data.title || '') : 'Why DMC Trichology Is The Best Hair Transplant Clinic In Delhi';
   const subtitle = data ? (data.subtitle || '') : 'Best Hair Graft Clinic';
@@ -31,68 +34,82 @@ const WhyChooseUs = () => {
 
   // Always safe — never crash on .map
   const safeFeatures = Array.isArray(data?.features) ? data.features : null;
-  const features = (safeFeatures && safeFeatures.length > 0)
+  const activeFeatures = (safeFeatures && safeFeatures.length > 0)
     ? safeFeatures.filter(f => f.enabled !== false)
     : defaultFeatures;
 
   const iconUrl = "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png";
 
+  // Find original index in data.features for persistence mapping
+  const getOriginalIndex = (feat) => {
+    if (!data?.features) return defaultFeatures.indexOf(feat);
+    // Find by identity or title/desc match to be safe
+    const idx = data.features.findIndex(f => f === feat || (f.title === feat.title && f.desc === feat.desc));
+    return idx !== -1 ? idx : data.features.indexOf(feat);
+  };
+
   // Render a single feature card — design identical to original
-  const renderCard = (feat, index, realIndex) => (
-    <div className="card-item" style={{
-      backgroundColor: '#000',
-      borderRadius: '24px',
-      padding: '20px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '20px',
-      width: '400px',
-      color: '#fff',
-      textAlign: 'left',
-      zIndex: 2,
-      boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
-    }}>
-      <div style={{
-        backgroundColor: '#FEF0D7',
-        borderRadius: '16px',
-        padding: '12px',
-        minWidth: '85px',
-        height: '85px',
+  const renderCard = (feat, sideIndex) => {
+    const realIndex = getOriginalIndex(feat);
+    return (
+      <div className="card-item" style={{
+        backgroundColor: '#000',
+        borderRadius: '24px',
+        padding: '20px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        gap: '20px',
+        width: '400px',
+        color: '#fff',
+        textAlign: 'left',
+        zIndex: 2,
+        boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
       }}>
-        <img src={feat.icon} alt={feat.title} style={{ width: '50px', height: '50px', objectFit: 'contain' }} />
+        <div style={{
+          backgroundColor: '#FEF0D7',
+          borderRadius: '16px',
+          padding: '12px',
+          minWidth: '85px',
+          height: '85px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <img src={feat.icon} alt={feat.title} style={{ width: '50px', height: '50px', objectFit: 'contain' }} />
+        </div>
+        <div>
+          <h4 style={{ fontFamily: "'Marcellus', serif", fontSize: '24px', marginBottom: '8px', fontWeight: 400, color: '#FEF0D7' }}>
+            <EditableText sectionId="why-choose-us" fieldPath={`features.${realIndex}.title`} tag="span">
+              {feat.title}
+            </EditableText>
+          </h4>
+          <p style={{ fontFamily: "'Marcellus', serif", fontSize: '13px', lineHeight: '20px', color: '#FFFFFF' }}>
+            <EditableText sectionId="why-choose-us" fieldPath={`features.${realIndex}.desc`} tag="span">
+              {feat.desc}
+            </EditableText>
+          </p>
+        </div>
       </div>
-      <div>
-        <h4 style={{ fontFamily: "'Marcellus', serif", fontSize: '24px', marginBottom: '8px', fontWeight: 400, color: '#FEF0D7' }}>
-          <EditableText sectionId="why-choose-us" fieldPath={`features.${realIndex}.title`} tag="span">
-            {feat.title}
-          </EditableText>
-        </h4>
-        <p style={{ fontFamily: "'Marcellus', serif", fontSize: '13px', lineHeight: '20px', color: '#FFFFFF' }}>
-          <EditableText sectionId="why-choose-us" fieldPath={`features.${realIndex}.desc`} tag="span">
-            {feat.desc}
-          </EditableText>
-        </p>
-      </div>
-    </div>
-  );
+    );
+  };
 
   // Split features by side (left/right) — max 2 each for the positioned layout
-  const leftCards = features.filter(f => f.side !== 'right').slice(0, 2);
-  const rightCards = features.filter(f => f.side === 'right').slice(0, 2);
-
-  // Map back to original indices for correct fieldPath
-  const getOriginalIndex = (feat) => features.indexOf(feat);
+  const leftCards = activeFeatures.filter(f => f.side !== 'right').slice(0, 2);
+  const rightCards = activeFeatures.filter(f => f.side === 'right').slice(0, 2);
 
   // Positions: left column top/bottom, right column top/bottom
   const leftPositions = [{ top: '150px' }, { top: '450px' }];
   const rightPositions = [{ top: '40px' }, { top: '340px' }];
 
+  const sectionPadding = {
+    paddingTop: data?.paddingTop || '0px',
+    paddingBottom: data?.paddingBottom || '0px',
+    backgroundColor: data?.backgroundColor || '#fff'
+  };
+
   return (
     <EditableSection sectionId="why-choose-us" label="Why Choose Us">
-      <section className="why-choose-us" style={{ padding: '0', backgroundColor: '#fff', textAlign: 'center', overflow: 'hidden' }}>
+      <section className="why-choose-us" style={{ ...sectionPadding, textAlign: 'center', overflow: 'hidden', position: 'relative' }}>
         <div className="section-tag" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '24px' }}>
           <img src={iconUrl} alt="icon" style={{ width: '50px', height: 'auto' }} />
           <EditableText sectionId="why-choose-us" fieldPath="subtitle" tag="span" className="section-subtitle">
@@ -135,7 +152,7 @@ const WhyChooseUs = () => {
               className={`pos-card-${i + 1}`}
               style={{ position: 'absolute', left: 0, ...(leftPositions[i] || { top: `${150 + i * 300}px` }) }}
             >
-              {renderCard(feat, i, getOriginalIndex(feat))}
+              {renderCard(feat, i)}
             </div>
           ))}
 
@@ -146,19 +163,19 @@ const WhyChooseUs = () => {
               className={`pos-card-${i + 3}`}
               style={{ position: 'absolute', right: 0, ...(rightPositions[i] || { top: `${40 + i * 300}px` }) }}
             >
-              {renderCard(feat, i, getOriginalIndex(feat))}
+              {renderCard(feat, i)}
             </div>
           ))}
         </div>
       </section>
 
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @media (max-width: 1200px) {
           .why-choose-us div[style*="height: 650px"] { height: auto !important; flex-direction: column !important; padding-bottom: 40px; }
           .pos-card-1, .pos-card-2, .pos-card-3, .pos-card-4 { position: relative !important; top: auto !important; left: auto !important; right: auto !important; margin-bottom: 20px; }
           .card-item { width: 90% !important; max-width: 400px; margin: 0 auto; }
         }
-      `}</style>
+      `}} />
     </EditableSection>
   );
 };

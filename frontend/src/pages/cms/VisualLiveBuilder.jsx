@@ -256,15 +256,30 @@ export default function VisualLiveBuilder() {
                 <div>
                   <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Composition</h3>
                   <div className="space-y-2">
-                    {['Top Bar', 'Header', 'Hero Section', 'About Us', 'Services'].map((name, i) => (
-                      <div key={i} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl group hover:border-blue-200 hover:bg-white transition-all cursor-pointer">
+                    {[
+                      { id: 'topbar', label: 'Top Bar' },
+                      { id: 'header', label: 'Header' },
+                      { id: 'hero', label: 'Hero Slider' },
+                      { id: 'about-us', label: 'About Us' },
+                      { id: 'services', label: 'Services Slider' },
+                      { id: 'marquee-features', label: 'Marquee Features' },
+                      { id: 'why-choose-us', label: 'Why Choose Us' }
+                    ].map((section, i) => (
+                      <div 
+                        key={i} 
+                        onClick={() => {
+                          setActiveSection({ sectionId: section.id, label: section.label });
+                          setActiveTab("settings");
+                        }}
+                        className={`flex items-center justify-between p-3 border rounded-xl group transition-all cursor-pointer ${activeSection?.sectionId === section.id ? 'border-blue-600 bg-blue-50' : 'bg-slate-50 border-slate-100 hover:border-blue-200 hover:bg-white'}`}
+                      >
                         <div className="flex items-center gap-3">
-                          <div className="text-slate-300 group-hover:text-blue-400 transition-colors">
+                          <div className={activeSection?.sectionId === section.id ? 'text-blue-600' : 'text-slate-300 group-hover:text-blue-400 transition-colors'}>
                             <Layers size={14} />
                           </div>
-                          <span className="text-xs font-bold text-slate-700">{name}</span>
+                          <span className={`text-xs font-bold ${activeSection?.sectionId === section.id ? 'text-blue-700' : 'text-slate-700'}`}>{section.label}</span>
                         </div>
-                        <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1">
+                        <div className={`flex items-center gap-1 ${activeSection?.sectionId === section.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                           <button className="p-1 hover:text-blue-600"><RefreshCw size={12} /></button>
                           <button className="p-1 hover:text-blue-600"><SettingsIcon size={12} /></button>
                         </div>
