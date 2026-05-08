@@ -164,6 +164,21 @@ function Sidebar() {
             <NavLink to="/services/faqs" className={getNavClass}>
               <HelpCircle size={16} /> Service FAQ
             </NavLink>
+            
+            {/* New Service Page CMS Links */}
+            <SectionLabel>Service Page CMS</SectionLabel>
+            <NavLink to="/cms/service-hero" className={getNavClass}>
+              <Home size={16} /> Hero Banner
+            </NavLink>
+            <NavLink to="/cms/service-listing" className={getNavClass}>
+              <List size={16} /> Service Grid
+            </NavLink>
+            <NavLink to="/cms/service-categories" className={getNavClass}>
+              <Layers size={16} /> Categories
+            </NavLink>
+            <NavLink to="/cms/visual-builder/service" className={getNavClass}>
+              <Eye size={16} /> Visual Builder
+            </NavLink>
           </>
         )}
 

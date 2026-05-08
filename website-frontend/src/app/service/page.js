@@ -1,6 +1,7 @@
 import ServiceHero from '../../components/ServiceHero';
 import ServiceListing from '../../components/ServiceListing';
 import { fetchServicePageSettings, fetchServiceListingCards, fetchServiceListingCategories } from '../../services/serviceApi';
+import '../service.css';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
