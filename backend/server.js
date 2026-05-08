@@ -46,6 +46,9 @@ const whyChooseDMCRoutes = require("./routes/whyChooseDMCRoutes");
 const surgeonRoutes = require("./routes/surgeonRoutes");
 const consultationRoutes = require("./routes/consultationRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const treatmentPlanRoutes = require("./routes/treatmentPlanRoutes");
+const homeFaqRoutes = require("./routes/homeFaqRoutes");
+const homeBlogRoutes = require("./routes/homeBlogRoutes");
 const sectionRoutes = require("./routes/sectionRoutes");
 
 // Database Connection
@@ -159,6 +162,9 @@ app.use("/api/why-choose-dmc", whyChooseDMCRoutes);
 app.use("/api/surgeons", surgeonRoutes);
 app.use("/api/consultation", consultationRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/treatment-plan", treatmentPlanRoutes);
+app.use("/api/home-faq", homeFaqRoutes);
+app.use("/api/blogs-home", homeBlogRoutes);
 app.use("/api/sections", sectionRoutes);
 
 // SEO

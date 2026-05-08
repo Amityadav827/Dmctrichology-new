@@ -101,6 +101,9 @@ export default function VisualLiveBuilder() {
           case 'surgeons-section': endpoint = '/surgeons'; break;
           case 'consultation-section': endpoint = '/consultation'; break;
           case 'reviews-section': endpoint = '/reviews'; break;
+          case 'treatment-plan-section': endpoint = '/treatment-plan'; break;
+          case 'faq-section': endpoint = '/home-faq'; break;
+          case 'blogs-home-section': endpoint = '/blogs-home'; break;
           default: endpoint = `/sections/${sectionId}`;
         }
 
@@ -275,7 +278,10 @@ export default function VisualLiveBuilder() {
                       { id: 'why-choose-dmc', label: 'Why Choose DMC' },
                       { id: 'surgeons-section', label: 'Meet Our Surgeons' },
                       { id: 'consultation-section', label: 'Request Consultation' },
-                      { id: 'reviews-section', label: 'Reviews & Stories' }
+                      { id: 'reviews-section', label: 'Reviews & Stories' },
+                      { id: 'treatment-plan-section', label: 'Know The Right Treatment' },
+                      { id: 'faq-section', label: 'Frequently Asked Question?' },
+                      { id: 'blogs-home-section', label: 'News & Wellness Advice' }
                     ].map((section, i) => (
                       <div 
                         key={i} 
@@ -336,7 +342,10 @@ export default function VisualLiveBuilder() {
                             'Why Choose DMC': '/cms/why-choose-dmc',
                             'Meet Our Surgeons': '/cms/surgeons',
                             'Request Consultation': '/cms/consultation',
-                            'Reviews & Stories': '/cms/reviews'
+                            'Reviews & Stories': '/cms/reviews',
+                            'Know The Right Treatment': '/cms/treatment-plan',
+                            'Frequently Asked Question?': '/cms/faq',
+                            'News & Wellness Advice': '/cms/blogs-home'
                           };
                           if(routeMap[activeSection.label]) navigate(routeMap[activeSection.label]);
                         }}

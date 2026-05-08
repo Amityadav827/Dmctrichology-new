@@ -40,6 +40,9 @@ import WhyChooseDMCCMS from "./pages/cms/WhyChooseDMCCMS";
 import SurgeonsCMS from "./pages/cms/SurgeonsCMS";
 import ConsultationCMS from "./pages/cms/ConsultationCMS";
 import ReviewsCMS from "./pages/cms/ReviewsCMS";
+import TreatmentPlanCMS from "./pages/cms/TreatmentPlanCMS";
+import FaqCMS from "./pages/cms/FaqCMS";
+import BlogsHomeCMS from "./pages/cms/BlogsHomeCMS";
 import VisualLiveBuilder from "./pages/cms/VisualLiveBuilder";
 
 import RedirectList from "./pages/RedirectList";
@@ -139,6 +142,30 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <ReviewsCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/treatment-plan"
+          element={
+            <ProtectedRoute permission="cms">
+              <TreatmentPlanCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/faq"
+          element={
+            <ProtectedRoute permission="cms">
+              <FaqCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/blogs-home"
+          element={
+            <ProtectedRoute permission="cms">
+              <BlogsHomeCMS />
             </ProtectedRoute>
           }
         />

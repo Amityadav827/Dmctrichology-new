@@ -154,6 +154,36 @@ export const fetchReviews = async () => {
   }
 };
 
+export const fetchTreatmentPlan = async () => {
+  try {
+    const res = await api.get(`/treatment-plan?t=${Date.now()}`);
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching treatment plan', error);
+    return null;
+  }
+};
+
+export const fetchHomeFAQ = async () => {
+  try {
+    const res = await api.get(`/home-faq?t=${Date.now()}`);
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching home faq', error);
+    return null;
+  }
+};
+
+export const fetchHomeBlog = async () => {
+  try {
+    const res = await api.get(`/blogs-home?t=${Date.now()}`);
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching blogs home', error);
+    return null;
+  }
+};
+
 export const submitLead = async (data) => {
   try {
     const res = await api.post('/lead', data);
