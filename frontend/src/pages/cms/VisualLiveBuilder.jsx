@@ -76,9 +76,10 @@ export default function VisualLiveBuilder() {
   const sections = getSectionsForSlug(slug);
 
   // URL for the real frontend
-  // Fix 404: header editor should point to /header, footer to /footer
+  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
   const frontendPath = slug === 'home' ? '' : slug;
-  const frontendUrl = `https://dmctrichology-mkm4.vercel.app/${frontendPath}?edit=true&preview=true`;
+  const baseUrl = isLocal ? "http://localhost:3000" : "https://dmctrichology-mkm4.vercel.app";
+  const frontendUrl = `${baseUrl}/${frontendPath}?edit=true&preview=true`;
 
   const pendingChanges = useRef({});
   const saveTimeout = useRef(null);

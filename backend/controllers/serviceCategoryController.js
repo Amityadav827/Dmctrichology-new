@@ -35,3 +35,26 @@ exports.deleteCategory = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+exports.toggleCategoryStatus = async (req, res) => {
+  try {
+    const category = await ServiceCategory.findById(req.params.id);
+    category.isActive = !category.isActive;
+    await category.save();
+    res.status(200).json({ success: true, data: category });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.updateCategoryOrder = async (req, res) => {
+  try {
+    const { order } = req.body;
+    await Promise.all(order.map((id, index) => 
+      ServiceCategory.findByIdAndUpdate(id, { sortOrder: index })
+    ));
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

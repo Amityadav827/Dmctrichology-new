@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const isLocal = process.env.NODE_ENV === 'development';
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || (isLocal ? 'http://localhost:10000/api' : 'https://dmctrichology-1.onrender.com/api'),
 });
 
 export const fetchServicePageSettings = async () => {
