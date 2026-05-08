@@ -3,20 +3,26 @@ const Footer = require('../models/Footer');
 const defaultColumns = [
   {
     id: 'col1',
-    title: 'Hair Transplant',
+    title: 'HAIR TRANSPLANT',
     links: [
-      { id: 'l1', label: 'FUE Hair Transplant', url: '/services/fue' },
-      { id: 'l2', label: 'DHI Hair Transplant', url: '/services/dhi' },
-      { id: 'l3', label: 'Beard Transplant', url: '/services/beard' }
+      { id: 'l1', label: 'FUE Hair Transplant', url: '#' },
+      { id: 'l2', label: 'DHI Hair Transplant', url: '#' },
+      { id: 'l3', label: 'Hair Restoration', url: '#' },
+      { id: 'l4', label: 'Beard Transplant', url: '#' },
+      { id: 'l5', label: 'Moustache Transplant', url: '#' },
+      { id: 'l6', label: 'Eyebrow Transplant', url: '#' }
     ]
   },
   {
     id: 'col2',
-    title: 'Hair Treatments',
+    title: 'HAIR TREATMENTS',
     links: [
-      { id: 'l4', label: 'PRP Therapy', url: '/treatments/prp' },
-      { id: 'l5', label: 'Meso Therapy', url: '/treatments/meso' },
-      { id: 'l6', label: 'Hair Growth Factors', url: '/treatments/growth-factors' }
+      { id: 'l7', label: 'PRP Therapy', url: '#' },
+      { id: 'l8', label: 'GFC Therapy', url: '#' },
+      { id: 'l9', label: 'QR 678®', url: '#' },
+      { id: 'l10', label: 'Meso Therapy', url: '#' },
+      { id: 'l11', label: 'Cyclical Therapy', url: '#' },
+      { id: 'l12', label: 'Low-Level Laser Therapy', url: '#' }
     ]
   }
 ];

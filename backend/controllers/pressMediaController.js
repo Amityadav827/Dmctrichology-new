@@ -1,15 +1,16 @@
 const PressMedia = require('../models/PressMedia');
 
 const defaultAvatars = [
-  { id: '1', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/patient1.png' },
-  { id: '2', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/patient2.png' },
-  { id: '3', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/patient3.png' }
+  { id: '1', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/qytwlafbixtw14egkncm.png' },
+  { id: '2', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/qytwlafbixtw14egkncm.png' },
+  { id: '3', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/qytwlafbixtw14egkncm.png' },
+  { id: '4', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/qytwlafbixtw14egkncm.png' }
 ];
 
 const defaultLogos = [
-  { id: '1', title: 'Elle', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777698274/dmc-trichology/logo1.png', link: '#' },
-  { id: '2', title: 'Vogue', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777698274/dmc-trichology/logo2.png', link: '#' },
-  { id: '3', title: 'Grazia', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777698274/dmc-trichology/logo3.png', link: '#' }
+  { id: '1', title: 'Press 1', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/rervxi6jq1fl20lu2fps.png', link: '#' },
+  { id: '2', title: 'Press 2', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/pvyogcawczl9mv7wb82v.png', link: '#' },
+  { id: '3', title: 'Press 3', image: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/tixdm9gnhknxtwvlj3xd.png', link: '#' }
 ];
 
 exports.getPressMedia = async (req, res) => {
