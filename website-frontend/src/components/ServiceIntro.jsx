@@ -8,6 +8,7 @@ import { useBuilder } from '../context/BuilderContext';
 const ServiceIntro = ({ data = {} }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [introData, setIntroData] = useState(data);
+  const [activeSlide, setActiveSlide] = useState(0);
   const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
@@ -29,18 +30,35 @@ const ServiceIntro = ({ data = {} }) => {
     }
   }, [isEditMode, siteConfig]);
 
+  const videos = introData.videoGallery || [];
   const bullets = introData.bulletPoints || [];
+  const totalSlides = videos.length || 1;
+
+  const prevSlide = () => {
+    setActiveSlide(i => (i - 1 + totalSlides) % totalSlides);
+    setShowVideo(false);
+  };
+  const nextSlide = () => {
+    setActiveSlide(i => (i + 1) % totalSlides);
+    setShowVideo(false);
+  };
+
+  const activeVideo = videos[activeSlide] || {};
 
   return (
     <EditableSection sectionId="service-intro" label="Service Details Intro">
       <section className="details-intro-section" data-section-id="service-intro">
         <div className="details-intro-container">
 
-          {/* ─── LEFT: Video Player Section ─────────── */}
+          {/* ─── LEFT: Video Gallery Slider ─────────── */}
           <div className="details-gallery-col">
             <div className="details-video-player-wrapper" style={{ position: 'relative', width: '100%', aspectRatio: '4/3', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.08)', backgroundColor: '#f8fafc' }}>
               
-              {!showVideo ? (
+              {videos.length === 0 ? (
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f1f5f9' }}>
+                  <span style={{ color: '#94a3b8', fontSize: '14px', fontWeight: '500' }}>No Videos Available</span>
+                </div>
+              ) : !showVideo ? (
                 <div 
                   className="video-thumbnail-overlay"
                   style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 10 }}
@@ -48,7 +66,7 @@ const ServiceIntro = ({ data = {} }) => {
                 >
                   {/* Thumbnail Image */}
                   <img 
-                    src={introData.videoThumbnail || 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png'} 
+                    src={activeVideo.videoThumbnail || 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png'} 
                     alt="Video Thumbnail" 
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
@@ -57,21 +75,21 @@ const ServiceIntro = ({ data = {} }) => {
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)' }}></div>
                   
                   {/* Play Button Center */}
-                  {introData.videoUrl && (
+                  {activeVideo.videoUrl && (
                     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '70px', height: '70px', backgroundColor: 'rgba(255,255,255,0.9)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 25px rgba(0,0,0,0.2)', transition: 'transform 0.3s' }} className="hover:scale-110">
                       <Play size={30} fill="#1e293b" color="#1e293b" style={{ marginLeft: '4px' }} />
                     </div>
                   )}
 
                   {/* YouTube/Vimeo Logo Bottom Right */}
-                  {introData.videoUrl && introData.videoType === 'youtube' && (
+                  {activeVideo.videoUrl && activeVideo.videoType === 'youtube' && (
                     <img 
                       src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" 
                       alt="YouTube" 
                       style={{ position: 'absolute', bottom: '20px', right: '20px', width: '50px', height: 'auto', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.3))' }}
                     />
                   )}
-                  {introData.videoUrl && introData.videoType === 'vimeo' && (
+                  {activeVideo.videoUrl && activeVideo.videoType === 'vimeo' && (
                     <img 
                       src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Vimeo_logo_2015.svg" 
                       alt="Vimeo" 
@@ -80,19 +98,19 @@ const ServiceIntro = ({ data = {} }) => {
                   )}
                 </div>
               ) : (
-                <div style={{ position: 'absolute', inset: 0, backgroundColor: '#000' }}>
-                  {introData.videoType === 'mp4' ? (
+                <div style={{ position: 'absolute', inset: 0, backgroundColor: '#000', zIndex: 10 }}>
+                  {activeVideo.videoType === 'mp4' ? (
                     <video 
-                      src={introData.videoUrl} 
+                      src={activeVideo.videoUrl} 
                       controls 
                       autoPlay 
                       style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                     ></video>
                   ) : (
                     <iframe
-                      src={introData.videoType === 'youtube' && introData.videoUrl && !introData.videoUrl.includes('?') 
-                        ? `${introData.videoUrl}?autoplay=1&rel=0` 
-                        : introData.videoUrl}
+                      src={activeVideo.videoType === 'youtube' && activeVideo.videoUrl && !activeVideo.videoUrl.includes('?') 
+                        ? `${activeVideo.videoUrl}?autoplay=1&rel=0` 
+                        : activeVideo.videoUrl}
                       title="Service Video"
                       style={{ width: '100%', height: '100%', border: 'none' }}
                       allow="autoplay; encrypted-media; fullscreen"
@@ -100,6 +118,40 @@ const ServiceIntro = ({ data = {} }) => {
                     />
                   )}
                 </div>
+              )}
+
+              {/* Slider Controls */}
+              {videos.length > 1 && !showVideo && (
+                <>
+                  <button
+                    className="gallery-arrow gallery-arrow-left"
+                    style={{ zIndex: 20 }}
+                    onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                    aria-label="Previous"
+                  >
+                    <ChevronLeft size={22} />
+                  </button>
+                  <button
+                    className="gallery-arrow gallery-arrow-right"
+                    style={{ zIndex: 20 }}
+                    onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                    aria-label="Next"
+                  >
+                    <ChevronRight size={22} />
+                  </button>
+                  
+                  {/* Dot Indicators */}
+                  <div className="gallery-dots" style={{ zIndex: 20 }}>
+                    {videos.map((_, i) => (
+                      <button
+                        key={i}
+                        className={`gallery-dot ${i === activeSlide ? 'active' : ''}`}
+                        onClick={(e) => { e.stopPropagation(); setActiveSlide(i); setShowVideo(false); }}
+                        aria-label={`Slide ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                </>
               )}
 
             </div>

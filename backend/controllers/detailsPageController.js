@@ -24,6 +24,10 @@ exports.updateDetailsPage = async (req, res) => {
       if (req.body.banner) Object.assign(data.banner, req.body.banner);
       if (req.body.intro) {
         Object.assign(data.intro, req.body.intro);
+        if (req.body.intro.videoGallery !== undefined) {
+          data.intro.videoGallery = req.body.intro.videoGallery;
+          data.markModified("intro.videoGallery");
+        }
         if (req.body.intro.bulletPoints !== undefined) {
           data.intro.bulletPoints = req.body.intro.bulletPoints;
           data.markModified("intro.bulletPoints");

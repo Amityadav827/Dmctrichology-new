@@ -12,9 +12,7 @@ export default function ServiceIntroCMS() {
     subTitle: "",
     description: "",
     closingText: "",
-    videoType: "youtube",
-    videoUrl: "",
-    videoThumbnail: "",
+    videoGallery: [],
     bulletPoints: [],
   });
   const [loading, setLoading] = useState(true);
@@ -32,7 +30,14 @@ export default function ServiceIntroCMS() {
 
   const updateField = (field, val) => setData(d => ({ ...d, [field]: val }));
 
-  // Video fields mapped directly via updateField
+  // Video Gallery
+  const addVideo = () => updateField("videoGallery", [...(data.videoGallery || []), { videoType: "youtube", videoUrl: "", videoThumbnail: "" }]);
+  const updateVideo = (i, field, val) => {
+    const vids = [...(data.videoGallery || [])];
+    vids[i] = { ...vids[i], [field]: val };
+    updateField("videoGallery", vids);
+  };
+  const removeVideo = (i) => updateField("videoGallery", (data.videoGallery || []).filter((_, idx) => idx !== i));
 
   // Bullet Points
   const addBullet = () => updateField("bulletPoints", [...(data.bulletPoints || []), ""]);
@@ -115,42 +120,59 @@ export default function ServiceIntroCMS() {
           </div>
         </div>
 
-        {/* Video Configuration */}
+        {/* Video Configuration (Slider) */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
-          <h2 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-6">Video Configuration</h2>
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Video Type</label>
-                <select value={data.videoType || 'youtube'} onChange={e => updateField("videoType", e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none bg-white">
-                  <option value="youtube">YouTube</option>
-                  <option value="vimeo">Vimeo</option>
-                  <option value="mp4">Uploaded MP4</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Video URL</label>
-                <input type="text" value={data.videoUrl} onChange={e => updateField("videoUrl", e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="https://www.youtube.com/embed/..." />
-              </div>
-            </div>
-            <div>
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Custom Thumbnail URL (Optional)</label>
-              <div className="flex gap-4 items-start">
-                <input type="text" value={data.videoThumbnail || ''} onChange={e => updateField("videoThumbnail", e.target.value)}
-                  className="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Paste thumbnail image URL..." />
-                {data.videoThumbnail ? (
-                  <img src={data.videoThumbnail} alt="" className="w-20 h-14 object-cover rounded-xl border flex-shrink-0" />
-                ) : (
-                  <div className="w-20 h-14 bg-gray-100 rounded-xl border flex items-center justify-center flex-shrink-0">
-                    <ImageIcon size={20} className="text-gray-300" />
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-sm font-black uppercase tracking-widest text-gray-400">Video Gallery Slider</h2>
+            <button onClick={addVideo} className="flex items-center gap-1.5 text-xs bg-gray-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-gray-700 transition-all">
+              <Plus size={13} /> Add Video
+            </button>
+          </div>
+
+          <div className="space-y-8">
+            {(data.videoGallery || []).map((video, i) => (
+              <div key={i} className="bg-gray-50 p-6 rounded-xl border border-gray-200 relative">
+                <button onClick={() => removeVideo(i)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors bg-white p-1.5 rounded-md shadow-sm border border-gray-100"><Trash2 size={15} /></button>
+                <div className="mb-4">
+                  <span className="text-xs font-black bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md uppercase">Slide {i + 1}</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Video Type</label>
+                    <select value={video.videoType || 'youtube'} onChange={e => updateVideo(i, "videoType", e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none bg-white focus:ring-2 focus:ring-blue-500">
+                      <option value="youtube">YouTube</option>
+                      <option value="vimeo">Vimeo</option>
+                      <option value="mp4">Uploaded MP4</option>
+                    </select>
                   </div>
-                )}
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Video URL</label>
+                    <input type="text" value={video.videoUrl || ''} onChange={e => updateVideo(i, "videoUrl", e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="https://www.youtube.com/embed/..." />
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Custom Thumbnail URL</label>
+                  <div className="flex gap-4 items-start">
+                    <input type="text" value={video.videoThumbnail || ''} onChange={e => updateVideo(i, "videoThumbnail", e.target.value)}
+                      className="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Paste thumbnail image URL..." />
+                    {video.videoThumbnail ? (
+                      <img src={video.videoThumbnail} alt="" className="w-20 h-14 object-cover rounded-xl border flex-shrink-0" />
+                    ) : (
+                      <div className="w-20 h-14 bg-gray-100 rounded-xl border flex items-center justify-center flex-shrink-0">
+                        <ImageIcon size={20} className="text-gray-300" />
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
+            {(data.videoGallery || []).length === 0 && (
+              <p className="text-sm text-gray-400 text-center py-4 bg-gray-50 rounded-xl border border-dashed border-gray-200">No videos in slider. Click "Add Video" to get started.</p>
+            )}
           </div>
         </div>
 

@@ -19,9 +19,14 @@ const detailsPageSchema = new mongoose.Schema(
       subTitle: { type: String, default: "Follicular Unit Extraction (FUE)\nSafe, smart & skin-friendly" },
       description: { type: String, default: "FUE is one of the most popular and limited modern procedure techniques for hair repair. Each hair follicle is removed individually and implanted into the thinning or bald areas, making sure that it's natural volume and growth." },
       closingText: { type: String, default: "Our FUE procedure is performed by skilled hair transplant surgeons with years of experience, making us the best hair transplant centre in Delhi." },
-      videoType: { type: String, default: "youtube", enum: ["youtube", "vimeo", "mp4"] },
-      videoUrl: { type: String, default: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-      videoThumbnail: { type: String, default: "" },
+      videoGallery: {
+        type: [{
+          videoType: { type: String, default: "youtube", enum: ["youtube", "vimeo", "mp4"] },
+          videoUrl: { type: String, default: "" },
+          videoThumbnail: { type: String, default: "" }
+        }],
+        default: []
+      },
       bulletPoints: {
         type: [String],
         default: [
