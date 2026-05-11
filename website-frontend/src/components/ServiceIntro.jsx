@@ -31,7 +31,7 @@ const ServiceIntro = ({ data = {} }) => {
     }
   }, [isEditMode, siteConfig]);
 
-  const images = introData.galleryImages || [];
+  const images = (introData.galleryImages || []).filter(img => img && img.trim() !== "");
   const bullets = introData.bulletPoints || [];
   const totalSlides = images.length || 1;
 
@@ -57,27 +57,31 @@ const ServiceIntro = ({ data = {} }) => {
                     <img src={img} alt={`Gallery ${i + 1}`} />
                   </div>
                 )) : (
-                  <div className="details-gallery-slide active details-gallery-placeholder">
-                    <span>No Images</span>
+                  <div className="details-gallery-slide active details-gallery-placeholder" style={{ backgroundColor: '#f0f4f8' }}>
+                    <span style={{ color: '#94a3b8', fontSize: '14px', fontWeight: '500' }}>Image Not Available</span>
                   </div>
                 )}
               </div>
 
               {/* Prev / Next Arrows */}
-              <button
-                className="gallery-arrow gallery-arrow-left"
-                onClick={prevSlide}
-                aria-label="Previous"
-              >
-                <ChevronLeft size={22} />
-              </button>
-              <button
-                className="gallery-arrow gallery-arrow-right"
-                onClick={nextSlide}
-                aria-label="Next"
-              >
-                <ChevronRight size={22} />
-              </button>
+              {images.length > 1 && (
+                <>
+                  <button
+                    className="gallery-arrow gallery-arrow-left"
+                    onClick={prevSlide}
+                    aria-label="Previous"
+                  >
+                    <ChevronLeft size={22} />
+                  </button>
+                  <button
+                    className="gallery-arrow gallery-arrow-right"
+                    onClick={nextSlide}
+                    aria-label="Next"
+                  >
+                    <ChevronRight size={22} />
+                  </button>
+                </>
+              )}
 
               {/* Video Button */}
               {introData.videoUrl && !showVideo && (
@@ -88,6 +92,24 @@ const ServiceIntro = ({ data = {} }) => {
                 >
                   <Play size={20} fill="white" />
                 </button>
+              )}
+
+              {/* YouTube Logo Indicator */}
+              {introData.videoUrl && !showVideo && (
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" 
+                  alt="YouTube Video Available" 
+                  style={{ 
+                    position: 'absolute', 
+                    bottom: '20px', 
+                    right: '20px', 
+                    width: '45px', 
+                    height: 'auto', 
+                    zIndex: 10, 
+                    filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.2))', 
+                    pointerEvents: 'none' 
+                  }}
+                />
               )}
 
               {/* Dot Indicators */}
