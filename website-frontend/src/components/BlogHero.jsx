@@ -30,53 +30,24 @@ const BlogHero = ({ data: initialData }) => {
   return (
     <EditableSection sectionId="blog-hero" label="Blog Hero Banner">
       <section 
-        className="blog-hero-section"
+        className="service-hero-premium"
         style={{ 
           backgroundImage: `url(${bannerImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          minHeight: bannerHeight || '400px',
-          padding: '170px 5% 100px',
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          overflow: 'hidden'
+          minHeight: bannerHeight || '400px'
         }}
       >
         {/* Content Layer */}
-        <div className="container mx-auto px-4 relative">
-          <h1 
-            style={{ 
-              fontSize: '64px', 
-              fontFamily: "'Marcellus', serif", 
-              color: '#111',
-              marginBottom: '16px',
-              fontWeight: '400'
-            }}
-          >
+        <div className="max-w-[1400px] mx-auto w-full">
+          <h1 className="service-hero-title">
             <EditableText sectionId="blog-hero" fieldPath="hero.title">
               {title}
             </EditableText>
           </h1>
 
-          <div 
-            style={{ 
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              fontSize: '16px',
-              fontFamily: "'Lato', sans-serif",
-              color: '#888'
-            }}
-          >
+          <div className="service-hero-breadcrumb">
             <span style={{ cursor: 'pointer' }}>Home</span>
-            <span style={{ color: '#ccc' }}>/</span>
-            <span style={{ color: '#111', fontWeight: '600' }}>
+            <span className="sep">/</span>
+            <span className="current">
                <EditableText sectionId="blog-hero" fieldPath="hero.breadcrumbText">
                   {breadcrumbText}
                </EditableText>
@@ -87,8 +58,8 @@ const BlogHero = ({ data: initialData }) => {
 
       <style jsx>{`
         @media (max-width: 768px) {
-          .blog-hero-section h1 {
-            font-size: 40px !important;
+          .service-hero-premium h1 {
+            font-size: 36px !important;
           }
         }
       `}</style>
