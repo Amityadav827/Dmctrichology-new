@@ -102,7 +102,7 @@ const ServiceIntro = ({ data = {} }) => {
   const buttonSettings = intro.buttonSettings || { floatingButtonIcon: 'play', floatingButtonPosition: 'bottom-right' };
 
   return (
-    <EditableSection sectionId="service-intro" label="Service Details Intro">
+    <EditableSection sectionId="service-intro" label="Service Intro">
       <section className="service-intro-premium">
         <div className="intro-container-premium">
           <div className="intro-flex-row">
