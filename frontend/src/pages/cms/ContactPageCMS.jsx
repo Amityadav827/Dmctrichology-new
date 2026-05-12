@@ -122,25 +122,42 @@ export default function ContactPageCMS() {
         {activeTab === 'hero' && (
           <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
             <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8 flex items-center gap-2">
-              <Layout size={14} className="text-blue-600" /> Hero Section Settings
+              <Layout size={14} className="text-blue-600" /> Hero Banner Settings
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="md:col-span-2">
+                <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Banner Image URL</label>
+                <div className="flex gap-4">
+                  <input type="text" value={data.hero.bannerImage} onChange={e => updateSectionField("hero", "bannerImage", e.target.value)}
+                    className="flex-1 px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all" />
+                  {data.hero.bannerImage && (
+                    <img src={data.hero.bannerImage} alt="Preview" className="h-14 w-24 object-cover rounded-xl border border-slate-100 shadow-sm" />
+                  )}
+                </div>
+              </div>
+
               <div>
-                <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Main Title</label>
+                <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Page Title</label>
                 <input type="text" value={data.hero.title} onChange={e => updateSectionField("hero", "title", e.target.value)}
                   className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all" />
               </div>
+
               <div>
                 <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Breadcrumb Text</label>
                 <input type="text" value={data.hero.breadcrumbText} onChange={e => updateSectionField("hero", "breadcrumbText", e.target.value)}
                   className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all" />
               </div>
+
               <div>
-                <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Background Color</label>
-                <div className="flex gap-4 items-center">
-                  <input type="color" value={data.hero.backgroundColor} onChange={e => updateSectionField("hero", "backgroundColor", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer" />
-                  <input type="text" value={data.hero.backgroundColor} onChange={e => updateSectionField("hero", "backgroundColor", e.target.value)} className="flex-1 px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none" />
-                </div>
+                <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Overlay Opacity (0 to 1)</label>
+                <input type="number" step="0.1" min="0" max="1" value={data.hero.overlayOpacity || 0.5} onChange={e => updateSectionField("hero", "overlayOpacity", parseFloat(e.target.value))}
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all" />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Banner Height (e.g. 400px)</label>
+                <input type="text" value={data.hero.bannerHeight || "400px"} onChange={e => updateSectionField("hero", "bannerHeight", e.target.value)}
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all" />
               </div>
             </div>
           </div>

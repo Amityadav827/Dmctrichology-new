@@ -4,10 +4,10 @@ const contactPageSchema = new mongoose.Schema(
   {
     hero: {
       title: { type: String, default: "Contact Us" },
-      breadcrumbText: { type: String, default: "Home / Contact Us" },
-      backgroundColor: { type: String, default: "#F7F7F7" },
-      paddingTop: { type: String, default: "80px" },
-      paddingBottom: { type: String, default: "80px" },
+      breadcrumbText: { type: String, default: "Contact Us" },
+      bannerImage: { type: String, default: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png" },
+      overlayOpacity: { type: Number, default: 0.5 },
+      bannerHeight: { type: String, default: "400px" },
     },
     consultation: {
       badgeText: { type: String, default: "WHY CHOOSE US SERVICES" },

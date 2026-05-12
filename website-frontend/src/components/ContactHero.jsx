@@ -22,50 +22,51 @@ const ContactHero = ({ data: initialData }) => {
 
   const {
     title = "Contact Us",
-    breadcrumbText = "Home / Contact Us",
-    backgroundColor = "#F7F7F7",
-    paddingTop = "80px",
-    paddingBottom = "80px"
+    breadcrumbText = "Contact Us",
+    bannerImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+    overlayOpacity = 0.5,
+    bannerHeight = "400px"
   } = data || {};
 
   return (
     <EditableSection sectionId="contact-hero" label="Contact Hero Banner">
       <section 
-        className="contact-hero" 
+        className="service-hero-premium" 
         style={{ 
-          backgroundColor, 
-          paddingTop, 
-          paddingBottom,
-          textAlign: 'center' 
+          backgroundImage: `url(${bannerImage})`,
+          minHeight: bannerHeight,
+          position: 'relative'
         }}
       >
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <h1 
-            style={{ 
-              fontFamily: "'Marcellus', serif", 
-              fontSize: '48px', 
-              color: '#111', 
-              marginBottom: '15px',
-              fontWeight: 400
-            }}
-          >
-            <EditableText sectionId="contact-hero" fieldPath="title" tag="span">
+        {/* Dynamic Overlay */}
+        <div 
+          className="hero-overlay"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundColor: `rgba(0,0,0,${overlayOpacity})`,
+            zIndex: 1
+          }}
+        />
+
+        <div className="max-w-[1400px] mx-auto w-full relative" style={{ zIndex: 2 }}>
+          {/* Heading on Top */}
+          <h1 className="service-hero-title" style={{ color: overlayOpacity > 0.4 ? '#ffffff' : '#111111' }}>
+            <EditableText sectionId="contact-hero" fieldPath="hero.title">
               {title}
             </EditableText>
           </h1>
-          <p 
-            style={{ 
-              fontFamily: "'Lato', sans-serif", 
-              fontSize: '14px', 
-              color: '#777', 
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}
-          >
-            <EditableText sectionId="contact-hero" fieldPath="breadcrumbText" tag="span">
-              {breadcrumbText}
-            </EditableText>
-          </p>
+
+          {/* Breadcrumb Below */}
+          <div className="service-hero-breadcrumb" style={{ color: overlayOpacity > 0.4 ? 'rgba(255,255,255,0.8)' : '#555555' }}>
+            <span className="current" style={{ color: overlayOpacity > 0.4 ? '#ffffff' : '#111111' }}>Home</span>
+            <span className="sep" style={{ color: overlayOpacity > 0.4 ? 'rgba(255,255,255,0.4)' : '#cccccc' }}>/</span>
+            <span className="current" style={{ color: overlayOpacity > 0.4 ? '#ffffff' : '#111111' }}>
+               <EditableText sectionId="contact-hero" fieldPath="hero.breadcrumbText">
+                  {breadcrumbText}
+               </EditableText>
+            </span>
+          </div>
         </div>
       </section>
     </EditableSection>
