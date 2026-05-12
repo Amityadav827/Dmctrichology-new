@@ -5,7 +5,7 @@ import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import { useBuilder } from '../context/BuilderContext';
 
-const EnquirySection = ({ sectionId = "consultation-section", data: propData }) => {
+const EnquirySection = ({ sectionId = "consultation-section", data: propData, label = "Request Consultation" }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [data, setData] = useState(propData || {});
   
@@ -132,7 +132,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData }) 
   };
 
   return (
-    <EditableSection sectionId={sectionId} label="Request Consultation">
+    <EditableSection sectionId={sectionId} label={label}>
       <section className="enquiry-section" style={{ padding: '100px 5%', backgroundColor: bgColor }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           

@@ -40,9 +40,6 @@ export default function Home() {
       <BlogSection />
       <PressMediaSection />
 
-      {/* Force Deployment Sync: v1.0.8 */}
     </>
   );
 }
-
-// Deployment sync update - v1.0.9

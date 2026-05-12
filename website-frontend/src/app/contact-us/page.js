@@ -31,10 +31,12 @@ export default async function ContactPage() {
   return (
     <div className="bg-white min-h-screen">
       <ContactHero data={hero} />
-      <EnquirySection sectionId="contact-consultation" data={consultation} />
+      <EnquirySection 
+        sectionId="contact-consultation" 
+        data={consultation} 
+        label="Contact Page Consultation" 
+      />
       <MapSection data={map} />
     </div>
   );
 }
-
-// Deployment sync update - v1.0.1
