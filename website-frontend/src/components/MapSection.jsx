@@ -1,8 +1,7 @@
 "use client";
 import React from 'react';
 import EditableSection from './Editable/EditableSection';
-import EditableText from './Editable/EditableText';
-import { MapPin } from 'lucide-react';
+
 
 import { useBuilder } from '../context/BuilderContext';
 
@@ -21,14 +20,8 @@ const MapSection = ({ data: initialData }) => {
     if (initialData) setData(initialData);
   }, [initialData]);
 
-  const {
-    city = "New Delhi",
-    area = "Vasant Vihar",
     googleMapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.444704381882!2d77.16010531508083!3d28.55641798244799!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1df64319087d%3A0xe6759c22f07f2324!2sDMC%20Trichology%20Vasant%20Vihar!5e0!3m2!1sen!2sin!4v1625471234567!5m2!1sen!2sin",
     mapHeight = "600px",
-    cardBackground = "#2D4A8A",
-    iconColor = "#C8102E",
-    textColor = "#FFFFFF"
   } = data || {};
 
   return (
@@ -44,134 +37,6 @@ const MapSection = ({ data: initialData }) => {
           loading="lazy"
           title="Clinic Location"
         ></iframe>
-
-        {/* Floating Location Card */}
-        <div 
-          className="location-floating-card"
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            display: 'flex',
-            alignItems: 'center',
-            zIndex: 10,
-            width: 'fit-content',
-            gap: '15px'
-          }}
-        >
-          {/* Custom Pin Image (No BG) */}
-          <div style={{ flexShrink: 0 }}>
-            <img 
-              src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778570823936-861958394.png" 
-              alt="Pin" 
-              style={{ width: '60px', height: 'auto', display: 'block' }} 
-            />
-          </div>
-
-          {/* Card Container (Combined Glass + Text) */}
-          <div 
-            style={{ 
-              display: 'flex', 
-              alignItems: 'stretch', 
-              borderRadius: '26px', 
-              overflow: 'hidden',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
-            }}
-          >
-            {/* Transparent Glass Area (Left) */}
-            <div 
-              style={{
-                width: '150px',
-                height: '75px',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                border: '1.5px solid rgba(255, 255, 255, 0.5)',
-                borderRight: 'none',
-                borderRadius: '26px 0 0 26px'
-              }}
-            />
-
-            {/* Text Area with Blue Background (Right) */}
-            <div 
-              style={{
-                backgroundColor: cardBackground, // #2D4A8A
-                padding: '0 35px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                height: '75px',
-                minWidth: '200px',
-                border: '1.5px solid rgba(255, 255, 255, 0.5)',
-                borderLeft: 'none',
-                borderRadius: '0 26px 26px 0'
-              }}
-            >
-              <h3 
-                style={{ 
-                  margin: 0, 
-                  fontFamily: "'Marcellus', serif", 
-                  fontSize: '26px',
-                  fontWeight: 700,
-                  lineHeight: '1',
-                  color: textColor,
-                  letterSpacing: '0.5px'
-                }}
-              >
-                <EditableText sectionId="contact-map" fieldPath="city" tag="span">
-                  {city}
-                </EditableText>
-              </h3>
-              <p 
-                style={{ 
-                  margin: '4px 0 0', 
-                  fontFamily: "'Lato', sans-serif", 
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  opacity: 0.8,
-                  textTransform: 'uppercase',
-                  letterSpacing: '1.5px',
-                  color: textColor
-                }}
-              >
-                <EditableText sectionId="contact-map" fieldPath="area" tag="span">
-                  {area}
-                </EditableText>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <style jsx>{`
-          @media (max-width: 768px) {
-            .location-floating-card {
-              flex-direction: column;
-              gap: 15px !important;
-              width: 90% !important;
-            }
-            .location-floating-card > div:last-child {
-              min-width: unset !important;
-              width: 100%;
-              flex-direction: column;
-              padding: 20px !important;
-              text-align: center;
-              border-radius: 24px !important;
-            }
-            .location-floating-card > div:last-child > div:first-child {
-              margin-right: 0 !important;
-              margin-bottom: 15px;
-              width: 100% !important;
-              height: 80px !important;
-            }
-            .location-floating-card h3 {
-              font-size: 28px !important;
-            }
-            .location-floating-card p {
-              font-size: 15px !important;
-            }
-          }
-        `}</style>
       </section>
     </EditableSection>
   );
