@@ -10,6 +10,7 @@ const DetailsBanner = ({ data = {} }) => {
   const [bannerData, setBannerData] = useState(data);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (data) setBannerData(data);
   }, [data]);
 
@@ -24,7 +25,10 @@ const DetailsBanner = ({ data = {} }) => {
           hasUpdates = true;
         }
       });
-      if (hasUpdates) setBannerData(nextData);
+      if (hasUpdates) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setBannerData(nextData);
+      }
     }
   }, [isEditMode, siteConfig]);
 

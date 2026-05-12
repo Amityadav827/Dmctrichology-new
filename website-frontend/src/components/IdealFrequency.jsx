@@ -10,6 +10,7 @@ const IdealFrequency = ({ data = {} }) => {
   const [sectionData, setSectionData] = useState(data);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (data) setSectionData(data);
   }, [data]);
 
@@ -24,7 +25,10 @@ const IdealFrequency = ({ data = {} }) => {
           hasUpdates = true;
         }
       });
-      if (hasUpdates) setSectionData(nextData);
+      if (hasUpdates) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setSectionData(nextData);
+      }
     }
   }, [isEditMode, siteConfig]);
 

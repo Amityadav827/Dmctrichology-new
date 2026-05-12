@@ -11,6 +11,7 @@ const ServiceHero = ({ data }) => {
   // Sync state when props change (for SSR data)
   useEffect(() => {
     if (data) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHeroData(data);
     }
   }, [data]);
@@ -18,6 +19,7 @@ const ServiceHero = ({ data }) => {
   // Sync state with Visual Builder for live preview
   useEffect(() => {
     if (isEditMode && siteConfig && siteConfig.hero) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHeroData(siteConfig.hero);
     }
   }, [isEditMode, siteConfig]);

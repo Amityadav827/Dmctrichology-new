@@ -47,6 +47,7 @@ const ServiceIntro = ({ data = {} }) => {
 
   // Sync from props
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (data) setIntroData(data);
   }, [data]);
 
@@ -76,7 +77,10 @@ const ServiceIntro = ({ data = {} }) => {
         }
       });
 
-      if (hasUpdates) setIntroData(nextData);
+      if (hasUpdates) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIntroData(nextData);
+      }
     }
   }, [isEditMode, siteConfig]);
 

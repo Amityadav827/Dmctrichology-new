@@ -18,6 +18,7 @@ const ServiceListing = ({ services: initialServices = [], categories: initialCat
     if (isEditMode && siteConfig) {
       const builderServices = siteConfig['service-listing'];
       if (Array.isArray(builderServices)) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setServices(builderServices);
       } else if (initialServices) {
         const updatedServices = [...initialServices];
@@ -33,13 +34,17 @@ const ServiceListing = ({ services: initialServices = [], categories: initialCat
             }
           }
         });
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setServices(updatedServices);
       }
 
       const builderCategories = siteConfig['service-listing-categories'];
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (Array.isArray(builderCategories)) setCategories(builderCategories);
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (initialServices) setServices(initialServices);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (initialCategories) setCategories(initialCategories);
     }
   }, [initialServices, initialCategories, isEditMode, siteConfig]);

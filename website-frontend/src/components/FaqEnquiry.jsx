@@ -11,6 +11,7 @@ const FaqEnquiry = ({ data = {} }) => {
   const [openFaqIndex, setOpenFaqIndex] = useState(0); // First open by default
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (data) setSectionData(data);
   }, [data]);
 
@@ -25,7 +26,10 @@ const FaqEnquiry = ({ data = {} }) => {
           hasUpdates = true;
         }
       });
-      if (hasUpdates) setSectionData(nextData);
+      if (hasUpdates) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setSectionData(nextData);
+      }
     }
   }, [isEditMode, siteConfig]);
 

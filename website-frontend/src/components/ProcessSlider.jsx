@@ -14,6 +14,7 @@ const ProcessSlider = ({ data = {} }) => {
   const VISIBLE = 4; // cards visible at once on desktop
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (data) setProcessData(data);
   }, [data]);
 
@@ -28,7 +29,10 @@ const ProcessSlider = ({ data = {} }) => {
           hasUpdates = true;
         }
       });
-      if (hasUpdates) setProcessData(nextData);
+      if (hasUpdates) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setProcessData(nextData);
+      }
     }
   }, [isEditMode, siteConfig]);
 
