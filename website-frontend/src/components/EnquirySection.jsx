@@ -4,28 +4,15 @@ import { fetchConsultation } from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
-const EnquirySection = ({ sectionId = "consultation-section", data: propData }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    mobile: '',
-    service: '',
-    message: ''
-  });
-  const [captcha, setCaptcha] = useState('');
-  const [captchaInput, setCaptchaInput] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const { isEditMode, siteConfig } = useBuilder();
+  const [data, setData] = useState(propData || {});
 
-  // Generate 4-digit captcha
-  const generateCaptcha = () => {
-    setCaptcha(Math.floor(1000 + Math.random() * 9000).toString());
-  };
-
+  // Real-time sync from Visual Builder
   useEffect(() => {
-    generateCaptcha();
-  }, []);
+    if (isEditMode && siteConfig && siteConfig.sectionId === sectionId) {
+      setData(prev => ({ ...prev, ...siteConfig.data }));
+    }
+  }, [isEditMode, siteConfig, sectionId]);
 
   useEffect(() => {
     if (!propData) {

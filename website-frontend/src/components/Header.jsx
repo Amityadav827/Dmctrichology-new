@@ -6,8 +6,18 @@ import Link from 'next/link';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
+import { useBuilder } from '../context/BuilderContext';
+
 export default function Header() {
+  const { isEditMode, siteConfig } = useBuilder();
   const [headerData, setHeaderData] = useState(null);
+
+  // Real-time sync from Visual Builder
+  useEffect(() => {
+    if (isEditMode && siteConfig && siteConfig.sectionId === 'header') {
+      setHeaderData(prev => ({ ...prev, ...siteConfig.data }));
+    }
+  }, [isEditMode, siteConfig]);
 
   useEffect(() => {
     fetchHeader().then(data => {

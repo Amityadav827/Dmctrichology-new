@@ -3,7 +3,23 @@ import React from 'react';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
-const ContactHero = ({ data }) => {
+import { useBuilder } from '../context/BuilderContext';
+
+const ContactHero = ({ data: initialData }) => {
+  const { isEditMode, siteConfig } = useBuilder();
+  const [data, setData] = React.useState(initialData || {});
+
+  // Real-time sync from Visual Builder
+  React.useEffect(() => {
+    if (isEditMode && siteConfig && siteConfig.sectionId === 'contact-hero') {
+      setData(prev => ({ ...prev, ...siteConfig.data }));
+    }
+  }, [isEditMode, siteConfig]);
+
+  React.useEffect(() => {
+    if (initialData) setData(initialData);
+  }, [initialData]);
+
   const {
     title = "Contact Us",
     breadcrumbText = "Home / Contact Us",

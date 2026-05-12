@@ -6,7 +6,14 @@ import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
 export default function TopBar() {
-  const { topBarCMS, setTopBarCMS } = useBuilder();
+  const { topBarCMS, setTopBarCMS, isEditMode, siteConfig } = useBuilder();
+  
+  // Real-time sync from Visual Builder
+  useEffect(() => {
+    if (isEditMode && siteConfig && siteConfig.sectionId === 'topbar') {
+      setTopBarCMS(prev => ({ ...prev, ...siteConfig.data }));
+    }
+  }, [isEditMode, siteConfig, setTopBarCMS]);
 
   useEffect(() => {
     // Background sync to ensure data is fresh

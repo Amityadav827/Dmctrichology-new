@@ -82,7 +82,7 @@ export default function VisualLiveBuilder() {
         { id: 'ideal-frequency-section', label: 'Ideal Frequency & CTA' }
       ];
     }
-    if (currentSlug === 'contact-us') {
+    if (currentSlug === 'contact') {
       return [
         { id: 'contact-hero', label: 'Contact Hero Banner' },
         { id: 'contact-consultation', label: 'Contact Page Consultation' },

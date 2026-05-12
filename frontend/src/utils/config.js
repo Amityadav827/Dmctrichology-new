@@ -11,7 +11,7 @@ export const FRONTEND_URL = isLocal
 /**
  * Generates a preview URL for a given page slug
  * Adds ?v1 to bypass cache as requested by the user
- * @param {string} slug - The page slug (e.g., 'home', 'contact-us', 'service')
+ * @param {string} slug - The page slug (e.g., 'home', 'contact', 'service')
  * @param {boolean} editMode - Whether to enable edit mode parameters
  * @returns {string} The full preview URL
  */

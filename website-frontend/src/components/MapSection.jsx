@@ -4,7 +4,23 @@ import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import { MapPin } from 'lucide-react';
 
-const MapSection = ({ data }) => {
+import { useBuilder } from '../context/BuilderContext';
+
+const MapSection = ({ data: initialData }) => {
+  const { isEditMode, siteConfig } = useBuilder();
+  const [data, setData] = React.useState(initialData || {});
+
+  // Real-time sync from Visual Builder
+  React.useEffect(() => {
+    if (isEditMode && siteConfig && siteConfig.sectionId === 'contact-map') {
+      setData(prev => ({ ...prev, ...siteConfig.data }));
+    }
+  }, [isEditMode, siteConfig]);
+
+  React.useEffect(() => {
+    if (initialData) setData(initialData);
+  }, [initialData]);
+
   const {
     city = "New Delhi",
     area = "Vasant Vihar",
