@@ -55,89 +55,78 @@ const MapSection = ({ data: initialData }) => {
             transform: 'translate(-50%, -50%)',
             display: 'flex',
             alignItems: 'center',
-            gap: '20px',
             zIndex: 10,
             width: 'fit-content'
           }}
         >
-          {/* Pin Icon Container */}
-          <div 
-            style={{ 
-              width: '75px', 
-              height: '75px', 
-              backgroundColor: '#fff', 
-              borderRadius: '50%', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              boxShadow: '0 15px 35px rgba(0,0,0,0.15)',
-              flexShrink: 0
-            }}
-          >
-            <MapPin size={35} color={iconColor} fill={iconColor} />
+          {/* Custom Pin Image (No BG) */}
+          <div style={{ flexShrink: 0 }}>
+            <img 
+              src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778570823936-861958394.png" 
+              alt="Pin" 
+              style={{ width: '60px', height: 'auto', display: 'block' }} 
+            />
           </div>
 
-          {/* Blue Rounded Card */}
+          {/* Transparent Glass Area (Border only) */}
+          <div 
+            style={{
+              width: '160px',
+              height: '70px',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              borderRadius: '20px',
+              border: '1.5px solid rgba(255, 255, 255, 0.5)',
+              margin: '0 15px'
+            }}
+          />
+
+          {/* Text Area with Blue Background */}
           <div 
             style={{
               backgroundColor: cardBackground,
-              padding: '12px',
-              borderRadius: '32px',
+              padding: '12px 25px',
+              borderRadius: '24px',
               color: textColor,
-              boxShadow: '0 25px 60px rgba(0,0,0,0.25)',
+              boxShadow: '0 15px 35px rgba(0,0,0,0.2)',
               display: 'flex',
-              alignItems: 'center',
-              minWidth: '380px'
+              flexDirection: 'column',
+              justifyContent: 'center',
+              minWidth: '220px',
+              height: '70px'
             }}
           >
-            {/* Left Glass Preview Area */}
-            <div 
-              style={{
-                width: '160px',
-                height: '110px',
-                backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
-                borderRadius: '24px',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                marginRight: '28px'
+            <h3 
+              style={{ 
+                margin: 0, 
+                fontFamily: "'Marcellus', serif", 
+                fontSize: '22px',
+                fontWeight: 700,
+                lineHeight: '1.2',
+                color: textColor
               }}
-            />
-
-            {/* Right Text Content */}
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <h3 
-                style={{ 
-                  margin: 0, 
-                  fontFamily: "'Marcellus', serif", 
-                  fontSize: '38px',
-                  fontWeight: 700,
-                  lineHeight: '1.1',
-                  letterSpacing: '0.5px',
-                  color: textColor
-                }}
-              >
-                <EditableText sectionId="contact-map" fieldPath="city" tag="span">
-                  {city}
-                </EditableText>
-              </h3>
-              <p 
-                style={{ 
-                  margin: '6px 0 0', 
-                  fontFamily: "'Lato', sans-serif", 
-                  fontSize: '16px',
-                  fontWeight: 400,
-                  opacity: 0.8,
-                  textTransform: 'uppercase',
-                  letterSpacing: '2px',
-                  color: textColor
-                }}
-              >
-                <EditableText sectionId="contact-map" fieldPath="area" tag="span">
-                  {area}
-                </EditableText>
-              </p>
-            </div>
+            >
+              <EditableText sectionId="contact-map" fieldPath="city" tag="span">
+                {city}
+              </EditableText>
+            </h3>
+            <p 
+              style={{ 
+                margin: '2px 0 0', 
+                fontFamily: "'Lato', sans-serif", 
+                fontSize: '12px',
+                fontWeight: 400,
+                opacity: 0.8,
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                color: textColor
+              }}
+            >
+              <EditableText sectionId="contact-map" fieldPath="area" tag="span">
+                {area}
+              </EditableText>
+            </p>
           </div>
         </div>
 
