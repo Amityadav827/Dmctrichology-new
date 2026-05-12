@@ -110,9 +110,9 @@ const MapSection = ({ data: initialData }) => {
                 style={{ 
                   margin: 0, 
                   fontFamily: "'Marcellus', serif", 
-                  fontSize: '36px',
-                  fontWeight: 400,
-                  lineHeight: '1',
+                  fontSize: '38px',
+                  fontWeight: 700,
+                  lineHeight: '1.1',
                   letterSpacing: '0.5px',
                   color: textColor
                 }}
@@ -123,12 +123,13 @@ const MapSection = ({ data: initialData }) => {
               </h3>
               <p 
                 style={{ 
-                  margin: '8px 0 0', 
+                  margin: '6px 0 0', 
                   fontFamily: "'Lato', sans-serif", 
-                  fontSize: '18px',
-                  fontWeight: 300,
-                  opacity: 0.75,
-                  letterSpacing: '0.5px',
+                  fontSize: '16px',
+                  fontWeight: 400,
+                  opacity: 0.8,
+                  textTransform: 'uppercase',
+                  letterSpacing: '2px',
                   color: textColor
                 }}
               >
