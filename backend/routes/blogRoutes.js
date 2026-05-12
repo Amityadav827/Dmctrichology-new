@@ -12,6 +12,8 @@ const upload = require("../middleware/uploadMiddleware");
 
 const router = express.Router();
 
+router.get("/", getBlogs);
+router.get("/:id", getBlogById);
 router.get("/slug/:slug", getBlogBySlug);
 
 router.use(protect, adminOnly);
@@ -21,7 +23,7 @@ const uploadFields = upload.fields([
   { name: "bannerImage", maxCount: 1 },
 ]);
 
-router.route("/").post(uploadFields, createBlog).get(getBlogs);
-router.route("/:id").get(getBlogById).put(uploadFields, updateBlog).delete(deleteBlog);
+router.post("/", uploadFields, createBlog);
+router.route("/:id").put(uploadFields, updateBlog).delete(deleteBlog);
 
 module.exports = router;

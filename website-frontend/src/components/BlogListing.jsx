@@ -10,6 +10,11 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
   const [pageData, setPageData] = useState(initialData?.listing || {});
   const [blogs, setBlogs] = useState(initialBlogs);
 
+  console.log("[BlogListing] Component initialized with:", { 
+    initialBlogsCount: initialBlogs?.length || 0,
+    blogsStateCount: blogs?.length || 0 
+  });
+
   // Sync state when initialData changes (SSR data)
   useEffect(() => {
     if (initialData?.listing) {
@@ -19,6 +24,7 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
 
   useEffect(() => {
     if (initialBlogs) {
+      console.log("[BlogListing] Updating blogs state with initialBlogs:", initialBlogs.length);
       setBlogs(initialBlogs);
     }
   }, [initialBlogs]);
