@@ -80,6 +80,13 @@ export default function VisualLiveBuilder() {
         { id: 'ideal-frequency-section', label: 'Ideal Frequency & CTA' }
       ];
     }
+    if (currentSlug === 'contact-us') {
+      return [
+        { id: 'contact-hero', label: 'Contact Hero Banner' },
+        { id: 'contact-consultation', label: 'Request Consultation' },
+        { id: 'contact-map', label: 'Location Map Section' }
+      ];
+    }
     return allSections;
   };
 
@@ -189,6 +196,9 @@ export default function VisualLiveBuilder() {
           case 'before-after-section': endpoint = '/details-page'; break;
           case 'faq-enquiry-section': endpoint = '/details-page'; break;
           case 'ideal-frequency-section': endpoint = '/details-page'; break;
+          case 'contact-hero': endpoint = '/contact-page'; break;
+          case 'contact-consultation': endpoint = '/contact-page'; break;
+          case 'contact-map': endpoint = '/contact-page'; break;
           default: endpoint = `/sections/${sectionId}`;
         }
 
@@ -424,7 +434,10 @@ export default function VisualLiveBuilder() {
                             'Process Slider': '/cms/process-slider',
                             'Before/After Treatment': '/cms/before-after',
                             'FAQ & Enquiry Form': '/cms/faq-enquiry',
-                            'Ideal Frequency & CTA': '/cms/ideal-frequency'
+                            'Ideal Frequency & CTA': '/cms/ideal-frequency',
+                            'Contact Hero Banner': '/cms/contact-page',
+                            'Location Map Section': '/cms/contact-page',
+                            'Request Consultation': '/cms/contact-page'
                           };
                           if(routeMap[activeSection.label]) navigate(routeMap[activeSection.label]);
                         }}

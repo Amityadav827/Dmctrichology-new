@@ -55,6 +55,7 @@ import ProcessSliderCMS from "./pages/cms/ProcessSliderCMS";
 import BeforeAfterCMS from "./pages/cms/BeforeAfterCMS";
 import FaqEnquiryCMS from "./pages/cms/FaqEnquiryCMS";
 import IdealFrequencyCMS from "./pages/cms/IdealFrequencyCMS";
+import ContactPageCMS from "./pages/cms/ContactPageCMS";
 
 import RedirectList from "./pages/RedirectList";
 import SitemapManager from "./pages/SitemapManager";
@@ -400,6 +401,14 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <IdealFrequencyCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/contact-page"
+          element={
+            <ProtectedRoute permission="cms">
+              <ContactPageCMS />
             </ProtectedRoute>
           }
         />

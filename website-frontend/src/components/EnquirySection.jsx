@@ -4,19 +4,40 @@ import { fetchConsultation } from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
-const EnquirySection = () => {
-  const [data, setData] = useState(null);
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDateTime, setSelectedDateTime] = useState('');
-  const calendarRef = useRef(null);
+const EnquirySection = ({ sectionId = "consultation-section", data: propData }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    mobile: '',
+    service: '',
+    message: ''
+  });
+  const [captcha, setCaptcha] = useState('');
+  const [captchaInput, setCaptchaInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  // Generate 4-digit captcha
+  const generateCaptcha = () => {
+    setCaptcha(Math.floor(1000 + Math.random() * 9000).toString());
+  };
 
   useEffect(() => {
-    fetchConsultation().then(res => {
-      if (res && res.success && res.data) {
-        setData(res.data);
-      }
-    });
+    generateCaptcha();
   }, []);
+
+  useEffect(() => {
+    if (!propData) {
+      fetchConsultation().then(res => {
+        if (res && res.success && res.data) {
+          setData(res.data);
+        }
+      });
+    } else {
+      setData(propData);
+    }
+  }, [propData]);
 
   // Close calendar when clicking outside
   useEffect(() => {
@@ -46,12 +67,58 @@ const EnquirySection = () => {
   const beforeImage = data ? (data.beforeImage || '') : 'https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png';
   const bgColor = data ? (data.backgroundColor || '#ffffff') : '#ffffff';
 
-  const handleDateSelect = (e) => {
-    setSelectedDateTime(e.target.value);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess(false);
+
+    if (captchaInput !== captcha) {
+      setError('Invalid captcha code.');
+      return;
+    }
+
+    if (!selectedDateTime) {
+      setError('Please select an appointment date and time.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const payload = {
+        ...formData,
+        appointmentDate: selectedDateTime
+      };
+      
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
+      const response = await fetch(`${API_URL}/appointment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setSuccess(true);
+        setFormData({ name: '', email: '', mobile: '', service: '', message: '' });
+        setSelectedDateTime('');
+        setCaptchaInput('');
+        generateCaptcha();
+      } else {
+        setError(result.message || 'Something went wrong.');
+      }
+    } catch (err) {
+      setError('Failed to submit. Please check your connection.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <EditableSection sectionId="consultation-section" label="Request Consultation">
+    <EditableSection sectionId={sectionId} label="Request Consultation">
       <section className="enquiry-section" style={{ padding: '100px 5%', backgroundColor: bgColor }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           
@@ -62,17 +129,17 @@ const EnquirySection = () => {
             <div style={{ flex: '1 1 500px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
                 <img src={iconUrl} alt="icon" style={{ width: '40px', height: 'auto' }} />
-                <EditableText sectionId="consultation-section" fieldPath="badgeText" tag="span" className="section-subtitle">
+                <EditableText sectionId={sectionId} fieldPath="badgeText" tag="span" className="section-subtitle">
                   {badgeText}
                 </EditableText>
               </div>
               <h2 className="section-title">
-                <EditableText sectionId="consultation-section" fieldPath="heading" tag="span">
+                <EditableText sectionId={sectionId} fieldPath="heading" tag="span">
                   {heading}
                 </EditableText>
               </h2>
               <p style={{ fontSize: '14px', color: '#666', fontFamily: "'Marcellus', serif", marginBottom: '30px' }}>
-                <EditableText sectionId="consultation-section" fieldPath="subtitle" tag="span">
+                <EditableText sectionId={sectionId} fieldPath="subtitle" tag="span">
                   {subtitle}
                 </EditableText>
               </p>
@@ -85,7 +152,7 @@ const EnquirySection = () => {
                     <p style={{ margin: 0, fontSize: '11px', color: '#777', fontFamily: "'Marcellus', serif" }}>Phone Number</p>
                     <a href={`tel:${phoneNumber}`} style={{ textDecoration: 'none', color: '#000' }}>
                       <p style={{ margin: 0, fontSize: '14px', color: '#000', fontFamily: "'Marcellus', serif" }}>
-                        <EditableText sectionId="consultation-section" fieldPath="phoneNumber" tag="span">{phoneNumber}</EditableText>
+                        <EditableText sectionId={sectionId} fieldPath="phoneNumber" tag="span">{phoneNumber}</EditableText>
                       </p>
                     </a>
                   </div>
@@ -95,7 +162,7 @@ const EnquirySection = () => {
                   <div>
                     <p style={{ margin: 0, fontSize: '11px', color: '#777', fontFamily: "'Marcellus', serif" }}>Service Timing ( Mon To Sat )</p>
                     <p style={{ margin: 0, fontSize: '14px', color: '#000', fontFamily: "'Marcellus', serif" }}>
-                      <EditableText sectionId="consultation-section" fieldPath="serviceTimingMonSat" tag="span">{timingMonSat}</EditableText>
+                      <EditableText sectionId={sectionId} fieldPath="serviceTimingMonSat" tag="span">{timingMonSat}</EditableText>
                     </p>
                   </div>
                 </div>
@@ -104,7 +171,7 @@ const EnquirySection = () => {
                   <div>
                     <p style={{ margin: 0, fontSize: '11px', color: '#777', fontFamily: "'Marcellus', serif" }}>Service Timing ( Sunday )</p>
                     <p style={{ margin: 0, fontSize: '14px', color: '#000', fontFamily: "'Marcellus', serif" }}>
-                      <EditableText sectionId="consultation-section" fieldPath="serviceTimingSunday" tag="span">{timingSun}</EditableText>
+                      <EditableText sectionId={sectionId} fieldPath="serviceTimingSunday" tag="span">{timingSun}</EditableText>
                     </p>
                   </div>
                 </div>
@@ -113,18 +180,25 @@ const EnquirySection = () => {
 
             {/* Form */}
             <div style={{ flex: '1 1 400px', paddingTop: '55px', position: 'relative', zIndex: 2 }}>
-              <form style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                <div>
-                   <input type="text" placeholder={namePlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} />
+              <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                <div style={{ gridColumn: 'span 2' }}>
+                   {success && <div style={{ padding: '10px 20px', backgroundColor: '#e6fffa', color: '#2c7a7b', borderRadius: '10px', marginBottom: '10px', fontSize: '14px', fontFamily: "'Marcellus', serif" }}>Appointment requested successfully!</div>}
+                   {error && <div style={{ padding: '10px 20px', backgroundColor: '#fff5f5', color: '#c53030', borderRadius: '10px', marginBottom: '10px', fontSize: '14px', fontFamily: "'Marcellus', serif" }}>{error}</div>}
                 </div>
                 <div>
-                   <input type="email" placeholder={emailPlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} />
+                   <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder={namePlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} required />
+                </div>
+                <div>
+                   <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder={emailPlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} required />
+                </div>
+                <div>
+                   <input type="text" name="mobile" value={formData.mobile} onChange={handleChange} placeholder="Mobile Number*" className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} required />
                 </div>
                 <div style={{ position: 'relative' }}>
-                   <select className="premium-select" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", appearance: 'none', cursor: 'pointer', transition: 'all 0.3s ease' }}>
-                     <option>Type Of Service Enquiry*</option>
+                   <select name="service" value={formData.service} onChange={handleChange} className="premium-select" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", appearance: 'none', cursor: 'pointer', transition: 'all 0.3s ease' }} required>
+                     <option value="">Type Of Service Enquiry*</option>
                      {serviceOptions.map((opt, i) => (
-                       <option key={i}>{opt}</option>
+                       <option key={i} value={opt}>{opt}</option>
                      ))}
                    </select>
                    <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777623764/dmc-trichology/qcrzwotm1zyqsdbu6ttb.png" style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', width: '12px', pointerEvents: 'none' }} alt="icon" />
@@ -136,7 +210,8 @@ const EnquirySection = () => {
                      readOnly
                      value={selectedDateTime}
                      className="premium-input-readonly" 
-                     style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease', cursor: 'default' }} 
+                     style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease', cursor: 'pointer' }} 
+                     onClick={() => setShowCalendar(!showCalendar)}
                    />
                    <div 
                       onClick={() => setShowCalendar(!showCalendar)}
@@ -165,12 +240,16 @@ const EnquirySection = () => {
                      </div>
                    )}
                 </div>
-                <div style={{ gridColumn: 'span 2' }}>
-                  <textarea placeholder={messagePlaceholder} className="premium-textarea" style={{ width: '100%', padding: '20px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", minHeight: '100px', resize: 'none', transition: 'all 0.3s ease' }}></textarea>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                   <div style={{ padding: '15px 20px', backgroundColor: '#E4B753', borderRadius: '30px', color: '#fff', fontWeight: 'bold', letterSpacing: '4px' }}>{captcha}</div>
+                   <input type="text" value={captchaInput} onChange={e => setCaptchaInput(e.target.value)} placeholder="Code*" className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif" }} required />
                 </div>
                 <div style={{ gridColumn: 'span 2' }}>
-                  <button className="premium-submit-btn" style={{ width: '100%', padding: '15px', borderRadius: '30px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', fontFamily: "'Marcellus', serif", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', position: 'relative', overflow: 'hidden' }}>
-                    <EditableText sectionId="consultation-section" fieldPath="buttonText" tag="span">{buttonText}</EditableText>
+                  <textarea name="message" value={formData.message} onChange={handleChange} placeholder={messagePlaceholder} className="premium-textarea" style={{ width: '100%', padding: '20px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", minHeight: '100px', resize: 'none', transition: 'all 0.3s ease' }}></textarea>
+                </div>
+                <div style={{ gridColumn: 'span 2' }}>
+                  <button type="submit" className="premium-submit-btn" style={{ width: '100%', padding: '15px', borderRadius: '30px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', fontFamily: "'Marcellus', serif", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', position: 'relative', overflow: 'hidden' }} disabled={loading}>
+                    <EditableText sectionId={sectionId} fieldPath="buttonText" tag="span">{loading ? 'Processing...' : buttonText}</EditableText>
                     <div style={{ transform: 'rotate(-45deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.4s ease' }} className="btn-arrow">
                       <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777613952/dmc-trichology/xc065ftxo6zamcldpd59.png" style={{ width: '40px' }} alt="arrow" />
                     </div>
