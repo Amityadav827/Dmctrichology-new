@@ -18,7 +18,6 @@ import {
   Plus
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import VisualLiveBuilderSkeleton from "../../components/VisualLiveBuilderSkeleton";
 import { getFrontendPreviewUrl, FRONTEND_URL } from "../../utils/config";
 
 export default function VisualLiveBuilder() {
