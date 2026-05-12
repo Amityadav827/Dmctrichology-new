@@ -41,59 +41,46 @@ const BlogListing = ({ data: initialData }) => {
     sidebarCategoriesTitle = "Blog Categories",
     sidebarRecentPostsTitle = "Recent Post",
     promoImage = "",
-    promoLink = ""
+    promoLink = "",
+    promoButtonText = "Special Offer",
+    categories = [],
+    recentPosts = [],
+    blogs = []
   } = pageData;
 
-  const dummyBlogs = [
-    {
-      id: 1,
-      title: "Overcoming Physical Setbacks: How Physiotherapy Recovery.",
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 10, 2025",
-      author: "Dr. Meera Joshi, Posture & Spine",
-      slug: "overcoming-physical-setbacks",
-      active: true
-    },
-    {
-      id: 2,
-      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 11, 2025",
-      author: "Dr. Rahul Kapoor, Neuro Expert",
-      slug: "revolutionizing-rehab"
-    },
-    {
-      id: 3,
-      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 11, 2025",
-      author: "Dr. Rahul Kapoor, Neuro Expert",
-      slug: "revolutionizing-rehab-2"
-    },
-    {
-      id: 4,
-      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 11, 2025",
-      author: "Dr. Rahul Kapoor, Neuro Expert",
-      slug: "revolutionizing-rehab-3"
+  // Real-time sync from Visual Builder
+  useEffect(() => {
+    if (isEditMode && siteConfig) {
+      const updatedListing = JSON.parse(JSON.stringify(pageData));
+      let hasChanges = false;
+
+      Object.keys(siteConfig).forEach(key => {
+        if (key.startsWith('blog-listing.listing.')) {
+          hasChanges = true;
+          const path = key.replace('blog-listing.listing.', '');
+          
+          if (path.includes('.')) {
+            const parts = path.split('.');
+            let current = updatedListing;
+            for (let i = 0; i < parts.length - 1; i++) {
+              const part = parts[i];
+              if (!current[part]) {
+                current[part] = isNaN(parts[i+1]) ? {} : [];
+              }
+              current = current[part];
+            }
+            current[parts[parts.length - 1]] = siteConfig[key];
+          } else {
+            updatedListing[path] = siteConfig[key];
+          }
+        }
+      });
+
+      if (hasChanges) {
+        setPageData(updatedListing);
+      }
     }
-  ];
-
-  const categories = [
-    { name: "Back & Spine Therapy", count: 4 },
-    { name: "Sports Injury Rehab", count: 3 },
-    { name: "Post-Surgical Recovery", count: 2 },
-    { name: "Joint & Muscle Mobilization", count: 3 },
-    { name: "Neurological Physiotherapy", count: 2 }
-  ];
-
-  const recentPosts = [
-    { title: "How Physiotherapy Helps You Heal Faster", date: "Mar 06, 2025", image: "" },
-    { title: "Best Exercises For Shoulder Pain Relief", date: "Mar 08, 2025", image: "" },
-    { title: "Improve Posture With Simple Daily Stretches", date: "Mar 10, 2025", image: "" },
-    { title: "Best Exercises For Shoulder Pain Relief", date: "Mar 08, 2025", image: "" }
-  ];
+  }, [isEditMode, siteConfig]);
 
   return (
     <EditableSection sectionId="blog-listing" label="Blog Listing Section">
@@ -103,24 +90,36 @@ const BlogListing = ({ data: initialData }) => {
           {/* Left Side: Blog Grid */}
           <div className="blog-grid-content">
             <div className="blog-grid">
-              {dummyBlogs.map((blog) => (
-                <div key={blog.id} className={`blog-card ${blog.active ? 'active-card' : ''}`}>
+              {blogs.map((blog, idx) => (
+                <div key={idx} className={`blog-card ${idx === 0 ? 'active-card' : ''}`}>
                   <div className="blog-card-image">
-                    <img src={blog.image} alt={blog.title} />
+                    <img src={blog.image || 'https://via.placeholder.com/600x400'} alt={blog.title} />
                   </div>
                   <div className="blog-card-info">
                     <div className="blog-card-meta">
                       <div className="meta-item">
                         <Calendar size={14} />
-                        <span>{blog.date}</span>
+                        <EditableText sectionId="blog-listing" fieldPath={`listing.blogs.${idx}.date`}>
+                          {blog.date}
+                        </EditableText>
                       </div>
                       <div className="meta-item">
                         <User size={14} />
-                        <span>{blog.author}</span>
+                        <EditableText sectionId="blog-listing" fieldPath={`listing.blogs.${idx}.author`}>
+                          {blog.author}
+                        </EditableText>
                       </div>
                     </div>
-                    <h3 className="blog-card-title">{blog.title}</h3>
-                    <a href={`/blog/${blog.slug}`} className="explore-link">Explore More</a>
+                    <h3 className="blog-card-title">
+                      <EditableText sectionId="blog-listing" fieldPath={`listing.blogs.${idx}.title`}>
+                        {blog.title}
+                      </EditableText>
+                    </h3>
+                    <a href={blog.buttonUrl || "#"} className="explore-link">
+                      <EditableText sectionId="blog-listing" fieldPath={`listing.blogs.${idx}.buttonText`}>
+                        {blog.buttonText || "Explore More"}
+                      </EditableText>
+                    </a>
                   </div>
                 </div>
               ))}
@@ -148,8 +147,14 @@ const BlogListing = ({ data: initialData }) => {
                 <ul className="category-list">
                   {categories.map((cat, idx) => (
                     <li key={idx}>
-                      <span>{cat.name}</span>
-                      <span className="count">({cat.count})</span>
+                      <EditableText sectionId="blog-listing" fieldPath={`listing.categories.${idx}.name`}>
+                        {cat.name}
+                      </EditableText>
+                      <span className="count">
+                        (<EditableText sectionId="blog-listing" fieldPath={`listing.categories.${idx}.count`} tag="span">
+                          {cat.count}
+                        </EditableText>)
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -165,10 +170,26 @@ const BlogListing = ({ data: initialData }) => {
                 <div className="recent-posts">
                   {recentPosts.map((post, idx) => (
                     <div key={idx} className="recent-post-item">
-                      <div className="post-thumb"></div>
+                      <div 
+                        className="post-thumb"
+                        style={{
+                          backgroundImage: `url(${post.image || 'https://via.placeholder.com/80'})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          backgroundColor: '#D9D9D9'
+                        }}
+                      ></div>
                       <div className="post-content">
-                        <span className="post-date">{post.date}</span>
-                        <h5 className="post-title">{post.title}</h5>
+                        <span className="post-date">
+                          <EditableText sectionId="blog-listing" fieldPath={`listing.recentPosts.${idx}.date`}>
+                            {post.date}
+                          </EditableText>
+                        </span>
+                        <h5 className="post-title">
+                          <EditableText sectionId="blog-listing" fieldPath={`listing.recentPosts.${idx}.title`}>
+                            {post.title}
+                          </EditableText>
+                        </h5>
                       </div>
                     </div>
                   ))}
@@ -186,7 +207,9 @@ const BlogListing = ({ data: initialData }) => {
                   }}
                 >
                   <div className="promo-overlay">
-                    <span>Special Offer</span>
+                    <EditableText sectionId="blog-listing" fieldPath="listing.promoButtonText">
+                      {promoButtonText}
+                    </EditableText>
                   </div>
                 </div>
               </div>
@@ -194,6 +217,7 @@ const BlogListing = ({ data: initialData }) => {
           </aside>
 
         </div>
+
 
         <style jsx>{`
           .blog-listing-wrapper {

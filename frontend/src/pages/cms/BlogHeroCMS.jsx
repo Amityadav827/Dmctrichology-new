@@ -158,9 +158,178 @@ export default function BlogHeroCMS() {
                 </div>
               </div>
               <div>
+                <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Promo Button Text</label>
+                <input type="text" value={data.listing.promoButtonText || "Special Offer"} onChange={e => updateSectionField("listing", "promoButtonText", e.target.value)}
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none transition-all" />
+              </div>
+              <div>
                 <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Promo Link</label>
                 <input type="text" value={data.listing.promoLink} onChange={e => updateSectionField("listing", "promoLink", e.target.value)}
                   className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none transition-all" />
+              </div>
+
+              {/* Categories Management */}
+              <div className="md:col-span-2 border-t border-slate-100 pt-8 mt-4">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xs font-black uppercase tracking-widest text-slate-900">Manage Categories</h3>
+                  <button type="button" onClick={() => {
+                    const newCats = [...(data.listing.categories || [])];
+                    newCats.push({ name: "New Category", count: 0 });
+                    updateSectionField("listing", "categories", newCats);
+                  }} className="text-[10px] font-black text-blue-600 uppercase hover:underline">+ Add Category</button>
+                </div>
+                <div className="space-y-4">
+                  {(data.listing.categories || []).map((cat, idx) => (
+                    <div key={idx} className="flex gap-4 items-end bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                      <div className="flex-1">
+                        <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Category Name</label>
+                        <input type="text" value={cat.name} onChange={e => {
+                          const newCats = [...data.listing.categories];
+                          newCats[idx].name = e.target.value;
+                          updateSectionField("listing", "categories", newCats);
+                        }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                      </div>
+                      <div className="w-24">
+                        <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Count</label>
+                        <input type="number" value={cat.count} onChange={e => {
+                          const newCats = [...data.listing.categories];
+                          newCats[idx].count = parseInt(e.target.value);
+                          updateSectionField("listing", "categories", newCats);
+                        }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                      </div>
+                      <button type="button" onClick={() => {
+                        const newCats = data.listing.categories.filter((_, i) => i !== idx);
+                        updateSectionField("listing", "categories", newCats);
+                      }} className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-all">Remove</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Recent Posts Management */}
+              <div className="md:col-span-2 border-t border-slate-100 pt-8 mt-4">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xs font-black uppercase tracking-widest text-slate-900">Manage Recent Posts</h3>
+                  <button type="button" onClick={() => {
+                    const newPosts = [...(data.listing.recentPosts || [])];
+                    newPosts.push({ title: "New Post", date: "Mar 10, 2025", image: "" });
+                    updateSectionField("listing", "recentPosts", newPosts);
+                  }} className="text-[10px] font-black text-blue-600 uppercase hover:underline">+ Add Post</button>
+                </div>
+                <div className="space-y-4">
+                  {(data.listing.recentPosts || []).map((post, idx) => (
+                    <div key={idx} className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="md:col-span-2">
+                          <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Post Title</label>
+                          <input type="text" value={post.title} onChange={e => {
+                            const newPosts = [...data.listing.recentPosts];
+                            newPosts[idx].title = e.target.value;
+                            updateSectionField("listing", "recentPosts", newPosts);
+                          }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                        </div>
+                        <div>
+                          <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Date</label>
+                          <input type="text" value={post.date} onChange={e => {
+                            const newPosts = [...data.listing.recentPosts];
+                            newPosts[idx].date = e.target.value;
+                            updateSectionField("listing", "recentPosts", newPosts);
+                          }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                        </div>
+                        <div>
+                          <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Image URL</label>
+                          <input type="text" value={post.image} onChange={e => {
+                            const newPosts = [...data.listing.recentPosts];
+                            newPosts[idx].image = e.target.value;
+                            updateSectionField("listing", "recentPosts", newPosts);
+                          }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                        </div>
+                      </div>
+                      <div className="flex justify-end">
+                        <button type="button" onClick={() => {
+                          const newPosts = data.listing.recentPosts.filter((_, i) => i !== idx);
+                          updateSectionField("listing", "recentPosts", newPosts);
+                        }} className="text-[10px] font-black text-red-500 uppercase hover:underline">Remove Post</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Featured Blogs Cards Management */}
+              <div className="md:col-span-2 border-t border-slate-100 pt-8 mt-4">
+                <h3 className="text-xs font-black uppercase tracking-widest text-slate-900 mb-6">Featured Blog Cards (4 Cards)</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {(data.listing.blogs || []).map((blog, idx) => (
+                    <div key={idx} className="bg-slate-50 p-6 rounded-3xl border border-slate-100 space-y-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Card #{idx + 1}</span>
+                      </div>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Featured Image URL</label>
+                          <input type="text" value={blog.image} onChange={e => {
+                            const newBlogs = [...data.listing.blogs];
+                            newBlogs[idx].image = e.target.value;
+                            updateSectionField("listing", "blogs", newBlogs);
+                          }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                        </div>
+                        <div>
+                          <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Blog Title</label>
+                          <input type="text" value={blog.title} onChange={e => {
+                            const newBlogs = [...data.listing.blogs];
+                            newBlogs[idx].title = e.target.value;
+                            updateSectionField("listing", "blogs", newBlogs);
+                          }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Author</label>
+                            <input type="text" value={blog.author} onChange={e => {
+                              const newBlogs = [...data.listing.blogs];
+                              newBlogs[idx].author = e.target.value;
+                              updateSectionField("listing", "blogs", newBlogs);
+                            }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                          </div>
+                          <div>
+                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Category</label>
+                            <input type="text" value={blog.category} onChange={e => {
+                              const newBlogs = [...data.listing.blogs];
+                              newBlogs[idx].category = e.target.value;
+                              updateSectionField("listing", "blogs", newBlogs);
+                            }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Date</label>
+                            <input type="text" value={blog.date} onChange={e => {
+                              const newBlogs = [...data.listing.blogs];
+                              newBlogs[idx].date = e.target.value;
+                              updateSectionField("listing", "blogs", newBlogs);
+                            }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                          </div>
+                          <div>
+                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Button Text</label>
+                            <input type="text" value={blog.buttonText} onChange={e => {
+                              const newBlogs = [...data.listing.blogs];
+                              newBlogs[idx].buttonText = e.target.value;
+                              updateSectionField("listing", "blogs", newBlogs);
+                            }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Button URL</label>
+                          <input type="text" value={blog.buttonUrl} onChange={e => {
+                            const newBlogs = [...data.listing.blogs];
+                            newBlogs[idx].buttonUrl = e.target.value;
+                            updateSectionField("listing", "blogs", newBlogs);
+                          }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
