@@ -37,6 +37,33 @@ const BlogListing = ({ data: initialData }) => {
       category: "Back & Spine",
       buttonText: "Explore More",
       buttonLink: "/blog/overcoming-physical-setbacks"
+    },
+    {
+      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+      date: "May 11, 2025",
+      author: "Dr. Rahul Kapoor, Neuro Expert",
+      category: "Sports Injury",
+      buttonText: "Explore More",
+      buttonLink: "/blog/revolutionizing-rehab"
+    },
+    {
+      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+      date: "May 11, 2025",
+      author: "Dr. Rahul Kapoor, Neuro Expert",
+      category: "Post-Surgical",
+      buttonText: "Explore More",
+      buttonLink: "/blog/revolutionizing-rehab-2"
+    },
+    {
+      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+      date: "May 11, 2025",
+      author: "Dr. Rahul Kapoor, Neuro Expert",
+      category: "Neurological",
+      buttonText: "Explore More",
+      buttonLink: "/blog/revolutionizing-rehab-3"
     }
   ];
 
