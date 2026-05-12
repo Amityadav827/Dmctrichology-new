@@ -38,7 +38,7 @@ export default function BlogHeroCMS() {
         { title: "Improve Posture With Simple Daily Stretches", date: "Mar 10, 2025", image: "" },
         { title: "Best Exercises For Shoulder Pain Relief", date: "Mar 08, 2025", image: "" }
       ],
-      blogs: [
+      featuredBlogs: [
         {
           image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
           date: "May 10, 2025",
@@ -46,7 +46,7 @@ export default function BlogHeroCMS() {
           category: "Back & Spine",
           title: "Overcoming Physical Setbacks: How Physiotherapy Recovery.",
           buttonText: "Explore More",
-          buttonUrl: "/blog/overcoming-physical-setbacks"
+          buttonLink: "/blog/overcoming-physical-setbacks"
         },
         {
           image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
@@ -55,7 +55,7 @@ export default function BlogHeroCMS() {
           category: "Sports Injury",
           title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
           buttonText: "Explore More",
-          buttonUrl: "/blog/revolutionizing-rehab"
+          buttonLink: "/blog/revolutionizing-rehab"
         },
         {
           image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
@@ -64,7 +64,7 @@ export default function BlogHeroCMS() {
           category: "Post-Surgical",
           title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
           buttonText: "Explore More",
-          buttonUrl: "/blog/revolutionizing-rehab-2"
+          buttonLink: "/blog/revolutionizing-rehab-2"
         },
         {
           image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
@@ -73,29 +73,84 @@ export default function BlogHeroCMS() {
           category: "Neurological",
           title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
           buttonText: "Explore More",
-          buttonUrl: "/blog/revolutionizing-rehab-3"
+          buttonLink: "/blog/revolutionizing-rehab-3"
         }
       ]
     }
   });
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("hero");
+
+  const defaultFeaturedBlogs = [
+    {
+      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+      date: "May 10, 2025",
+      author: "Dr. Meera Joshi, Posture & Spine",
+      category: "Back & Spine",
+      title: "Overcoming Physical Setbacks: How Physiotherapy Recovery.",
+      buttonText: "Explore More",
+      buttonLink: "/blog/overcoming-physical-setbacks"
+    },
+    {
+      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+      date: "May 11, 2025",
+      author: "Dr. Rahul Kapoor, Neuro Expert",
+      category: "Sports Injury",
+      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+      buttonText: "Explore More",
+      buttonLink: "/blog/revolutionizing-rehab"
+    },
+    {
+      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+      date: "May 11, 2025",
+      author: "Dr. Rahul Kapoor, Neuro Expert",
+      category: "Post-Surgical",
+      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+      buttonText: "Explore More",
+      buttonLink: "/blog/revolutionizing-rehab-2"
+    },
+    {
+      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+      date: "May 11, 2025",
+      author: "Dr. Rahul Kapoor, Neuro Expert",
+      category: "Neurological",
+      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+      buttonText: "Explore More",
+      buttonLink: "/blog/revolutionizing-rehab-3"
+    }
+  ];
 
   useEffect(() => {
     axios.get("/blog-page")
       .then(res => {
         if (res.data?.data) {
           const fetchedData = res.data.data;
-          // Initialize missing listing fields with defaults from the initial state
-          fetchedData.listing = {
-            ...data.listing,
-            ...fetchedData.listing
-          };
-          // Double check arrays
-          if (!fetchedData.listing.categories?.length) fetchedData.listing.categories = data.listing.categories;
-          if (!fetchedData.listing.recentPosts?.length) fetchedData.listing.recentPosts = data.listing.recentPosts;
-          if (!fetchedData.listing.featuredBlogs?.length) fetchedData.listing.featuredBlogs = data.listing.featuredBlogs;
+          // Ensure listing exists
+          if (!fetchedData.listing) fetchedData.listing = {};
+          
+          // Hydrate with defaults if fields are missing or empty
+          if (!fetchedData.listing.featuredBlogs || !Array.isArray(fetchedData.listing.featuredBlogs) || fetchedData.listing.featuredBlogs.length === 0) {
+            fetchedData.listing.featuredBlogs = defaultFeaturedBlogs;
+          }
+          if (!fetchedData.listing.categories || !Array.isArray(fetchedData.listing.categories) || fetchedData.listing.categories.length === 0) {
+            fetchedData.listing.categories = [
+              { name: "Back & Spine Therapy", count: 4 },
+              { name: "Sports Injury Rehab", count: 3 },
+              { name: "Post-Surgical Recovery", count: 2 },
+              { name: "Joint & Muscle Mobilization", count: 3 },
+              { name: "Neurological Physiotherapy", count: 2 }
+            ];
+          }
+          if (!fetchedData.listing.recentPosts || !Array.isArray(fetchedData.listing.recentPosts) || fetchedData.listing.recentPosts.length === 0) {
+            fetchedData.listing.recentPosts = [
+              { title: "How Physiotherapy Helps You Heal Faster", date: "Mar 06, 2025", image: "" },
+              { title: "Best Exercises For Shoulder Pain Relief", date: "Mar 08, 2025", image: "" },
+              { title: "Improve Posture With Simple Daily Stretches", date: "Mar 10, 2025", image: "" },
+              { title: "Best Exercises For Shoulder Pain Relief", date: "Mar 08, 2025", image: "" }
+            ];
+          }
           
           setData(fetchedData);
         }
@@ -337,13 +392,15 @@ export default function BlogHeroCMS() {
                     updateSectionField("listing", "featuredBlogs", newBlogs);
                   }} className="text-[10px] font-black text-blue-600 uppercase hover:underline">+ Add Card</button>
                 </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {(data.listing.featuredBlogs || []).map((blog, idx) => (
+                  {/* Safe rendering logic for Featured Blogs */}
+                  {(data.listing.featuredBlogs || defaultFeaturedBlogs).map((blog, idx) => (
                     <div key={idx} className="bg-slate-50 p-6 rounded-3xl border border-slate-100 space-y-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Card #{idx + 1}</span>
                         <button type="button" onClick={() => {
-                          const newBlogs = data.listing.featuredBlogs.filter((_, i) => i !== idx);
+                          const newBlogs = (data.listing.featuredBlogs || defaultFeaturedBlogs).filter((_, i) => i !== idx);
                           updateSectionField("listing", "featuredBlogs", newBlogs);
                         }} className="text-[9px] font-black text-red-500 uppercase hover:underline">Remove Card</button>
                       </div>
@@ -351,7 +408,7 @@ export default function BlogHeroCMS() {
                         <div>
                           <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Featured Image URL</label>
                           <input type="text" value={blog.image} onChange={e => {
-                            const newBlogs = [...data.listing.featuredBlogs];
+                            const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
                             newBlogs[idx].image = e.target.value;
                             updateSectionField("listing", "featuredBlogs", newBlogs);
                           }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
@@ -359,7 +416,7 @@ export default function BlogHeroCMS() {
                         <div>
                           <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Blog Title</label>
                           <input type="text" value={blog.title} onChange={e => {
-                            const newBlogs = [...data.listing.featuredBlogs];
+                            const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
                             newBlogs[idx].title = e.target.value;
                             updateSectionField("listing", "featuredBlogs", newBlogs);
                           }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
@@ -368,7 +425,7 @@ export default function BlogHeroCMS() {
                           <div>
                             <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Author</label>
                             <input type="text" value={blog.author} onChange={e => {
-                              const newBlogs = [...data.listing.featuredBlogs];
+                              const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
                               newBlogs[idx].author = e.target.value;
                               updateSectionField("listing", "featuredBlogs", newBlogs);
                             }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
@@ -376,7 +433,7 @@ export default function BlogHeroCMS() {
                           <div>
                             <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Category</label>
                             <input type="text" value={blog.category} onChange={e => {
-                              const newBlogs = [...data.listing.featuredBlogs];
+                              const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
                               newBlogs[idx].category = e.target.value;
                               updateSectionField("listing", "featuredBlogs", newBlogs);
                             }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
@@ -386,7 +443,7 @@ export default function BlogHeroCMS() {
                           <div>
                             <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Date</label>
                             <input type="text" value={blog.date} onChange={e => {
-                              const newBlogs = [...data.listing.featuredBlogs];
+                              const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
                               newBlogs[idx].date = e.target.value;
                               updateSectionField("listing", "featuredBlogs", newBlogs);
                             }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
@@ -394,7 +451,7 @@ export default function BlogHeroCMS() {
                           <div>
                             <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Button Text</label>
                             <input type="text" value={blog.buttonText} onChange={e => {
-                              const newBlogs = [...data.listing.featuredBlogs];
+                              const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
                               newBlogs[idx].buttonText = e.target.value;
                               updateSectionField("listing", "featuredBlogs", newBlogs);
                             }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
@@ -403,7 +460,7 @@ export default function BlogHeroCMS() {
                         <div>
                           <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Button Link</label>
                           <input type="text" value={blog.buttonLink} onChange={e => {
-                            const newBlogs = [...data.listing.featuredBlogs];
+                            const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
                             newBlogs[idx].buttonLink = e.target.value;
                             updateSectionField("listing", "featuredBlogs", newBlogs);
                           }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
