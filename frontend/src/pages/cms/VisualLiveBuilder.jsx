@@ -92,10 +92,18 @@ export default function VisualLiveBuilder() {
 
   const sections = getSectionsForSlug(slug);
 
-  // URL for the real frontend
+  // Dynamic base URL detection
   const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
   const frontendPath = slug === 'home' ? '' : slug;
-  const baseUrl = isLocal ? "http://localhost:3000" : "https://dmctrichology-mkm4.vercel.app";
+  
+  // If we're on a deployed version, use the current origin's domain for the frontend as well
+  // (Assuming frontend and backend/dashboard are on the same domain or siblings)
+  const baseUrl = isLocal 
+    ? "http://localhost:3000" 
+    : (window.location.origin.includes('vercel.app') || window.location.origin.includes('render.com')
+        ? window.location.origin.replace('dashboard', 'website').replace('admin', 'www') // Heuristic for siblings
+        : "https://dmctrichology.com"); // Fallback to production domain
+  
   const frontendUrl = `${baseUrl}/${frontendPath}?edit=true&preview=true`;
 
   const pendingChanges = useRef({});
@@ -506,7 +514,7 @@ export default function VisualLiveBuilder() {
             <div className="h-2 w-2 bg-green-500 rounded-full"></div>
             <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Real-time Preview</span>
             <span className="text-slate-300 mx-1">|</span>
-            <span className="text-[10px] font-bold text-slate-400">dmctrichology.com/{slug === 'home' ? '' : slug}</span>
+            <span className="text-[10px] font-bold text-slate-400">{baseUrl.replace('https://', '').replace('http://', '')}/{slug === 'home' ? '' : slug}</span>
           </div>
 
           <div 
