@@ -12,29 +12,51 @@ const detailsPageSchema = new mongoose.Schema(
 
     // ── Section 2: Service Intro ──────────────────────
     intro: {
-      badge: { type: String, default: "FOR UNWANTED HAIR" },
+      badgeText: { type: String, default: "HAIR TREATMENT" },
       title: { type: String, default: "Follicular Unit Extraction (FUE)" },
       rating: { type: String, default: "4.85" },
       duration: { type: String, default: "180 mins" },
-      subTitle: { type: String, default: "Follicular Unit Extraction (FUE)\nSafe, smart & skin-friendly" },
-      description: { type: String, default: "FUE is one of the most popular and limited modern procedure techniques for hair repair. Each hair follicle is removed individually and implanted into the thinning or bald areas, making sure that it's natural volume and growth." },
-      closingText: { type: String, default: "Our FUE procedure is performed by skilled hair transplant surgeons with years of experience, making us the best hair transplant centre in Delhi." },
-      videoGallery: {
+      shortDescription: { type: String, default: "Safe, smart & skin-friendly hair repair" },
+      longDescription: { type: String, default: "FUE is one of the most popular and limited modern procedure techniques for hair repair. Each hair follicle is removed individually and implanted into the thinning or bald areas, making sure that it's natural volume and growth." },
+      
+      benefits: {
+        type: [{ text: String }],
+        default: [
+          { text: "Best for both men and women" },
+          { text: "Low scarring and recovery time" },
+          { text: "Permanent, natural-looking results" }
+        ]
+      },
+
+      videos: {
         type: [{
-          videoType: { type: String, default: "youtube", enum: ["youtube", "vimeo", "mp4"] },
           videoUrl: { type: String, default: "" },
-          videoThumbnail: { type: String, default: "" }
+          thumbnail: { type: String, default: "" },
+          title: { type: String, default: "" },
+          isYoutubeStyleButtonEnabled: { type: Boolean, default: true }
         }],
         default: []
       },
-      bulletPoints: {
-        type: [String],
-        default: [
-          "Best for both men and women",
-          "Low scarring and recovery time",
-          "Permanent, natural-looking results"
-        ]
+
+      sliderSettings: {
+        autoplay: { type: Boolean, default: true },
+        autoplaySpeed: { type: Number, default: 5000 },
+        showDots: { type: Boolean, default: true },
+        loopVideos: { type: Boolean, default: true }
       },
+
+      buttonSettings: {
+        floatingButtonIcon: { type: String, default: "play" },
+        floatingButtonPosition: { type: String, default: "bottom-right" }
+      },
+
+      // Legacy fields for compatibility (optional, but good to keep if they exist in DB)
+      badge: { type: String },
+      subTitle: { type: String },
+      description: { type: String },
+      closingText: { type: String },
+      videoGallery: { type: Array },
+      bulletPoints: { type: [String] },
     },
 
     // ── Section 3: Process Slider ─────────────────────

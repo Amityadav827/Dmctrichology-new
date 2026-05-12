@@ -23,7 +23,28 @@ exports.updateDetailsPage = async (req, res) => {
       // Deep merge: only update sent fields
       if (req.body.banner) Object.assign(data.banner, req.body.banner);
       if (req.body.intro) {
-        Object.assign(data.intro, req.body.intro);
+        // Deep merge top-level intro fields
+        const { videos, benefits, sliderSettings, buttonSettings, ...introFields } = req.body.intro;
+        Object.assign(data.intro, introFields);
+
+        if (videos !== undefined) {
+          data.intro.videos = videos;
+          data.markModified("intro.videos");
+        }
+        if (benefits !== undefined) {
+          data.intro.benefits = benefits;
+          data.markModified("intro.benefits");
+        }
+        if (sliderSettings !== undefined) {
+          data.intro.sliderSettings = { ...data.intro.sliderSettings, ...sliderSettings };
+          data.markModified("intro.sliderSettings");
+        }
+        if (buttonSettings !== undefined) {
+          data.intro.buttonSettings = { ...data.intro.buttonSettings, ...buttonSettings };
+          data.markModified("intro.buttonSettings");
+        }
+
+        // Keep legacy sync for now if needed, or remove if confident
         if (req.body.intro.videoGallery !== undefined) {
           data.intro.videoGallery = req.body.intro.videoGallery;
           data.markModified("intro.videoGallery");

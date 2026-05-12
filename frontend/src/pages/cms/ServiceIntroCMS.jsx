@@ -1,52 +1,88 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
-import { Save, Loader2, Plus, Trash2, Image as ImageIcon } from "lucide-react";
+import { 
+  Save, 
+  Loader2, 
+  Plus, 
+  Trash2, 
+  Image as ImageIcon, 
+  Video, 
+  Settings, 
+  MousePointer2, 
+  ChevronRight,
+  CheckCircle2,
+  Layout,
+  PlayCircle
+} from "lucide-react";
 
 export default function ServiceIntroCMS() {
   const [data, setData] = useState({
-    badge: "FOR UNWANTED HAIR",
+    badgeText: "HAIR TREATMENT",
     title: "Follicular Unit Extraction (FUE)",
     rating: "4.85",
     duration: "180 mins",
-    subTitle: "",
-    description: "",
-    closingText: "",
-    videoGallery: [],
-    bulletPoints: [],
+    shortDescription: "Safe, smart & skin-friendly hair repair",
+    longDescription: "",
+    benefits: [],
+    videos: [],
+    sliderSettings: {
+      autoplay: true,
+      autoplaySpeed: 5000,
+      showDots: true,
+      loopVideos: true
+    },
+    buttonSettings: {
+      floatingButtonIcon: "play",
+      floatingButtonPosition: "bottom-right"
+    }
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState("content"); // content, gallery, settings
 
   useEffect(() => {
     axios.get("/details-page")
       .then(res => {
         const intro = res.data?.data?.intro || {};
-        setData(prev => ({ ...prev, ...intro }));
+        // Merge with defaults to ensure all fields exist
+        setData(prev => ({ 
+          ...prev, 
+          ...intro,
+          sliderSettings: { ...prev.sliderSettings, ...(intro.sliderSettings || {}) },
+          buttonSettings: { ...prev.buttonSettings, ...(intro.buttonSettings || {}) }
+        }));
       })
       .catch(() => toast.error("Failed to load intro data"))
       .finally(() => setLoading(false));
   }, []);
 
   const updateField = (field, val) => setData(d => ({ ...d, [field]: val }));
+  
+  const updateNestedField = (parent, field, val) => {
+    setData(d => ({
+      ...d,
+      [parent]: { ...d[parent], [field]: val }
+    }));
+  };
 
-  // Video Gallery
-  const addVideo = () => updateField("videoGallery", [...(data.videoGallery || []), { videoType: "youtube", videoUrl: "", videoThumbnail: "" }]);
+  // Videos Repeater
+  const addVideo = () => updateField("videos", [...(data.videos || []), { title: "", videoUrl: "", thumbnail: "", isYoutubeStyleButtonEnabled: true }]);
   const updateVideo = (i, field, val) => {
-    const vids = [...(data.videoGallery || [])];
+    const vids = [...(data.videos || [])];
     vids[i] = { ...vids[i], [field]: val };
-    updateField("videoGallery", vids);
+    updateField("videos", vids);
   };
-  const removeVideo = (i) => updateField("videoGallery", (data.videoGallery || []).filter((_, idx) => idx !== i));
+  const removeVideo = (i) => updateField("videos", (data.videos || []).filter((_, idx) => idx !== i));
 
-  // Bullet Points
-  const addBullet = () => updateField("bulletPoints", [...(data.bulletPoints || []), ""]);
-  const updateBullet = (i, val) => {
-    const pts = [...(data.bulletPoints || [])];
-    pts[i] = val;
-    updateField("bulletPoints", pts);
+  // Benefits Repeater
+  const addBenefit = () => updateField("benefits", [...(data.benefits || []), { text: "" }]);
+  const updateBenefit = (i, val) => {
+    const pts = [...(data.benefits || [])];
+    pts[i] = { text: val };
+    updateField("benefits", pts);
   };
-  const removeBullet = (i) => updateField("bulletPoints", (data.bulletPoints || []).filter((_, idx) => idx !== i));
+  const removeBenefit = (i) => updateField("benefits", (data.benefits || []).filter((_, idx) => idx !== i));
 
   const handleSave = async () => {
     setSaving(true);
@@ -60,145 +96,340 @@ export default function ServiceIntroCMS() {
     }
   };
 
-  if (loading) return <div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin h-8 w-8 text-blue-600" /></div>;
+  if (loading) return <div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="animate-spin h-8 w-8 text-blue-600" /></div>;
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
+    <div className="p-8 max-w-6xl mx-auto bg-slate-50 min-h-screen">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
         <div>
-          <h1 className="text-2xl font-black text-gray-900">Details Page — Service Intro</h1>
-          <p className="text-sm text-gray-400 mt-1">Manage the service details section (left gallery + right content)</p>
+          <div className="flex items-center gap-2 mb-1">
+            <Layout className="text-blue-600" size={20} />
+            <h1 className="text-2xl font-black text-slate-900 tracking-tight">Service Details Intro</h1>
+          </div>
+          <p className="text-sm text-slate-500 font-medium italic">Professional video slider + service information management</p>
         </div>
-        <button onClick={handleSave} disabled={saving}
-          className="flex items-center gap-2 bg-gray-900 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-gray-700 disabled:opacity-50 transition-all shadow-lg">
-          {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-          {saving ? "Saving..." : "Save Changes"}
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <button onClick={handleSave} disabled={saving}
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 disabled:opacity-50 transition-all shadow-xl shadow-slate-200">
+            {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+            {saving ? "Saving Changes..." : "Publish Updates"}
+          </button>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-1 bg-slate-200/50 p-1 rounded-2xl mb-8 w-fit">
+        <button 
+          onClick={() => setActiveTab("content")}
+          className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'content' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+        >
+          Right Side Content
+        </button>
+        <button 
+          onClick={() => setActiveTab("gallery")}
+          className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'gallery' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+        >
+          Left Side Slider
+        </button>
+        <button 
+          onClick={() => setActiveTab("settings")}
+          className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'settings' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+        >
+          Slider Settings
         </button>
       </div>
 
-      <div className="space-y-6">
-        {/* Basic Fields */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
-          <h2 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-6">Basic Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Category Badge</label>
-              <input type="text" value={data.badge} onChange={e => updateField("badge", e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500" placeholder="FOR UNWANTED HAIR" />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Rating</label>
-              <input type="text" value={data.rating} onChange={e => updateField("rating", e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none" placeholder="4.85" />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Service Title</label>
-              <input type="text" value={data.title} onChange={e => updateField("title", e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500" placeholder="Follicular Unit Extraction (FUE)" />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Duration</label>
-              <input type="text" value={data.duration} onChange={e => updateField("duration", e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none" placeholder="180 mins" />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Sub-title (optional, supports line breaks)</label>
-              <textarea value={data.subTitle} onChange={e => updateField("subTitle", e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none min-h-[80px] resize-none" placeholder="Bold sub-heading under the title..." />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Main Description</label>
-              <textarea value={data.description} onChange={e => updateField("description", e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none min-h-[120px] resize-none" placeholder="Main descriptive text..." />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Closing Text (optional)</label>
-              <textarea value={data.closingText} onChange={e => updateField("closingText", e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none min-h-[80px] resize-none" placeholder="Closing statement after bullet points..." />
-            </div>
-          </div>
-        </div>
-
-        {/* Video Configuration (Slider) */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-sm font-black uppercase tracking-widest text-gray-400">Video Gallery Slider</h2>
-            <button onClick={addVideo} className="flex items-center gap-1.5 text-xs bg-gray-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-gray-700 transition-all">
-              <Plus size={13} /> Add Video
-            </button>
-          </div>
-
-          <div className="space-y-8">
-            {(data.videoGallery || []).map((video, i) => (
-              <div key={i} className="bg-gray-50 p-6 rounded-xl border border-gray-200 relative">
-                <button onClick={() => removeVideo(i)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors bg-white p-1.5 rounded-md shadow-sm border border-gray-100"><Trash2 size={15} /></button>
-                <div className="mb-4">
-                  <span className="text-xs font-black bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md uppercase">Slide {i + 1}</span>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Video Type</label>
-                    <select value={video.videoType || 'youtube'} onChange={e => updateVideo(i, "videoType", e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none bg-white focus:ring-2 focus:ring-blue-500">
-                      <option value="youtube">YouTube</option>
-                      <option value="vimeo">Vimeo</option>
-                      <option value="mp4">Uploaded MP4</option>
-                    </select>
+      <div className="space-y-8">
+        {activeTab === 'content' && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Main Info */}
+            <div className="lg:col-span-2 space-y-8">
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8 flex items-center gap-2">
+                  <div className="w-1 h-1 bg-blue-600 rounded-full"></div>
+                  Service Text Information
+                </h2>
+                
+                <div className="space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Badge Text</label>
+                      <input type="text" value={data.badgeText} onChange={e => updateField("badgeText", e.target.value)}
+                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all" placeholder="e.g. HAIR TREATMENT" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Rating Value</label>
+                      <input type="text" value={data.rating} onChange={e => updateField("rating", e.target.value)}
+                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all" placeholder="e.g. 4.85" />
+                    </div>
                   </div>
+
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Video URL</label>
-                    <input type="text" value={video.videoUrl || ''} onChange={e => updateVideo(i, "videoUrl", e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="https://www.youtube.com/embed/..." />
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Main Service Title</label>
+                    <input type="text" value={data.title} onChange={e => updateField("title", e.target.value)}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-lg font-black outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all" placeholder="Follicular Unit Extraction (FUE)" />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Duration Text</label>
+                      <input type="text" value={data.duration} onChange={e => updateField("duration", e.target.value)}
+                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all" placeholder="e.g. 180 mins" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Short Catchy Description</label>
+                      <input type="text" value={data.shortDescription} onChange={e => updateField("shortDescription", e.target.value)}
+                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all" placeholder="e.g. Safe, smart & skin-friendly" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Long Detailed Description</label>
+                    <textarea value={data.longDescription} onChange={e => updateField("longDescription", e.target.value)}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-medium outline-none min-h-[160px] focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all resize-none" placeholder="Enter full details about the service..." />
                   </div>
                 </div>
-                <div className="mt-6">
-                  <label className="block text-[10px] font-black uppercase text-gray-400 mb-2 tracking-widest">Custom Thumbnail URL</label>
-                  <div className="flex gap-4 items-start">
-                    <input type="text" value={video.videoThumbnail || ''} onChange={e => updateVideo(i, "videoThumbnail", e.target.value)}
-                      className="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Paste thumbnail image URL..." />
-                    {video.videoThumbnail ? (
-                      <img src={video.videoThumbnail} alt="" className="w-20 h-14 object-cover rounded-xl border flex-shrink-0" />
-                    ) : (
-                      <div className="w-20 h-14 bg-gray-100 rounded-xl border flex items-center justify-center flex-shrink-0">
-                        <ImageIcon size={20} className="text-gray-300" />
+              </div>
+            </div>
+
+            {/* Benefits Repeater */}
+            <div className="space-y-8">
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
+                    <div className="w-1 h-1 bg-blue-600 rounded-full"></div>
+                    Benefits Checklist
+                  </h2>
+                  <button onClick={addBenefit} className="p-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-all shadow-sm shadow-blue-100">
+                    <Plus size={16} />
+                  </button>
+                </div>
+                
+                <div className="space-y-4">
+                  {(data.benefits || []).map((benefit, i) => (
+                    <div key={i} className="flex gap-3 group">
+                      <div className="flex-1 relative">
+                        <input type="text" value={benefit.text} onChange={e => updateBenefit(i, e.target.value)}
+                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                          placeholder={`Benefit #${i + 1}`} />
+                        <CheckCircle2 size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500" />
                       </div>
-                    )}
+                      <button onClick={() => removeBenefit(i)} className="p-3 text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  ))}
+                  {(data.benefits || []).length === 0 && (
+                    <div className="text-center py-10 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                      <p className="text-xs font-bold text-slate-400">No benefits added yet</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'gallery' && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+              <div className="flex justify-between items-center mb-10">
+                <div>
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2 mb-2">
+                    <div className="w-1 h-1 bg-blue-600 rounded-full"></div>
+                    Video Slider Slides
+                  </h2>
+                  <p className="text-xs text-slate-500 font-medium italic">Manage multiple video slides for the left-side slider</p>
+                </div>
+                <button onClick={addVideo} className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-xl shadow-blue-100">
+                  <Video size={16} /> Add Video Slide
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {(data.videos || []).map((video, i) => (
+                  <div key={i} className="group relative bg-slate-50/50 rounded-[28px] border border-slate-100 p-8 hover:bg-white hover:shadow-2xl hover:shadow-slate-200 transition-all duration-500">
+                    <button onClick={() => removeVideo(i)} className="absolute top-6 right-6 text-slate-300 hover:text-red-500 transition-colors bg-white p-2.5 rounded-xl shadow-sm opacity-0 group-hover:opacity-100">
+                      <Trash2 size={16} />
+                    </button>
+                    
+                    <div className="flex items-center gap-3 mb-8">
+                      <div className="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                        <span className="text-sm font-black">{i + 1}</span>
+                      </div>
+                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">Slide Configuration</h4>
+                    </div>
+
+                    <div className="space-y-6">
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Slide Title</label>
+                        <input type="text" value={video.title} onChange={e => updateVideo(i, "title", e.target.value)}
+                          className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="e.g. FUE Process Overview" />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Video Embed URL (YouTube/MP4)</label>
+                        <div className="relative">
+                          <input type="text" value={video.videoUrl} onChange={e => updateVideo(i, "videoUrl", e.target.value)}
+                            className="w-full pl-12 pr-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="https://..." />
+                          <Video size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Cover Image (Thumbnail)</label>
+                        <div className="flex gap-4">
+                          <div className="flex-1 relative">
+                            <input type="text" value={video.thumbnail} onChange={e => updateVideo(i, "thumbnail", e.target.value)}
+                              className="w-full pl-12 pr-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="Thumbnail URL..." />
+                            <ImageIcon size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                          </div>
+                          {video.thumbnail ? (
+                            <img src={video.thumbnail} className="w-14 h-14 object-cover rounded-2xl shadow-md border-2 border-white" alt="" />
+                          ) : (
+                            <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-300">
+                              <ImageIcon size={20} />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-slate-100">
+                        <input 
+                          type="checkbox" 
+                          checked={video.isYoutubeStyleButtonEnabled} 
+                          onChange={e => updateVideo(i, "isYoutubeStyleButtonEnabled", e.target.checked)}
+                          className="w-5 h-5 rounded-lg border-slate-300 text-blue-600 focus:ring-blue-500 transition-all"
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-900">Show Play Button Overlay</span>
+                          <span className="text-[9px] text-slate-400 font-bold uppercase">Enable floating play button on this slide</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {(data.videos || []).length === 0 && (
+                  <div className="md:col-span-2 text-center py-20 bg-slate-50/50 rounded-[40px] border-2 border-dashed border-slate-200">
+                    <Video size={48} className="text-slate-200 mx-auto mb-4" />
+                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest">No Videos Added</h3>
+                    <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase">Click the button above to add your first video slide</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'settings' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Slider Config */}
+            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8 flex items-center gap-2">
+                <div className="w-1 h-1 bg-blue-600 rounded-full"></div>
+                Technical Configuration
+              </h2>
+
+              <div className="space-y-6">
+                <div className="flex items-center justify-between p-6 bg-slate-50/50 rounded-2xl border border-slate-100 group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors shadow-sm">
+                      <MousePointer2 size={18} />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">Autoplay Slider</h4>
+                      <p className="text-[10px] text-slate-400 font-bold uppercase">Automatically switch slides</p>
+                    </div>
+                  </div>
+                  <div className="relative inline-flex items-center cursor-pointer" onClick={() => updateNestedField("sliderSettings", "autoplay", !data.sliderSettings.autoplay)}>
+                    <div className={`w-12 h-6 rounded-full transition-all duration-300 ${data.sliderSettings.autoplay ? 'bg-blue-600' : 'bg-slate-300'}`}>
+                      <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all duration-300 ${data.sliderSettings.autoplay ? 'translate-x-6' : 'translate-x-0'}`}></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between p-6 bg-slate-50/50 rounded-2xl border border-slate-100 group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors shadow-sm">
+                      <Settings size={18} />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">Autoplay Speed</h4>
+                      <p className="text-[10px] text-slate-400 font-bold uppercase">Duration in milliseconds</p>
+                    </div>
+                  </div>
+                  <input type="number" value={data.sliderSettings.autoplaySpeed} onChange={e => updateNestedField("sliderSettings", "autoplaySpeed", parseInt(e.target.value))}
+                    className="w-24 px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black outline-none" />
+                </div>
+
+                <div className="flex items-center justify-between p-6 bg-slate-50/50 rounded-2xl border border-slate-100 group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors shadow-sm">
+                      <ChevronRight size={18} />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">Loop Slider</h4>
+                      <p className="text-[10px] text-slate-400 font-bold uppercase">Infinite scrolling loop</p>
+                    </div>
+                  </div>
+                  <div className="relative inline-flex items-center cursor-pointer" onClick={() => updateNestedField("sliderSettings", "loopVideos", !data.sliderSettings.loopVideos)}>
+                    <div className={`w-12 h-6 rounded-full transition-all duration-300 ${data.sliderSettings.loopVideos ? 'bg-blue-600' : 'bg-slate-300'}`}>
+                      <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all duration-300 ${data.sliderSettings.loopVideos ? 'translate-x-6' : 'translate-x-0'}`}></div>
+                    </div>
                   </div>
                 </div>
               </div>
-            ))}
-            {(data.videoGallery || []).length === 0 && (
-              <p className="text-sm text-gray-400 text-center py-4 bg-gray-50 rounded-xl border border-dashed border-gray-200">No videos in slider. Click "Add Video" to get started.</p>
-            )}
-          </div>
-        </div>
+            </div>
 
-        {/* Bullet Points */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-sm font-black uppercase tracking-widest text-gray-400">Bullet Points</h2>
-            <button onClick={addBullet} className="flex items-center gap-1.5 text-xs bg-gray-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-gray-700 transition-all">
-              <Plus size={13} /> Add Point
-            </button>
-          </div>
-          <div className="space-y-3">
-            {(data.bulletPoints || []).map((point, i) => (
-              <div key={i} className="flex gap-3 items-center">
-                <span className="text-[10px] font-black text-gray-300 w-4">•</span>
-                <input type="text" value={point} onChange={e => updateBullet(i, e.target.value)}
-                  className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm outline-none"
-                  placeholder={`Bullet point ${i + 1}`} />
-                <button onClick={() => removeBullet(i)} className="p-2 text-gray-300 hover:text-red-500 transition-colors"><Trash2 size={15} /></button>
+            {/* Button Settings */}
+            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8 flex items-center gap-2">
+                <div className="w-1 h-1 bg-blue-600 rounded-full"></div>
+                Floating UI Customization
+              </h2>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Floating Button Position</label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <button 
+                      onClick={() => updateNestedField("buttonSettings", "floatingButtonPosition", "bottom-right")}
+                      className={`p-4 rounded-2xl border transition-all flex flex-col items-center gap-2 ${data.buttonSettings.floatingButtonPosition === 'bottom-right' ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-200'}`}
+                    >
+                      <div className="w-full h-12 bg-white rounded-lg relative overflow-hidden">
+                        <div className="absolute bottom-2 right-2 w-3 h-3 bg-current rounded-full"></div>
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-widest">Bottom Right</span>
+                    </button>
+                    <button 
+                      onClick={() => updateNestedField("buttonSettings", "floatingButtonPosition", "bottom-left")}
+                      className={`p-4 rounded-2xl border transition-all flex flex-col items-center gap-2 ${data.buttonSettings.floatingButtonPosition === 'bottom-left' ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-200'}`}
+                    >
+                      <div className="w-full h-12 bg-white rounded-lg relative overflow-hidden">
+                        <div className="absolute bottom-2 left-2 w-3 h-3 bg-current rounded-full"></div>
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-widest">Bottom Left</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Overlay Style Preset</label>
+                  <div className="flex items-center gap-4 p-6 bg-slate-50 rounded-[28px] border border-slate-100">
+                    <div className="w-16 h-16 bg-red-600 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-red-100">
+                      <PlayCircle size={32} />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">Modern Youtube UI</h4>
+                      <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase">Floating red pill with shadow</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))}
-            {(data.bulletPoints || []).length === 0 && (
-              <p className="text-sm text-gray-400 text-center py-4">No bullet points. Click "Add Point".</p>
-            )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
