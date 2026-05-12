@@ -103,15 +103,15 @@ const ServiceIntro = ({ data = {} }) => {
 
   return (
     <EditableSection sectionId="service-intro" label="Service Details Intro">
-      <section className="py-12 md:py-20 bg-white">
-        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+      <section className="service-intro-premium">
+        <div className="intro-container-premium">
+          <div className="intro-flex-row">
             
             {/* ─── LEFT SIDE: Video Slider ─────────────────── */}
-            <div className="w-full lg:w-1/2">
-              <div className="relative group">
+            <div className="intro-media-column">
+              <div className="media-card-wrapper">
                 {/* Main Slider Container */}
-                <div className="relative rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] bg-slate-100 aspect-[16/10] md:aspect-auto md:h-[500px]">
+                <div className="video-slider-main">
                   <Swiper
                     modules={[Navigation, Pagination, Autoplay]}
                     onSwiper={(swiper) => (swiperRef.current = swiper)}
@@ -120,56 +120,56 @@ const ServiceIntro = ({ data = {} }) => {
                     loop={sliderSettings.loopVideos}
                     autoplay={sliderSettings.autoplay ? { delay: sliderSettings.autoplaySpeed, disableOnInteraction: false } : false}
                     pagination={sliderSettings.showDots ? { clickable: true, el: '.custom-swiper-pagination' } : false}
-                    className="h-full w-full"
+                    className="full-height-swiper"
                   >
                     {videos.map((video, index) => (
-                      <SwiperSlide key={index} className="relative h-full w-full">
-                        <div className="relative h-full w-full">
+                      <SwiperSlide key={index}>
+                        <div className="slide-video-container">
                           {activeVideo === index ? (
-                            <div className="absolute inset-0 bg-black z-20">
+                            <div className="video-overlay-active">
                               <iframe
                                 src={`${video.videoUrl.includes('?') ? video.videoUrl : video.videoUrl + '?'}autoplay=1&rel=0&modestbranding=1`}
                                 title={video.title || "Service Video"}
-                                className="w-full h-full border-none"
+                                className="video-iframe"
                                 allow="autoplay; encrypted-media; fullscreen"
                                 allowFullScreen
                               />
                               <button 
                                 onClick={() => setActiveVideo(null)}
-                                className="absolute top-6 right-6 z-30 bg-white/20 hover:bg-white/40 backdrop-blur-md text-white p-2 rounded-full transition-all"
+                                className="video-close-btn"
                               >
                                 <ChevronLeft className="rotate-180" size={20} />
                               </button>
                             </div>
                           ) : (
-                            <div className="relative h-full w-full cursor-pointer group/slide" onClick={() => setActiveVideo(index)}>
+                            <div className="video-poster-wrapper" onClick={() => setActiveVideo(index)}>
                               <img 
                                 src={video.thumbnail || 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png'} 
                                 alt={video.title} 
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover/slide:scale-105"
+                                className="video-poster-img"
                               />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover/slide:opacity-80 transition-opacity"></div>
+                              <div className="video-poster-gradient"></div>
                               
                               {/* Central Play Button */}
-                              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white/95 rounded-full flex items-center justify-center shadow-2xl scale-90 group-hover/slide:scale-100 transition-all duration-300">
-                                <Play fill="#1e293b" className="text-slate-800 ml-1" size={32} />
+                              <div className="play-button-center">
+                                <Play fill="#1e293b" className="play-icon-svg" size={32} />
                               </div>
 
                               {/* Floating Youtube Style Button */}
                               {video.isYoutubeStyleButtonEnabled && (
-                                <div className={`absolute ${buttonSettings.floatingButtonPosition === 'bottom-right' ? 'bottom-8 right-8' : 'bottom-8 left-8'} z-10 animate-bounce-slow`}>
-                                  <div className="bg-red-600 p-3 rounded-2xl shadow-[0_10px_20px_rgba(220,38,38,0.4)] flex items-center gap-2 hover:scale-110 transition-transform cursor-pointer">
-                                    <YoutubeIcon className="text-white" size={20} />
-                                    <span className="text-[10px] font-black text-white uppercase tracking-widest hidden md:block">Watch Now</span>
+                                <div className={`floating-youtube-btn ${buttonSettings.floatingButtonPosition}`}>
+                                  <div className="youtube-btn-inner">
+                                    <YoutubeIcon size={20} />
+                                    <span className="youtube-btn-text">Watch Now</span>
                                   </div>
                                 </div>
                               )}
 
                               {/* Slide Title */}
                               {video.title && (
-                                <div className="absolute bottom-8 left-8 right-8 text-white z-10 pointer-events-none">
-                                  <p className="text-xs font-black uppercase tracking-widest opacity-70 mb-1">Slide {index + 1}</p>
-                                  <h4 className="text-lg font-bold">{video.title}</h4>
+                                <div className="slide-info-overlay">
+                                  <p className="slide-count">Slide {index + 1}</p>
+                                  <h4 className="slide-main-title">{video.title}</h4>
                                 </div>
                               )}
                             </div>
@@ -182,13 +182,13 @@ const ServiceIntro = ({ data = {} }) => {
                   {/* Navigation Arrows */}
                   <button 
                     onClick={() => swiperRef.current?.slidePrev()}
-                    className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg text-slate-800 opacity-0 group-hover:opacity-100 transition-all hover:bg-white"
+                    className="swiper-nav-btn swiper-prev"
                   >
                     <ChevronLeft size={24} />
                   </button>
                   <button 
                     onClick={() => swiperRef.current?.slideNext()}
-                    className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg text-slate-800 opacity-0 group-hover:opacity-100 transition-all hover:bg-white"
+                    className="swiper-nav-btn swiper-next"
                   >
                     <ChevronRight size={24} />
                   </button>
@@ -196,18 +196,18 @@ const ServiceIntro = ({ data = {} }) => {
 
                 {/* Pagination Dots (Bottom Center) */}
                 {sliderSettings.showDots && (
-                  <div className="flex justify-center mt-8">
-                    <div className="custom-swiper-pagination !static !flex !gap-2 !w-auto"></div>
+                  <div className="pagination-dots-container">
+                    <div className="custom-swiper-pagination"></div>
                   </div>
                 )}
               </div>
             </div>
 
             {/* ─── RIGHT SIDE: Content ───────────────────── */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-center">
+            <div className="intro-content-column">
               {/* Badge */}
-              <div className="mb-6">
-                <span className="inline-block px-4 py-1.5 bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-widest rounded-full">
+              <div className="content-badge-box">
+                <span className="content-badge-premium">
                   <EditableText sectionId="service-intro" fieldPath="intro.badgeText">
                     {intro.badgeText || intro.badge || 'HAIR TREATMENT'}
                   </EditableText>
@@ -215,29 +215,29 @@ const ServiceIntro = ({ data = {} }) => {
               </div>
 
               {/* Title */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.1] mb-6">
+              <h1 className="intro-main-heading">
                 <EditableText sectionId="service-intro" fieldPath="intro.title">
                   {intro.title || 'Follicular Unit Extraction (FUE)'}
                 </EditableText>
               </h1>
 
               {/* Meta Stats */}
-              <div className="flex items-center gap-8 mb-8 pb-8 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-0.5">
+              <div className="intro-meta-stats">
+                <div className="meta-stat-item">
+                  <div className="star-rating-row">
                     {[1, 2, 3, 4, 5].map((s) => (
-                      <Star key={s} size={14} fill="#fbbf24" className="text-amber-400" />
+                      <Star key={s} size={14} fill="#fbbf24" className="star-icon" />
                     ))}
                   </div>
-                  <span className="text-sm font-black text-slate-900">
+                  <span className="rating-value">
                     <EditableText sectionId="service-intro" fieldPath="intro.rating">
                       {intro.rating || '4.85'}
                     </EditableText>
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-slate-400">
-                  <Clock size={16} />
-                  <span className="text-sm font-bold uppercase tracking-tight">
+                <div className="meta-stat-item divider-left">
+                  <Clock size={16} className="clock-icon" />
+                  <span className="duration-text">
                     <EditableText sectionId="service-intro" fieldPath="intro.duration">
                       {intro.duration || '180 mins'}
                     </EditableText>
@@ -246,13 +246,13 @@ const ServiceIntro = ({ data = {} }) => {
               </div>
 
               {/* Descriptions */}
-              <div className="space-y-6 mb-10">
-                <div className="text-lg md:text-xl font-bold text-slate-800 leading-relaxed italic">
+              <div className="intro-description-box">
+                <div className="intro-short-desc">
                   <EditableText sectionId="service-intro" fieldPath="intro.shortDescription">
                     {intro.shortDescription || intro.subTitle || 'Safe, smart & skin-friendly hair repair'}
                   </EditableText>
                 </div>
-                <p className="text-slate-500 leading-relaxed text-base md:text-lg">
+                <p className="intro-long-desc">
                   <EditableText sectionId="service-intro" fieldPath="intro.longDescription">
                     {intro.longDescription || intro.description || 'FUE is one of the most popular and limited modern procedure techniques for hair repair.'}
                   </EditableText>
@@ -261,13 +261,13 @@ const ServiceIntro = ({ data = {} }) => {
 
               {/* Benefits Checklist */}
               {benefits.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="benefits-checklist-grid">
                   {benefits.map((benefit, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
+                    <div key={i} className="benefit-check-item">
+                      <div className="check-dot-wrapper">
+                        <div className="check-dot-inner"></div>
                       </div>
-                      <span className="text-sm font-bold text-slate-700">{benefit.text}</span>
+                      <span className="benefit-label">{benefit.text}</span>
                     </div>
                   ))}
                 </div>
