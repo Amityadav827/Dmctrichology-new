@@ -55,59 +55,88 @@ const MapSection = ({ data: initialData }) => {
             transform: 'translate(-50%, -50%)',
             display: 'flex',
             alignItems: 'center',
-            gap: '15px',
-            zIndex: 10
+            gap: '20px',
+            zIndex: 10,
+            width: 'fit-content'
           }}
         >
+          {/* Pin Icon Container */}
           <div 
             style={{ 
-              width: '50px', 
-              height: '50px', 
+              width: '75px', 
+              height: '75px', 
               backgroundColor: '#fff', 
               borderRadius: '50%', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center',
-              boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
+              boxShadow: '0 15px 35px rgba(0,0,0,0.15)',
+              flexShrink: 0
             }}
           >
-            <MapPin size={24} color={iconColor} fill={iconColor} fillOpacity={0.1} />
+            <MapPin size={35} color={iconColor} fill={iconColor} />
           </div>
 
+          {/* Blue Rounded Card */}
           <div 
             style={{
               backgroundColor: cardBackground,
-              padding: '15px 30px',
-              borderRadius: '12px',
+              padding: '12px',
+              borderRadius: '32px',
               color: textColor,
-              boxShadow: '0 15px 35px rgba(0,0,0,0.2)',
-              minWidth: '200px'
+              boxShadow: '0 25px 60px rgba(0,0,0,0.25)',
+              display: 'flex',
+              alignItems: 'center',
+              minWidth: '380px'
             }}
           >
-            <h3 
-              style={{ 
-                margin: 0, 
-                fontFamily: "'Marcellus', serif", 
-                fontSize: '18px',
-                fontWeight: 400
+            {/* Left Glass Preview Area */}
+            <div 
+              style={{
+                width: '160px',
+                height: '110px',
+                backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                borderRadius: '24px',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                marginRight: '28px'
               }}
-            >
-              <EditableText sectionId="contact-map" fieldPath="city" tag="span">
-                {city}
-              </EditableText>
-            </h3>
-            <p 
-              style={{ 
-                margin: 0, 
-                fontFamily: "'Lato', sans-serif", 
-                fontSize: '13px',
-                opacity: 0.8
-              }}
-            >
-              <EditableText sectionId="contact-map" fieldPath="area" tag="span">
-                {area}
-              </EditableText>
-            </p>
+            />
+
+            {/* Right Text Content */}
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <h3 
+                style={{ 
+                  margin: 0, 
+                  fontFamily: "'Marcellus', serif", 
+                  fontSize: '36px',
+                  fontWeight: 400,
+                  lineHeight: '1',
+                  letterSpacing: '0.5px',
+                  color: textColor
+                }}
+              >
+                <EditableText sectionId="contact-map" fieldPath="city" tag="span">
+                  {city}
+                </EditableText>
+              </h3>
+              <p 
+                style={{ 
+                  margin: '8px 0 0', 
+                  fontFamily: "'Lato', sans-serif", 
+                  fontSize: '18px',
+                  fontWeight: 300,
+                  opacity: 0.75,
+                  letterSpacing: '0.5px',
+                  color: textColor
+                }}
+              >
+                <EditableText sectionId="contact-map" fieldPath="area" tag="span">
+                  {area}
+                </EditableText>
+              </p>
+            </div>
           </div>
         </div>
 
@@ -115,7 +144,28 @@ const MapSection = ({ data: initialData }) => {
           @media (max-width: 768px) {
             .location-floating-card {
               flex-direction: column;
-              gap: 10px;
+              gap: 15px !important;
+              width: 90% !important;
+            }
+            .location-floating-card > div:last-child {
+              min-width: unset !important;
+              width: 100%;
+              flex-direction: column;
+              padding: 20px !important;
+              text-align: center;
+              border-radius: 24px !important;
+            }
+            .location-floating-card > div:last-child > div:first-child {
+              margin-right: 0 !important;
+              margin-bottom: 15px;
+              width: 100% !important;
+              height: 80px !important;
+            }
+            .location-floating-card h3 {
+              font-size: 28px !important;
+            }
+            .location-floating-card p {
+              font-size: 15px !important;
             }
           }
         `}</style>
