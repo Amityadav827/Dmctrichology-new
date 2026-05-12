@@ -22,8 +22,60 @@ export default function BlogHeroCMS() {
       sidebarSearchPlaceholder: "Enter Key Word",
       sidebarCategoriesTitle: "Blog Categories",
       sidebarRecentPostsTitle: "Recent Post",
-      promoImage: "",
+      promoImage: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
       promoLink: "",
+      promoButtonText: "Special Offer",
+      categories: [
+        { name: "Back & Spine Therapy", count: 4 },
+        { name: "Sports Injury Rehab", count: 3 },
+        { name: "Post-Surgical Recovery", count: 2 },
+        { name: "Joint & Muscle Mobilization", count: 3 },
+        { name: "Neurological Physiotherapy", count: 2 }
+      ],
+      recentPosts: [
+        { title: "How Physiotherapy Helps You Heal Faster", date: "Mar 06, 2025", image: "" },
+        { title: "Best Exercises For Shoulder Pain Relief", date: "Mar 08, 2025", image: "" },
+        { title: "Improve Posture With Simple Daily Stretches", date: "Mar 10, 2025", image: "" },
+        { title: "Best Exercises For Shoulder Pain Relief", date: "Mar 08, 2025", image: "" }
+      ],
+      blogs: [
+        {
+          image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+          date: "May 10, 2025",
+          author: "Dr. Meera Joshi, Posture & Spine",
+          category: "Back & Spine",
+          title: "Overcoming Physical Setbacks: How Physiotherapy Recovery.",
+          buttonText: "Explore More",
+          buttonUrl: "/blog/overcoming-physical-setbacks"
+        },
+        {
+          image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+          date: "May 11, 2025",
+          author: "Dr. Rahul Kapoor, Neuro Expert",
+          category: "Sports Injury",
+          title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+          buttonText: "Explore More",
+          buttonUrl: "/blog/revolutionizing-rehab"
+        },
+        {
+          image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+          date: "May 11, 2025",
+          author: "Dr. Rahul Kapoor, Neuro Expert",
+          category: "Post-Surgical",
+          title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+          buttonText: "Explore More",
+          buttonUrl: "/blog/revolutionizing-rehab-2"
+        },
+        {
+          image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+          date: "May 11, 2025",
+          author: "Dr. Rahul Kapoor, Neuro Expert",
+          category: "Neurological",
+          title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+          buttonText: "Explore More",
+          buttonUrl: "/blog/revolutionizing-rehab-3"
+        }
+      ]
     }
   });
   const [loading, setLoading] = useState(true);

@@ -16,25 +16,44 @@ const BlogListing = ({ data: initialData }) => {
     }
   }, [initialData]);
 
-  // Real-time sync from Visual Builder
-  useEffect(() => {
-    if (isEditMode && siteConfig) {
-      const updatedListing = { ...pageData };
-      let hasChanges = false;
-
-      Object.keys(siteConfig).forEach(key => {
-        if (key.startsWith('blog-listing.listing.')) {
-          hasChanges = true;
-          const field = key.replace('blog-listing.listing.', '');
-          updatedListing[field] = siteConfig[key];
-        }
-      });
-
-      if (hasChanges) {
-        setPageData(updatedListing);
-      }
+  const fallbackBlogs = [
+    {
+      title: "Overcoming Physical Setbacks: How Physiotherapy Recovery.",
+      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+      date: "May 10, 2025",
+      author: "Dr. Meera Joshi, Posture & Spine",
+      category: "Back & Spine",
+      buttonText: "Explore More",
+      buttonUrl: "/blog/overcoming-physical-setbacks"
+    },
+    {
+      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+      date: "May 11, 2025",
+      author: "Dr. Rahul Kapoor, Neuro Expert",
+      category: "Sports Injury",
+      buttonText: "Explore More",
+      buttonUrl: "/blog/revolutionizing-rehab"
+    },
+    {
+      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+      date: "May 11, 2025",
+      author: "Dr. Rahul Kapoor, Neuro Expert",
+      category: "Post-Surgical",
+      buttonText: "Explore More",
+      buttonUrl: "/blog/revolutionizing-rehab-2"
+    },
+    {
+      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
+      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+      date: "May 11, 2025",
+      author: "Dr. Rahul Kapoor, Neuro Expert",
+      category: "Neurological",
+      buttonText: "Explore More",
+      buttonUrl: "/blog/revolutionizing-rehab-3"
     }
-  }, [isEditMode, siteConfig, pageData]);
+  ];
 
   const {
     sidebarSearchPlaceholder = "Enter Key Word",
@@ -45,8 +64,23 @@ const BlogListing = ({ data: initialData }) => {
     promoButtonText = "Special Offer",
     categories = [],
     recentPosts = [],
-    blogs = []
+    blogs: cmsBlogs = []
   } = pageData;
+
+  const blogs = (cmsBlogs.length > 0 && cmsBlogs[0].title) ? cmsBlogs : fallbackBlogs;
+  const displayCategories = categories.length > 0 ? categories : [
+    { name: "Back & Spine Therapy", count: 4 },
+    { name: "Sports Injury Rehab", count: 3 },
+    { name: "Post-Surgical Recovery", count: 2 },
+    { name: "Joint & Muscle Mobilization", count: 3 },
+    { name: "Neurological Physiotherapy", count: 2 }
+  ];
+  const displayRecentPosts = recentPosts.length > 0 ? recentPosts : [
+    { title: "How Physiotherapy Helps You Heal Faster", date: "Mar 06, 2025", image: "" },
+    { title: "Best Exercises For Shoulder Pain Relief", date: "Mar 08, 2025", image: "" },
+    { title: "Improve Posture With Simple Daily Stretches", date: "Mar 10, 2025", image: "" },
+    { title: "Best Exercises For Shoulder Pain Relief", date: "Mar 08, 2025", image: "" }
+  ];
 
   // Real-time sync from Visual Builder
   useEffect(() => {
@@ -145,7 +179,7 @@ const BlogListing = ({ data: initialData }) => {
                    </EditableText>
                 </h4>
                 <ul className="category-list">
-                  {categories.map((cat, idx) => (
+                  {displayCategories.map((cat, idx) => (
                     <li key={idx}>
                       <EditableText sectionId="blog-listing" fieldPath={`listing.categories.${idx}.name`}>
                         {cat.name}
@@ -168,7 +202,7 @@ const BlogListing = ({ data: initialData }) => {
                    </EditableText>
                 </h4>
                 <div className="recent-posts">
-                  {recentPosts.map((post, idx) => (
+                  {displayRecentPosts.map((post, idx) => (
                     <div key={idx} className="recent-post-item">
                       <div 
                         className="post-thumb"
