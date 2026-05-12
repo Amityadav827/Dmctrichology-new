@@ -10,8 +10,21 @@ const BlogHero = ({ data: initialData }) => {
 
   // Real-time sync from Visual Builder
   React.useEffect(() => {
-    if (isEditMode && siteConfig && siteConfig.sectionId === 'blog-hero') {
-      setData(prev => ({ ...prev, ...siteConfig.data }));
+    if (isEditMode && siteConfig) {
+      const updatedData = { ...data };
+      let hasChanges = false;
+
+      Object.keys(siteConfig).forEach(key => {
+        if (key.startsWith('blog-hero.hero.')) {
+          hasChanges = true;
+          const field = key.replace('blog-hero.hero.', '');
+          updatedData[field] = siteConfig[key];
+        }
+      });
+
+      if (hasChanges) {
+        setData(updatedData);
+      }
     }
   }, [isEditMode, siteConfig]);
 

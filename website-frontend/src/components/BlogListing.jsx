@@ -9,17 +9,39 @@ const BlogListing = ({ data: initialData }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [pageData, setPageData] = useState(initialData?.listing || {});
 
+  // Sync state when initialData changes (SSR data)
+  useEffect(() => {
+    if (initialData?.listing) {
+      setPageData(initialData.listing);
+    }
+  }, [initialData]);
+
   // Real-time sync from Visual Builder
   useEffect(() => {
-    if (isEditMode && siteConfig && siteConfig.sectionId === 'blog-listing') {
-      setPageData(prev => ({ ...prev, ...siteConfig.data.listing }));
+    if (isEditMode && siteConfig) {
+      const updatedListing = { ...pageData };
+      let hasChanges = false;
+
+      Object.keys(siteConfig).forEach(key => {
+        if (key.startsWith('blog-listing.listing.')) {
+          hasChanges = true;
+          const field = key.replace('blog-listing.listing.', '');
+          updatedListing[field] = siteConfig[key];
+        }
+      });
+
+      if (hasChanges) {
+        setPageData(updatedListing);
+      }
     }
-  }, [isEditMode, siteConfig]);
+  }, [isEditMode, siteConfig, pageData]);
 
   const {
     sidebarSearchPlaceholder = "Enter Key Word",
     sidebarCategoriesTitle = "Blog Categories",
     sidebarRecentPostsTitle = "Recent Post",
+    promoImage = "",
+    promoLink = ""
   } = pageData;
 
   const dummyBlogs = [
@@ -158,7 +180,7 @@ const BlogListing = ({ data: initialData }) => {
                 <div 
                   className="promo-banner"
                   style={{
-                    backgroundImage: `url(${pageData.promoImage || 'https://via.placeholder.com/320x350/D9D9D9/888888?text=Promo+Banner'})`,
+                    backgroundImage: `url(${promoImage || 'https://via.placeholder.com/320x350/D9D9D9/888888?text=Promo+Banner'})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                   }}
