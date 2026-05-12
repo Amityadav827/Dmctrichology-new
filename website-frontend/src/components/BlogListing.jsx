@@ -5,9 +5,10 @@ import EditableText from './Editable/EditableText';
 import { useBuilder } from '../context/BuilderContext';
 import { Search, Calendar, User } from 'lucide-react';
 
-const BlogListing = ({ data: initialData }) => {
+const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [pageData, setPageData] = useState(initialData?.listing || {});
+  const [blogs, setBlogs] = useState(initialBlogs);
 
   // Sync state when initialData changes (SSR data)
   useEffect(() => {
@@ -15,6 +16,12 @@ const BlogListing = ({ data: initialData }) => {
       setPageData(initialData.listing);
     }
   }, [initialData]);
+
+  useEffect(() => {
+    if (initialBlogs) {
+      setBlogs(initialBlogs);
+    }
+  }, [initialBlogs]);
 
   const {
     sidebarSearchPlaceholder = "Enter Key Word",
@@ -24,51 +31,8 @@ const BlogListing = ({ data: initialData }) => {
     promoLink = "",
     promoButtonText = "Special Offer",
     categories = [],
-    recentPosts = [],
-    featuredBlogs = []
+    recentPosts = []
   } = pageData;
-
-  const blogs = featuredBlogs.length > 0 ? featuredBlogs : [
-    {
-      title: "Overcoming Physical Setbacks: How Physiotherapy Recovery.",
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 10, 2025",
-      author: "Dr. Meera Joshi, Posture & Spine",
-      category: "Back & Spine",
-      buttonText: "Explore More",
-      buttonLink: "/blog/overcoming-physical-setbacks"
-    },
-    {
-      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 11, 2025",
-      author: "Dr. Rahul Kapoor, Neuro Expert",
-      category: "Sports Injury",
-      buttonText: "Explore More",
-      buttonLink: "/blog/revolutionizing-rehab"
-    },
-    {
-      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 11, 2025",
-      author: "Dr. Rahul Kapoor, Neuro Expert",
-      category: "Post-Surgical",
-      buttonText: "Explore More",
-      buttonLink: "/blog/revolutionizing-rehab-2"
-    },
-    {
-      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 11, 2025",
-      author: "Dr. Rahul Kapoor, Neuro Expert",
-      category: "Neurological",
-      buttonText: "Explore More",
-      buttonLink: "/blog/revolutionizing-rehab-3"
-    }
-  ];
-
-  const displayCategories = categories.length > 0 ? categories : [];
-  const displayRecentPosts = recentPosts.length > 0 ? recentPosts : [];
 
   // Real-time sync from Visual Builder
   useEffect(() => {
@@ -115,32 +79,24 @@ const BlogListing = ({ data: initialData }) => {
               {blogs.map((blog, idx) => (
                 <div key={idx} className={`blog-card ${idx === 0 ? 'active-card' : ''}`}>
                   <div className="blog-card-image">
-                    <img src={blog.image || 'https://via.placeholder.com/600x400'} alt={blog.title} />
+                    <img src={blog.blogImage || 'https://via.placeholder.com/600x400'} alt={blog.title} />
                   </div>
                   <div className="blog-card-info">
                     <div className="blog-card-meta">
                       <div className="meta-item">
                         <Calendar size={14} />
-                        <EditableText sectionId="blog-listing" fieldPath={`listing.featuredBlogs.${idx}.date`}>
-                          {blog.date}
-                        </EditableText>
+                        <span>{blog.blogDate || blog.date}</span>
                       </div>
                       <div className="meta-item">
                         <User size={14} />
-                        <EditableText sectionId="blog-listing" fieldPath={`listing.featuredBlogs.${idx}.author`}>
-                          {blog.author}
-                        </EditableText>
+                        <span>{blog.author}</span>
                       </div>
                     </div>
                     <h3 className="blog-card-title">
-                      <EditableText sectionId="blog-listing" fieldPath={`listing.featuredBlogs.${idx}.title`}>
-                        {blog.title}
-                      </EditableText>
+                      {blog.title}
                     </h3>
-                    <a href={blog.buttonLink || "#"} className="explore-link">
-                      <EditableText sectionId="blog-listing" fieldPath={`listing.featuredBlogs.${idx}.buttonText`}>
-                        {blog.buttonText || "Explore More"}
-                      </EditableText>
+                    <a href={`/blog/${blog.slug}`} className="explore-link">
+                      Explore More
                     </a>
                   </div>
                 </div>
@@ -167,7 +123,7 @@ const BlogListing = ({ data: initialData }) => {
                    </EditableText>
                 </h4>
                 <ul className="category-list">
-                  {displayCategories.map((cat, idx) => (
+                  {categories.map((cat, idx) => (
                     <li key={idx}>
                       <EditableText sectionId="blog-listing" fieldPath={`listing.categories.${idx}.name`}>
                         {cat.name}
@@ -190,7 +146,7 @@ const BlogListing = ({ data: initialData }) => {
                    </EditableText>
                 </h4>
                 <div className="recent-posts">
-                  {displayRecentPosts.map((post, idx) => (
+                  {recentPosts.map((post, idx) => (
                     <div key={idx} className="recent-post-item">
                       <div 
                         className="post-thumb"

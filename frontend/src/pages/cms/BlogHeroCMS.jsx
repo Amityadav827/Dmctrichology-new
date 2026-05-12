@@ -38,44 +38,6 @@ export default function BlogHeroCMS() {
         { title: "Improve Posture With Simple Daily Stretches", date: "Mar 10, 2025", image: "" },
         { title: "Best Exercises For Shoulder Pain Relief", date: "Mar 08, 2025", image: "" }
       ],
-      featuredBlogs: [
-        {
-          image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-          date: "May 10, 2025",
-          author: "Dr. Meera Joshi, Posture & Spine",
-          category: "Back & Spine",
-          title: "Overcoming Physical Setbacks: How Physiotherapy Recovery.",
-          buttonText: "Explore More",
-          buttonLink: "/blog/overcoming-physical-setbacks"
-        },
-        {
-          image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-          date: "May 11, 2025",
-          author: "Dr. Rahul Kapoor, Neuro Expert",
-          category: "Sports Injury",
-          title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-          buttonText: "Explore More",
-          buttonLink: "/blog/revolutionizing-rehab"
-        },
-        {
-          image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-          date: "May 11, 2025",
-          author: "Dr. Rahul Kapoor, Neuro Expert",
-          category: "Post-Surgical",
-          title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-          buttonText: "Explore More",
-          buttonLink: "/blog/revolutionizing-rehab-2"
-        },
-        {
-          image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-          date: "May 11, 2025",
-          author: "Dr. Rahul Kapoor, Neuro Expert",
-          category: "Neurological",
-          title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-          buttonText: "Explore More",
-          buttonLink: "/blog/revolutionizing-rehab-3"
-        }
-      ]
     }
   });
 
@@ -83,44 +45,7 @@ export default function BlogHeroCMS() {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("hero");
 
-  const defaultFeaturedBlogs = [
-    {
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 10, 2025",
-      author: "Dr. Meera Joshi, Posture & Spine",
-      category: "Back & Spine",
-      title: "Overcoming Physical Setbacks: How Physiotherapy Recovery.",
-      buttonText: "Explore More",
-      buttonLink: "/blog/overcoming-physical-setbacks"
-    },
-    {
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 11, 2025",
-      author: "Dr. Rahul Kapoor, Neuro Expert",
-      category: "Sports Injury",
-      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-      buttonText: "Explore More",
-      buttonLink: "/blog/revolutionizing-rehab"
-    },
-    {
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 11, 2025",
-      author: "Dr. Rahul Kapoor, Neuro Expert",
-      category: "Post-Surgical",
-      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-      buttonText: "Explore More",
-      buttonLink: "/blog/revolutionizing-rehab-2"
-    },
-    {
-      image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      date: "May 11, 2025",
-      author: "Dr. Rahul Kapoor, Neuro Expert",
-      category: "Neurological",
-      title: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies.",
-      buttonText: "Explore More",
-      buttonLink: "/blog/revolutionizing-rehab-3"
-    }
-  ];
+
 
   useEffect(() => {
     axios.get("/blog-page")
@@ -131,9 +56,7 @@ export default function BlogHeroCMS() {
           if (!fetchedData.listing) fetchedData.listing = {};
           
           // Hydrate with defaults if fields are missing or empty
-          if (!fetchedData.listing.featuredBlogs || !Array.isArray(fetchedData.listing.featuredBlogs) || fetchedData.listing.featuredBlogs.length === 0) {
-            fetchedData.listing.featuredBlogs = defaultFeaturedBlogs;
-          }
+
           if (!fetchedData.listing.categories || !Array.isArray(fetchedData.listing.categories) || fetchedData.listing.categories.length === 0) {
             fetchedData.listing.categories = [
               { name: "Back & Spine Therapy", count: 4 },
@@ -374,102 +297,7 @@ export default function BlogHeroCMS() {
                 </div>
               </div>
 
-              {/* Featured Blogs Cards Management */}
-              <div className="md:col-span-2 border-t border-slate-100 pt-8 mt-4">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-xs font-black uppercase tracking-widest text-slate-900">Featured Blog Cards (4 Cards)</h3>
-                  <button type="button" onClick={() => {
-                    const newBlogs = [...(data.listing.featuredBlogs || [])];
-                    newBlogs.push({
-                      image: "",
-                      title: "New Blog Post",
-                      author: "Author Name",
-                      date: "May 12, 2025",
-                      category: "Category",
-                      buttonText: "Explore More",
-                      buttonLink: "/blog/link"
-                    });
-                    updateSectionField("listing", "featuredBlogs", newBlogs);
-                  }} className="text-[10px] font-black text-blue-600 uppercase hover:underline">+ Add Card</button>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Safe rendering logic for Featured Blogs */}
-                  {(data.listing.featuredBlogs || defaultFeaturedBlogs).map((blog, idx) => (
-                    <div key={idx} className="bg-slate-50 p-6 rounded-3xl border border-slate-100 space-y-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Card #{idx + 1}</span>
-                        <button type="button" onClick={() => {
-                          const newBlogs = (data.listing.featuredBlogs || defaultFeaturedBlogs).filter((_, i) => i !== idx);
-                          updateSectionField("listing", "featuredBlogs", newBlogs);
-                        }} className="text-[9px] font-black text-red-500 uppercase hover:underline">Remove Card</button>
-                      </div>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Featured Image URL</label>
-                          <input type="text" value={blog.image} onChange={e => {
-                            const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
-                            newBlogs[idx].image = e.target.value;
-                            updateSectionField("listing", "featuredBlogs", newBlogs);
-                          }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
-                        </div>
-                        <div>
-                          <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Blog Title</label>
-                          <input type="text" value={blog.title} onChange={e => {
-                            const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
-                            newBlogs[idx].title = e.target.value;
-                            updateSectionField("listing", "featuredBlogs", newBlogs);
-                          }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Author</label>
-                            <input type="text" value={blog.author} onChange={e => {
-                              const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
-                              newBlogs[idx].author = e.target.value;
-                              updateSectionField("listing", "featuredBlogs", newBlogs);
-                            }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
-                          </div>
-                          <div>
-                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Category</label>
-                            <input type="text" value={blog.category} onChange={e => {
-                              const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
-                              newBlogs[idx].category = e.target.value;
-                              updateSectionField("listing", "featuredBlogs", newBlogs);
-                            }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Date</label>
-                            <input type="text" value={blog.date} onChange={e => {
-                              const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
-                              newBlogs[idx].date = e.target.value;
-                              updateSectionField("listing", "featuredBlogs", newBlogs);
-                            }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
-                          </div>
-                          <div>
-                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Button Text</label>
-                            <input type="text" value={blog.buttonText} onChange={e => {
-                              const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
-                              newBlogs[idx].buttonText = e.target.value;
-                              updateSectionField("listing", "featuredBlogs", newBlogs);
-                            }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Button Link</label>
-                          <input type="text" value={blog.buttonLink} onChange={e => {
-                            const newBlogs = [...(data.listing.featuredBlogs || defaultFeaturedBlogs)];
-                            newBlogs[idx].buttonLink = e.target.value;
-                            updateSectionField("listing", "featuredBlogs", newBlogs);
-                          }} className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-xs font-bold outline-none" />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         )}

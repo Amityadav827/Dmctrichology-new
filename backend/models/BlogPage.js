@@ -60,44 +60,6 @@ const blogPageSchema = new mongoose.Schema(
           image: { type: String, default: "" }
         }
       ],
-      featuredBlogs: [
-        {
-          image: { type: String, default: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png" },
-          date: { type: String, default: "May 10, 2025" },
-          author: { type: String, default: "Dr. Meera Joshi, Posture & Spine" },
-          category: { type: String, default: "Back & Spine" },
-          title: { type: String, default: "Overcoming Physical Setbacks: How Physiotherapy Recovery." },
-          buttonText: { type: String, default: "Explore More" },
-          buttonLink: { type: String, default: "/blog/overcoming-physical-setbacks" }
-        },
-        {
-          image: { type: String, default: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png" },
-          date: { type: String, default: "May 11, 2025" },
-          author: { type: String, default: "Dr. Rahul Kapoor, Neuro Expert" },
-          category: { type: String, default: "Sports Injury" },
-          title: { type: String, default: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies." },
-          buttonText: { type: String, default: "Explore More" },
-          buttonLink: { type: String, default: "/blog/revolutionizing-rehab" }
-        },
-        {
-          image: { type: String, default: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png" },
-          date: { type: String, default: "May 11, 2025" },
-          author: { type: String, default: "Dr. Rahul Kapoor, Neuro Expert" },
-          category: { type: String, default: "Post-Surgical" },
-          title: { type: String, default: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies." },
-          buttonText: { type: String, default: "Explore More" },
-          buttonLink: { type: String, default: "/blog/revolutionizing-rehab-2" }
-        },
-        {
-          image: { type: String, default: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png" },
-          date: { type: String, default: "May 11, 2025" },
-          author: { type: String, default: "Dr. Rahul Kapoor, Neuro Expert" },
-          category: { type: String, default: "Neurological" },
-          title: { type: String, default: "Revolutionizing Rehab: How Emerging Physiotherapy Technologies." },
-          buttonText: { type: String, default: "Explore More" },
-          buttonLink: { type: String, default: "/blog/revolutionizing-rehab-3" }
-        }
-      ]
     }
   },
   { timestamps: true }
