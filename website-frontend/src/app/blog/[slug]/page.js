@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { fetchBlogBySlug, fetchBlogPage, fetchBlogs } from '../../../services/api';
 import BlogHero from '../../../components/BlogHero';
@@ -60,9 +61,20 @@ export async function generateMetadata({ params }) {
   const blogRes = await fetchBlogBySlug(slug);
   const blog = blogRes?.data;
   
+  const siteUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://dmctrichology-mkm4.vercel.app';
+  
   return {
     title: blog ? `${blog.title} | DMC Trichology` : 'Blog Detail | DMC Trichology',
-    description: blog?.excerpt || 'Read the latest updates and advice from DMC Trichology experts.',
+    description: blog?.shortDescription || blog?.excerpt || 'Read the latest updates and advice from DMC Trichology experts.',
+    alternates: {
+      canonical: `${siteUrl}/blog/${slug}`,
+    },
+    openGraph: {
+      title: blog?.title,
+      description: blog?.shortDescription,
+      images: blog?.blogImage ? [{ url: blog.blogImage }] : [],
+      type: 'article',
+    }
   };
 }
 
@@ -251,9 +263,9 @@ export default async function BlogDetailPage({ params }) {
                           {formatDate(post.blogDate || post.date)}
                         </span>
                         <h5 className="post-title">
-                          <a href={`/blog/${post.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                          <Link href={`/blog/${post.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
                             {post.title}
-                          </a>
+                          </Link>
                         </h5>
                       </div>
                     </div>

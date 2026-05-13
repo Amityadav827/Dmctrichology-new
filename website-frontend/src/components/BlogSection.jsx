@@ -137,7 +137,7 @@ export default function BlogSection() {
                 </h3>
 
                 <Link 
-                  href={blog.buttonLink || '#'} 
+                  href={`/blog/${blog.slug}`} 
                   style={{ 
                     fontSize: '14px', 
                     color: blog.featured ? '#fff' : '#000', 
