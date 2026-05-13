@@ -80,10 +80,13 @@ export async function generateMetadata({ params }) {
 
 export default async function BlogDetailPage({ params }) {
   const { slug } = params;
+  console.log("[BlogDetailPage] Slug:", slug);
 
   const { blog, pageSettings, recentBlogs } = await getData(slug);
+  console.log("[BlogDetailPage] Blog found:", blog ? blog.title : "NULL");
 
   if (!blog) {
+    console.log("[BlogDetailPage] Triggering notFound()");
     notFound();
   }
 

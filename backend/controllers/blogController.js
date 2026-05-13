@@ -113,6 +113,10 @@ const getBlogs = async (req, res, next) => {
       .order('created_at', { ascending: false })
       .range(skip, skip + limit - 1);
 
+    if (data) {
+      console.log("[getBlogs] AUDIT: ", data.map(b => ({ title: b.title, slug: b.slug, status: b.status })));
+    }
+
     if (error) return res.status(500).json({ success: false, message: error.message });
 
     const formattedBlogs = data.map(blog => mapFromSupabase(blog));
@@ -147,38 +151,45 @@ const getBlogBySlug = async (req, res, next) => {
     const rawSlug = req.params.slug;
     const normalizedSlug = String(rawSlug).trim().toLowerCase();
     
+    console.log("[getBlogBySlug] Searching for normalized slug:", normalizedSlug);
+
     // Try finding by normalized slug first
     let { data, error } = await supabase
       .from('blogs')
       .select('*')
       .ilike('slug', normalizedSlug)
-      .single();
+      .limit(1);
+
+    let blog = data && data.length > 0 ? data[0] : null;
 
     // FALLBACK: If not found, try to find a blog where the title matches the slug structure
-    if (error || !data) {
-      // Replace dashes with % and try ilike on title
+    if (!blog) {
+      console.log("[getBlogBySlug] No exact slug match. Trying title fallback...");
       const searchTitle = normalizedSlug.split('-').join('%');
       const { data: fallbackData } = await supabase
         .from('blogs')
         .select('*')
         .ilike('title', `%${searchTitle}%`)
-        .limit(1)
-        .single();
+        .limit(1);
       
-      data = fallbackData;
+      blog = fallbackData && fallbackData.length > 0 ? fallbackData[0] : null;
     }
 
-    if (!data) {
+    if (!blog) {
+      console.log("[getBlogBySlug] Blog NOT FOUND for:", normalizedSlug);
       return res.status(404).json({ success: false, message: "Blog not found" });
     }
 
     // Safety: Verify status is Published (case-insensitive)
-    if (data.status?.toLowerCase() !== 'published') {
+    if (blog.status?.toLowerCase() !== 'published') {
+      console.log("[getBlogBySlug] Blog found but status is:", blog.status);
       return res.status(404).json({ success: false, message: "Blog not published" });
     }
 
-    return res.status(200).json({ success: true, data: mapFromSupabase(data) });
+    console.log("[getBlogBySlug] SUCCESS found:", blog.title);
+    return res.status(200).json({ success: true, data: mapFromSupabase(blog) });
   } catch (error) {
+    console.error("[getBlogBySlug FATAL ERROR]:", error);
     next(error);
   }
 };
