@@ -80,28 +80,40 @@ export async function generateMetadata({ params }) {
 
 export default async function BlogDetailPage({ params }) {
   const { slug } = await params;
-  console.log("[BlogDetailPage] Slug:", slug);
-
+  
   const { blog, pageSettings, recentBlogs } = await getData(slug);
-  console.log("[BlogDetailPage] Blog found:", blog ? blog.title : "NULL");
+
+  // TEMPORARY DIAGNOSTIC LOGS
+  console.log("[BlogDetailPage] slug:", slug);
+  console.log("[BlogDetailPage] blog.title type:", typeof blog?.title);
+  console.log("[BlogDetailPage] blog.content type:", typeof blog?.content);
+  if (blog?.content && typeof blog.content === 'object') {
+     console.log("[BlogDetailPage] CRITICAL: blog.content is an OBJECT!", blog.content);
+  }
 
   if (!blog) {
-    console.log("[BlogDetailPage] Triggering notFound()");
     notFound();
   }
 
+  // Defensive parsing for pageSettings
+  const listingSettings = pageSettings?.listing || {};
   const {
     sidebarSearchPlaceholder = "Enter Key Word",
     sidebarCategoriesTitle = "Blog Categories",
     sidebarRecentPostsTitle = "Recent Post",
     categories = []
-  } = pageSettings.listing || {};
+  } = listingSettings;
+
+  // Ensure content is a string
+  const blogContent = typeof blog.content === 'string' 
+    ? blog.content 
+    : (typeof blog.content === 'object' ? JSON.stringify(blog.content) : String(blog.content || ""));
 
   return (
     <div className="bg-white min-h-screen">
       {/* Blog Hero */}
       <BlogHero data={{
-        ...pageSettings.hero,
+        ...(pageSettings?.hero || {}),
         title: "Blog Detail",
         breadcrumbText: "Blog Detail"
       }} />
@@ -113,7 +125,7 @@ export default async function BlogDetailPage({ params }) {
           {/* Left Column: Blog Content */}
           <article className="blog-main-content">
             <div className="blog-detail-image">
-              <img src={blog.blogImage || 'https://via.placeholder.com/1200x600'} alt={blog.title} />
+              <img src={String(blog.blogImage || blog.image || 'https://via.placeholder.com/1200x600')} alt={String(blog.title || "Blog")} />
             </div>
 
             <div className="blog-detail-meta">
@@ -123,7 +135,7 @@ export default async function BlogDetailPage({ params }) {
               </div>
               <div className="meta-item">
                 <User size={14} className="text-blue-600" />
-                <span>Admin By {blog.author || 'Admin'}</span>
+                <span>Admin By {String(blog.author || 'Admin')}</span>
               </div>
               <div className="meta-item">
                 <MessageCircle size={14} className="text-blue-600" />
@@ -131,11 +143,11 @@ export default async function BlogDetailPage({ params }) {
               </div>
             </div>
 
-            <h2 className="blog-detail-title">{blog.title}</h2>
+            <h2 className="blog-detail-title">{String(blog.title || "")}</h2>
 
             <div 
               className="blog-content-body" 
-              dangerouslySetInnerHTML={{ __html: blog.content }} 
+              dangerouslySetInnerHTML={{ __html: blogContent }} 
             />
 
             {/* Blockquote Example (If content doesn't have one, we can show how it looks or just rely on CSS) */}
@@ -235,12 +247,12 @@ export default async function BlogDetailPage({ params }) {
 
               {/* Categories Widget */}
               <div className="sidebar-widget">
-                <h4 className="sidebar-title">{sidebarCategoriesTitle}</h4>
+                <h4 className="sidebar-title">{String(sidebarCategoriesTitle || "")}</h4>
                 <ul className="category-list">
-                  {categories.map((cat, idx) => (
+                  {(Array.isArray(categories) ? categories : []).map((cat, idx) => (
                     <li key={idx}>
-                      <span>{cat.name}</span>
-                      <span className="count">({cat.count})</span>
+                      <span>{String(cat?.name || "")}</span>
+                      <span className="count">({String(cat?.count || "0")})</span>
                     </li>
                   ))}
                 </ul>
@@ -248,14 +260,14 @@ export default async function BlogDetailPage({ params }) {
 
               {/* Recent Posts Widget */}
               <div className="sidebar-widget">
-                <h4 className="sidebar-title">{sidebarRecentPostsTitle}</h4>
+                <h4 className="sidebar-title">{String(sidebarRecentPostsTitle || "")}</h4>
                 <div className="recent-posts">
-                  {(recentBlogs.slice(0, 4)).map((post, idx) => (
+                  {(Array.isArray(recentBlogs) ? recentBlogs.slice(0, 4) : []).map((post, idx) => (
                     <div key={idx} className="recent-post-item">
                       <div 
                         className="post-thumb"
                         style={{
-                          backgroundImage: `url(${post.blogImage || 'https://via.placeholder.com/80'})`,
+                          backgroundImage: `url(${String(post?.blogImage || post?.image || 'https://via.placeholder.com/80')})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                           backgroundColor: '#D9D9D9'
@@ -263,11 +275,11 @@ export default async function BlogDetailPage({ params }) {
                       ></div>
                       <div className="post-content">
                         <span className="post-date">
-                          {formatDate(post.blogDate || post.date)}
+                          {formatDate(post?.blogDate || post?.date)}
                         </span>
                         <h5 className="post-title">
-                          <Link href={`/blog/${post.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                            {post.title}
+                          <Link href={`/blog/${String(post?.slug || "")}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                            {String(post?.title || "")}
                           </Link>
                         </h5>
                       </div>

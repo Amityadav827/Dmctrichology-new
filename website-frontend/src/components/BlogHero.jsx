@@ -53,7 +53,7 @@ const BlogHero = ({ data: initialData }) => {
         <div className="max-w-[1400px] mx-auto w-full">
           <h1 className="service-hero-title">
             <EditableText sectionId="blog-hero" fieldPath="hero.title">
-              {title}
+              {String(title || "")}
             </EditableText>
           </h1>
 
@@ -62,7 +62,7 @@ const BlogHero = ({ data: initialData }) => {
             <span className="sep">/</span>
             <span className="current">
                <EditableText sectionId="blog-hero" fieldPath="hero.breadcrumbText">
-                  {breadcrumbText}
+                  {String(breadcrumbText || "")}
                </EditableText>
             </span>
           </div>
