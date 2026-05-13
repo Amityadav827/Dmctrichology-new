@@ -1,7 +1,7 @@
 .blog-detail-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 100px 5%;
+  padding: 100px 0;
   background-color: #ffffff;
 }
 .blog-detail-grid {
@@ -22,7 +22,8 @@
 }
 .blog-detail-image img {
   width: 100%;
-  height: auto;
+  height: 450px;
+  object-fit: cover;
   display: block;
 }
 .blog-detail-meta {
