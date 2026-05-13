@@ -138,6 +138,7 @@
     color: #111;
     margin-bottom: 40px !important;
     font-weight: 400;
+    line-height: normal;
 }
 .comments-list {
     display: flex;
