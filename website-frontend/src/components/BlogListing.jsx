@@ -145,7 +145,9 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
                 filteredBlogs.map((blog, idx) => (
                   <div key={idx} className={`blog-card ${idx === 0 ? 'active-card' : ''}`}>
                     <div className="blog-card-image">
-                      <img src={blog.blogImage || 'https://via.placeholder.com/600x400'} alt={blog.title} />
+                      <Link href={`/blog/${blog.slug}`}>
+                        <img src={blog.blogImage || 'https://via.placeholder.com/600x400'} alt={blog.title} />
+                      </Link>
                     </div>
                     <div className="blog-card-info">
                       <div className="blog-card-meta">
@@ -159,7 +161,9 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
                         </div>
                       </div>
                       <h3 className="blog-card-title">
-                        {blog.title}
+                        <Link href={`/blog/${blog.slug}`} className="blog-title-link">
+                          {blog.title}
+                        </Link>
                       </h3>
                       <Link href={`/blog/${blog.slug}`} className="explore-link">
                         Explore More
@@ -354,15 +358,24 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             font-size: 14px;
             color: inherit;
             font-weight: 600;
-            text-decoration: none;
+            text-decoration: none !important;
             display: inline-block;
-            border-bottom: 2px solid currentColor;
+            border-bottom: none !important;
             padding-bottom: 2px;
             transition: all 0.3s ease;
           }
           .explore-link:hover {
             opacity: 0.8;
-            padding-bottom: 5px;
+            text-decoration: none !important;
+          }
+          .blog-title-link {
+            color: inherit;
+            text-decoration: none !important;
+            transition: opacity 0.3s ease;
+          }
+          .blog-title-link:hover {
+            opacity: 0.8;
+            text-decoration: none !important;
           }
 
           /* Sidebar */
