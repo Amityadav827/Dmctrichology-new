@@ -57,7 +57,7 @@ async function getData(slug) {
 }
 
 export async function generateMetadata({ params }) {
-  const { slug } = params;
+  const { slug } = await params;
   const blogRes = await fetchBlogBySlug(slug);
   const blog = blogRes?.data;
   
@@ -79,7 +79,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function BlogDetailPage({ params }) {
-  const { slug } = params;
+  const { slug } = await params;
   console.log("[BlogDetailPage] Slug:", slug);
 
   const { blog, pageSettings, recentBlogs } = await getData(slug);
