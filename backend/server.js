@@ -86,10 +86,18 @@ connectDB().then(() => {
 // ✅ Global Middleware
 // ========================
 app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: [
+    "https://dmctrichology.vercel.app",
+    "https://dmctrichology-mkm4.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173" // Adding Vite default port too
+  ],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
+
+app.options("*", cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
