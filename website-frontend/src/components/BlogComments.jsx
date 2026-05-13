@@ -8,8 +8,8 @@ const BlogComments = ({ blogSlug }) => {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', content: '' });
-  const [message, setMessage] = useState({ type: '', text: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [statusMessage, setStatusMessage] = useState({ type: '', text: '' });
 
   useEffect(() => {
     const loadComments = async () => {
@@ -19,7 +19,7 @@ const BlogComments = ({ blogSlug }) => {
           setComments(res.data || []);
         }
       } catch (err) {
-        console.error("Comments fetch error:", err);
+        console.error("[BlogComments] Fetch error:", err);
       } finally {
         setLoading(false);
       }
@@ -29,29 +29,38 @@ const BlogComments = ({ blogSlug }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.content) {
-      setMessage({ type: 'error', text: 'All fields are required' });
+    if (!formData.name || !formData.email || !formData.message) {
+      setStatusMessage({ type: 'error', text: 'All fields are required' });
       return;
     }
     
     setSubmitting(true);
-    setMessage({ type: '', text: '' });
+    setStatusMessage({ type: '', text: '' });
+
+    const payload = {
+      blog_slug: blogSlug,
+      name: formData.name,
+      email: formData.email,
+      message: formData.message
+    };
+
+    console.log("[BlogComments] Outgoing payload:", payload);
 
     try {
-      const res = await submitComment({
-        blogSlug,
-        ...formData
-      });
+      const res = await submitComment(payload);
+
+      console.log("[BlogComments] API response:", res);
 
       if (res?.success) {
-        setMessage({ type: 'success', text: 'Comment posted successfully!' });
-        setComments([res.data, ...comments]);
-        setFormData({ name: '', email: '', content: '' });
+        setStatusMessage({ type: 'success', text: 'Comment submitted for review' });
+        setFormData({ name: '', email: '', message: '' });
+        // We do NOT add it to the local comments list because it needs approval
       } else {
-        setMessage({ type: 'error', text: res?.message || 'Failed to post comment' });
+        setStatusMessage({ type: 'error', text: res?.message || 'Failed to post comment' });
       }
     } catch (err) {
-      setMessage({ type: 'error', text: 'An error occurred' });
+      console.error("[BlogComments] Submit error:", err);
+      setStatusMessage({ type: 'error', text: 'An error occurred while submitting' });
     } finally {
       setSubmitting(false);
     }
@@ -76,7 +85,7 @@ const BlogComments = ({ blogSlug }) => {
                     <h4 className="comment-author">{comment.name}</h4>
                     <span className="comment-date">{formatDate(comment.created_at)}</span>
                   </div>
-                  <p className="comment-text">{comment.content}</p>
+                  <p className="comment-text">{comment.message || comment.content}</p>
                 </div>
               </div>
             ))
@@ -91,9 +100,9 @@ const BlogComments = ({ blogSlug }) => {
         <h3 className="section-title">Leave A Reply</h3>
         <p className="form-subtitle">Your Email Address Will Not Be Published. Required Fields Are Marked *</p>
         
-        {message.text && (
-          <div className={`form-message ${message.type}`} style={{ padding: '10px', marginBottom: '20px', borderRadius: '4px', backgroundColor: message.type === 'success' ? '#e6fffa' : '#fff5f5', color: message.type === 'success' ? '#2c7a7b' : '#c53030', border: `1px solid ${message.type === 'success' ? '#81e6d9' : '#feb2b2'}` }}>
-            {message.text}
+        {statusMessage.text && (
+          <div className={`form-message ${statusMessage.type}`} style={{ padding: '15px', marginBottom: '20px', borderRadius: '4px', backgroundColor: statusMessage.type === 'success' ? '#e6fffa' : '#fff5f5', color: statusMessage.type === 'success' ? '#2c7a7b' : '#c53030', border: `1px solid ${statusMessage.type === 'success' ? '#81e6d9' : '#feb2b2'}` }}>
+            {statusMessage.text}
           </div>
         )}
 
@@ -123,8 +132,8 @@ const BlogComments = ({ blogSlug }) => {
               placeholder="Your Message*" 
               rows="6" 
               required
-              value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              value={formData.message}
+              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             ></textarea>
           </div>
           <button type="submit" className="submit-btn" disabled={submitting}>

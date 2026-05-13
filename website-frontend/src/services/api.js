@@ -262,8 +262,8 @@ export const submitComment = async (data) => {
     const res = await api.post('/blog-comments', data);
     return res.data;
   } catch (error) {
-    console.error('Error submitting comment', error);
-    return null;
+    console.error('[submitComment] API Error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: error.message };
   }
 };
 
