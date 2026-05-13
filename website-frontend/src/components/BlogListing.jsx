@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import { useBuilder } from '../context/BuilderContext';
@@ -102,9 +103,9 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
                     <h3 className="blog-card-title">
                       {blog.title}
                     </h3>
-                    <a href={`/blog/${blog.slug}`} className="explore-link">
+                    <Link href={`/blog/${blog.slug}`} className="explore-link">
                       Explore More
-                    </a>
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -169,9 +170,9 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
                           {formatDate(post.blogDate || post.date)}
                         </span>
                         <h5 className="post-title">
-                          <a href={`/blog/${post.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                          <Link href={`/blog/${post.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
                             {post.title}
-                          </a>
+                          </Link>
                         </h5>
                       </div>
                     </div>

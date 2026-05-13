@@ -214,6 +214,16 @@ export const fetchBlogs = async (params) => {
   }
 };
 
+export const fetchBlogBySlug = async (slug) => {
+  try {
+    const res = await api.get(`/blogs/slug/${slug}?t=${Date.now()}`);
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching blog by slug', error);
+    return null;
+  }
+};
+
 export const fetchBlogCategories = async () => {
   try {
     const res = await api.get('/blog-categories');

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { fetchHomeBlog } from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
@@ -135,7 +136,7 @@ export default function BlogSection() {
                   </EditableText>
                 </h3>
 
-                <a 
+                <Link 
                   href={blog.buttonLink || '#'} 
                   style={{ 
                     fontSize: '14px', 
@@ -148,7 +149,7 @@ export default function BlogSection() {
                   <EditableText sectionId="blogs-home-section" fieldPath={`blogs.${index}.buttonText`} tag="span">
                     {blog.buttonText}
                   </EditableText>
-                </a>
+                </Link>
               </div>
             ))}
           </div>
