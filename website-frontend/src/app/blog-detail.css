@@ -133,12 +133,14 @@
     margin-bottom: 60px;
 }
 .section-title {
-    font-family: 'Marcellus', serif;
-    font-size: 20px !important;
-    color: #111;
+    color: #333 !important;
+    text-transform: uppercase !important;
+    margin: 0 !important;
     margin-bottom: 40px !important;
-    font-weight: 400;
-    line-height: normal !important;
+    font-family: Marcellus, serif !important;
+    font-size: 20px !important;
+    font-weight: 400 !important;
+    line-height: 1.2 !important;
 }
 .comments-list {
     display: flex;
