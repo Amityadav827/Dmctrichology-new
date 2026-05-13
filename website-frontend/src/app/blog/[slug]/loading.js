@@ -4,37 +4,38 @@ export default function Loading() {
   return (
     <div className="bg-white min-h-screen">
       {/* Skeleton Hero */}
-      <div className="w-full h-[400px] bg-gray-100 animate-pulse" />
-      
-      <div className="max-w-[1400px] mx-auto px-[5%] py-[100px]">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-[70px]">
+      <div className="skeleton skeleton-banner"></div>
+
+      {/* Main Content Skeleton */}
+      <div className="blog-detail-container">
+        <div className="blog-detail-grid">
           
-          <div className="space-y-8">
-            {/* Image Skeleton */}
-            <div className="w-full aspect-video bg-gray-100 rounded-[40px] animate-pulse" />
-            
-            {/* Meta Skeleton */}
-            <div className="flex gap-8">
-              <div className="w-32 h-4 bg-gray-100 rounded animate-pulse" />
-              <div className="w-32 h-4 bg-gray-100 rounded animate-pulse" />
-            </div>
-            
-            {/* Title Skeleton */}
-            <div className="w-3/4 h-12 bg-gray-100 rounded animate-pulse" />
-            
-            {/* Content Skeleton */}
+          {/* Left Column: Blog Content Skeleton */}
+          <div className="blog-main-content">
+            <div className="skeleton skeleton-img"></div>
+
+            <div className="skeleton skeleton-meta"></div>
+
+            <div className="skeleton skeleton-title"></div>
+
             <div className="space-y-4">
-              <div className="w-full h-4 bg-gray-100 rounded animate-pulse" />
-              <div className="w-full h-4 bg-gray-100 rounded animate-pulse" />
-              <div className="w-5/6 h-4 bg-gray-100 rounded animate-pulse" />
+              <div className="skeleton skeleton-text"></div>
+              <div className="skeleton skeleton-text"></div>
+              <div className="skeleton skeleton-text" style={{ width: '90%' }}></div>
+              <div className="skeleton skeleton-text" style={{ width: '95%' }}></div>
+              <div className="skeleton skeleton-text" style={{ width: '85%' }}></div>
+              <div className="skeleton skeleton-text"></div>
+              <div className="skeleton skeleton-text" style={{ width: '92%' }}></div>
             </div>
+
+            <div className="skeleton" style={{ height: '200px', borderRadius: '20px', marginTop: '40px', width: '100%' }}></div>
           </div>
-          
-          {/* Sidebar Skeleton */}
-          <div className="hidden lg:block">
-            <div className="w-full h-[600px] bg-gray-100 rounded-[40px] animate-pulse" />
-          </div>
-          
+
+          {/* Right Column: Sidebar Skeleton */}
+          <aside className="blog-sidebar">
+            <div className="skeleton skeleton-sidebar-card"></div>
+          </aside>
+
         </div>
       </div>
     </div>
