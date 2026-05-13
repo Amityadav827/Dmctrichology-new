@@ -358,9 +358,8 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             font-size: 14px;
             color: inherit;
             font-weight: 600;
-            text-decoration: none !important;
+            text-decoration: underline !important;
             display: inline-block;
-            border-bottom: none !important;
             padding-bottom: 2px;
             transition: all 0.3s ease;
           }
