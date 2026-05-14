@@ -35,7 +35,7 @@ const contactPageSchema = new mongoose.Schema(
       longitude: { type: String, default: "77.162294" },
       zoomLevel: { type: Number, default: 15 },
       mapHeight: { type: String, default: "600px" },
-      cardBackground: { type: String, default: "#2D4A8A" },
+      cardBackground: { type: String, default: "rgb(249, 247, 242)" },
       iconColor: { type: String, default: "#C8102E" },
       textColor: { type: String, default: "#FFFFFF" }
     }

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
-import { 
-  Save, 
-  Loader2, 
-  MapPin, 
-  Phone, 
-  Clock, 
-  Settings, 
-  Layout, 
+import {
+  Save,
+  Loader2,
+  MapPin,
+  Phone,
+  Clock,
+  Settings,
+  Layout,
   Image as ImageIcon,
   CheckCircle2,
   Plus,
@@ -40,7 +40,7 @@ export default function ContactPageCMS() {
       area: "Vasant Vihar",
       googleMapEmbedUrl: "",
       mapHeight: "600px",
-      cardBackground: "#2D4A8A",
+      cardBackground: "rgb(249, 247, 242)",
       iconColor: "#C8102E",
       textColor: "#FFFFFF"
     }

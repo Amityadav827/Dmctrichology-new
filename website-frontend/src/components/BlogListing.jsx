@@ -316,7 +316,7 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             transition: all 0.3s ease;
           }
           .blog-card.active-card {
-            background: #2D4A8A;
+            background: rgb(249, 247, 242);
             color: #ffffff;
           }
           .blog-card-image {
@@ -384,7 +384,7 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
           .sidebar-inner {
             position: sticky;
             top: 100px;
-            background: #2D4A8A;
+            background: rgb(249, 247, 242);
             border-radius: 40px;
             padding: 40px 30px;
             color: #ffffff;
