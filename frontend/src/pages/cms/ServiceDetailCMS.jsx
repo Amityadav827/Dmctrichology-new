@@ -324,8 +324,24 @@ export default function ServiceDetailCMS() {
                       className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
                   </div>
                   
-                  {/* New Fields: Secondary Title & Tagline */}
-                  <div>
+                  <div className="grid grid-cols-2 gap-4 md:col-span-2">
+                     <div>
+                       <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Rating</label>
+                       <input type="text" value={data.banner.rating || ""} onChange={e => updateSectionField("banner", "rating", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
+                     </div>
+                     <div>
+                       <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Duration</label>
+                       <input type="text" value={data.banner.duration || ""} onChange={e => updateSectionField("banner", "duration", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
+                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10 mt-8">
+                <h3 className="text-lg font-bold mb-6 text-slate-800 flex items-center gap-2"><Type size={18} className="text-blue-500"/> Service Intro Description</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                   {/* Intro Specific Hero Fields */}
+                   <div>
                     <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Secondary Title (for Intro Section)</label>
                     <input type="text" value={data.banner.secondaryTitle || ""} onChange={e => updateSectionField("banner", "secondaryTitle", e.target.value)}
                       className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
@@ -342,33 +358,19 @@ export default function ServiceDetailCMS() {
                       updateSectionField("banner", "shortDescription", e.target.value);
                       updateSectionField("banner", "subtitle", e.target.value);
                     }}
-                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold min-h-[100px]" />
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold min-h-[80px]" />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                     <div>
-                       <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Rating</label>
-                       <input type="text" value={data.banner.rating || ""} onChange={e => updateSectionField("banner", "rating", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
-                     </div>
-                     <div>
-                       <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Duration</label>
-                       <input type="text" value={data.banner.duration || ""} onChange={e => updateSectionField("banner", "duration", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
-                     </div>
-                  </div>
+
                   <div className="md:col-span-2">
                     <MediaUploader label="Hero Background Image" value={data.banner.backgroundImage} onChange={val => updateSectionField("banner", "backgroundImage", val)} />
                   </div>
-                </div>
-              </div>
 
-              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10 mt-8">
-                <h3 className="text-lg font-bold mb-6 text-slate-800 flex items-center gap-2"><Type size={18} className="text-blue-500"/> Service Intro Description</h3>
-                <div className="grid grid-cols-1 gap-8">
-                   <div>
+                  <div className="md:col-span-2">
                     <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Long Description</label>
                     <textarea value={data.intro.longDescription || ""} onChange={e => updateSectionField("intro", "longDescription", e.target.value)}
                       className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold min-h-[150px]" />
                   </div>
-                  <div>
+                  <div className="md:col-span-2">
                     <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Closing Text</label>
                     <textarea value={data.intro.closingText || ""} onChange={e => updateSectionField("intro", "closingText", e.target.value)}
                       className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold min-h-[80px]" />
