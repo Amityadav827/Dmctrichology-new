@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { getAboutUs, updateAboutUs } = require('../controllers/aboutUsController');
+const aboutUsController = require('../controllers/aboutUsController');
 
-router.get('/', getAboutUs);
-router.put('/', updateAboutUs);
+router.get('/', aboutUsController.getAboutUs);
+router.put('/', aboutUsController.updateAboutUs);
 
 module.exports = router;

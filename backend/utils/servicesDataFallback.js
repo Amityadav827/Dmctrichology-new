@@ -210,7 +210,7 @@ const generateServiceData = (title, slug, type) => {
   };
 };
 
-module.exports = { servicesData = [
+module.exports = { servicesData: [
   generateServiceData("Soprano Titanium Laser", "soprano-titanium-laser", "laser"),
   generateServiceData("FUE Hair Transplant", "fue-hair-transplant", "transplant"),
   generateServiceData("Advanced GFC Therapy", "advanced-gfc-therapy", "regrowth"),
@@ -228,5 +228,4 @@ module.exports = { servicesData = [
   generateServiceData("Arm & Forearm Smooth", "arm-forearm-smooth", "laser"),
   generateServiceData("Chest & Front Laser", "chest-front-laser", "laser"),
   generateServiceData("Scalp Micro-Pigmentation", "scalp-micro-pigmentation", "smp")
-];
-};
+]};

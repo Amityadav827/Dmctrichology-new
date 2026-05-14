@@ -35,6 +35,7 @@ import ServiceListingCMS from "./pages/cms/ServiceListingCMS";
 import HeroCMS from "./pages/cms/HeroCMS";
 import PageCompositionEditor from "./pages/cms/PageCompositionEditor";
 import AboutUsCMS from "./pages/cms/AboutUsCMS";
+import AboutUsVisualBuilder from "./pages/cms/AboutUsVisualBuilder";
 import ServicesCMS from "./pages/cms/ServicesCMS";
 import MarqueeFeaturesCMS from "./pages/cms/MarqueeFeaturesCMS";
 import WhyChooseUsCMS from "./pages/cms/WhyChooseUsCMS";
@@ -86,6 +87,14 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <AboutUsCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/visual-builder-about"
+          element={
+            <ProtectedRoute permission="cms">
+              <AboutUsVisualBuilder />
             </ProtectedRoute>
           }
         />

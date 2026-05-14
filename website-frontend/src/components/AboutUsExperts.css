@@ -1,0 +1,177 @@
+.about-experts-section {
+  padding: 150px 0;
+  background-color: #ffffff;
+}
+
+.about-experts-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.about-experts-header {
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+.about-experts-tag {
+  display: inline-block;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #c19a5b;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+.about-experts-main-title {
+  font-family: 'Marcellus', serif;
+  font-size: 44px;
+  color: #1a1a1a;
+}
+
+.about-experts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 60px;
+}
+
+.about-expert-card {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  background: #fdfdfd;
+  padding: 50px;
+  border-radius: 60px;
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border: 1px solid #f0f0f0;
+}
+
+.about-expert-card:hover {
+  background: #ffffff;
+  box-shadow: 0 50px 100px rgba(0,0,0,0.08);
+  transform: translateY(-10px);
+  border-color: #c19a5b;
+}
+
+.about-expert-img-wrapper {
+  width: 280px;
+  height: 340px;
+  border-radius: 40px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  background: #f8f8f8;
+}
+
+.about-expert-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.about-expert-card:hover .about-expert-img {
+  transform: scale(1.05);
+}
+
+.about-expert-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.about-expert-card:hover .about-expert-overlay {
+  opacity: 1;
+}
+
+.about-expert-bio {
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.about-expert-card:hover .about-expert-bio {
+  transform: translateY(0);
+}
+
+.about-expert-info {
+  flex-grow: 1;
+}
+
+.about-expert-name {
+  font-family: 'Marcellus', serif;
+  font-size: 32px;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.about-expert-designation {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  color: #c19a5b;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+
+.about-expert-divider {
+  width: 40px;
+  height: 2px;
+  background: #eee;
+  margin-bottom: 24px;
+}
+
+.about-expert-spec {
+  display: block;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  color: #888;
+  line-height: 1.6;
+}
+
+@media (max-width: 1280px) {
+  .about-expert-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px;
+  }
+  
+  .about-expert-img-wrapper {
+    width: 100%;
+    height: 300px;
+  }
+  
+  .about-expert-divider {
+    margin: 0 auto 24px;
+  }
+}
+
+@media (max-width: 992px) {
+  .about-experts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-experts-main-title {
+    font-size: 32px;
+  }
+  
+  .about-expert-name {
+    font-size: 26px;
+  }
+}

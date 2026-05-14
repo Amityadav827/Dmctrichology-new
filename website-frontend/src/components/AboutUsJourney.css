@@ -1,0 +1,162 @@
+.about-journey-section {
+  padding: 150px 0;
+  background-color: #fcfcfc;
+  overflow: hidden;
+}
+
+.about-journey-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.about-journey-header {
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+.about-journey-tag {
+  display: inline-block;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #c19a5b;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+.about-journey-main-title {
+  font-family: 'Marcellus', serif;
+  font-size: 44px;
+  color: #1a1a1a;
+}
+
+.about-journey-timeline {
+  position: relative;
+  padding: 40px 0;
+}
+
+.about-journey-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #eee;
+  transform: translateX(-50%);
+}
+
+.about-journey-item {
+  display: grid;
+  grid-template-columns: 1fr 100px 1fr;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.about-journey-item:nth-child(even) {
+  direction: rtl;
+}
+
+.about-journey-item:nth-child(even) .about-journey-content-box {
+  direction: ltr;
+}
+
+.about-journey-year-box {
+  text-align: right;
+  padding-right: 20px;
+}
+
+.about-journey-item:nth-child(even) .about-journey-year-box {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.about-journey-year {
+  font-family: 'Marcellus', serif;
+  font-size: 48px;
+  font-weight: 300;
+  color: #c19a5b;
+  line-height: 1;
+}
+
+.about-journey-dot-wrapper {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.about-journey-dot {
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border: 4px solid #c19a5b;
+  border-radius: 50%;
+  box-shadow: 0 0 0 8px rgba(193, 154, 91, 0.1);
+}
+
+.about-journey-content-box {
+  background: #ffffff;
+  padding: 50px;
+  border-radius: 40px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.04);
+  transition: all 0.4s ease;
+  border: 1px solid transparent;
+}
+
+.about-journey-item:hover .about-journey-content-box {
+  transform: translateY(-10px);
+  border-color: #f0f0f0;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.07);
+}
+
+.about-journey-milestone-title {
+  font-family: 'Marcellus', serif;
+  font-size: 24px;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.about-journey-milestone-desc {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  color: #666;
+  line-height: 1.8;
+}
+
+@media (max-width: 1024px) {
+  .about-journey-main-title {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-journey-line {
+    left: 20px;
+  }
+  
+  .about-journey-item {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-left: 60px;
+    direction: ltr !important;
+  }
+  
+  .about-journey-year-box {
+    text-align: left !important;
+    padding: 0;
+  }
+  
+  .about-journey-dot-wrapper {
+    position: absolute;
+    left: 12px;
+    top: 30px;
+  }
+  
+  .about-journey-content-box {
+    padding: 30px;
+    width: 100%;
+    text-align: left !important;
+  }
+}

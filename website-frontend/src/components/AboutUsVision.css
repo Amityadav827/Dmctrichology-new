@@ -1,0 +1,157 @@
+.about-vision-section {
+  padding: 120px 0;
+  background-color: #ffffff;
+}
+
+.about-vision-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.about-vision-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.about-vision-tag {
+  display: inline-block;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #c19a5b;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+.about-vision-main-title {
+  font-family: 'Marcellus', serif;
+  font-size: 44px;
+  color: #1a1a1a;
+}
+
+.about-vision-dual-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  margin-bottom: 100px;
+}
+
+.about-vision-card {
+  background: #fdfdfd;
+  padding: 80px 60px;
+  border-radius: 50px;
+  border: 1px solid #f0f0f0;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-vision-card.mission {
+  background: #1a1a1a;
+  color: white;
+  border: none;
+}
+
+.card-icon {
+  margin-bottom: 40px;
+  color: #c19a5b;
+}
+
+.about-vision-card-title {
+  font-family: 'Marcellus', serif;
+  font-size: 36px;
+  margin-bottom: 24px;
+  font-weight: 400;
+}
+
+.about-vision-card-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 18px;
+  line-height: 1.8;
+  opacity: 0.8;
+}
+
+.about-values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.about-value-item {
+  text-align: center;
+  padding: 50px 30px;
+  background: #ffffff;
+  border-radius: 40px;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border: 1px solid transparent;
+}
+
+.about-value-item:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.06);
+  border-color: #f0f0f0;
+}
+
+.about-value-icon-box {
+  width: 90px;
+  height: 90px;
+  background: #f9f7f2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 32px;
+  transition: all 0.3s ease;
+}
+
+.about-value-item:hover .about-value-icon-box {
+  background: #c19a5b;
+}
+
+.about-value-item:hover .about-value-icon-box svg {
+  color: white !important;
+}
+
+.about-value-title {
+  font-family: 'Marcellus', serif;
+  font-size: 22px;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.about-value-desc {
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  color: #666;
+  line-height: 1.7;
+}
+
+@media (max-width: 1024px) {
+  .about-vision-dual-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .about-vision-main-title {
+    font-size: 32px;
+  }
+  
+  .about-vision-card {
+    padding: 60px 30px;
+  }
+  
+  .about-values-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-vision-card-title {
+    font-size: 28px;
+  }
+}
