@@ -8,46 +8,27 @@ import './AboutUsBanner.css';
 
 const AboutUsBanner = ({ data = {} }) => {
   const {
-    badgeText = "ABOUT DMC TRICHOLOGY",
     title = "About Us",
     breadcrumbText = "Home / About Us",
-    backgroundImage = "",
-    overlayOpacity = 0.5,
-    overlayColor = "#000000",
-    textAlignment = "center",
-    spacingTop = "170px",
-    spacingBottom = "100px"
+    backgroundImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
   } = data;
 
   const bannerStyle = {
-    backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
-    paddingTop: spacingTop,
-    paddingBottom: spacingBottom,
-    textAlign: textAlignment,
-  };
-
-  const overlayStyle = {
-    backgroundColor: overlayColor,
-    opacity: overlayOpacity,
+    backgroundImage: `url(${backgroundImage})`,
+    paddingTop: "0px",
+    paddingBottom: "0px",
+    textAlign: "center",
   };
 
   return (
     <EditableSection sectionId="about-banner" label="About Us Banner">
       <section className="about-banner-premium" style={bannerStyle}>
-        <div className="about-banner-overlay" style={overlayStyle}></div>
-        
         <div className="about-banner-container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="about-banner-badge">
-              <EditableText sectionId="about-banner" fieldPath="banner.badgeText">
-                {badgeText}
-              </EditableText>
-            </div>
-            
             <h1 className="about-banner-title">
               <EditableText sectionId="about-banner" fieldPath="banner.title">
                 {title}

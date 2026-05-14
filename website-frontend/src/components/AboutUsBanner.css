@@ -8,26 +8,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 420px;
   width: 100%;
-  overflow: hidden;
-  padding: 170px 5% 100px;
-}
-
-/* Match Services Banner Light Gradient */
-.about-banner-premium::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, #F5F7FA, #E8EBF3);
-  z-index: -2;
+  padding: 80px 5% !important; /* Reduced padding to match premium feel without being too thin */
+  background-color: transparent !important;
 }
 
 .about-banner-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
+  display: none !important;
 }
 
 .about-banner-container {
@@ -40,32 +27,27 @@
   text-align: center;
 }
 
-/* Hide badge to match Services banner layout exactly */
-.about-banner-badge {
-  display: none;
-}
-
 .about-banner-title {
   font-family: 'Marcellus', serif !important;
   font-size: 54px !important;
-  color: #111111 !important; /* Dark text like Services */
-  margin: 0 0 16px !important;
+  color: #111111 !important;
+  margin: 0 0 12px !important;
   text-transform: capitalize !important;
   font-weight: 400 !important;
   letter-spacing: 1px !important;
-  line-height: 1.2 !important;
+  line-height: 1.1 !important;
 }
 
 .about-banner-breadcrumb {
   font-family: 'Marcellus', serif !important;
   font-size: 14px !important;
-  color: #555555 !important;
+  color: #888888 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
   font-weight: 400 !important;
-  opacity: 0.8 !important;
+  opacity: 1 !important;
 }
 
 .about-banner-breadcrumb a {
@@ -79,21 +61,7 @@
 }
 
 .about-banner-breadcrumb .current {
-  color: #111111 !important;
-}
-
-/* Adaptive styles if background image is applied */
-.about-banner-premium[style*="background-image"] .about-banner-title {
-  color: #ffffff !important;
-}
-.about-banner-premium[style*="background-image"] .about-banner-breadcrumb {
-  color: rgba(255, 255, 255, 0.8) !important;
-}
-.about-banner-premium[style*="background-image"] .about-banner-breadcrumb a {
-  color: rgba(255, 255, 255, 0.6) !important;
-}
-.about-banner-premium[style*="background-image"] .about-banner-breadcrumb .current {
-  color: #ffffff !important;
+  color: #888888 !important;
 }
 
 @media (max-width: 992px) {
@@ -104,9 +72,7 @@
 
 @media (max-width: 600px) {
   .about-banner-premium {
-    min-height: 320px;
-    padding-top: 120px !important;
-    padding-bottom: 80px !important;
+    padding: 60px 5% !important;
   }
   .about-banner-title {
     font-size: 32px !important;
