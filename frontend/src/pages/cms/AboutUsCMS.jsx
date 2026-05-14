@@ -128,7 +128,8 @@ export default function AboutUsCMS() {
 
         {/* Section Navigation */}
         <div className="max-w-[1600px] mx-auto px-8 flex overflow-x-auto no-scrollbar border-t border-slate-100">
-          <SectionTab id="hero" label="HERO BANNER" icon={ImageIcon} />
+          <SectionTab id="banner" label="ABOUT BANNER" icon={ImageIcon} />
+          <SectionTab id="hero" label="HERO SECTION" icon={ImageIcon} />
           <SectionTab id="story" label="OUR STORY" icon={Clock} />
           <SectionTab id="vision" label="VISION & VALUES" icon={Target} />
           <SectionTab id="journey" label="MILESTONES" icon={Settings} />
@@ -139,6 +140,53 @@ export default function AboutUsCMS() {
       </div>
 
       <div className="max-w-[1200px] mx-auto px-8 mt-12">
+        {/* ABOUT BANNER SECTION */}
+        {activeSection === "banner" && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+             <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <h3 className="text-lg font-black mb-8 text-slate-800 flex items-center gap-3">
+                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600">
+                    <ImageIcon size={18} />
+                  </div>
+                  About Page Top Banner
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Badge Text</label>
+                    <input type="text" value={data.banner?.badgeText || ""} onChange={e => updateSectionField("banner", "badgeText", e.target.value)} 
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Banner Title</label>
+                    <input type="text" value={data.banner?.title || ""} onChange={e => updateSectionField("banner", "title", e.target.value)} 
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Breadcrumb Text</label>
+                    <input type="text" value={data.banner?.breadcrumbText || ""} onChange={e => updateSectionField("banner", "breadcrumbText", e.target.value)} 
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Background Image URL</label>
+                    <input type="text" value={data.banner?.backgroundImage || ""} onChange={e => updateSectionField("banner", "backgroundImage", e.target.value)} 
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Overlay Opacity (0 to 1)</label>
+                    <input type="number" step="0.1" min="0" max="1" value={data.banner?.overlayOpacity || 0.5} onChange={e => updateSectionField("banner", "overlayOpacity", parseFloat(e.target.value))} 
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Overlay Color</label>
+                    <input type="color" value={data.banner?.overlayColor || "#000000"} onChange={e => updateSectionField("banner", "overlayColor", e.target.value)} 
+                      className="w-full h-[54px] bg-slate-50 border border-slate-100 rounded-2xl cursor-pointer" />
+                  </div>
+                </div>
+             </div>
+          </div>
+        )}
+
         {/* HERO SECTION */}
         {activeSection === "hero" && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -147,7 +195,7 @@ export default function AboutUsCMS() {
                   <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600">
                     <ImageIcon size={18} />
                   </div>
-                  Hero Banner Configuration
+                  Hero Section Configuration
                 </h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -167,7 +215,7 @@ export default function AboutUsCMS() {
                       className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold focus:bg-white focus:border-blue-500 transition-all min-h-[100px]" />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Background Image URL</label>
+                    <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Cinematic Image URL</label>
                     <input type="text" value={data.hero.backgroundImage || ""} onChange={e => updateSectionField("hero", "backgroundImage", e.target.value)} 
                       className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold focus:bg-white focus:border-blue-500 transition-all" />
                   </div>
@@ -180,7 +228,7 @@ export default function AboutUsCMS() {
 
                 <div className="mt-12 pt-12 border-t border-slate-100">
                   <h4 className="text-sm font-black text-slate-800 mb-6 uppercase tracking-widest">Performance Stats</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {data.hero.stats.map((stat, idx) => (
                       <div key={idx} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 relative group">
                         <div className="grid grid-cols-2 gap-4">
@@ -193,7 +241,7 @@ export default function AboutUsCMS() {
                             }} className="w-full px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-xs font-bold" />
                           </div>
                           <div>
-                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2">Suffix (+/%)</label>
+                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2">Suffix</label>
                             <input type="text" value={stat.suffix} onChange={e => {
                               const newStats = [...data.hero.stats];
                               newStats[idx].suffix = e.target.value;

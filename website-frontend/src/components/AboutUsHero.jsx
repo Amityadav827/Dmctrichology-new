@@ -9,9 +9,18 @@ const AboutUsHero = ({ data = {} }) => {
     badge = "ESTABLISHED 2008", 
     title = "Crafting The Art Of Natural Hair Restoration", 
     subtitle = "At DMC Trichology, we blend advanced medical science with meticulous artistic precision to restore more than just hair—we restore confidence.", 
-    image = "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png", 
+    backgroundImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
+    videoUrl = "",
     stats = [] 
   } = data;
+
+  const defaultStats = [
+    { value: "15", suffix: "+", label: "Years Experience" },
+    { value: "25", suffix: "k+", label: "Happy Patients" },
+    { value: "12", suffix: "+", label: "Expert Board" }
+  ];
+
+  const activeStats = (stats && stats.length > 0) ? stats : defaultStats;
 
   return (
     <EditableSection sectionId="about-hero" label="About Us Hero">
@@ -61,11 +70,7 @@ const AboutUsHero = ({ data = {} }) => {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="about-hero-stats"
               >
-                {(stats && stats.length > 0 ? stats : [
-                  { value: "15", suffix: "+", label: "Years Experience" },
-                  { value: "25", suffix: "k+", label: "Happy Patients" },
-                  { value: "12", suffix: "+", label: "Expert Board" }
-                ]).map((stat, index) => (
+                {activeStats.map((stat, index) => (
                   <div key={index} className="about-hero-stat-box">
                     <span className="stat-num">
                       <EditableText sectionId="about-hero" fieldPath={`hero.stats.${index}.value`} tag="span">{stat.value}</EditableText>
@@ -87,19 +92,33 @@ const AboutUsHero = ({ data = {} }) => {
                 transition={{ duration: 1.5, ease: "easeOut" }}
                 className="cinematic-img-frame"
               >
-                <img 
-                  src={image} 
-                  alt="DMC Luxury Clinic" 
-                  className="cinematic-img"
-                />
+                {videoUrl ? (
+                  <iframe 
+                    src={videoUrl.replace("watch?v=", "embed/")} 
+                    className="cinematic-video" 
+                    title="About Us Video"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                ) : (
+                  <img 
+                    src={backgroundImage} 
+                    alt="DMC Luxury Clinic" 
+                    className="cinematic-img"
+                  />
+                )}
+                
                 <div className="cinematic-overlay"></div>
-                <motion.div 
-                  initial={{ height: "0%" }}
-                  whileInView={{ height: "100%" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.2, delay: 0.5, ease: "easeInOut" }}
-                  className="cinematic-reveal"
-                ></motion.div>
+                {!videoUrl && (
+                  <motion.div 
+                    initial={{ height: "0%" }}
+                    whileInView={{ height: "100%" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.2, delay: 0.5, ease: "easeInOut" }}
+                    className="cinematic-reveal"
+                  ></motion.div>
+                )}
               </motion.div>
             </div>
           </div>

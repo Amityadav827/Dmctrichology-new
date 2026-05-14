@@ -1,6 +1,18 @@
 const mongoose = require('mongoose');
 
 const AboutUsSchema = new mongoose.Schema({
+  banner: {
+    badgeText: { type: String, default: "ABOUT DMC TRICHOLOGY" },
+    title: { type: String, default: "About Us" },
+    breadcrumbText: { type: String, default: "Home / About Us" },
+    backgroundImage: { type: String, default: "" },
+    overlayOpacity: { type: Number, default: 0.5 },
+    overlayColor: { type: String, default: "#000000" },
+    textAlignment: { type: String, default: "center" },
+    spacingTop: { type: String, default: "150px" },
+    spacingBottom: { type: String, default: "150px" }
+  },
+
   hero: {
     badge: { type: String, default: "ABOUT DMC TRICHOLOGY" },
     title: { type: String, default: "Experience the Pinnacle of Hair Care" },

@@ -31,6 +31,7 @@ export default function AboutUsVisualBuilder() {
   const navigate = useNavigate();
 
   const sections = [
+    { id: 'about-banner', label: 'About Us Banner' },
     { id: 'about-hero', label: 'About Us Hero' },
     { id: 'about-story', label: 'Our Story' },
     { id: 'about-vision', label: 'Vision & Values' },
