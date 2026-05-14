@@ -9,7 +9,7 @@ export default function NotFound() {
           className="text-[120px] font-bold leading-none mb-4"
           style={{
             fontFamily: "'Marcellus', serif",
-            background: 'linear-gradient(135deg, rgb(249, 247, 242) 0%, #1a3266 100%)',
+            background: 'linear-gradient(135deg, #2D4A8A 0%, #1a3266 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
           }}
@@ -30,7 +30,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/blog"
-          className="inline-flex items-center justify-center px-10 py-4 bg-[rgb(249, 247, 242)] text-white rounded-full font-semibold transition-all hover:bg-[#1a3266] hover:scale-105"
+          className="inline-flex items-center justify-center px-10 py-4 bg-[#2D4A8A] text-white rounded-full font-semibold transition-all hover:bg-[#1a3266] hover:scale-105"
           style={{ fontFamily: "'Marcellus', serif" }}
         >
           Back to All Blogs

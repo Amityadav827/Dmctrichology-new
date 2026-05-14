@@ -73,7 +73,7 @@
 }
 
 .quote-icon {
-  color: rgb(249, 247, 242);
+  color: #2D4A8A;
   flex-shrink: 0;
   margin-top: 5px;
 }
@@ -132,7 +132,7 @@
 .share-icons a {
   width: 36px;
   height: 36px;
-  background-color: rgb(249, 247, 242);
+  background-color: #2D4A8A;
   color: #FFF;
   border-radius: 50%;
   display: flex;
@@ -275,7 +275,7 @@
 
 .submit-btn {
   width: fit-content;
-  background-color: rgb(249, 247, 242);
+  background-color: #2D4A8A;
   color: #FFF;
   padding: 15px 35px;
   border-radius: 50px;
@@ -301,7 +301,7 @@
 .sidebar-inner {
   position: sticky;
   top: 100px;
-  background: rgb(249, 247, 242);
+  background: #2D4A8A;
   border-radius: 40px;
   padding: 40px 30px;
   color: #ffffff;

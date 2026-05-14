@@ -40,7 +40,7 @@ export default function ContactPageCMS() {
       area: "Vasant Vihar",
       googleMapEmbedUrl: "",
       mapHeight: "600px",
-      cardBackground: "rgb(249, 247, 242)",
+      cardBackground: "#2D4A8A",
       iconColor: "#C8102E",
       textColor: "#FFFFFF"
     }
