@@ -72,6 +72,6 @@ const AboutUsSchema = new mongoose.Schema({
     metaDescription: { type: String, default: "" },
     ogImage: { type: String, default: "" }
   }
-}, { timestamps: true });
+}, { timestamps: true, collection: 'aboutus' });
 
 module.exports = mongoose.model('AboutUs', AboutUsSchema);

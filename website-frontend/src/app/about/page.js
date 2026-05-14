@@ -47,8 +47,8 @@ const staticFallback = {
 async function getAboutData() {
   try {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
-    const response = await fetch(`${API_URL}/about-us`, {
-      next: { revalidate: 60 } // Cache for 60 seconds
+    const response = await fetch(`${API_URL}/about-us?t=${Date.now()}`, {
+      cache: 'no-store'
     });
     
     if (!response.ok) return staticFallback;
