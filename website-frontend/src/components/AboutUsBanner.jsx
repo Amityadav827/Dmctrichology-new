@@ -3,8 +3,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import EditableText from './EditableText';
-import EditableSection from './EditableSection';
+import EditableText from './Editable/EditableText';
+import EditableSection from './Editable/EditableSection';
 import './AboutUsBanner.css';
 
 const AboutUsBanner = ({ data = {} }) => {
