@@ -238,17 +238,26 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
                 </div>
               </div>
 
-              {/* Subtitle / Service Name repeat */}
+              {/* Intro Section Heading */}
               <h3 className="details-subtitle">
                 <EditableText sectionId="service-intro" fieldPath="intro.introHeading">
                   {intro.introHeading || 'About the Treatment'}
                 </EditableText>
               </h3>
 
+              {/* Short Description / Tagline */}
+              {intro.shortDescription && (
+                <div className="details-intro-short-desc">
+                  <EditableText sectionId="service-intro" fieldPath="intro.shortDescription">
+                    {intro.shortDescription}
+                  </EditableText>
+                </div>
+              )}
+
               {/* Main Description */}
               <p className="details-description">
                 <EditableText sectionId="service-intro" fieldPath="intro.longDescription">
-                  {intro.longDescription || 'FUE is one of the most popular and limited modern procedure techniques for hair repair. Each hair follicle is removed individually and implanted into the thinning or bald areas, making sure that it\'s natural volume and growth.'}
+                  {intro.longDescription || 'FUE is one of the most popular and limited modern procedure techniques for hair repair.'}
                 </EditableText>
               </p>
 

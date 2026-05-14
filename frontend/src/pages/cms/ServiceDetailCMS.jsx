@@ -348,9 +348,8 @@ export default function ServiceDetailCMS() {
 
                   <div>
                     <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Short Description</label>
-                    <textarea value={data.banner.shortDescription || data.banner.subtitle || ""} onChange={e => {
-                      updateSectionField("banner", "shortDescription", e.target.value);
-                      updateSectionField("banner", "subtitle", e.target.value);
+                    <textarea value={data.intro.shortDescription || ""} onChange={e => {
+                      updateSectionField("intro", "shortDescription", e.target.value);
                     }}
                       className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold min-h-[80px]" />
                   </div>
