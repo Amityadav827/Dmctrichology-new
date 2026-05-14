@@ -1,29 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Play } from 'lucide-react';
-import { useBuilder } from '../context/BuilderContext';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import './AboutUsHero.css';
 
 const AboutUsHero = ({ data = {} }) => {
-  const { siteConfig } = useBuilder();
-  const [heroData, setHeroData] = useState(data);
-
-  useEffect(() => {
-    const nextHeroData = { ...heroData };
-    let hasUpdates = false;
-    Object.keys(siteConfig).forEach(key => {
-      if (key.startsWith('about-hero.hero.')) {
-        const field = key.replace('about-hero.hero.', '');
-        nextHeroData[field] = siteConfig[key];
-        hasUpdates = true;
-      }
-    });
-    if (hasUpdates) setHeroData(nextHeroData);
-  }, [siteConfig]);
-
-  const { badge, title, subtitle, backgroundImage, stats = [] } = heroData;
+  const { 
+    badge = "ESTABLISHED 2008", 
+    title = "Crafting The Art Of Natural Hair Restoration", 
+    subtitle = "At DMC Trichology, we blend advanced medical science with meticulous artistic precision to restore more than just hair—we restore confidence.", 
+    image = "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png", 
+    stats = [] 
+  } = data;
 
   return (
     <EditableSection sectionId="about-hero" label="About Us Hero">
@@ -33,43 +21,51 @@ const AboutUsHero = ({ data = {} }) => {
             <div className="about-hero-content">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
               >
                 <EditableText sectionId="about-hero" fieldPath="hero.badge" className="about-hero-badge" tag="span">
-                  {badge || "ESTABLISHED 2008"}
+                  {badge}
                 </EditableText>
               </motion.div>
               
               <motion.h1 
                 initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                 className="about-hero-title"
               >
                 <EditableText sectionId="about-hero" fieldPath="hero.title" tag="span">
-                  {title || "Crafting The Art Of Natural Hair Restoration"}
+                  {title}
                 </EditableText>
               </motion.h1>
               
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                 className="about-hero-subtitle"
               >
                 <EditableText sectionId="about-hero" fieldPath="hero.subtitle" tag="span">
-                  {subtitle || "At DMC Trichology, we blend advanced medical science with meticulous artistic precision to restore more than just hair—we restore confidence."}
+                  {subtitle}
                 </EditableText>
               </motion.p>
 
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="about-hero-stats"
               >
-                {stats.slice(0, 3).map((stat, index) => (
+                {(stats && stats.length > 0 ? stats : [
+                  { value: "15", suffix: "+", label: "Years Experience" },
+                  { value: "25", suffix: "k+", label: "Happy Patients" },
+                  { value: "12", suffix: "+", label: "Expert Board" }
+                ]).map((stat, index) => (
                   <div key={index} className="about-hero-stat-box">
                     <span className="stat-num">
                       <EditableText sectionId="about-hero" fieldPath={`hero.stats.${index}.value`} tag="span">{stat.value}</EditableText>
@@ -86,19 +82,21 @@ const AboutUsHero = ({ data = {} }) => {
             <div className="about-hero-cinematic">
               <motion.div 
                 initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 1, scale: 1 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
                 transition={{ duration: 1.5, ease: "easeOut" }}
                 className="cinematic-img-frame"
               >
                 <img 
-                  src={backgroundImage || "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png"} 
+                  src={image} 
                   alt="DMC Luxury Clinic" 
                   className="cinematic-img"
                 />
                 <div className="cinematic-overlay"></div>
                 <motion.div 
                   initial={{ height: "0%" }}
-                  animate={{ height: "100%" }}
+                  whileInView={{ height: "100%" }}
+                  viewport={{ once: true }}
                   transition={{ duration: 1.2, delay: 0.5, ease: "easeInOut" }}
                   className="cinematic-reveal"
                 ></motion.div>

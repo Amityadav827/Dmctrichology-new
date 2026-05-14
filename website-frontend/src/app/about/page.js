@@ -1,15 +1,7 @@
-"use client";
-
-import React, { useState, useEffect } from 'react';
-import AboutUsHero from '@/components/AboutUsHero';
-import AboutUsStory from '@/components/AboutUsStory';
-import AboutUsJourney from '@/components/AboutUsJourney';
-import AboutUsVision from '@/components/AboutUsVision';
-import AboutUsExperts from '@/components/AboutUsExperts';
-import AboutUsTestimonials from '@/components/AboutUsTestimonials';
+import AboutUsClient from '@/components/AboutUsClient';
 import { fetchAboutUs } from '@/services/api';
 
-// Static fallback data for production safety
+// Static fallback data for production safety (SSR Level)
 const staticFallback = {
   hero: {
     badge: "ESTABLISHED 2008",
@@ -26,55 +18,50 @@ const staticFallback = {
     badge: "OUR HERITAGE",
     heading: "A Legacy Of Clinical Excellence",
     description: "Founded in 2008 by Dr. Gaurav Garg, DMC Trichology has pioneered the field of hair restoration in India.",
-    points: ["US-FDA Approved Technologies", "Award-winning Surgeons", "Gold Standard Protocols"],
+    points: [{ text: "US-FDA Approved Technologies" }, { text: "Award-winning Surgeons" }, { text: "Gold Standard Protocols" }],
     mainImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png",
-    sideImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/jkidxsr5nbpwq7y7x0x0.png"
+    secondaryImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/jkidxsr5nbpwq7y7x0x0.png"
+  },
+  vision: {
+    visionText: "To be the global benchmark in hair restoration, merging advanced science with artistic excellence.",
+    missionText: "To restore confidence through personalized care and the highest medical standards."
+  },
+  journey: {
+    milestones: [
+      { year: "2008", title: "The Inception", description: "First clinic opened in Delhi." },
+      { year: "2015", title: "Global Recognition", description: "Excellence award in Trichology." }
+    ]
+  },
+  experts: {
+    team: [
+      { name: "Dr. Gaurav Garg", designation: "Chief Surgeon", specialization: "FUE Specialist", bio: "Expert in hair restoration with 15+ years experience." }
+    ]
+  },
+  testimonials: {
+    reviews: [
+      { patientName: "Rahul Sharma", reviewText: "Life changing experience. The density is amazing.", treatment: "FUE Transplant", rating: 5 }
+    ]
   }
 };
 
-export default function AboutUsPage() {
-  const [aboutData, setAboutData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadAboutData = async () => {
-      try {
-        const result = await fetchAboutUs();
-        if (result && result.success) {
-          setAboutData(result.data);
-        } else {
-          // If API returns success: false, use static fallback
-          setAboutData(staticFallback);
-        }
-      } catch (error) {
-        console.error('Error fetching About Us data:', error);
-        setAboutData(staticFallback);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadAboutData();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
+async function getAboutData() {
+  try {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
+    const response = await fetch(`${API_URL}/about-us`, {
+      next: { revalidate: 60 } // Cache for 60 seconds
+    });
+    
+    if (!response.ok) return staticFallback;
+    const result = await response.json();
+    return result.success ? result.data : staticFallback;
+  } catch (error) {
+    console.error('SSR Fetch Error:', error);
+    return staticFallback;
   }
+}
 
-  if (!aboutData) return null;
+export default async function AboutUsPage() {
+  const data = await getAboutData();
 
-  return (
-    <main className="about-us-page-wrapper">
-      <AboutUsHero data={aboutData.hero} />
-      <AboutUsStory data={aboutData.story} />
-      <AboutUsVision data={aboutData.vision} />
-      <AboutUsJourney data={aboutData.journey} />
-      <AboutUsExperts data={aboutData.experts} />
-      <AboutUsTestimonials data={aboutData.testimonials} />
-    </main>
-  );
+  return <AboutUsClient initialData={data} />;
 }

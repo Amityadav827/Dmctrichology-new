@@ -1,9 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import EditableSection from './Editable/EditableSection';
+import EditableText from './Editable/EditableText';
 import './AboutUsExperts.css';
 
 const AboutUsExperts = ({ data = {} }) => {
-  const { team = [] } = data;
+  const { 
+    sectionTitle = "MEDICAL BOARD",
+    heading = "Led By World-Class Surgeons",
+    team = [] 
+  } = data;
 
   const defaultTeam = [
     { 
@@ -22,60 +28,70 @@ const AboutUsExperts = ({ data = {} }) => {
     }
   ];
 
-  const activeTeam = team.length > 0 ? team : defaultTeam;
+  const activeTeam = (team && team.length > 0) ? team : defaultTeam;
 
   return (
-    <section className="about-experts-section">
-      <div className="about-experts-container">
-        <div className="about-experts-header">
-          <motion.span 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="about-experts-tag"
-          >
-            MEDICAL BOARD
-          </motion.span>
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="about-experts-main-title"
-          >
-            Led By World-Class Surgeons
-          </motion.h2>
-        </div>
-
-        <div className="about-experts-grid">
-          {activeTeam.map((member, index) => (
-            <motion.div 
-              key={index} 
-              initial={{ opacity: 0, y: 40 }}
+    <EditableSection sectionId="about-experts" label="Team Experts">
+      <section className="about-experts-section">
+        <div className="about-experts-container">
+          <div className="about-experts-header">
+            <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="about-experts-tag"
+            >
+              <EditableText sectionId="about-experts" fieldPath="experts.sectionTitle" tag="span">{sectionTitle}</EditableText>
+            </motion.span>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="about-expert-card"
+              transition={{ delay: 0.2 }}
+              className="about-experts-main-title"
             >
-              <div className="about-expert-img-wrapper">
-                <img src={member.image} alt={member.name} className="about-expert-img" />
-                <div className="about-expert-overlay">
-                  <div className="about-expert-bio-box">
-                    <p className="about-expert-bio">{member.bio}</p>
+              <EditableText sectionId="about-experts" fieldPath="experts.heading" tag="span">{heading}</EditableText>
+            </motion.h2>
+          </div>
+
+          <div className="about-experts-grid">
+            {activeTeam.map((member, index) => (
+              <motion.div 
+                key={index} 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                className="about-expert-card"
+              >
+                <div className="about-expert-img-wrapper">
+                  <img src={member.image} alt={member.name} className="about-expert-img" />
+                  <div className="about-expert-overlay">
+                    <div className="about-expert-bio-box">
+                      <p className="about-expert-bio">
+                        <EditableText sectionId="about-experts" fieldPath={`experts.team.${index}.bio`} tag="span">{member.bio}</EditableText>
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="about-expert-info">
-                <h4 className="about-expert-name">{member.name}</h4>
-                <p className="about-expert-designation">{member.designation}</p>
-                <div className="about-expert-divider"></div>
-                <span className="about-expert-spec">{member.specialization}</span>
-              </div>
-            </motion.div>
-          ))}
+                <div className="about-expert-info">
+                  <h4 className="about-expert-name">
+                    <EditableText sectionId="about-experts" fieldPath={`experts.team.${index}.name`} tag="span">{member.name}</EditableText>
+                  </h4>
+                  <p className="about-expert-designation">
+                    <EditableText sectionId="about-experts" fieldPath={`experts.team.${index}.designation`} tag="span">{member.designation}</EditableText>
+                  </p>
+                  <div className="about-expert-divider"></div>
+                  <span className="about-expert-spec">
+                    <EditableText sectionId="about-experts" fieldPath={`experts.team.${index}.specialization`} tag="span">{member.specialization}</EditableText>
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </EditableSection>
   );
 };
 
