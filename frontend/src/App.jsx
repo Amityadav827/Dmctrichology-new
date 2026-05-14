@@ -57,6 +57,7 @@ import FaqEnquiryCMS from "./pages/cms/FaqEnquiryCMS";
 import IdealFrequencyCMS from "./pages/cms/IdealFrequencyCMS";
 import ContactPageCMS from "./pages/cms/ContactPageCMS";
 import BlogHeroCMS from "./pages/cms/BlogHeroCMS";
+import ServiceDetailCMS from "./pages/cms/ServiceDetailCMS";
 import Comments from "./pages/Comments";
 
 
@@ -428,6 +429,14 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <BlogHeroCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/service-details"
+          element={
+            <ProtectedRoute permission="cms">
+              <ServiceDetailCMS />
             </ProtectedRoute>
           }
         />

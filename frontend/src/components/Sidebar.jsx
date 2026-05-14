@@ -184,6 +184,9 @@ function Sidebar() {
             <NavLink to="/cms/visual-builder/service" className={getNavClass}>
               <Eye size={16} /> Visual Builder
             </NavLink>
+            <NavLink to="/cms/service-details" className={getNavClass}>
+              <Layers size={16} /> Service Details CMS
+            </NavLink>
 
             {/* Details Page CMS */}
             <SectionLabel>Details Page CMS</SectionLabel>

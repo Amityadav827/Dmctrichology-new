@@ -12,13 +12,32 @@ import '../../details.css';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
+
+async function fetchServiceData(slug) {
+  try {
+    const res = await fetch(`${API_BASE}/service-details/${slug}`, {
+      cache: 'no-store'
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && json.data) {
+        return json.data;
+      }
+    }
+  } catch (error) {
+    console.error(`Failed to fetch CMS data for ${slug}:`, error);
+  }
+  
+  // Fallback to static data
+  const normalizedSlug = String(slug || '').toLowerCase().trim();
+  return servicesData.find(s => s.slug.toLowerCase() === normalizedSlug) || null;
+}
+
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
   const { slug } = resolvedParams;
-  const rawSlug = slug || '';
-  const normalizedSlug = String(rawSlug).toLowerCase().trim();
-  
-  const service = servicesData.find(s => s.slug.toLowerCase() === normalizedSlug);
+  const service = await fetchServiceData(slug);
 
   if (!service) {
     return {
@@ -27,8 +46,8 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${service.banner.title} | DMC Trichology`,
-    description: service.banner.subtitle,
+    title: `${service.banner?.title || service.title} | DMC Trichology`,
+    description: service.banner?.subtitle || '',
   };
 }
 
@@ -36,18 +55,7 @@ export default async function DynamicDetailsPage({ params }) {
   const resolvedParams = await params;
   const { slug } = resolvedParams;
   
-  const rawSlug = slug || '';
-  // Normalize slug to handle case differences, trailing spaces, or extra query-like parts (though Next.js handles queries)
-  const normalizedSlug = String(rawSlug).toLowerCase().trim();
-  
-  const service = servicesData.find(s => s.slug.toLowerCase() === normalizedSlug);
-
-  // --- Temporary Debug Logs ---
-  console.log('--- DYNAMIC ROUTING DEBUG ---');
-  console.log('params.slug:', slug);
-  console.log('Normalized Slug:', normalizedSlug);
-  console.log('Matched Result:', service ? service.slug : 'Not Found');
-  console.log('-----------------------------');
+  const service = await fetchServiceData(slug);
 
   if (!service) {
     notFound();
@@ -57,12 +65,12 @@ export default async function DynamicDetailsPage({ params }) {
 
   return (
     <div className="bg-white min-h-screen">
-      <DetailsBanner data={banner} />
-      <ServiceIntro data={intro} />
-      <ProcessSlider data={process} />
-      <IdealFrequency data={idealFrequency} />
-      <BeforeAfterTreatment data={beforeAfter} />
-      <FaqEnquiry data={faqEnquiry} />
+      <DetailsBanner data={banner || {}} />
+      <ServiceIntro data={intro || {}} />
+      <ProcessSlider data={process || {}} />
+      <IdealFrequency data={idealFrequency || {}} />
+      <BeforeAfterTreatment data={beforeAfter || {}} />
+      <FaqEnquiry data={faqEnquiry || {}} />
     </div>
   );
 }
