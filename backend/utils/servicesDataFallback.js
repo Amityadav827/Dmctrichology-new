@@ -152,6 +152,7 @@ const generateServiceData = (title, slug, type) => {
     intro: {
       badgeText: "ABOUT THE TREATMENT",
       title: title,
+      introHeading: title,
       rating: "4.9",
       duration: c.duration,
       shortDescription: c.shortDesc,

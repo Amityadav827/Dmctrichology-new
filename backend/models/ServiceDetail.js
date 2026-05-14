@@ -21,6 +21,7 @@ const ServiceDetailSchema = new mongoose.Schema({
   intro: {
     badgeText: { type: String, default: "ABOUT THE TREATMENT" },
     title: { type: String, default: "" },
+    introHeading: { type: String, default: "" },
     rating: { type: String, default: "4.9" },
     duration: { type: String, default: "" },
     shortDescription: { type: String, default: "" },
