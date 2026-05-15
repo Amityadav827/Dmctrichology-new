@@ -583,6 +583,12 @@ export default function AboutUsCMS() {
                             <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
                               const file = e.target.files[0];
                               if (!file) return;
+                              
+                              console.log("[DEBUG] Current localStorage structure:");
+                              console.log("dmc_admin_token:", localStorage.getItem("dmc_admin_token") ? "Exists" : "MISSING");
+                              console.log("dmc_admin_user:", localStorage.getItem("dmc_admin_user") ? "Exists" : "MISSING");
+                              console.log("userInfo (requested check):", localStorage.getItem("userInfo"));
+
                               const fd = new FormData();
                               fd.append('image', file);
                               toast.loading("Uploading...", { id: "upload-" + idx });

@@ -5,22 +5,32 @@ const supabase = require("../config/supabase");
 const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-    console.log("[AUTH DEBUG] Authorization Header:", authHeader);
+    console.log("[AUTH DEBUG] Authorization Header Received:", authHeader ? (authHeader.substring(0, 15) + "...") : "MISSING");
+    console.log("[AUTH DEBUG] Request URL:", req.originalUrl);
+    console.log("[AUTH DEBUG] Content-Type:", req.headers['content-type']);
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      console.log("[AUTH DEBUG] Token missing or invalid format");
+    if (!authHeader || !authHeader.toLowerCase().startsWith("bearer ")) {
+      console.log("[AUTH DEBUG] Token missing or invalid Bearer format");
       return res.status(401).json({
         success: false,
         message: "Not authorized, token missing",
       });
     }
 
-    const token = authHeader.split(" ")[1];
-    console.log("[AUTH DEBUG] Token Extracted:", token ? (token.substring(0, 10) + "...") : "null");
+    const token = authHeader.split(/\s+/)[1];
+    
+    if (!token) {
+      console.log("[AUTH DEBUG] Token string is empty after split");
+      return res.status(401).json({
+        success: false,
+        message: "Not authorized, token empty",
+      });
+    }
 
     try {
+      console.log("[AUTH DEBUG] Verifying token with JWT_SECRET length:", process.env.JWT_SECRET?.length || 0);
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("[AUTH DEBUG] Decoded Payload:", decoded);
+      console.log("[AUTH DEBUG] Token Verified Successfully. Decoded ID:", decoded.id);
 
       const { data: user, error } = await supabase
         .from('users')
@@ -35,7 +45,7 @@ const protect = async (req, res, next) => {
         .single();
 
       if (error || !user) {
-        console.log("[AUTH DEBUG] User not found in database:", decoded.id);
+        console.log("[AUTH DEBUG] User not found in database for ID:", decoded.id);
         return res.status(401).json({
           success: false,
           message: "Not authorized, user not found",
@@ -43,6 +53,7 @@ const protect = async (req, res, next) => {
       }
 
       if (user.status !== "active") {
+        console.log("[AUTH DEBUG] User account is inactive:", decoded.id);
         return res.status(403).json({
           success: false,
           message: "User account is inactive",
@@ -52,14 +63,15 @@ const protect = async (req, res, next) => {
       req.user = user;
       next();
     } catch (jwtError) {
-      console.error("[AUTH DEBUG] JWT Verification Failed:", jwtError.message);
+      console.error("[AUTH DEBUG] JWT Verification Failed Details:", jwtError.name, jwtError.message);
       return res.status(401).json({
         success: false,
         message: "Not authorized, token failed",
+        error: jwtError.message
       });
     }
   } catch (error) {
-    console.error("[AUTH DEBUG] Unexpected Error:", error.message);
+    console.error("[AUTH DEBUG] Global Protect Middleware Error:", error);
     return res.status(401).json({
       success: false,
       message: "Not authorized, token failed",
