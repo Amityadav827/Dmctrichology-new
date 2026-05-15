@@ -587,19 +587,27 @@ export default function AboutUsCMS() {
                               toast.loading("Uploading...", { id: "upload-" + idx });
                               try {
                                 const token = localStorage.getItem("dmc_admin_token");
-                                const res = await axios.post('/service-details/upload', fd, { 
-                                  headers: { 
-                                    'Content-Type': 'multipart/form-data',
+                                const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+                                const baseURL = import.meta.env.VITE_API_URL || (isLocal ? "http://localhost:10000/api" : "https://dmctrichology-1.onrender.com/api");
+                                
+                                const res = await fetch(`${baseURL}/service-details/upload`, {
+                                  method: 'POST',
+                                  headers: {
                                     'Authorization': `Bearer ${token}`
-                                  }
+                                  },
+                                  body: fd
                                 });
-                                if (res.data?.success) {
+                                
+                                const data = await res.json();
+                                
+                                if (res.ok && data?.success) {
                                   const newTesti = [...data.testimonials.reviews];
-                                  newTesti[idx].image = res.data.url;
+                                  newTesti[idx].image = data.url;
                                   updateSectionField("testimonials", "reviews", newTesti);
                                   toast.success("Uploaded!", { id: "upload-" + idx });
                                 } else {
-                                  toast.error("Upload failed", { id: "upload-" + idx });
+                                  toast.error(data?.message || "Upload failed", { id: "upload-" + idx });
+                                  console.error("Upload failed with status:", res.status, data);
                                 }
                               } catch(err) { 
                                 toast.error("Error", { id: "upload-" + idx }); 
