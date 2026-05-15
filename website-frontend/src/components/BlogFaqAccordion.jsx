@@ -31,7 +31,9 @@ export default function BlogFaqAccordion({ faqs }) {
                 onClick={() => toggleAccordion(index)}
               >
                 <div className="faq-card-trigger">
-                  <span className="faq-question-label">{faq.question}</span>
+                  <span className="faq-question-label">
+                    <span className="faq-q-number">Q{index + 1}.</span> {faq.question}
+                  </span>
                   <div className="faq-chevron-wrapper">
                     <ChevronDown size={20} className={isActive ? 'rotate-180' : ''} />
                   </div>
@@ -48,7 +50,9 @@ export default function BlogFaqAccordion({ faqs }) {
                     >
                       <div className="faq-answer-content">
                         <div className="faq-answer-divider"></div>
-                        <p className="faq-answer-text">{faq.answer}</p>
+                        <p className="faq-answer-text">
+                          <span className="faq-ans-label">Ans:-</span> {faq.answer}
+                        </p>
                       </div>
                     </motion.div>
                   )}
@@ -128,6 +132,21 @@ export default function BlogFaqAccordion({ faqs }) {
           color: #1a1a1a;
           font-weight: 600;
           transition: color 0.3s;
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        .faq-q-number {
+          color: #bfa37c;
+          font-weight: 700;
+          flex-shrink: 0;
+        }
+
+        .faq-ans-label {
+          color: #1a1a1a;
+          font-weight: 700;
+          margin-right: 5px;
         }
 
         .faq-active .faq-question-label {
