@@ -573,8 +573,31 @@ export default function AboutUsCMS() {
                       }} className="w-full bg-white px-5 py-4 rounded-2xl border border-slate-100 text-sm font-bold italic text-slate-600 min-h-[120px] mb-6" placeholder="Patient review text..." />
 
                       <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-full overflow-hidden bg-white border border-slate-100 flex-shrink-0">
-                          {review.image ? <img src={review.image} className="w-full h-full object-cover" /> : <User className="w-full h-full p-3 text-slate-200" />}
+                        <div className="relative group w-14 h-14 flex-shrink-0">
+                          <div className="w-14 h-14 rounded-full overflow-hidden bg-white border border-slate-100">
+                            {review.image ? <img src={review.image} className="w-full h-full object-cover" /> : <User className="w-full h-full p-3 text-slate-200" />}
+                          </div>
+                          <label className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-all">
+                            <ImageIcon size={16} className="text-white" />
+                            <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                              const file = e.target.files[0];
+                              if (!file) return;
+                              const fd = new FormData();
+                              fd.append('image', file);
+                              toast.loading("Uploading...", { id: "upload-" + idx });
+                              try {
+                                const res = await axios.post('/service-details/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
+                                if (res.data?.success) {
+                                  const newTesti = [...data.testimonials.reviews];
+                                  newTesti[idx].image = res.data.url;
+                                  updateSectionField("testimonials", "reviews", newTesti);
+                                  toast.success("Uploaded!", { id: "upload-" + idx });
+                                } else {
+                                  toast.error("Upload failed", { id: "upload-" + idx });
+                                }
+                              } catch(err) { toast.error("Error", { id: "upload-" + idx }); }
+                            }} />
+                          </label>
                         </div>
                         <div className="flex-1 space-y-3">
                            <input type="text" value={review.patientName} onChange={e => {

@@ -1,129 +1,291 @@
+/* =========================================================
+   PATIENT TESTIMONIALS — LUXURY MONOCHROME REDESIGN
+   Palette: #000 · #1a1a1a · #111 · #fafaf8 · #f5f1eb
+   Zero gold. Premium editorial storytelling layout.
+   ========================================================= */
+
 .about-testi-section {
-  padding: 150px 0;
-  background-color: #fdfdfd;
+  position: relative;
+  padding: 130px 0 140px;
+  background-color: #fafaf8;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Optional subtle background gradient to add depth */
+.about-testi-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 500px;
+  background: linear-gradient(to bottom, rgba(245, 241, 235, 0.4), transparent);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .about-testi-container {
-  max-width: 1400px;
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 5%;
 }
 
+/* =========================================================
+   HEADER
+   ========================================================= */
 .about-testi-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  margin-bottom: 100px;
+  margin-bottom: 80px;
 }
 
+/* Eyebrow tag */
 .about-testi-tag {
-  display: inline-block;
-  font-family: 'Lato', sans-serif;
-  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Inter', 'Lato', sans-serif;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 4px;
-  color: #c19a5b;
-  margin-bottom: 24px;
+  color: #1a1a1a;
   text-transform: uppercase;
+  margin-bottom: 24px;
 }
 
+.about-testi-tag::before,
+.about-testi-tag::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Main title */
 .about-testi-main-title {
   font-family: 'Marcellus', serif;
-  font-size: 44px;
-  color: #1a1a1a;
+  font-size: 52px;
+  color: #111111;
+  letter-spacing: -1px;
+  font-weight: 400;
+  line-height: 1.1;
+  max-width: 700px;
 }
 
-.about-testi-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
-}
-
-.about-testi-card {
-  background: #ffffff;
-  padding: 70px 60px;
-  border-radius: 60px;
+/* =========================================================
+   SLIDER (SWIPER)
+   ========================================================= */
+.about-testi-slider-wrapper {
   position: relative;
-  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-  border: 1px solid #f5f5f5;
+  /* Allow shadow bleeding */
+  padding: 40px 0;
+  margin: -40px 0;
+}
+
+/* Adjusting Swiper wrapper so sides can bleed slightly if needed, 
+   but since container has padding 5%, we'll just let Swiper handle it. */
+.about-testi-swiper {
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+/* =========================================================
+   TESTIMONIAL CARD
+   ========================================================= */
+.about-testi-card {
+  position: relative;
+  background: #ffffff;
+  padding: 56px 48px;
+  border-radius: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.02),
+    0 24px 60px rgba(0, 0, 0, 0.04);
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.5s ease,
+              border-color 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .about-testi-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 50px 100px rgba(0,0,0,0.06);
-  border-color: #c19a5b;
+  transform: translateY(-8px);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.04),
+    0 40px 80px rgba(0, 0, 0, 0.08);
 }
 
-.about-testi-quote-icon {
-  margin-bottom: 32px;
+/* Large decorative quote mark in background */
+.about-testi-quote-bg {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  color: #000000;
+  opacity: 0.03;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
 }
 
+.about-testi-card:hover .about-testi-quote-bg {
+  opacity: 0.06;
+}
+
+/* Stars Container */
 .about-testi-stars {
   display: flex;
-  gap: 6px;
-  margin-bottom: 32px;
+  gap: 4px;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 2;
 }
 
+/* Review Text */
 .about-testi-text {
-  font-family: 'Lato', sans-serif;
-  font-size: 20px;
-  color: #333;
-  line-height: 1.7;
-  font-style: italic;
-  margin-bottom: 40px;
+  font-family: 'Marcellus', serif;
+  font-size: 22px;
+  color: #1a1a1a;
+  line-height: 1.6;
+  margin-bottom: 48px;
   font-weight: 400;
+  flex-grow: 1;
+  position: relative;
+  z-index: 2;
 }
 
+/* =========================================================
+   AUTHOR AREA
+   ========================================================= */
 .about-testi-author {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-top: 28px;
+  position: relative;
+  z-index: 2;
 }
 
+/* Author image with premium border */
 .about-testi-author-img {
-  width: 70px;
-  height: 70px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #f9f7f2;
+  border: 2px solid #f5f1eb;
+  padding: 2px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.about-testi-author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .about-testi-author-name {
-  font-family: 'Marcellus', serif;
-  font-size: 20px;
+  font-family: 'Inter', 'Lato', sans-serif;
+  font-size: 16px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 4px;
+  color: #000000;
+  letter-spacing: -0.2px;
 }
 
 .about-testi-author-meta {
-  font-family: 'Lato', sans-serif;
-  font-size: 14px;
-  color: #c19a5b;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-family: 'Inter', 'Lato', sans-serif;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 500;
 }
 
+/* =========================================================
+   SLIDER NAVIGATION
+   ========================================================= */
+.about-testi-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.testi-nav-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: transparent;
+  color: #111111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.testi-nav-btn:hover:not(:disabled) {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+  transform: scale(1.05);
+}
+
+.testi-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 @media (max-width: 1024px) {
-  .about-testi-grid {
-    grid-template-columns: 1fr;
-  }
-  
   .about-testi-card {
-    padding: 50px 40px;
+    padding: 48px 40px;
+  }
+  .about-testi-text {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-testi-section {
+    padding: 100px 0 110px;
+  }
+  .about-testi-main-title {
+    font-size: 40px;
+  }
+  .about-testi-header {
+    margin-bottom: 60px;
   }
 }
 
 @media (max-width: 640px) {
-  .about-testi-main-title {
-    font-size: 32px;
+  .about-testi-card {
+    padding: 40px 32px;
+    border-radius: 32px;
   }
-  
   .about-testi-text {
     font-size: 18px;
+    margin-bottom: 36px;
   }
-  
-  .about-testi-card {
-    padding: 40px 24px;
-    border-radius: 40px;
+  .about-testi-author-img {
+    width: 56px;
+    height: 56px;
+  }
+  .about-testi-nav {
+    justify-content: center;
+  }
+  .testi-nav-btn {
+    width: 50px;
+    height: 50px;
   }
 }
