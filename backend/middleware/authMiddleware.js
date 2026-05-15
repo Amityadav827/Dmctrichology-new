@@ -5,7 +5,7 @@ const supabase = require("../config/supabase");
 const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-    console.log("[AUTH DEBUG] Full Header:", authHeader);
+    console.log("[AUTH DEBUG] Authorization Header:", authHeader);
 
     if (!authHeader || !authHeader.toLowerCase().startsWith("bearer ")) {
       console.log("[AUTH DEBUG] Token missing or invalid Bearer format");
@@ -26,14 +26,10 @@ const protect = async (req, res, next) => {
     }
 
     try {
-      // Decode without verification first to see what's inside
-      const decodedInfo = jwt.decode(token);
-      console.log("[AUTH DEBUG] Raw Decoded (No Verification):", decodedInfo);
-      console.log("[AUTH DEBUG] JWT_SECRET Exists:", !!process.env.JWT_SECRET);
-      console.log("[AUTH DEBUG] JWT_SECRET Length:", process.env.JWT_SECRET?.length || 0);
-
+      console.log("[AUTH DEBUG] JWT_SECRET being used for verification:", process.env.JWT_SECRET);
+      
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("[AUTH DEBUG] Token Verified Successfully. ID:", decoded.id);
+      console.log("[AUTH DEBUG] Token Verified Successfully. Payload ID:", decoded.id);
 
       const { data: user, error } = await supabase
         .from('users')
@@ -57,12 +53,12 @@ const protect = async (req, res, next) => {
 
       req.user = user;
       next();
-    } catch (jwtError) {
-      console.error("[AUTH DEBUG] JWT ERROR:", jwtError.name, jwtError.message);
+    } catch (err) {
+      console.log("[AUTH DEBUG] VERIFY ERROR:", err.message);
       return res.status(401).json({
         success: false,
         message: "Not authorized, token failed",
-        debug: jwtError.message
+        debug: err.message
       });
     }
   } catch (error) {
