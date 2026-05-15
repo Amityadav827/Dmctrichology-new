@@ -5,9 +5,7 @@ const supabase = require("../config/supabase");
 const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-    console.log("[AUTH DEBUG] Authorization Header Received:", authHeader ? (authHeader.substring(0, 15) + "...") : "MISSING");
-    console.log("[AUTH DEBUG] Request URL:", req.originalUrl);
-    console.log("[AUTH DEBUG] Content-Type:", req.headers['content-type']);
+    console.log("[AUTH DEBUG] Full Header:", authHeader);
 
     if (!authHeader || !authHeader.toLowerCase().startsWith("bearer ")) {
       console.log("[AUTH DEBUG] Token missing or invalid Bearer format");
@@ -28,9 +26,14 @@ const protect = async (req, res, next) => {
     }
 
     try {
-      console.log("[AUTH DEBUG] Verifying token with JWT_SECRET length:", process.env.JWT_SECRET?.length || 0);
+      // Decode without verification first to see what's inside
+      const decodedInfo = jwt.decode(token);
+      console.log("[AUTH DEBUG] Raw Decoded (No Verification):", decodedInfo);
+      console.log("[AUTH DEBUG] JWT_SECRET Exists:", !!process.env.JWT_SECRET);
+      console.log("[AUTH DEBUG] JWT_SECRET Length:", process.env.JWT_SECRET?.length || 0);
+
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("[AUTH DEBUG] Token Verified Successfully. Decoded ID:", decoded.id);
+      console.log("[AUTH DEBUG] Token Verified Successfully. ID:", decoded.id);
 
       const { data: user, error } = await supabase
         .from('users')
@@ -45,33 +48,25 @@ const protect = async (req, res, next) => {
         .single();
 
       if (error || !user) {
-        console.log("[AUTH DEBUG] User not found in database for ID:", decoded.id);
+        console.log("[AUTH DEBUG] User not found for ID:", decoded.id);
         return res.status(401).json({
           success: false,
           message: "Not authorized, user not found",
         });
       }
 
-      if (user.status !== "active") {
-        console.log("[AUTH DEBUG] User account is inactive:", decoded.id);
-        return res.status(403).json({
-          success: false,
-          message: "User account is inactive",
-        });
-      }
-
       req.user = user;
       next();
     } catch (jwtError) {
-      console.error("[AUTH DEBUG] JWT Verification Failed Details:", jwtError.name, jwtError.message);
+      console.error("[AUTH DEBUG] JWT ERROR:", jwtError.name, jwtError.message);
       return res.status(401).json({
         success: false,
         message: "Not authorized, token failed",
-        error: jwtError.message
+        debug: jwtError.message
       });
     }
   } catch (error) {
-    console.error("[AUTH DEBUG] Global Protect Middleware Error:", error);
+    console.error("[AUTH DEBUG] GLOBAL ERROR:", error);
     return res.status(401).json({
       success: false,
       message: "Not authorized, token failed",
