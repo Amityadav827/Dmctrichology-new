@@ -567,7 +567,8 @@ function Blogs() {
 
   if (view === "form") {
     return (
-      <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: "1.5rem", paddingBottom: "3rem" }}>
+      <>
+        <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: "1.5rem", paddingBottom: "3rem" }}>
         {/* Preview Modal */}
         {showPreviewModal && (
           <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.5)", padding: "1rem" }}>
@@ -1021,7 +1022,7 @@ function Blogs() {
             </div>
           </div>
         )}
-      </div>
+      </>
     );
   }
 

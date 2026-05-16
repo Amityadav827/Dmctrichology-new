@@ -11,6 +11,7 @@
   position: relative;
   background: #fafaf8;
   overflow: hidden;
+
   isolation: isolate;
 }
 
