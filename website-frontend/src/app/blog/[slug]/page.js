@@ -82,15 +82,20 @@ export async function generateMetadata({ params }) {
   const blog = blogRes?.data;
   
   const siteUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://dmctrichology-mkm4.vercel.app';
-  const title = blog ? `${blog.title} | DMC Trichology` : 'Blog Detail | DMC Trichology';
-  const description = blog?.shortDescription || blog?.excerpt || 'Read the latest updates and advice from DMC Trichology experts.';
+  
+  // SEO overrides from dashboard
+  const title = blog?.metaTitle || (blog ? `${blog.title} | DMC Trichology` : 'Blog Detail | DMC Trichology');
+  const description = blog?.metaDescription || blog?.shortDescription || blog?.excerpt || 'Read the latest updates and advice from DMC Trichology experts.';
+  const keywords = blog?.metaKeywords || "";
+  const canonical = blog?.canonicalUrl || `${siteUrl}/blog/${slug}`;
   const image = blog?.blogImage || `${siteUrl}/default-blog.jpg`;
 
   return {
     title,
     description,
+    keywords,
     alternates: {
-      canonical: `${siteUrl}/blog/${slug}`,
+      canonical,
     },
     openGraph: {
       title,
@@ -206,7 +211,8 @@ export default async function BlogDetailPage({ params }) {
       <BlogHero data={{
         ...(pageSettings?.hero || {}),
         title: "Blog Detail",
-        breadcrumbText: "Blog Detail"
+        breadcrumbText: "Blog Detail",
+        titleTag: "div"
       }} />
 
       {/* Main Content */}
@@ -216,7 +222,10 @@ export default async function BlogDetailPage({ params }) {
           {/* Left Column: Blog Content */}
           <article className="blog-main-content">
             <div className="blog-detail-image">
-              <img src={String(blog.blogImage || blog.image || 'https://via.placeholder.com/1200x600')} alt={String(blog.title || "Blog")} />
+              <img 
+                src={String(blog.blogImage || blog.image || 'https://via.placeholder.com/1200x600')} 
+                alt={String(blog.altTag || blog.title || "Blog")} 
+              />
             </div>
 
             <div className="blog-detail-meta">
@@ -234,7 +243,7 @@ export default async function BlogDetailPage({ params }) {
               </div>
             </div>
 
-            <h2 className="blog-detail-title">{String(blog.title || "")}</h2>
+            <h1 className="blog-detail-title">{String(blog.title || "")}</h1>
 
             <div 
               className="blog-content-body" 

@@ -444,13 +444,21 @@ function Blogs() {
         });
         toast.success(saveAsDraft ? "Draft saved successfully" : "Blog updated successfully");
       } else {
-        await api.post("/blogs", formPayload, {
+        const response = await api.post("/blogs", formPayload, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        
+        // Update editing ID so further saves become updates
+        const newBlog = response.data?.data;
+        if (newBlog?._id || newBlog?.id) {
+          setEditingId(newBlog._id || newBlog.id);
+          setIsSlugManual(true);
+        }
+        
         toast.success(saveAsDraft ? "Draft created successfully" : "Blog published successfully");
       }
       
-      setView("list");
+      // Removed setView("list") to stay on the same page as requested
       fetchBlogs();
     } catch (error) {
       toast.error(error.response?.data?.message || "Operation failed");
@@ -515,7 +523,17 @@ function Blogs() {
             </h2>
           </div>
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-            <button type="button" onClick={() => setShowPreviewModal(true)} className="btn-secondary">
+            <button 
+              type="button" 
+              onClick={() => {
+                if (formData.slug) {
+                  window.open(`${FRONTEND_URL}/blog/${formData.slug}`, '_blank');
+                } else {
+                  toast.error("Please enter a title or slug first");
+                }
+              }} 
+              className="btn-secondary"
+            >
               <Eye size={15} /> Preview
             </button>
             <button type="button" onClick={(e) => handleSubmit(e, true)} disabled={submitting}
