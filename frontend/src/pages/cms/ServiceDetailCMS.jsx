@@ -9,11 +9,9 @@ import { useNavigate } from "react-router-dom";
 import { getGalleryItems } from "../../api/services";
 import { Film } from "lucide-react";
 
-// Helper component for Media Uploads
+// Helper component for Media Uploads (Image Only)
 function MediaUploader({ label, value, onChange, onGalleryClick }) {
   const [uploading, setUploading] = useState(false);
-
-  const isVideo = value && (value.includes('.mp4') || value.includes('.webm') || value.includes('.mov'));
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
@@ -29,12 +27,12 @@ function MediaUploader({ label, value, onChange, onGalleryClick }) {
       });
       if (res.data?.success) {
         onChange(res.data.url);
-        toast.success("Media uploaded successfully!");
+        toast.success("Image uploaded successfully!");
       } else {
         toast.error("Upload failed: " + (res.data.message || "Unknown error"));
       }
     } catch (err) {
-      toast.error("Error uploading media");
+      toast.error("Error uploading image");
     } finally {
       setUploading(false);
     }
@@ -42,33 +40,24 @@ function MediaUploader({ label, value, onChange, onGalleryClick }) {
 
   return (
     <div className="w-full">
-      <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">{label}</label>
+      <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">{label}</label>
       <div className="flex items-center gap-4">
-        {value && (
-          <div className="h-16 w-16 rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center bg-slate-100 flex-shrink-0">
-            {isVideo ? (
-               <Film size={24} className="text-blue-500" />
-            ) : (
-              <img src={value} alt="Preview" className="h-full w-full object-cover" />
-            )}
-          </div>
-        )}
         <div className="flex-1 relative">
            <input 
              type="text" 
              value={value || ""} 
              onChange={e => onChange(e.target.value)} 
-             className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl pr-44 outline-none focus:border-blue-500 transition-all text-sm" 
+             className="w-full pl-5 pr-44 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all" 
              placeholder="https://..."
            />
            <div className="absolute right-2 top-2 flex gap-1">
-             <button onClick={onGalleryClick} type="button" className="bg-slate-100 text-slate-600 hover:bg-slate-200 px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1">
+             <button onClick={onGalleryClick} type="button" className="bg-slate-100 text-slate-600 hover:bg-slate-200 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-1">
                <List size={14} /> Gallery
              </button>
-             <label className="bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center gap-1">
+             <label className="bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-pointer transition-all flex items-center gap-1">
                {uploading ? <Loader2 size={14} className="animate-spin" /> : <ImageIcon size={14} />}
                Upload
-               <input type="file" accept="image/*,video/*" className="hidden" onChange={handleFileChange} />
+               <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
              </label>
            </div>
         </div>
@@ -455,8 +444,8 @@ export default function ServiceDetailCMS() {
                   <div className="border-t border-slate-100 pt-8 mt-4">
                     <div className="flex justify-between items-center mb-6">
                       <div>
-                        <label className="block text-[12px] font-black uppercase text-slate-900 tracking-widest">Gallery Images</label>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase mt-1">Manage multiple images for the premium gallery</p>
+                        <label className="block text-[12px] font-black uppercase text-slate-900 tracking-widest">Intro Gallery Images</label>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase mt-1">Manage multiple images for the premium gallery slider</p>
                       </div>
                       <button onClick={() => addArrayItem("intro", "introImages", { image: "", title: "", alt: "" })} className="flex items-center gap-1 text-blue-600 text-xs font-bold bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100">
                         <Plus size={14}/> Add Image
@@ -464,28 +453,44 @@ export default function ServiceDetailCMS() {
                     </div>
                     <div className="space-y-4">
                       {(data.intro.introImages || []).map((m, i) => (
-                        <div key={i} className="bg-slate-50 p-6 rounded-2xl border border-slate-100 relative">
-                          <button onClick={() => removeArrayItem("intro", "introImages", i)} className="absolute top-4 right-4 text-slate-300 hover:text-red-500">
+                        <div key={i} className="bg-white p-8 rounded-[32px] border border-slate-200 relative group hover:shadow-xl transition-all duration-500">
+                          <button onClick={() => removeArrayItem("intro", "introImages", i)} className="absolute top-6 right-6 text-slate-300 hover:text-red-500 transition-colors bg-slate-50 p-2 rounded-xl">
                             <Trash2 size={18} />
                           </button>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                               <MediaUploader 
-                                 label="Image Asset (Gallery or Upload)" 
-                                 value={m.image} 
-                                 onChange={val => {
-                                   updateArrayItem("intro", "introImages", i, "image", val);
-                                 }} 
-                                 onGalleryClick={() => openGalleryPicker({ section: "intro", arrayField: "introImages", idx: i, field: "image" })}
-                               />
+                          
+                          <div className="flex items-center gap-3 mb-8">
+                            <div className="w-10 h-10 bg-slate-900 rounded-2xl flex items-center justify-center text-white font-black italic">
+                              {i + 1}
                             </div>
-                            <div>
-                              <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Image Title</label>
-                              <input type="text" value={m.title || ""} onChange={e => updateArrayItem("intro", "introImages", i, "title", e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm" />
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-900">Asset Configuration</h4>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-6">
+                              <div>
+                                <label className="block text-[10px] font-bold uppercase text-slate-400 mb-2">Image Title</label>
+                                <input type="text" value={m.title || ""} onChange={e => updateArrayItem("intro", "introImages", i, "title", e.target.value)} className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
+                              </div>
+                              <MediaUploader 
+                                label="High-Res Image" 
+                                value={m.image} 
+                                onChange={val => updateArrayItem("intro", "introImages", i, "image", val)} 
+                                onGalleryClick={() => openGalleryPicker({ section: "intro", arrayField: "introImages", idx: i, field: "image" })}
+                              />
+                              <div>
+                                <label className="block text-[10px] font-bold uppercase text-slate-400 mb-2">Alt Text (SEO)</label>
+                                <input type="text" value={m.alt || ""} onChange={e => updateArrayItem("intro", "introImages", i, "alt", e.target.value)} className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-medium italic" />
+                              </div>
                             </div>
-                            <div className="md:col-span-2">
-                              <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Alt Text (SEO)</label>
-                              <input type="text" value={m.alt || ""} onChange={e => updateArrayItem("intro", "introImages", i, "alt", e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm" />
+                            
+                            <div className="relative aspect-square rounded-[32px] overflow-hidden border-4 border-slate-50 shadow-inner">
+                              {m.image ? (
+                                <img src={m.image} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="" />
+                              ) : (
+                                <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-300">
+                                  <ImageIcon size={48} />
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
