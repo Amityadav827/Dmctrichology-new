@@ -28,12 +28,11 @@ const ServiceDetailSchema = new mongoose.Schema({
     longDescription: { type: String, default: "" },
     benefits: [{ text: { type: String } }],
     closingText: { type: String, default: "" },
-    videos: [{
-      title: { type: String },
-      videoUrl: { type: String },
-      thumbnail: { type: String },
-      isYoutubeStyleButtonEnabled: { type: Boolean, default: true }
-    }]
+    introImages: [{
+      image: { type: String, default: "" },
+      title: { type: String, default: "" },
+      alt: { type: String, default: "" }
+    }],
   },
 
   process: {

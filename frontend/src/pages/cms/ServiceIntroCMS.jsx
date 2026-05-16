@@ -25,17 +25,7 @@ export default function ServiceIntroCMS() {
     shortDescription: "Safe, smart & skin-friendly hair repair",
     longDescription: "",
     benefits: [],
-    videos: [],
-    sliderSettings: {
-      autoplay: true,
-      autoplaySpeed: 5000,
-      showDots: true,
-      loopVideos: true
-    },
-    buttonSettings: {
-      floatingButtonIcon: "play",
-      floatingButtonPosition: "bottom-right"
-    }
+    introImages: [],
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -48,9 +38,7 @@ export default function ServiceIntroCMS() {
         // Merge with defaults to ensure all fields exist
         setData(prev => ({ 
           ...prev, 
-          ...intro,
-          sliderSettings: { ...prev.sliderSettings, ...(intro.sliderSettings || {}) },
-          buttonSettings: { ...prev.buttonSettings, ...(intro.buttonSettings || {}) }
+          ...intro
         }));
       })
       .catch(() => toast.error("Failed to load intro data"))
@@ -66,14 +54,14 @@ export default function ServiceIntroCMS() {
     }));
   };
 
-  // Videos Repeater
-  const addVideo = () => updateField("videos", [...(data.videos || []), { title: "", videoUrl: "", thumbnail: "", isYoutubeStyleButtonEnabled: true }]);
-  const updateVideo = (i, field, val) => {
-    const vids = [...(data.videos || [])];
-    vids[i] = { ...vids[i], [field]: val };
-    updateField("videos", vids);
+  // Images Repeater
+  const addImage = () => updateField("introImages", [...(data.introImages || []), { title: "", image: "", alt: "" }]);
+  const updateImage = (i, field, val) => {
+    const imgs = [...(data.introImages || [])];
+    imgs[i] = { ...imgs[i], [field]: val };
+    updateField("introImages", imgs);
   };
-  const removeVideo = (i) => updateField("videos", (data.videos || []).filter((_, idx) => idx !== i));
+  const removeImage = (i) => updateField("introImages", (data.introImages || []).filter((_, idx) => idx !== i));
 
   // Benefits Repeater
   const addBenefit = () => updateField("benefits", [...(data.benefits || []), { text: "" }]);
@@ -130,13 +118,7 @@ export default function ServiceIntroCMS() {
           onClick={() => setActiveTab("gallery")}
           className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'gallery' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
         >
-          Left Side Slider
-        </button>
-        <button 
-          onClick={() => setActiveTab("settings")}
-          className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'settings' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-        >
-          Slider Settings
+          Left Side Gallery
         </button>
       </div>
 
@@ -238,19 +220,19 @@ export default function ServiceIntroCMS() {
                 <div>
                   <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2 mb-2">
                     <div className="w-1 h-1 bg-blue-600 rounded-full"></div>
-                    Video Slider Slides
+                    Service Gallery Images
                   </h2>
-                  <p className="text-xs text-slate-500 font-medium italic">Manage multiple video slides for the left-side slider</p>
+                  <p className="text-xs text-slate-500 font-medium italic">Manage multiple images for the premium gallery slider</p>
                 </div>
-                <button onClick={addVideo} className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-xl shadow-blue-100">
-                  <Video size={16} /> Add Video Slide
+                <button onClick={addImage} className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-xl shadow-blue-100">
+                  <Plus size={16} /> Add Image
                 </button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {(data.videos || []).map((video, i) => (
+                {(data.introImages || []).map((img, i) => (
                   <div key={i} className="group relative bg-slate-50/50 rounded-[28px] border border-slate-100 p-8 hover:bg-white hover:shadow-2xl hover:shadow-slate-200 transition-all duration-500">
-                    <button onClick={() => removeVideo(i)} className="absolute top-6 right-6 text-slate-300 hover:text-red-500 transition-colors bg-white p-2.5 rounded-xl shadow-sm opacity-0 group-hover:opacity-100">
+                    <button onClick={() => removeImage(i)} className="absolute top-6 right-6 text-slate-300 hover:text-red-500 transition-colors bg-white p-2.5 rounded-xl shadow-sm opacity-0 group-hover:opacity-100">
                       <Trash2 size={16} />
                     </button>
                     
@@ -258,63 +240,44 @@ export default function ServiceIntroCMS() {
                       <div className="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
                         <span className="text-sm font-black">{i + 1}</span>
                       </div>
-                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">Slide Configuration</h4>
+                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">Image Configuration</h4>
                     </div>
 
                     <div className="space-y-6">
                       <div>
-                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Slide Title</label>
-                        <input type="text" value={video.title} onChange={e => updateVideo(i, "title", e.target.value)}
-                          className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="e.g. FUE Process Overview" />
+                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Image Title</label>
+                        <input type="text" value={img.title} onChange={e => updateImage(i, "title", e.target.value)}
+                          className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="e.g. Treatment Room" />
                       </div>
                       
                       <div>
-                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Video Embed URL (YouTube/MP4)</label>
+                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Image URL</label>
                         <div className="relative">
-                          <input type="text" value={video.videoUrl} onChange={e => updateVideo(i, "videoUrl", e.target.value)}
+                          <input type="text" value={img.image} onChange={e => updateImage(i, "image", e.target.value)}
                             className="w-full pl-12 pr-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="https://..." />
-                          <Video size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                          <ImageIcon size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Cover Image (Thumbnail)</label>
-                        <div className="flex gap-4">
-                          <div className="flex-1 relative">
-                            <input type="text" value={video.thumbnail} onChange={e => updateVideo(i, "thumbnail", e.target.value)}
-                              className="w-full pl-12 pr-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="Thumbnail URL..." />
-                            <ImageIcon size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                          </div>
-                          {video.thumbnail ? (
-                            <img src={video.thumbnail} className="w-14 h-14 object-cover rounded-2xl shadow-md border-2 border-white" alt="" />
-                          ) : (
-                            <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-300">
-                              <ImageIcon size={20} />
-                            </div>
-                          )}
-                        </div>
+                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Alt Text</label>
+                        <input type="text" value={img.alt} onChange={e => updateImage(i, "alt", e.target.value)}
+                          className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="Describe the image..." />
                       </div>
 
-                      <div className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-slate-100">
-                        <input 
-                          type="checkbox" 
-                          checked={video.isYoutubeStyleButtonEnabled} 
-                          onChange={e => updateVideo(i, "isYoutubeStyleButtonEnabled", e.target.checked)}
-                          className="w-5 h-5 rounded-lg border-slate-300 text-blue-600 focus:ring-blue-500 transition-all"
-                        />
-                        <div className="flex flex-col">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-900">Show Play Button Overlay</span>
-                          <span className="text-[9px] text-slate-400 font-bold uppercase">Enable floating play button on this slide</span>
+                      {img.image && (
+                        <div className="mt-4">
+                          <img src={img.image} className="w-full h-32 object-cover rounded-2xl shadow-md border-2 border-white" alt="" />
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 ))}
-                {(data.videos || []).length === 0 && (
+                {(data.introImages || []).length === 0 && (
                   <div className="md:col-span-2 text-center py-20 bg-slate-50/50 rounded-[40px] border-2 border-dashed border-slate-200">
-                    <Video size={48} className="text-slate-200 mx-auto mb-4" />
-                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest">No Videos Added</h3>
-                    <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase">Click the button above to add your first video slide</p>
+                    <ImageIcon size={48} className="text-slate-200 mx-auto mb-4" />
+                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest">No Images Added</h3>
+                    <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase">Click the button above to add your first gallery image</p>
                   </div>
                 )}
               </div>
@@ -322,114 +285,6 @@ export default function ServiceIntroCMS() {
           </div>
         )}
 
-        {activeTab === 'settings' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {/* Slider Config */}
-            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
-              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8 flex items-center gap-2">
-                <div className="w-1 h-1 bg-blue-600 rounded-full"></div>
-                Technical Configuration
-              </h2>
-
-              <div className="space-y-6">
-                <div className="flex items-center justify-between p-6 bg-slate-50/50 rounded-2xl border border-slate-100 group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors shadow-sm">
-                      <MousePointer2 size={18} />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">Autoplay Slider</h4>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase">Automatically switch slides</p>
-                    </div>
-                  </div>
-                  <div className="relative inline-flex items-center cursor-pointer" onClick={() => updateNestedField("sliderSettings", "autoplay", !data.sliderSettings.autoplay)}>
-                    <div className={`w-12 h-6 rounded-full transition-all duration-300 ${data.sliderSettings.autoplay ? 'bg-blue-600' : 'bg-slate-300'}`}>
-                      <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all duration-300 ${data.sliderSettings.autoplay ? 'translate-x-6' : 'translate-x-0'}`}></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between p-6 bg-slate-50/50 rounded-2xl border border-slate-100 group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors shadow-sm">
-                      <Settings size={18} />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">Autoplay Speed</h4>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase">Duration in milliseconds</p>
-                    </div>
-                  </div>
-                  <input type="number" value={data.sliderSettings.autoplaySpeed} onChange={e => updateNestedField("sliderSettings", "autoplaySpeed", parseInt(e.target.value))}
-                    className="w-24 px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-black outline-none" />
-                </div>
-
-                <div className="flex items-center justify-between p-6 bg-slate-50/50 rounded-2xl border border-slate-100 group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors shadow-sm">
-                      <ChevronRight size={18} />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">Loop Slider</h4>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase">Infinite scrolling loop</p>
-                    </div>
-                  </div>
-                  <div className="relative inline-flex items-center cursor-pointer" onClick={() => updateNestedField("sliderSettings", "loopVideos", !data.sliderSettings.loopVideos)}>
-                    <div className={`w-12 h-6 rounded-full transition-all duration-300 ${data.sliderSettings.loopVideos ? 'bg-blue-600' : 'bg-slate-300'}`}>
-                      <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all duration-300 ${data.sliderSettings.loopVideos ? 'translate-x-6' : 'translate-x-0'}`}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Button Settings */}
-            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
-              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8 flex items-center gap-2">
-                <div className="w-1 h-1 bg-blue-600 rounded-full"></div>
-                Floating UI Customization
-              </h2>
-
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Floating Button Position</label>
-                  <div className="grid grid-cols-2 gap-4">
-                    <button 
-                      onClick={() => updateNestedField("buttonSettings", "floatingButtonPosition", "bottom-right")}
-                      className={`p-4 rounded-2xl border transition-all flex flex-col items-center gap-2 ${data.buttonSettings.floatingButtonPosition === 'bottom-right' ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-200'}`}
-                    >
-                      <div className="w-full h-12 bg-white rounded-lg relative overflow-hidden">
-                        <div className="absolute bottom-2 right-2 w-3 h-3 bg-current rounded-full"></div>
-                      </div>
-                      <span className="text-[10px] font-black uppercase tracking-widest">Bottom Right</span>
-                    </button>
-                    <button 
-                      onClick={() => updateNestedField("buttonSettings", "floatingButtonPosition", "bottom-left")}
-                      className={`p-4 rounded-2xl border transition-all flex flex-col items-center gap-2 ${data.buttonSettings.floatingButtonPosition === 'bottom-left' ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-200'}`}
-                    >
-                      <div className="w-full h-12 bg-white rounded-lg relative overflow-hidden">
-                        <div className="absolute bottom-2 left-2 w-3 h-3 bg-current rounded-full"></div>
-                      </div>
-                      <span className="text-[10px] font-black uppercase tracking-widest">Bottom Left</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Overlay Style Preset</label>
-                  <div className="flex items-center gap-4 p-6 bg-slate-50 rounded-[28px] border border-slate-100">
-                    <div className="w-16 h-16 bg-red-600 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-red-100">
-                      <PlayCircle size={32} />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900">Modern Youtube UI</h4>
-                      <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase">Floating red pill with shadow</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

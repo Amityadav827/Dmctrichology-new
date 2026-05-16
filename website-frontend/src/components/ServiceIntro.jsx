@@ -1,48 +1,36 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
-import { Star, Clock, Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
+import { Navigation, FreeMode } from 'swiper/modules';
 import EditableText from './Editable/EditableText';
 import EditableSection from './Editable/EditableSection';
 import { useBuilder } from '../context/BuilderContext';
+
+// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
+import 'swiper/css/free-mode';
+
+const DUMMY_IMAGES = [
+  {
+    image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png",
+    title: "Expert Care",
+    alt: "Expert Care Team"
+  },
+  {
+    image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
+    title: "Advanced Technology",
+    alt: "Advanced Technology"
+  }
+];
 
 const ServiceIntro = ({ data = {}, banner = {} }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [introData, setIntroData] = useState(data);
   const [bannerData, setBannerData] = useState(banner);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [activeVideo, setActiveVideo] = useState(false);
-  const thumbnailSwiperRef = useRef(null);
-
-  const DUMMY_VIDEOS = [
-    {
-      title: "Clinic Interior",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      thumbnail: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png",
-      isYoutubeStyleButtonEnabled: false
-    },
-    {
-      title: "Patient Success Story",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      thumbnail: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      isYoutubeStyleButtonEnabled: true
-    },
-    {
-      title: "Technology at DMC",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      thumbnail: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png",
-      isYoutubeStyleButtonEnabled: false
-    },
-    {
-      title: "Clinic Walkthrough",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      thumbnail: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-      isYoutubeStyleButtonEnabled: true
-    }
-  ];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const swiperRef = useRef(null);
 
   // Sync from props
   useEffect(() => {
@@ -57,9 +45,8 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
       let hasBannerUpdates = false;
       const nextIntroData = { ...introData };
       const nextBannerData = { ...bannerData };
-
+      
       Object.keys(siteConfig).forEach(key => {
-        // Handle Intro Updates
         if (key.startsWith('service-intro.intro.')) {
           const fieldPath = key.replace('service-intro.intro.', '');
           if (fieldPath.includes('.')) {
@@ -76,7 +63,6 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
           hasIntroUpdates = true;
         }
 
-        // Handle Banner Updates (for shared Hero/Intro fields)
         if (key.startsWith('details-banner.banner.')) {
           const fieldPath = key.replace('details-banner.banner.', '');
           nextBannerData[fieldPath] = siteConfig[key];
@@ -90,143 +76,121 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
   }, [isEditMode, siteConfig]);
 
   const intro = introData.intro || introData;
-  const videos = intro.videos?.length > 0 ? intro.videos : DUMMY_VIDEOS;
+  const images = (intro.introImages?.length > 0 ? intro.introImages : DUMMY_IMAGES);
   const benefits = intro.benefits || [];
-  const currentVideo = videos[selectedIndex];
+  const activeImage = images[activeIndex] || images[0] || DUMMY_IMAGES[0];
 
   return (
     <EditableSection sectionId="service-intro" label="Service Intro">
       <section className="service-intro-premium">
         <div className="intro-container-premium">
           <div className="intro-flex-row">
-
-            {/* ─── LEFT SIDE: Main Image/Video + Gallery Thumbnails ─────────────────── */}
+            
+            {/* ─── LEFT SIDE: Premium Image Gallery ─────────── */}
             <div className="intro-media-column">
               <div className="media-card-wrapper">
-
-                {/* Main Image/Video Display */}
+                
+                {/* Main Large Image */}
                 <div className="service-main-media">
-                  {activeVideo ? (
-                    <div className="service-video-active">
-                      <iframe
-                        src={`${currentVideo.videoUrl.includes('?') ? currentVideo.videoUrl : currentVideo.videoUrl + '?'}autoplay=1&rel=0&modestbranding=1`}
-                        title={currentVideo.title || "Service Video"}
-                        className="service-video-iframe"
-                        allow="autoplay; encrypted-media; fullscreen"
-                        allowFullScreen
-                      />
-                      <button
-                        onClick={() => setActiveVideo(false)}
-                        className="service-video-close"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="service-main-image-wrapper">
-                      <img
-                        src={currentVideo.thumbnail}
-                        alt={currentVideo.title}
-                        className="service-main-image"
-                      />
-                      <div className="service-image-gradient"></div>
-                      {currentVideo.isYoutubeStyleButtonEnabled && (
-                        <div className="service-play-overlay" onClick={() => setActiveVideo(true)}>
-                          <Play fill="white" className="service-play-icon" size={48} />
-                        </div>
-                      )}
-                    </div>
-                  )}
+                  <div className="service-main-image-wrapper">
+                    <img 
+                      src={activeImage.image || 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png'} 
+                      alt={activeImage.alt || activeImage.title || "Service Media"} 
+                      className="service-main-image"
+                    />
+                    <div className="service-image-gradient"></div>
+                    
+                    {/* Image Title Overlay */}
+                    {activeImage.title && (
+                      <div className="slide-info-overlay">
+                        <p className="slide-count">Image {activeIndex + 1}</p>
+                        <h4 className="slide-main-title">{activeImage.title}</h4>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                {/* Gallery Thumbnails Slider (Horizontal) */}
-                <div className="service-gallery-thumbnails-wrapper">
-                  <Swiper
-                    modules={[Navigation]}
-                    onSwiper={(swiper) => (thumbnailSwiperRef.current = swiper)}
-                    spaceBetween={12}
-                    slidesPerView="auto"
-                    className="service-gallery-thumbnails"
-                  >
-                    {videos.map((video, index) => (
-                      <SwiperSlide key={index} className="service-thumbnail-slide">
-                        <button
-                          className={`service-thumbnail ${selectedIndex === index ? 'active' : ''}`}
-                          onClick={() => {
-                            setSelectedIndex(index);
-                            setActiveVideo(false);
-                          }}
-                          title={video.title}
-                        >
-                          <img
-                            src={video.thumbnail}
-                            alt={`${video.title} thumbnail`}
-                            className="thumbnail-img"
-                          />
-                          {video.isYoutubeStyleButtonEnabled && (
-                            <div className="thumbnail-play-indicator">
-                              <Play fill="white" size={16} />
-                            </div>
-                          )}
-                        </button>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
+                {/* Thumbnail Slider Below */}
+                {images.length > 1 && (
+                  <div className="service-gallery-thumbnails-wrapper">
+                    <Swiper
+                      modules={[Navigation, FreeMode]}
+                      onSwiper={(swiper) => (swiperRef.current = swiper)}
+                      spaceBetween={12}
+                      slidesPerView="auto"
+                      freeMode={true}
+                      watchSlidesProgress={true}
+                      className="service-gallery-thumbnails"
+                    >
+                      {images.map((img, index) => (
+                        <SwiperSlide key={index} className="service-thumbnail-slide">
+                          <button 
+                            onClick={() => setActiveIndex(index)}
+                            className={`service-thumbnail ${activeIndex === index ? 'active' : ''}`}
+                          >
+                            <img 
+                              src={img.image || 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png'} 
+                              alt={img.alt || `Thumbnail ${index + 1}`} 
+                              className="thumbnail-img"
+                            />
+                          </button>
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
 
-                  {/* Navigation Arrows */}
-                  {videos.length > 4 && (
-                    <>
-                      <button
-                        onClick={() => thumbnailSwiperRef.current?.slidePrev()}
-                        className="thumbnail-nav-btn thumbnail-prev"
-                        aria-label="Previous thumbnail"
-                      >
-                        <ChevronLeft size={20} />
-                      </button>
-                      <button
-                        onClick={() => thumbnailSwiperRef.current?.slideNext()}
-                        className="thumbnail-nav-btn thumbnail-next"
-                        aria-label="Next thumbnail"
-                      >
-                        <ChevronRight size={20} />
-                      </button>
-                    </>
-                  )}
-                </div>
+                    {/* Thumbnail Nav Arrows */}
+                    <button 
+                      onClick={() => swiperRef.current?.slidePrev()}
+                      className="thumbnail-nav-btn thumbnail-prev"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    <button 
+                      onClick={() => swiperRef.current?.slideNext()}
+                      className="thumbnail-nav-btn thumbnail-next"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* ─── RIGHT SIDE: Content (Restored to Reference) ─── */}
-            <div className="details-content-col">
+            {/* ─── RIGHT SIDE: Content ─── */}
+            <div className="intro-content-column">
               {/* Badge */}
-              <span className="details-badge">
-                <EditableText sectionId="details-banner" fieldPath="banner.badgeText">
-                  {bannerData.badgeText || 'FOR UNWANTED HAIR'}
-                </EditableText>
-              </span>
+              <div className="content-badge-box">
+                <span className="content-badge-premium">
+                  <EditableText sectionId="details-banner" fieldPath="banner.badgeText">
+                    {bannerData.badgeText || 'FOR UNWANTED HAIR'}
+                  </EditableText>
+                </span>
+              </div>
 
               {/* Title */}
-              <h1 className="details-title">
+              <h1 className="intro-main-heading">
                 <EditableText sectionId="details-banner" fieldPath="banner.title">
                   {bannerData.title || 'Follicular Unit Extraction (FUE)'}
                 </EditableText>
               </h1>
 
               {/* Meta Row */}
-              <div className="details-meta-row">
-                <span className="details-rating-num">
-                  <EditableText sectionId="details-banner" fieldPath="banner.rating">
-                    {bannerData.rating || '4.85'}
-                  </EditableText>
-                </span>
-                <div className="details-stars">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} size={12} fill="#fbbf24" color="#fbbf24" />
-                  ))}
+              <div className="intro-meta-stats">
+                <div className="meta-stat-item">
+                  <span className="rating-value">
+                    <EditableText sectionId="details-banner" fieldPath="banner.rating">
+                      {bannerData.rating || '4.85'}
+                    </EditableText>
+                  </span>
+                  <div className="star-rating-row">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star key={s} size={12} fill="#fbbf24" color="#fbbf24" />
+                    ))}
+                  </div>
                 </div>
-                <div className="details-duration">
-                  <Clock size={14} />
-                  <span>
+                <div className="meta-stat-item divider-left">
+                  <Clock size={16} className="clock-icon" />
+                  <span className="duration-text">
                     <EditableText sectionId="details-banner" fieldPath="banner.duration">
                       {bannerData.duration || '180 mins'}
                     </EditableText>
@@ -234,53 +198,77 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
                 </div>
               </div>
 
-              {/* Intro Section Heading */}
-              <h3 className="details-subtitle">
-                <EditableText sectionId="service-intro" fieldPath="intro.introHeading">
-                  {intro.introHeading || intro.title || ""}
-                </EditableText>
-              </h3>
-
-              {/* Short Description / Tagline */}
-              {intro.shortDescription && (
-                <div className="details-intro-short-desc">
-                  <EditableText sectionId="service-intro" fieldPath="intro.shortDescription">
-                    {intro.shortDescription}
+              {/* Descriptions */}
+              <div className="intro-description-box">
+                {intro.shortDescription && (
+                  <h3 className="intro-short-desc">
+                    <EditableText sectionId="service-intro" fieldPath="intro.shortDescription">
+                      {intro.shortDescription}
+                    </EditableText>
+                  </h3>
+                )}
+                <p className="intro-long-desc">
+                  <EditableText sectionId="service-intro" fieldPath="intro.longDescription">
+                    {intro.longDescription || 'FUE is one of the most popular and limited modern procedure techniques for hair repair.'}
                   </EditableText>
+                </p>
+              </div>
+
+              {/* Benefits Checklist */}
+              {benefits.length > 0 && (
+                <div className="benefits-checklist-grid">
+                  {benefits.map((benefit, i) => (
+                    <div className="benefit-check-item" key={i}>
+                      <div className="check-dot-wrapper">
+                        <div className="check-dot-inner"></div>
+                      </div>
+                      <span className="benefit-label">
+                        <EditableText sectionId="service-intro" fieldPath={`benefits.${i}.text`}>
+                          {benefit.text}
+                        </EditableText>
+                      </span>
+                    </div>
+                  ))}
                 </div>
               )}
-
-              {/* Main Description */}
-              <p className="details-description">
-                <EditableText sectionId="service-intro" fieldPath="intro.longDescription">
-                  {intro.longDescription || 'FUE is one of the most popular and limited modern procedure techniques for hair repair.'}
-                </EditableText>
-              </p>
-
-              {/* Bullet Points */}
-              {benefits.length > 0 && (
-                <ul className="details-bullets">
-                  {benefits.map((benefit, i) => (
-                    <li key={i}>
-                      <EditableText sectionId="service-intro" fieldPath={`benefits.${i}.text`}>
-                        {benefit.text}
-                      </EditableText>
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              {/* Closing Text */}
-              <p className="details-closing">
-                <EditableText sectionId="service-intro" fieldPath="intro.closingText">
-                  {intro.closingText || 'Our FUE procedure is performed by skilled hair transplant surgeons with years of experience, making us the best hair transplant centre in Delhi.'}
-                </EditableText>
-              </p>
             </div>
 
           </div>
         </div>
       </section>
+
+      <style jsx>{`
+        .service-intro-premium {
+          padding: 80px 5%;
+          background: #ffffff;
+        }
+        .intro-container-premium {
+          max-width: 1400px;
+          margin: 0 auto;
+        }
+        .intro-flex-row {
+          display: flex;
+          gap: 80px;
+          align-items: center;
+        }
+        .intro-media-column {
+          flex: 1;
+          min-width: 0;
+          max-width: 50%;
+        }
+        .intro-content-column {
+          flex: 1;
+        }
+        @media (max-width: 992px) {
+          .intro-flex-row {
+            flex-direction: column;
+            gap: 40px;
+          }
+          .intro-media-column {
+            max-width: 100%;
+          }
+        }
+      `}</style>
     </EditableSection>
   );
 };

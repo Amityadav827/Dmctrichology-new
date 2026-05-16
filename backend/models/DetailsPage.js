@@ -28,26 +28,13 @@ const detailsPageSchema = new mongoose.Schema(
         ]
       },
 
-      videos: {
+      introImages: {
         type: [{
-          videoUrl: { type: String, default: "" },
-          thumbnail: { type: String, default: "" },
+          image: { type: String, default: "" },
           title: { type: String, default: "" },
-          isYoutubeStyleButtonEnabled: { type: Boolean, default: true }
+          alt: { type: String, default: "" }
         }],
         default: []
-      },
-
-      sliderSettings: {
-        autoplay: { type: Boolean, default: true },
-        autoplaySpeed: { type: Number, default: 5000 },
-        showDots: { type: Boolean, default: true },
-        loopVideos: { type: Boolean, default: true }
-      },
-
-      buttonSettings: {
-        floatingButtonIcon: { type: String, default: "play" },
-        floatingButtonPosition: { type: String, default: "bottom-right" }
       },
 
       // Legacy fields for compatibility (optional, but good to keep if they exist in DB)

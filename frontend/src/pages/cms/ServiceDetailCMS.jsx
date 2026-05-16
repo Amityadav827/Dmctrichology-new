@@ -6,10 +6,14 @@ import {
   Image as ImageIcon, Plus, Trash2, RefreshCw, Globe, ArrowUp, ArrowDown, Settings
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getGalleryItems } from "../../api/services";
+import { Film } from "lucide-react";
 
 // Helper component for Media Uploads
-function MediaUploader({ label, value, onChange }) {
+function MediaUploader({ label, value, onChange, onGalleryClick }) {
   const [uploading, setUploading] = useState(false);
+
+  const isVideo = value && (value.includes('.mp4') || value.includes('.webm') || value.includes('.mov'));
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
@@ -25,12 +29,12 @@ function MediaUploader({ label, value, onChange }) {
       });
       if (res.data?.success) {
         onChange(res.data.url);
-        toast.success("Image uploaded successfully!");
+        toast.success("Media uploaded successfully!");
       } else {
         toast.error("Upload failed: " + (res.data.message || "Unknown error"));
       }
     } catch (err) {
-      toast.error("Error uploading image");
+      toast.error("Error uploading media");
     } finally {
       setUploading(false);
     }
@@ -41,21 +45,32 @@ function MediaUploader({ label, value, onChange }) {
       <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">{label}</label>
       <div className="flex items-center gap-4">
         {value && (
-          <img src={value} alt="Preview" className="h-16 w-16 rounded-xl object-cover border border-slate-200" />
+          <div className="h-16 w-16 rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center bg-slate-100 flex-shrink-0">
+            {isVideo ? (
+               <Film size={24} className="text-blue-500" />
+            ) : (
+              <img src={value} alt="Preview" className="h-full w-full object-cover" />
+            )}
+          </div>
         )}
         <div className="flex-1 relative">
            <input 
              type="text" 
              value={value || ""} 
              onChange={e => onChange(e.target.value)} 
-             className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl pr-28 outline-none focus:border-blue-500 transition-all text-sm" 
+             className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl pr-44 outline-none focus:border-blue-500 transition-all text-sm" 
              placeholder="https://..."
            />
-           <label className="absolute right-2 top-2 bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center gap-1">
-             {uploading ? <Loader2 size={14} className="animate-spin" /> : <ImageIcon size={14} />}
-             Upload
-             <input type="file" accept="image/*,video/*" className="hidden" onChange={handleFileChange} />
-           </label>
+           <div className="absolute right-2 top-2 flex gap-1">
+             <button onClick={onGalleryClick} type="button" className="bg-slate-100 text-slate-600 hover:bg-slate-200 px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1">
+               <List size={14} /> Gallery
+             </button>
+             <label className="bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center gap-1">
+               {uploading ? <Loader2 size={14} className="animate-spin" /> : <ImageIcon size={14} />}
+               Upload
+               <input type="file" accept="image/*,video/*" className="hidden" onChange={handleFileChange} />
+             </label>
+           </div>
         </div>
       </div>
     </div>
@@ -92,6 +107,13 @@ export default function ServiceDetailCMS() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [newService, setNewService] = useState({ title: "", category: "Laser" });
   const [creating, setCreating] = useState(false);
+  
+  // Gallery Picker state
+  const [showGalleryPicker, setShowGalleryPicker] = useState(false);
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [galleryLoading, setGalleryLoading] = useState(false);
+  const [gallerySearch, setGallerySearch] = useState("");
+  const [activeMediaTarget, setActiveMediaTarget] = useState(null); // { section, arrayField, idx, field }
 
   // Fetch all services for the dropdown
   const fetchServices = async () => {
@@ -136,7 +158,7 @@ export default function ServiceDetailCMS() {
             title: serviceInfo.title || "",
             category: serviceInfo.category || "",
             banner: { badgeText: "PREMIUM TREATMENT", title: serviceInfo.title || "", subtitle: "", duration: "45 mins", rating: "4.9", buttonText: "Book Consultation", backgroundImage: "" },
-            intro: { badgeText: "ABOUT THE TREATMENT", title: serviceInfo.title || "", rating: "4.9", duration: "45 mins", shortDescription: "", longDescription: "", benefits: [], closingText: "", videos: [] },
+            intro: { badgeText: "ABOUT THE TREATMENT", title: serviceInfo.title || "", rating: "4.9", duration: "45 mins", shortDescription: "", longDescription: "", benefits: [], closingText: "", introImages: [] },
             process: { sectionTitle: "How it works?", processSteps: [] },
             idealFrequency: { frequencyTitle: "Treatment Frequency & Suitability", frequencyDescription: "", idealForPoints: [], notIdealForPoints: [], ctaTitle: "Not sure which treatment is right for YOU?", ctaDescription: "We can help with that!", ctaButtonText: "Book a free consultation", ctaButtonLink: "/contact", ctaImage: "" },
             beforeAfter: { beforeTitle: "Before Treatment Checklist", afterTitle: "Aftercare Instructions", beforePoints: [], afterPoints: [], sectionBackground: "#f9f7f2" },
@@ -190,13 +212,51 @@ export default function ServiceDetailCMS() {
     if (!data) return;
     setSaving(true);
     try {
-      await axios.put(`/service-details/${selectedSlug}`, data);
+      // Ensure we don't send legacy videos if we have introMedia
+      const payload = { ...data };
+      if (payload.intro && payload.intro.introImages && payload.intro.introImages.length > 0) {
+        // cleaned
+      }
+      
+      await axios.put(`/service-details/${selectedSlug}`, payload);
       toast.success("Service details saved successfully");
     } catch {
       toast.error("Save failed");
     } finally {
       setSaving(false);
     }
+  };
+
+  const fetchGallery = async () => {
+    setGalleryLoading(true);
+    try {
+      const res = await getGalleryItems({ page: 1, limit: 100 });
+      setGalleryItems(res.data || []);
+    } catch (err) {
+      toast.error("Failed to load gallery");
+    } finally {
+      setGalleryLoading(false);
+    }
+  };
+
+  const openGalleryPicker = (target) => {
+    setActiveMediaTarget(target);
+    fetchGallery();
+    setShowGalleryPicker(true);
+  };
+
+  const handleGallerySelect = (item) => {
+    const { section, arrayField, idx, field } = activeMediaTarget;
+    const url = item.url;
+    
+    if (arrayField) {
+      updateArrayItem(section, arrayField, idx, field, url);
+    } else {
+      updateSectionField(section, field, url);
+    }
+    
+    setShowGalleryPicker(false);
+    toast.success("Media selected from gallery");
   };
 
   const handleCreateService = async (e) => {
@@ -390,35 +450,50 @@ export default function ServiceDetailCMS() {
                     </div>
                   </div>
 
-                  {/* Videos Array */}
+                  {/* Intro Images Gallery */}
                   <div className="border-t border-slate-100 pt-8 mt-4">
                     <div className="flex justify-between items-center mb-6">
-                      <label className="block text-[12px] font-black uppercase text-slate-900 tracking-widest">Intro Media / Videos</label>
-                      <button onClick={() => addArrayItem("intro", "videos", { title: "", videoUrl: "", thumbnail: "" })} className="flex items-center gap-1 text-blue-600 text-xs font-bold bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100">
-                        <Plus size={14}/> Add Video
+                      <div>
+                        <label className="block text-[12px] font-black uppercase text-slate-900 tracking-widest">Gallery Images</label>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase mt-1">Manage multiple images for the premium gallery</p>
+                      </div>
+                      <button onClick={() => addArrayItem("intro", "introImages", { image: "", title: "", alt: "" })} className="flex items-center gap-1 text-blue-600 text-xs font-bold bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100">
+                        <Plus size={14}/> Add Image
                       </button>
                     </div>
                     <div className="space-y-4">
-                      {(data.intro.videos || []).map((v, i) => (
+                      {(data.intro.introImages || []).map((m, i) => (
                         <div key={i} className="bg-slate-50 p-6 rounded-2xl border border-slate-100 relative">
-                          <button onClick={() => removeArrayItem("intro", "videos", i)} className="absolute top-4 right-4 text-slate-300 hover:text-red-500">
+                          <button onClick={() => removeArrayItem("intro", "introImages", i)} className="absolute top-4 right-4 text-slate-300 hover:text-red-500">
                             <Trash2 size={18} />
                           </button>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                              <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Slide Title</label>
-                              <input type="text" value={v.title || ""} onChange={e => updateArrayItem("intro", "videos", i, "title", e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-xl" />
+                               <MediaUploader 
+                                 label="Image Asset (Gallery or Upload)" 
+                                 value={m.image} 
+                                 onChange={val => {
+                                   updateArrayItem("intro", "introImages", i, "image", val);
+                                 }} 
+                                 onGalleryClick={() => openGalleryPicker({ section: "intro", arrayField: "introImages", idx: i, field: "image" })}
+                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Video URL (YouTube Embed)</label>
-                              <input type="text" value={v.videoUrl || ""} onChange={e => updateArrayItem("intro", "videos", i, "videoUrl", e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-xl" placeholder="https://www.youtube.com/embed/..." />
+                              <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Image Title</label>
+                              <input type="text" value={m.title || ""} onChange={e => updateArrayItem("intro", "introImages", i, "title", e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm" />
                             </div>
                             <div className="md:col-span-2">
-                              <MediaUploader label="Video Thumbnail" value={v.thumbnail} onChange={val => updateArrayItem("intro", "videos", i, "thumbnail", val)} />
+                              <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Alt Text (SEO)</label>
+                              <input type="text" value={m.alt || ""} onChange={e => updateArrayItem("intro", "introImages", i, "alt", e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm" />
                             </div>
                           </div>
                         </div>
                       ))}
+                      {(!data.intro.introImages || data.intro.introImages.length === 0) && (
+                        <div className="py-10 text-center border-2 border-dashed border-slate-100 rounded-3xl text-slate-300 text-sm font-bold uppercase tracking-widest">
+                          No images added yet
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -464,7 +539,7 @@ export default function ServiceDetailCMS() {
                               <textarea value={step.description || ""} onChange={e => updateArrayItem("process", "processSteps", i, "description", e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-xl min-h-[80px]" />
                             </div>
                             <div className="md:col-span-2">
-                              <MediaUploader label="Step Image" value={step.image} onChange={val => updateArrayItem("process", "processSteps", i, "image", val)} />
+                              <MediaUploader label="Step Image" value={step.image} onChange={val => updateArrayItem("process", "processSteps", i, "image", val)} onGalleryClick={() => openGalleryPicker({ section: "process", arrayField: "processSteps", idx: i, field: "image" })} />
                             </div>
                           </div>
                           <button onClick={() => removeArrayItem("process", "processSteps", i)} className="absolute top-4 right-4 text-slate-300 hover:text-red-500">
@@ -537,7 +612,7 @@ export default function ServiceDetailCMS() {
                         <textarea value={data.idealFrequency.ctaDescription || ""} onChange={e => updateSectionField("idealFrequency", "ctaDescription", e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-xl" />
                       </div>
                       <div className="md:col-span-2">
-                         <MediaUploader label="CTA Representative Image" value={data.idealFrequency.ctaImage} onChange={val => updateSectionField("idealFrequency", "ctaImage", val)} />
+                         <MediaUploader label="CTA Representative Image" value={data.idealFrequency.ctaImage} onChange={val => updateSectionField("idealFrequency", "ctaImage", val)} onGalleryClick={() => openGalleryPicker({ section: "idealFrequency", field: "ctaImage" })} />
                       </div>
                     </div>
                   </div>
@@ -709,7 +784,7 @@ export default function ServiceDetailCMS() {
                       <input type="text" value={data.seo?.canonicalUrl || ""} onChange={e => updateSectionField("seo", "canonicalUrl", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" placeholder="https://..." />
                    </div>
                    <div>
-                      <MediaUploader label="Open Graph (OG) Image" value={data.seo?.ogImage || ""} onChange={val => updateSectionField("seo", "ogImage", val)} />
+                      <MediaUploader label="Open Graph (OG) Image" value={data.seo?.ogImage || ""} onChange={val => updateSectionField("seo", "ogImage", val)} onGalleryClick={() => openGalleryPicker({ section: "seo", field: "ogImage" })} />
                    </div>
                 </div>
               </div>
@@ -760,6 +835,64 @@ export default function ServiceDetailCMS() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* GALLERY PICKER MODAL */}
+      {showGalleryPicker && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-[100] p-4">
+          <div className="bg-white rounded-[40px] shadow-2xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
+            {/* Modal Header */}
+            <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+              <div>
+                <h2 className="text-2xl font-black text-slate-900 tracking-tight">Media Library</h2>
+                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Select an asset for this section</p>
+              </div>
+              <button 
+                onClick={() => setShowGalleryPicker(false)}
+                className="p-3 hover:bg-white hover:shadow-md rounded-2xl transition-all text-slate-400 hover:text-slate-900"
+              >
+                <Trash2 size={24} />
+              </button>
+            </div>
+
+            {/* Gallery Grid */}
+            <div className="flex-1 overflow-y-auto p-8 bg-white">
+              {galleryLoading ? (
+                <div className="h-full flex flex-col items-center justify-center text-slate-400">
+                  <Loader2 className="animate-spin mb-4" size={40} />
+                  <p className="font-bold uppercase tracking-widest text-xs">Loading your assets...</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                  {galleryItems.map((item) => {
+                    const isVideo = item.url.match(/\.(mp4|webm|mov|ogg)$/i);
+                    return (
+                      <div 
+                        key={item._id} 
+                        onClick={() => handleGallerySelect(item)}
+                        className="group relative aspect-square rounded-3xl overflow-hidden border-4 border-transparent hover:border-blue-500 transition-all cursor-pointer shadow-sm hover:shadow-xl"
+                      >
+                        {isVideo ? (
+                          <div className="w-full h-full bg-slate-900 flex items-center justify-center">
+                            <Film size={32} className="text-white opacity-40 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute bottom-3 left-3 bg-blue-600 text-white text-[8px] font-black px-2 py-1 rounded-md uppercase">Video</div>
+                          </div>
+                        ) : (
+                          <img src={item.url} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        )}
+                        <div className="absolute inset-0 bg-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <div className="bg-white text-blue-600 px-4 py-2 rounded-xl font-bold text-xs shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform">Select Asset</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {galleryItems.length === 0 && (
+                    <div className="col-span-full py-20 text-center text-slate-400 italic">No assets found in gallery.</div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

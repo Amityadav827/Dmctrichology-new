@@ -159,18 +159,18 @@ const generateServiceData = (title, slug, type) => {
       longDescription: c.longDesc,
       benefits: c.benefits,
       closingText: c.closing,
-      videos: [
+      introMedia: [
         {
+          type: "video",
+          url: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png", // Use a placeholder video if possible
           title: `${title} Explained`,
-          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          thumbnail: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png",
-          isYoutubeStyleButtonEnabled: true
+          alt: `${title} procedure video`
         },
         {
-          title: "Patient Success Story",
-          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          thumbnail: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1778236591942-282403808.png",
-          isYoutubeStyleButtonEnabled: true
+          type: "image",
+          url: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png",
+          title: "Clinic Standards",
+          alt: "Our clinic environment"
         }
       ]
     },
