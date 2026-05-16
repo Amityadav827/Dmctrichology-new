@@ -246,6 +246,7 @@ export default function ServiceDetailCMS() {
   };
 
   const handleGallerySelect = (item) => {
+    if (!activeMediaTarget) return;
     const { section, arrayField, idx, field } = activeMediaTarget;
     const url = item.url;
     

@@ -7,14 +7,68 @@ import {
   Plus, 
   Trash2, 
   Image as ImageIcon, 
-  Video, 
   Settings, 
-  MousePointer2, 
-  ChevronRight,
-  CheckCircle2,
   Layout,
-  PlayCircle
+  List
 } from "lucide-react";
+import { getGalleryItems } from "../../api/services";
+
+// Helper component for Media Uploads
+function MediaUploader({ label, value, onChange, onGalleryClick }) {
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const fd = new FormData();
+    fd.append('image', file);
+
+    setUploading(true);
+    try {
+      const res = await axios.post('/service-details/upload', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (res.data?.success) {
+        onChange(res.data.url);
+        toast.success("Image uploaded successfully!");
+      } else {
+        toast.error("Upload failed: " + (res.data.message || "Unknown error"));
+      }
+    } catch (err) {
+      toast.error("Error uploading image");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="w-full">
+      <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">{label}</label>
+      <div className="flex items-center gap-4">
+        <div className="flex-1 relative">
+           <input 
+             type="text" 
+             value={value || ""} 
+             onChange={e => onChange(e.target.value)} 
+             className="w-full pl-5 pr-44 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all" 
+             placeholder="https://..."
+           />
+           <div className="absolute right-2 top-2 flex gap-1">
+             <button onClick={onGalleryClick} type="button" className="bg-slate-100 text-slate-600 hover:bg-slate-200 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-1">
+               <List size={14} /> Gallery
+             </button>
+             <label className="bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-pointer transition-all flex items-center gap-1">
+               {uploading ? <Loader2 size={14} className="animate-spin" /> : <ImageIcon size={14} />}
+               Upload
+               <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+             </label>
+           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function ServiceIntroCMS() {
   const [data, setData] = useState({
@@ -29,13 +83,18 @@ export default function ServiceIntroCMS() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState("content"); // content, gallery, settings
+  const [activeTab, setActiveTab] = useState("content"); // content, gallery
+
+  // Gallery Picker state
+  const [showGalleryPicker, setShowGalleryPicker] = useState(false);
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [galleryLoading, setGalleryLoading] = useState(false);
+  const [activeMediaTarget, setActiveMediaTarget] = useState(null); // { idx, field }
 
   useEffect(() => {
     axios.get("/details-page")
       .then(res => {
         const intro = res.data?.data?.intro || {};
-        // Merge with defaults to ensure all fields exist
         setData(prev => ({ 
           ...prev, 
           ...intro
@@ -47,13 +106,6 @@ export default function ServiceIntroCMS() {
 
   const updateField = (field, val) => setData(d => ({ ...d, [field]: val }));
   
-  const updateNestedField = (parent, field, val) => {
-    setData(d => ({
-      ...d,
-      [parent]: { ...d[parent], [field]: val }
-    }));
-  };
-
   // Images Repeater
   const addImage = () => updateField("introImages", [...(data.introImages || []), { title: "", image: "", alt: "" }]);
   const updateImage = (i, field, val) => {
@@ -84,6 +136,37 @@ export default function ServiceIntroCMS() {
     }
   };
 
+  const fetchGallery = async () => {
+    setGalleryLoading(true);
+    try {
+      const res = await getGalleryItems({ page: 1, limit: 100 });
+      setGalleryItems(res.data || []);
+    } catch (err) {
+      toast.error("Failed to load gallery");
+    } finally {
+      setGalleryLoading(false);
+    }
+  };
+
+  const openGalleryPicker = (target) => {
+    setActiveMediaTarget(target);
+    fetchGallery();
+    setShowGalleryPicker(true);
+  };
+
+  const handleGallerySelect = (item) => {
+    if (!activeMediaTarget) return;
+    const { idx, field } = activeMediaTarget;
+    const url = item.url;
+    
+    if (idx !== undefined) {
+      updateImage(idx, field, url);
+    }
+    
+    setShowGalleryPicker(false);
+    toast.success("Image selected from gallery");
+  };
+
   if (loading) return <div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="animate-spin h-8 w-8 text-blue-600" /></div>;
 
   return (
@@ -95,7 +178,7 @@ export default function ServiceIntroCMS() {
             <Layout className="text-blue-600" size={20} />
             <h1 className="text-2xl font-black text-slate-900 tracking-tight">Service Details Intro</h1>
           </div>
-          <p className="text-sm text-slate-500 font-medium italic">Professional video slider + service information management</p>
+          <p className="text-sm text-slate-500 font-medium italic">Premium image gallery slider + service information management</p>
         </div>
         <div className="flex items-center gap-3 w-full md:w-auto">
           <button onClick={handleSave} disabled={saving}
@@ -251,12 +334,12 @@ export default function ServiceIntroCMS() {
                       </div>
                       
                       <div>
-                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Image URL</label>
-                        <div className="relative">
-                          <input type="text" value={img.image} onChange={e => updateImage(i, "image", e.target.value)}
-                            className="w-full pl-12 pr-5 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="https://..." />
-                          <ImageIcon size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                        </div>
+                        <MediaUploader 
+                          label="Image Asset" 
+                          value={img.image} 
+                          onChange={val => updateImage(i, "image", val)} 
+                          onGalleryClick={() => openGalleryPicker({ idx: i, field: "image" })} 
+                        />
                       </div>
 
                       <div>
@@ -286,6 +369,56 @@ export default function ServiceIntroCMS() {
         )}
 
       </div>
+
+      {/* GALLERY PICKER MODAL */}
+      {showGalleryPicker && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-[100] p-4">
+          <div className="bg-white rounded-[40px] shadow-2xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
+            {/* Modal Header */}
+            <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+              <div>
+                <h2 className="text-2xl font-black text-slate-900 tracking-tight">Media Library</h2>
+                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Select an asset for the service intro</p>
+              </div>
+              <button 
+                onClick={() => setShowGalleryPicker(false)}
+                className="p-3 hover:bg-white hover:shadow-md rounded-2xl transition-all text-slate-400 hover:text-slate-900"
+              >
+                <Trash2 size={24} />
+              </button>
+            </div>
+
+            {/* Gallery Grid */}
+            <div className="flex-1 overflow-y-auto p-8 bg-white">
+              {galleryLoading ? (
+                <div className="h-full flex flex-col items-center justify-center text-slate-400">
+                  <Loader2 className="animate-spin mb-4" size={40} />
+                  <p className="font-bold uppercase tracking-widest text-xs">Loading your assets...</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                  {galleryItems.map((item) => (
+                    <div 
+                      key={item._id} 
+                      onClick={() => handleGallerySelect(item)}
+                      className="group relative aspect-square rounded-3xl overflow-hidden border-4 border-transparent hover:border-blue-500 transition-all cursor-pointer shadow-sm hover:shadow-xl"
+                    >
+                      <img src={item.url} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                      <div className="absolute inset-0 bg-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div className="bg-white text-blue-600 px-4 py-2 rounded-xl font-bold text-xs shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform">Select Asset</div>
+                      </div>
+                    </div>
+                  ))}
+                  {galleryItems.length === 0 && (
+                    <div className="col-span-full py-20 text-center text-slate-400 italic">No assets found in gallery.</div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
