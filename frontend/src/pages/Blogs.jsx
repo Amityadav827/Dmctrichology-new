@@ -290,9 +290,13 @@ function Blogs() {
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryLoading, setGalleryLoading] = useState(false);
   const [gallerySearch, setGallerySearch] = useState("");
+  const [activeEditor, setActiveEditor] = useState(null);
+  const [editingImageNode, setEditingImageNode] = useState(null);
+  const [selectedGalleryItem, setSelectedGalleryItem] = useState(null);
+  const [galleryDetailForm, setGalleryDetailForm] = useState({ title: "", altText: "" });
 
-  // Quill Editor Config
-  const modules = useMemo(() => ({
+  // Quill Editor Config - Optimized for multiple editors
+  const createQuillModules = (editorName) => ({
     toolbar: {
       container: [
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -306,17 +310,20 @@ function Blogs() {
       ],
       handlers: {
         image: function() {
-          if (quillRef.current) {
-            const range = quillRef.current.getSelection();
-            setSavedRange(range);
-            // Open inline Gallery Picker
-            fetchGallery();
-            setShowGalleryPicker(true);
-          }
+          const quill = this.quill;
+          const range = quill.getSelection(true);
+          setSavedRange(range);
+          setActiveEditor(quill);
+          fetchGallery();
+          setShowGalleryPicker(true);
         }
       }
     }
-  }), []);
+  });
+
+  const fullDescModules = useMemo(() => createQuillModules('fullDescription'), []);
+  const shortDescModules = useMemo(() => createQuillModules('shortDescription'), []);
+  const adminDescModules = useMemo(() => createQuillModules('adminDescription'), []);
 
   useEffect(() => {
     fetchBlogs();
@@ -506,43 +513,79 @@ function Blogs() {
     }
   };
 
-  const selectGalleryImage = (item) => {
-    if (!quillRef.current) return;
+  const handleGalleryItemClick = (item) => {
+    setSelectedGalleryItem(item);
+    setGalleryDetailForm({
+      title: item.title || "",
+      altText: item.altText || item.title || ""
+    });
+  };
 
+  const selectGalleryImage = () => {
+    if (!activeEditor || !selectedGalleryItem) {
+      toast.error("Please select an image first");
+      return;
+    }
+
+    const item = selectedGalleryItem;
     const base = (import.meta.env.VITE_API_URL || "https://dmctrichology-1.onrender.com/api").replace(/\/api$/, "");
     const normalizedPath = item.image.startsWith("/") ? item.image : `/${item.image}`;
     const fullUrl = item.image.startsWith("http") ? item.image : `${base}${normalizedPath}`;
 
-    // Semantic HTML Figure for WordPress-style insertion
-    const alt = item.altText || item.title || "";
-    const title = item.title || "";
-    const caption = item.description || "";
+    const alt = galleryDetailForm.altText || item.altText || item.title || "";
+    const title = galleryDetailForm.title || item.title || "";
     
-    const figureHtml = `
-      <figure class="wp-block-image size-full">
-        <img src="${fullUrl}" alt="${alt}" title="${title}" style="width: 100%; border-radius: 12px;" />
-        ${caption ? `<figcaption style="text-align: center; font-size: 0.875rem; color: #64748B; margin-top: 0.5rem;">${caption}</figcaption>` : ''}
-      </figure><p></p>
-    `;
-
-    // Insert at saved cursor position
-    const range = savedRange || { index: quillRef.current.getLength(), length: 0 };
-    quillRef.current.clipboard.dangerouslyPasteHTML(range.index, figureHtml);
+    // If we are editing an existing image, replace it
+    if (editingImageNode) {
+      editingImageNode.setAttribute('src', fullUrl);
+      editingImageNode.setAttribute('alt', alt);
+      editingImageNode.setAttribute('title', title);
+      toast.success("Image replaced successfully");
+    } else {
+      // Professional Figure-based insertion for SEO
+      const range = savedRange || { index: activeEditor.getLength(), length: 0 };
+      
+      // We use insertEmbed for cleaner Quill integration, or pasteHTML for figure wrap
+      activeEditor.insertEmbed(range.index, 'image', fullUrl);
+      
+      // Apply attributes to the newly inserted image
+      setTimeout(() => {
+        const [img] = activeEditor.root.querySelectorAll(`img[src="${fullUrl}"]`);
+        if (img) {
+          img.setAttribute('alt', alt);
+          img.setAttribute('title', title);
+          img.style.width = '100%';
+          img.style.borderRadius = '12px';
+          img.style.marginTop = '10px';
+          img.style.marginBottom = '10px';
+        }
+      }, 0);
+      
+      toast.success("Image inserted at cursor position");
+    }
     
     setShowGalleryPicker(false);
+    setEditingImageNode(null);
+    setSelectedGalleryItem(null);
     setSavedRange(null);
-    toast.success("Image inserted at cursor position");
   };
 
   // Click to Edit Image Logic (Double Click)
   const handleEditorDoubleClick = (e) => {
     if (e.target.tagName === 'IMG') {
-      // Save current image context and open drawer for replacement
-      const range = quillRef.current ? quillRef.current.getSelection() : null;
-      setSavedRange(range || { index: 0, length: 0 });
-      fetchGallery();
-      setShowGalleryPicker(true);
-      toast("Select a new image to replace", { icon: '🔄' });
+      const imgNode = e.target;
+      setEditingImageNode(imgNode);
+      
+      // Find which editor this belongs to
+      const editorRoot = imgNode.closest('.ql-editor');
+      if (editorRoot) {
+        // Find the quill instance associated with this root
+        // In ReactQuill, we might need a better way, but for now we'll assume the active one
+        // or re-fetch it if possible.
+        fetchGallery();
+        setShowGalleryPicker(true);
+        toast("Select a replacement image", { icon: '🔄' });
+      }
     }
   };
 
@@ -782,11 +825,15 @@ function Blogs() {
               </div>
               <div style={{ background: "#FFFFFF", borderRadius: "12px", overflow: "hidden", border: "1px solid #E2E8F0" }} onDoubleClick={handleEditorDoubleClick}>
                 <ReactQuill 
-                  ref={(el) => { if (el) quillRef.current = el.getEditor(); }}
+                  onFocus={() => {
+                    const editor = quillRef.current.getEditor();
+                    setActiveEditor(editor);
+                  }}
+                  ref={quillRef}
                   theme="snow"
                   value={formData.fullDescription}
                   onChange={(val) => handleQuillChange("fullDescription", val)}
-                  modules={modules}
+                  modules={fullDescModules}
                   placeholder="Start writing your editorial masterpiece..."
                   style={{ height: "500px", border: "none" }}
                 />
@@ -798,8 +845,15 @@ function Blogs() {
               <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 600, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.75rem" }}>
                 Blog Short Description
               </label>
-              <div style={{ background: "#FFFFFF", borderRadius: "10px", overflow: "hidden", border: "1px solid #E2E8F0" }}>
-                <ReactQuill theme="snow" modules={modules} value={formData.shortDescription} onChange={(val) => handleQuillChange('shortDescription', val)} style={{ minHeight: "160px" }} />
+              <div style={{ background: "#FFFFFF", borderRadius: "10px", overflow: "hidden", border: "1px solid #E2E8F0" }} onDoubleClick={handleEditorDoubleClick}>
+                <ReactQuill 
+                  onFocus={(range, source, editor) => setActiveEditor(editor)}
+                  theme="snow" 
+                  modules={shortDescModules} 
+                  value={formData.shortDescription} 
+                  onChange={(val) => handleQuillChange('shortDescription', val)} 
+                  style={{ minHeight: "160px" }} 
+                />
               </div>
             </div>
 
@@ -808,8 +862,15 @@ function Blogs() {
               <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 600, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.75rem" }}>
                 Admin Description
               </label>
-              <div style={{ background: "#FFFFFF", borderRadius: "10px", overflow: "hidden", border: "1px solid #E2E8F0" }}>
-                <ReactQuill theme="snow" modules={modules} value={formData.adminDescription} onChange={(val) => handleQuillChange('adminDescription', val)} style={{ minHeight: "160px" }} />
+              <div style={{ background: "#FFFFFF", borderRadius: "10px", overflow: "hidden", border: "1px solid #E2E8F0" }} onDoubleClick={handleEditorDoubleClick}>
+                <ReactQuill 
+                  onFocus={(range, source, editor) => setActiveEditor(editor)}
+                  theme="snow" 
+                  modules={adminDescModules} 
+                  value={formData.adminDescription} 
+                  onChange={(val) => handleQuillChange('adminDescription', val)} 
+                  style={{ minHeight: "160px" }} 
+                />
               </div>
             </div>
 
@@ -1086,24 +1147,72 @@ function Blogs() {
                 <div style={{ position: "relative" }}>
                   <input type="file" accept="image/*" onChange={handleGalleryUpload} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer", zIndex: 10 }} />
                   <button type="button" className="btn-primary" style={{ height: "40px", padding: "0 1rem", fontSize: "0.875rem", borderRadius: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
-                    <Plus size={16} /> Upload New
+                    <Plus size={16} /> {galleryLoading ? 'Uploading...' : 'Upload New'}
                   </button>
                 </div>
               </div>
 
-              {/* Grid Content */}
+              {/* Grid Content / Detail View */}
               <div style={{ flex: 1, padding: "1.5rem 2rem", overflowY: "auto" }}>
                 {galleryLoading ? (
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "30vh", gap: "1rem" }}>
                     <Loader />
                     <p style={{ fontSize: "0.875rem", color: "#64748B" }}>Accessing library...</p>
                   </div>
+                ) : selectedGalleryItem ? (
+                  /* DETAIL VIEW */
+                  <div className="animate-in fade-in slide-in-from-bottom-4 duration-300" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                    <button 
+                      onClick={() => setSelectedGalleryItem(null)}
+                      style={{ alignSelf: "flex-start", display: "flex", alignItems: "center", gap: "6px", fontSize: "0.875rem", color: "#2563EB", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}
+                    >
+                      <ArrowLeft size={16} /> Back to Library
+                    </button>
+                    
+                    <div style={{ width: "100%", borderRadius: "12px", overflow: "hidden", border: "1px solid #E2E8F0", background: "#FFF" }}>
+                      <img 
+                        src={selectedGalleryItem.image.startsWith('http') ? selectedGalleryItem.image : `${(import.meta.env.VITE_API_URL || "https://dmctrichology-1.onrender.com/api").replace(/\/api$/, "")}${selectedGalleryItem.image.startsWith('/') ? '' : '/'}${selectedGalleryItem.image}`} 
+                        alt="Preview" 
+                        style={{ width: "100%", maxHeight: "250px", objectFit: "contain", background: "#F1F5F9" }} 
+                      />
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                      <div>
+                        <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "0.5rem" }}>Image Title</label>
+                        <input 
+                          type="text" 
+                          value={galleryDetailForm.title} 
+                          onChange={(e) => setGalleryDetailForm(p => ({ ...p, title: e.target.value }))}
+                          className="form-input" 
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "0.5rem" }}>Alt Text (SEO)</label>
+                        <input 
+                          type="text" 
+                          value={galleryDetailForm.altText} 
+                          onChange={(e) => setGalleryDetailForm(p => ({ ...p, altText: e.target.value }))}
+                          className="form-input" 
+                        />
+                      </div>
+                      
+                      <button 
+                        onClick={selectGalleryImage}
+                        className="btn-primary" 
+                        style={{ width: "100%", height: "48px", marginTop: "1rem", fontSize: "1rem" }}
+                      >
+                        {editingImageNode ? 'Replace Image' : 'Insert into Blog'}
+                      </button>
+                    </div>
+                  </div>
                 ) : (
+                  /* GRID VIEW */
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "1rem" }}>
                     {galleryItems.filter(item => (item.title || "").toLowerCase().includes(gallerySearch.toLowerCase())).map((item) => (
                       <div 
                         key={item._id} 
-                        onClick={() => selectGalleryImage(item)}
+                        onClick={() => handleGalleryItemClick(item)}
                         style={{ 
                           background: "#FFF", 
                           borderRadius: "12px", 
