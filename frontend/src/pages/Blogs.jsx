@@ -282,23 +282,13 @@ function Blogs() {
   const [blogImagePreview, setBlogImagePreview] = useState(null);
   const [bannerImagePreview, setBannerImagePreview] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [savedRange, setSavedRange] = useState(null);
+  const [quillRef, setQuillRef] = useState(null);
 
-  // Media SEO Modal state
-  const [mediaModalOpen, setMediaModalOpen] = useState(false);
-  const [galleryModalOpen, setGalleryModalOpen] = useState(false);
+  // Gallery Picker state
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryLoading, setGalleryLoading] = useState(false);
   const [gallerySearch, setGallerySearch] = useState("");
-
-  const [mediaData, setMediaData] = useState({
-    url: "",
-    alt: "",
-    title: "",
-    link: "",
-    newTab: true,
-    caption: "",
-    width: "100%"
-  });
 
   // Quill Editor Config
   const modules = useMemo(() => ({
@@ -315,12 +305,17 @@ function Blogs() {
       ],
       handlers: {
         image: function() {
-          // Open custom gallery modal instead of local file input
-          handleOpenMediaModal();
+          if (quillRef) {
+            const range = quillRef.getSelection();
+            setSavedRange(range);
+            // Switch to Gallery Picker view
+            fetchGallery();
+            setView("gallery-picker");
+          }
         }
       }
     }
-  }), []);
+  }), [quillRef]);
 
   useEffect(() => {
     fetchBlogs();
@@ -489,85 +484,44 @@ function Blogs() {
     }
   };
 
-  const handleOpenMediaModal = () => {
-    fetchGallery();
-    setMediaModalOpen(true);
-  };
-
   const selectGalleryImage = (item) => {
-    // Correct URL construction similar to Gallery.jsx
+    if (!quillRef) return;
+
     const base = (import.meta.env.VITE_API_URL || "https://dmctrichology-1.onrender.com/api").replace(/\/api$/, "");
     const normalizedPath = item.image.startsWith("/") ? item.image : `/${item.image}`;
     const fullUrl = item.image.startsWith("http") ? item.image : `${base}${normalizedPath}`;
 
-    setMediaData({
-      ...mediaData,
-      url: fullUrl,
-      alt: item.altText || item.title || "",
-      title: item.title || "",
-      caption: item.description || ""
-    });
-    setGalleryModalOpen(false);
-    toast.success("Image selected from gallery");
+    // Semantic HTML Figure for WordPress-style insertion
+    const alt = item.altText || item.title || "";
+    const title = item.title || "";
+    const caption = item.description || "";
+    
+    const figureHtml = `
+      <figure class="wp-block-image size-full">
+        <img src="${fullUrl}" alt="${alt}" title="${title}" style="width: 100%; border-radius: 12px;" />
+        ${caption ? `<figcaption style="text-align: center; font-size: 0.875rem; color: #64748B; margin-top: 0.5rem;">${caption}</figcaption>` : ''}
+      </figure><p></p>
+    `;
+
+    // Insert at saved cursor position
+    const range = savedRange || { index: quillRef.getLength(), length: 0 };
+    quillRef.clipboard.dangerouslyPasteHTML(range.index, figureHtml);
+    
+    setView("form");
+    setSavedRange(null);
+    toast.success("Image inserted at cursor position");
   };
 
-  const handleInsertMedia = () => {
-    if (!mediaData.url) {
-      toast.error("Image URL is required");
-      return;
-    }
-
-    // Construct professional semantic HTML
-    let imgHtml = `<img src="${mediaData.url}" alt="${mediaData.alt}" title="${mediaData.title}" style="width: ${mediaData.width}; border-radius: 12px;" />`;
-    
-    let contentHtml = imgHtml;
-    if (mediaData.link) {
-      const isExternal = !mediaData.link.includes('dmctrichology.com') && mediaData.link.startsWith('http');
-      const target = mediaData.newTab ? ' target="_blank"' : '';
-      const rel = isExternal ? ' rel="nofollow noopener noreferrer"' : (mediaData.newTab ? ' rel="noopener noreferrer"' : '');
-      contentHtml = `<a href="${mediaData.link}"${target}${rel}>${imgHtml}</a>`;
-    }
-
-    let figureHtml = `<figure class="wp-block-image size-full">${contentHtml}`;
-    if (mediaData.caption) {
-      figureHtml += `<figcaption style="text-align: center; font-size: 0.875rem; color: #64748B; margin-top: 0.5rem;">${mediaData.caption}</figcaption>`;
-    }
-    figureHtml += `</figure><p></p>`;
-
-    setFormData(prev => ({
-      ...prev,
-      fullDescription: prev.fullDescription + figureHtml
-    }));
-    
-    setMediaModalOpen(false);
-    setMediaData({ url: "", alt: "", title: "", link: "", newTab: true, caption: "", width: "100%" });
-    toast.success("Media inserted successfully");
-  };
-
-  // Click to Edit Image Logic
-  const handleEditorClick = (e) => {
+  // Click to Edit Image Logic (Double Click)
+  const handleEditorDoubleClick = (e) => {
     if (e.target.tagName === 'IMG') {
-      const img = e.target;
-      const figure = img.closest('figure');
-      const link = img.closest('a');
-      const figcaption = figure ? figure.querySelector('figcaption') : null;
-
-      setMediaData({
-        url: img.src,
-        alt: img.alt || "",
-        title: img.title || "",
-        link: link ? link.href : "",
-        newTab: link ? link.target === '_blank' : true,
-        caption: figcaption ? figcaption.innerText : "",
-        width: img.style.width || "100%"
-      });
-      
-      // To replace correctly, we'd need Quill selection manipulation, 
-      // but for simplicity and stability, we just open the modal.
-      // Instructions for user: "Updating will insert a new version, please delete old one if needed."
-      // Actually, let's just use it as a 'Quick SEO View'
-      setMediaModalOpen(true);
-      toast("Media settings loaded for review", { icon: '📝' });
+      // Save current image context and switch to gallery for replacement
+      // In WordPress style, double click usually opens the media library to replace
+      const range = quillRef.getSelection() || { index: quillRef.getLength(), length: 0 };
+      setSavedRange(range);
+      fetchGallery();
+      setView("gallery-picker");
+      toast("Select a new image to replace", { icon: '🔄' });
     }
   };
 
@@ -804,23 +758,16 @@ function Blogs() {
                 <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em", margin: 0 }}>
                   Full Description <span style={{ color: "#EF4444" }}>*</span>
                 </label>
-                <div style={{ display: "flex", gap: "10px" }}>
-                  <button 
-                    type="button"
-                    onClick={handleOpenMediaModal}
-                    style={{ padding: "0.3rem 0.75rem", borderRadius: "6px", background: "#2563EB", color: "#FFF", fontSize: "0.75rem", fontWeight: 600, border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "5px" }}
-                  >
-                    <ImageIcon size={14} /> Gallery Media
-                  </button>
-                </div>
               </div>
-              <div style={{ background: "#FFFFFF", borderRadius: "12px", overflow: "hidden", border: "1px solid #E2E8F0" }}>
+              <div style={{ background: "#FFFFFF", borderRadius: "12px", overflow: "hidden", border: "1px solid #E2E8F0" }} onDoubleClick={handleEditorDoubleClick}>
                 <ReactQuill 
+                  ref={(el) => setQuillRef(el?.getEditor())}
                   theme="snow"
                   value={formData.fullDescription}
                   onChange={(val) => handleQuillChange("fullDescription", val)}
                   modules={modules}
-                  style={{ height: "450px" }}
+                  placeholder="Start writing your editorial masterpiece..."
+                  style={{ height: "500px", border: "none" }}
                 />
               </div>
             </div>
@@ -1060,137 +1007,95 @@ function Blogs() {
           </div>
         </form>
       </div>
-        {/* Media SEO Modal */}
-        {mediaModalOpen && (
-          <div style={{ position: "fixed", inset: 0, zIndex: 999, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(15, 23, 42, 0.6)", backdropFilter: "blur(8px)", padding: "1.5rem" }}>
-            <div className="animate-in fade-in zoom-in duration-200" style={{ background: "#FFFFFF", width: "100%", maxWidth: "560px", borderRadius: "28px", overflow: "hidden", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.3)" }}>
-              <div style={{ padding: "1.5rem", borderBottom: "1px solid #F1F5F9", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#F8FAFC" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "#DBEAFE", display: "flex", alignItems: "center", justifyContent: "center", color: "#2563EB" }}>
-                    <ImageIcon size={20} />
-                  </div>
-                  <h3 style={{ fontSize: "1.125rem", fontWeight: 700, color: "#0F172A", margin: 0 }}>SEO Media Control</h3>
-                </div>
-                <button onClick={() => setMediaModalOpen(false)} style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#FFF", border: "1px solid #E2E8F0", color: "#64748B", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><X size={18} /></button>
+        {/* No Modals - All Media logic now handled via 'gallery-picker' view */}
+
+        {/* Gallery Picker View - Professional WordPress Style Insertion */}
+        {view === "gallery-picker" && (
+          <div className="animate-in slide-in-from-right duration-300" style={{ position: "fixed", inset: 0, zIndex: 200, background: "#F8FAFC", display: "flex", flexDirection: "column" }}>
+            <div style={{ padding: "1.25rem 2rem", background: "#FFF", borderBottom: "1px solid #E2E8F0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <h2 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#0F172A", margin: 0 }}>Media Library</h2>
+                <p style={{ fontSize: "0.875rem", color: "#64748B", margin: 0 }}>Select an image to insert into your blog post</p>
               </div>
-              
-              <div style={{ padding: "1.5rem", maxHeight: "70vh", overflowY: "auto", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                
-                {/* Gallery Quick Select */}
+              <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+                <div style={{ position: "relative", width: "300px" }}>
+                  <Search size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "#94A3B8" }} />
+                  <input 
+                    type="text" 
+                    placeholder="Search by title..." 
+                    className="form-input" 
+                    style={{ paddingLeft: "2.75rem", borderRadius: "12px" }}
+                    value={gallerySearch}
+                    onChange={(e) => setGallerySearch(e.target.value)}
+                  />
+                </div>
                 <button 
-                  type="button" 
-                  onClick={() => setGalleryModalOpen(true)}
-                  style={{ width: "100%", padding: "1rem", borderRadius: "16px", background: "#EFF6FF", border: "2px dashed #2563EB", color: "#2563EB", fontWeight: 700, fontSize: "0.875rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", cursor: "pointer" }}
+                  onClick={() => { setView("form"); setSavedRange(null); }} 
+                  className="btn-secondary"
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
                 >
-                  <Maximize size={18} /> Select from Media Gallery
+                  <X size={18} /> Cancel
                 </button>
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 120px", gap: "1rem" }}>
-                  <div>
-                    <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#64748B", marginBottom: "0.5rem", textTransform: "uppercase" }}>Image URL</label>
-                    <input type="text" value={mediaData.url} onChange={(e) => setMediaData({...mediaData, url: e.target.value})} className="form-input" placeholder="Paste URL or select from gallery" />
-                  </div>
-                  <div>
-                    <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#64748B", marginBottom: "0.5rem", textTransform: "uppercase" }}>Width</label>
-                    <select value={mediaData.width} onChange={(e) => setMediaData({...mediaData, width: e.target.value})} className="form-input">
-                      <option value="100%">Full Width</option>
-                      <option value="75%">Large (75%)</option>
-                      <option value="50%">Medium (50%)</option>
-                      <option value="33%">Small (33%)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
-                  <div>
-                    <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#64748B", marginBottom: "0.5rem", textTransform: "uppercase" }}>Alt Text (SEO)</label>
-                    <input type="text" value={mediaData.alt} onChange={(e) => setMediaData({...mediaData, alt: e.target.value})} className="form-input" placeholder="Keyword-rich description" />
-                  </div>
-                  <div>
-                    <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#64748B", marginBottom: "0.5rem", textTransform: "uppercase" }}>Image Title</label>
-                    <input type="text" value={mediaData.title} onChange={(e) => setMediaData({...mediaData, title: e.target.value})} className="form-input" placeholder="Internal title" />
-                  </div>
-                </div>
-
-                <div>
-                  <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#64748B", marginBottom: "0.5rem", textTransform: "uppercase" }}>Caption (Visible under image)</label>
-                  <input type="text" value={mediaData.caption} onChange={(e) => setMediaData({...mediaData, caption: e.target.value})} className="form-input" placeholder="Add a descriptive caption..." />
-                </div>
-
-                <div>
-                  <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#64748B", marginBottom: "0.5rem", textTransform: "uppercase" }}>Hyperlink (Optional)</label>
-                  <div style={{ position: "relative" }}>
-                    <ExternalLink size={16} style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "#94A3B8" }} />
-                    <input type="text" value={mediaData.link} onChange={(e) => setMediaData({...mediaData, link: e.target.value})} className="form-input" style={{ paddingLeft: "2.5rem" }} placeholder="https://example.com/target-page" />
-                  </div>
-                </div>
-
-                <div onClick={() => setMediaData({...mediaData, newTab: !mediaData.newTab})} style={{ display: "flex", alignItems: "center", gap: "0.875rem", cursor: "pointer" }}>
-                  <div style={{ width: "20px", height: "20px", borderRadius: "5px", background: mediaData.newTab ? "#2563EB" : "#FFF", border: "2px solid #2563EB", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}>
-                    {mediaData.newTab && <Check size={14} color="#FFF" />}
-                  </div>
-                  <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#475569" }}>Open Link in New Tab (Auto-Nofollow)</span>
-                </div>
-              </div>
-
-              <div style={{ padding: "1.25rem 1.5rem", background: "#F8FAFC", borderTop: "1px solid #F1F5F9", display: "flex", gap: "1rem" }}>
-                <button onClick={() => setMediaModalOpen(false)} className="btn-secondary" style={{ flex: 1 }}>Discard</button>
-                <button onClick={handleInsertMedia} className="btn-primary" style={{ flex: 1 }}>Insert Media</button>
               </div>
             </div>
-          </div>
-        )}
 
-        {/* Gallery Selector Modal (Nested) */}
-        {galleryModalOpen && (
-          <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)", padding: "1.5rem" }}>
-            <div className="animate-in slide-in-from-bottom duration-300" style={{ background: "#FFFFFF", width: "100%", maxWidth: "900px", height: "85vh", borderRadius: "24px", overflow: "hidden", display: "flex", flexDirection: "column", boxShadow: "0 25px 60px rgba(0,0,0,0.4)" }}>
-              <div style={{ padding: "1.25rem 1.5rem", borderBottom: "1px solid #F1F5F9", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#F8FAFC" }}>
-                <h3 style={{ fontSize: "1.125rem", fontWeight: 700, color: "#0F172A", margin: 0 }}>Select Image from Gallery</h3>
-                <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-                   <div style={{ position: "relative", width: "240px" }}>
-                      <Search size={16} style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "#94A3B8" }} />
-                      <input 
-                        type="text" 
-                        placeholder="Search gallery..." 
-                        value={gallerySearch} 
-                        onChange={(e) => setGallerySearch(e.target.value)}
-                        className="form-input" 
-                        style={{ paddingLeft: "2.5rem", height: "38px" }}
-                      />
-                   </div>
-                   <button onClick={() => setGalleryModalOpen(false)} style={{ background: "#FFF", border: "1px solid #E2E8F0", padding: "0.5rem", borderRadius: "50%", cursor: "pointer", color: "#64748B" }}><X size={18} /></button>
+            <div style={{ flex: 1, padding: "2rem", overflowY: "auto" }}>
+              {galleryLoading ? (
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "40vh", gap: "1rem" }}>
+                  <Loader />
+                  <p style={{ fontWeight: 600, color: "#64748B" }}>Loading your library...</p>
                 </div>
-              </div>
-              
-              <div style={{ flex: 1, padding: "1.5rem", overflowY: "auto", background: "#F1F5F9" }}>
-                {galleryLoading ? (
-                  <div style={{ display: "flex", justifyContent: "center", padding: "4rem" }}><Loader /></div>
-                ) : (
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "1rem" }}>
-                    {galleryItems.filter(item => (item.title || "").toLowerCase().includes(gallerySearch.toLowerCase())).map(item => (
-                      <div 
-                        key={item._id} 
-                        onClick={() => selectGalleryImage(item)}
-                        style={{ borderRadius: "16px", background: "#FFF", padding: "8px", border: "1px solid #E2E8F0", cursor: "pointer", transition: "all 0.2s" }}
-                        onMouseEnter={e => e.currentTarget.style.transform = "scale(1.02)"}
-                        onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
-                      >
-                        <div style={{ height: "120px", borderRadius: "12px", overflow: "hidden", marginBottom: "8px" }}>
-                          <img src={item.image.startsWith('http') ? item.image : `${(import.meta.env.VITE_API_URL || "https://dmctrichology-1.onrender.com/api").replace(/\/api$/, "")}${item.image.startsWith('/') ? '' : '/'}${item.image}`} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                        </div>
-                        <p style={{ fontSize: "0.75rem", fontWeight: 700, color: "#1E293B", margin: "0 0 4px 0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.title || "Untitled"}</p>
-                        <p style={{ fontSize: "0.65rem", color: "#64748B", margin: 0 }}>SEO: {item.altText ? "✅" : "❌"}</p>
+              ) : (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "1.5rem" }}>
+                  {galleryItems.filter(item => (item.title || "").toLowerCase().includes(gallerySearch.toLowerCase())).map((item) => (
+                    <div 
+                      key={item._id} 
+                      onClick={() => selectGalleryImage(item)}
+                      style={{ 
+                        background: "#FFF", 
+                        borderRadius: "16px", 
+                        border: "1px solid #E2E8F0", 
+                        overflow: "hidden", 
+                        cursor: "pointer", 
+                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.05)"
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.transform = "translateY(-4px)";
+                        e.currentTarget.style.boxShadow = "0 12px 20px -8px rgba(0,0,0,0.15)";
+                        e.currentTarget.style.borderColor = "#2563EB";
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.05)";
+                        e.currentTarget.style.borderColor = "#E2E8F0";
+                      }}
+                    >
+                      <div style={{ aspectRatio: "1/1", overflow: "hidden", background: "#F1F5F9" }}>
+                        <img 
+                          src={item.image.startsWith('http') ? item.image : `${(import.meta.env.VITE_API_URL || "https://dmctrichology-1.onrender.com/api").replace(/\/api$/, "")}${item.image.startsWith('/') ? '' : '/'}${item.image}`} 
+                          alt={item.title} 
+                          style={{ width: "100%", height: "100%", objectFit: "cover" }} 
+                        />
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                      <div style={{ padding: "1rem" }}>
+                        <h4 style={{ fontSize: "0.875rem", fontWeight: 700, color: "#1E293B", margin: "0 0 0.25rem 0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {item.title || "Untitled Asset"}
+                        </h4>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                           <span style={{ fontSize: "0.7rem", color: "#64748B" }}>SEO: {item.altText ? "✅" : "❌"}</span>
+                           <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center", color: "#2563EB" }}>
+                              <Plus size={14} />
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
-
-        {/* Media SEO Modal */}
       </>
     );
   }
