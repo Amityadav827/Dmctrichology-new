@@ -116,9 +116,27 @@
 
 .about-vision-card:hover {
   transform: translateY(-6px);
+  background: #1a1a1a;
   box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.05),
-    0 40px 80px rgba(0, 0, 0, 0.09);
+    0 4px 16px rgba(0, 0, 0, 0.15),
+    0 40px 80px rgba(0, 0, 0, 0.25);
+}
+
+.about-vision-card:hover .about-vision-card-title {
+  color: #fff;
+}
+
+.about-vision-card:hover .about-vision-card-text {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.about-vision-card:hover .card-index {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.about-vision-card:hover .card-icon {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
 }
 
 /* Card index label */
@@ -254,14 +272,27 @@
 
 .about-value-item:hover {
   transform: translateY(-8px);
+  background: #1a1a1a;
   box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.05),
-    0 30px 60px rgba(0, 0, 0, 0.09);
-  border-color: rgba(0, 0, 0, 0.1);
+    0 4px 16px rgba(0, 0, 0, 0.15),
+    0 30px 60px rgba(0, 0, 0, 0.25);
+  border-color: transparent;
 }
 
 .about-value-item:hover::before {
-  background: #1a1a1a;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.about-value-item:hover .value-index {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.about-value-item:hover .about-value-title {
+  color: #fff;
+}
+
+.about-value-item:hover .about-value-desc {
+  color: rgba(255, 255, 255, 0.75);
 }
 
 /* Value index */

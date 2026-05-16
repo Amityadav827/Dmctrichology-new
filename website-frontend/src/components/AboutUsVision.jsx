@@ -38,17 +38,17 @@ const fadeRight = (delay = 0) => ({
 // ── Component ────────────────────────────────────────────────
 const AboutUsVision = ({ data = {} }) => {
   const {
-    sectionTitle = 'VISION & VALUES',
-    heading = 'Guided By Science, Inspired By Art',
-    visionText = 'To redefine the global standard of natural hair restoration through innovation and uncompromising quality.',
-    missionText = 'To empower our patients by restoring their natural appearance and confidence using the safest, most advanced medical protocols.',
+    sectionTitle = 'ABOUT DMC TRICHOLOGY',
+    heading = 'India\'s Premium Hair & Scalp Specialist Solution',
+    visionText = 'To bring world-class hair expert treatment to as many people as possible by combining advanced medical science with artistic precision and patient-first approach.',
+    missionText = 'To provide the most innovative and effective hair and scalp treatments with a gracious, patient-first approach, helping patients feel confident and assured their hair & scalp health is on the right track.',
     values = [],
   } = data;
 
   const defaultValues = [
-    { title: 'Integrity', description: 'Ethical medical practices above all else.', icon: 'ShieldCheck' },
-    { title: 'Precision', description: 'Artistic meticulousness in every graft.', icon: 'Crosshair' },
-    { title: 'Empathy', description: 'Patient care that goes beyond the procedure.', icon: 'Heart' },
+    { title: 'Holistic Approach', description: 'Comprehensive analysis evaluating clinical examination, blood & hormonal evaluation, genetic factors and lifestyle.', icon: 'ShieldCheck' },
+    { title: 'Advanced Technology', description: 'World-class DMC-GOLDEN TOUCH® hair restoration with microsurgical precision and artistic excellence.', icon: 'Crosshair' },
+    { title: 'Patient-First Care', description: 'Making you feel comfortable & safe with world-class treatment and expert guidance at every step.', icon: 'Heart' },
   ];
 
   const activeValues = values.length > 0 ? values : defaultValues;
