@@ -135,11 +135,7 @@
 }
 
 .filter-active-dot {
-  width: 7px;
-  height: 7px;
-  background: #D4AF37;
-  border-radius: 50%;
-  box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+  display: none;
 }
 
 /* Filter List */
@@ -319,8 +315,8 @@
 }
 
 .service-card-premium:hover .service-card-inner {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1);
+  transform: none;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
   border-color: #e0e0e0;
 }
 
@@ -332,6 +328,7 @@
   position: relative;
   overflow: hidden;
   order: 2;
+  padding: 12px 12px 0 0;
 }
 
 .service-card-image-box img {
@@ -343,7 +340,7 @@
 }
 
 .service-card-premium:hover .service-card-image-box img {
-  transform: scale(1.05);
+  transform: none;
 }
 
 /* ─── CARD CONTENT ──────────────────────────────────────────────── */

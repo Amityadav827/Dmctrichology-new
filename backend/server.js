@@ -56,9 +56,10 @@ const servicePageSettingsRoutes = require("./routes/servicePageRoutes");
 const serviceListingCardRoutes = require("./routes/serviceCardRoutes");
 const serviceListingCategoryRoutes = require("./routes/serviceCategoryListingRoutes");
 const detailsPageRoutes = require("./routes/detailsPageRoutes");
+const serviceDetailRoutes = require("./routes/serviceDetailRoutes");
 const contactPageRoutes = require("./routes/contactPageRoutes");
 const blogPageRoutes = require("./routes/blogPageRoutes");
-
+const blogCommentRoutes = require("./routes/commentRoutes");
 
 // Database Connection
 const connectDB = require("./config/db");
@@ -86,10 +87,18 @@ connectDB().then(() => {
 // ✅ Global Middleware
 // ========================
 app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: [
+    "https://dmctrichology.vercel.app",
+    "https://dmctrichology-mkm4.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173" // Adding Vite default port too
+  ],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
+
+app.options("*", cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -181,8 +190,10 @@ app.use("/api/service-page-settings", servicePageSettingsRoutes);
 app.use("/api/service-listing-cards", serviceListingCardRoutes);
 app.use("/api/service-listing-categories", serviceListingCategoryRoutes);
 app.use("/api/details-page", detailsPageRoutes);
+app.use("/api/service-details", serviceDetailRoutes);
 app.use("/api/contact-page", contactPageRoutes);
 app.use("/api/blog-page", blogPageRoutes);
+app.use("/api/blog-comments", blogCommentRoutes);
 
 
 // SEO

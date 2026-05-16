@@ -30,6 +30,15 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/about-us',
+        destination: '/about',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

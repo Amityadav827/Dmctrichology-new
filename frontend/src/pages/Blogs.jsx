@@ -248,7 +248,8 @@ function Blogs() {
     canonicalUrl: "",
     slug: "",
     categoryId: "",
-    status: "Published"
+    status: "Published",
+    faqs: []
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -322,7 +323,8 @@ function Blogs() {
       canonicalUrl: item.canonicalUrl || "",
       slug: item.slug || "",
       categoryId: item.categoryId || "",
-      status: item.status || "Published"
+      status: item.status || "Published",
+      faqs: Array.isArray(item.faqs) ? item.faqs : []
     });
     
     setBlogImage(null);
@@ -368,6 +370,26 @@ function Blogs() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleAddFaq = () => {
+    setFormData(prev => ({
+      ...prev,
+      faqs: [...prev.faqs, { question: "", answer: "" }]
+    }));
+  };
+
+  const handleRemoveFaq = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      faqs: prev.faqs.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleFaqChange = (index, field, value) => {
+    const updatedFaqs = [...formData.faqs];
+    updatedFaqs[index][field] = value;
+    setFormData(prev => ({ ...prev, faqs: updatedFaqs }));
+  };
+
   const handleFileChange = (e, type) => {
     const file = e.target.files[0];
     if (file) {
@@ -406,6 +428,8 @@ function Blogs() {
       Object.keys(formData).forEach((key) => {
         if (key === 'status' && saveAsDraft) {
           formPayload.append('status', 'Draft');
+        } else if (key === 'faqs') {
+          formPayload.append('faqs', JSON.stringify(formData[key]));
         } else {
           formPayload.append(key, formData[key]);
         }
@@ -420,13 +444,21 @@ function Blogs() {
         });
         toast.success(saveAsDraft ? "Draft saved successfully" : "Blog updated successfully");
       } else {
-        await api.post("/blogs", formPayload, {
+        const response = await api.post("/blogs", formPayload, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        
+        // Update editing ID so further saves become updates
+        const newBlog = response.data?.data;
+        if (newBlog?._id || newBlog?.id) {
+          setEditingId(newBlog._id || newBlog.id);
+          setIsSlugManual(true);
+        }
+        
         toast.success(saveAsDraft ? "Draft created successfully" : "Blog published successfully");
       }
       
-      setView("list");
+      // Removed setView("list") to stay on the same page as requested
       fetchBlogs();
     } catch (error) {
       toast.error(error.response?.data?.message || "Operation failed");
@@ -491,7 +523,17 @@ function Blogs() {
             </h2>
           </div>
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-            <button type="button" onClick={() => setShowPreviewModal(true)} className="btn-secondary">
+            <button 
+              type="button" 
+              onClick={() => {
+                if (formData.slug) {
+                  window.open(`${FRONTEND_URL}/blog/${formData.slug}`, '_blank');
+                } else {
+                  toast.error("Please enter a title or slug first");
+                }
+              }} 
+              className="btn-secondary"
+            >
               <Eye size={15} /> Preview
             </button>
             <button type="button" onClick={(e) => handleSubmit(e, true)} disabled={submitting}
@@ -622,6 +664,90 @@ function Blogs() {
               </label>
               <div style={{ background: "#FFFFFF", borderRadius: "10px", overflow: "hidden", border: "1px solid #E2E8F0" }}>
                 <ReactQuill theme="snow" modules={modules} value={formData.adminDescription} onChange={(val) => handleQuillChange('adminDescription', val)} style={{ minHeight: "160px" }} />
+              </div>
+            </div>
+
+            {/* BLOG FAQS - PREMIUM CMS UI */}
+            <div className="card-glass" style={{ padding: "2rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 700, color: "#1E293B", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>
+                    Blog FAQs
+                  </label>
+                  <p style={{ fontSize: "0.75rem", color: "#64748B", marginTop: "0.25rem" }}>Add frequently asked questions to this blog for better SEO and engagement.</p>
+                </div>
+                <button 
+                  type="button" 
+                  onClick={handleAddFaq}
+                  className="btn-primary"
+                  style={{ padding: "0.5rem 1.25rem", fontSize: "0.75rem", borderRadius: "10px", display: "flex", alignItems: "center", gap: "0.5rem" }}
+                >
+                  <Plus size={16} /> Add New FAQ
+                </button>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                {formData.faqs.map((faq, idx) => (
+                  <div key={idx} style={{ padding: "1.5rem", background: "#FFFFFF", borderRadius: "20px", border: "1px solid #E2E8F0", position: "relative", boxShadow: "0 2px 8px rgba(0,0,0,0.02)" }}>
+                    <div style={{ position: "absolute", top: "1.25rem", left: "1.5rem", width: "28px", height: "28px", borderRadius: "8px", background: "#F1F5F9", color: "#64748B", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 700 }}>
+                      #{idx + 1}
+                    </div>
+                    
+                    <button 
+                      type="button" 
+                      onClick={() => handleRemoveFaq(idx)}
+                      style={{ position: "absolute", top: "1.25rem", right: "1.5rem", color: "#EF4444", background: "#FEF2F2", border: "1px solid #FECACA", width: "32px", height: "32px", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.2s" }}
+                      onMouseEnter={(e) => e.target.style.background = "#FEE2E2"}
+                      onMouseLeave={(e) => e.target.style.background = "#FEF2F2"}
+                      title="Remove FAQ"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", marginTop: "1rem" }}>
+                      <div style={{ marginLeft: "3rem" }}>
+                        <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "0.5rem", letterSpacing: "0.05em" }}>Question</label>
+                        <input 
+                          type="text" 
+                          value={faq.question} 
+                          onChange={(e) => handleFaqChange(idx, 'question', e.target.value)} 
+                          placeholder="e.g., How many sessions are required for PRP?"
+                          className="form-input" 
+                          style={{ background: "#F8FAFC", border: "1px solid #E2E8F0" }}
+                        />
+                      </div>
+                      <div style={{ marginLeft: "3rem" }}>
+                        <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "0.5rem", letterSpacing: "0.05em" }}>Answer</label>
+                        <textarea 
+                          value={faq.answer} 
+                          onChange={(e) => handleFaqChange(idx, 'answer', e.target.value)} 
+                          placeholder="Enter the detailed answer here..."
+                          rows="4"
+                          className="form-input" 
+                          style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", resize: "vertical" }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {formData.faqs.length === 0 && (
+                  <div style={{ textAlign: "center", padding: "4rem 2rem", border: "2px dashed #E2E8F0", borderRadius: "24px", background: "#F8FAFC" }}>
+                    <div style={{ width: "50px", height: "50px", borderRadius: "50%", background: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.5rem", boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}>
+                      <Plus size={24} color="#94A3B8" />
+                    </div>
+                    <h4 style={{ fontSize: "1rem", color: "#1E293B", marginBottom: "0.5rem" }}>No FAQs Created Yet</h4>
+                    <p style={{ fontSize: "0.875rem", color: "#64748B", maxWidth: "300px", margin: "0 auto 1.5rem" }}>Add FAQs to help your readers find answers quickly and improve your search ranking.</p>
+                    <button 
+                      type="button" 
+                      onClick={handleAddFaq}
+                      className="btn-primary"
+                      style={{ padding: "0.6rem 1.5rem", fontSize: "0.8rem", borderRadius: "10px" }}
+                    >
+                      Start Adding FAQs
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

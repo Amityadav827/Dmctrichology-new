@@ -40,6 +40,8 @@ const BlogHero = ({ data: initialData }) => {
     bannerHeight = "400px"
   } = data || {};
 
+  const TitleTag = data?.titleTag || "h1";
+
   return (
     <EditableSection sectionId="blog-hero" label="Blog Hero Banner">
       <section 
@@ -51,18 +53,18 @@ const BlogHero = ({ data: initialData }) => {
       >
         {/* Content Layer */}
         <div className="max-w-[1400px] mx-auto w-full">
-          <h1 className="service-hero-title">
+          <TitleTag className="service-hero-title">
             <EditableText sectionId="blog-hero" fieldPath="hero.title">
-              {title}
+              {String(title || "")}
             </EditableText>
-          </h1>
+          </TitleTag>
 
           <div className="service-hero-breadcrumb">
             <span style={{ cursor: 'pointer' }}>Home</span>
             <span className="sep">/</span>
             <span className="current">
                <EditableText sectionId="blog-hero" fieldPath="hero.breadcrumbText">
-                  {breadcrumbText}
+                  {String(breadcrumbText || "")}
                </EditableText>
             </span>
           </div>

@@ -1,0 +1,374 @@
+/* =========================================================
+   VISION & VALUES — LUXURY MONOCHROME REDESIGN
+   Palette: #1a1a1a · #111 · #fafaf8 · #f5f1eb · #e7ded2
+   Zero gold. Depth through shadows, spacing, layers.
+   ========================================================= */
+
+/* ---------- Section ---------- */
+.about-vision-section {
+  position: relative;
+  background: #fafaf8;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Soft ambient blob top-right */
+.about-vision-section::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---------- Container ---------- */
+.about-vision-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 90px 5% 100px;
+}
+
+/* =========================================================
+   HEADER BLOCK — Editorial Luxury
+   ========================================================= */
+.about-vision-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 90px;
+}
+
+/* Eyebrow micro-label */
+.about-vision-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Inter', 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+.about-vision-tag::before,
+.about-vision-tag::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Main heading */
+.about-vision-main-title {
+  font-family: 'Marcellus', serif;
+  font-size: 58px;
+  line-height: 1.1;
+  color: #111111;
+  letter-spacing: -1.2px;
+  font-weight: 400;
+}
+
+/* Subtitle line */
+.about-vision-header-sub {
+  margin-top: 20px;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #666;
+  max-width: 520px;
+}
+
+/* =========================================================
+   DUAL CARD GRID — Asymmetric Luxury
+   ========================================================= */
+.about-vision-dual-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
+  margin-bottom: 32px;
+  align-items: stretch;
+}
+
+/* ---- Base Card ---- */
+.about-vision-card {
+  position: relative;
+  padding: 64px 60px;
+  border-radius: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  background: #ffffff;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.03),
+    0 20px 60px rgba(0, 0, 0, 0.05);
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+}
+
+.about-vision-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.05),
+    0 40px 80px rgba(0, 0, 0, 0.09);
+}
+
+/* Card index label */
+.card-index {
+  display: block;
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  margin-bottom: 48px;
+}
+
+/* Icon wrapper — light card */
+.card-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f1eb;
+  border-radius: 16px;
+  margin-bottom: 36px;
+  color: #1a1a1a;
+  transition: background 0.3s ease;
+}
+
+.about-vision-card:hover .card-icon {
+  background: #e7ded2;
+}
+
+/* Card title */
+.about-vision-card-title {
+  font-family: 'Marcellus', serif;
+  font-size: 34px;
+  margin-bottom: 20px;
+  font-weight: 400;
+  color: #111111;
+  line-height: 1.2;
+}
+
+/* Card text */
+.about-vision-card-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 17px;
+  line-height: 1.85;
+  color: #555;
+}
+
+/* ---- Mission Card — Deep Black ---- */
+.about-vision-card.mission {
+  background: #111111;
+  border-color: transparent;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.15),
+    0 40px 80px rgba(0, 0, 0, 0.22);
+}
+
+/* Subtle inner glow on mission card */
+.about-vision-card.mission::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent);
+}
+
+.about-vision-card.mission:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.2),
+    0 60px 100px rgba(0, 0, 0, 0.28);
+}
+
+.about-vision-card.mission .card-index {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.about-vision-card.mission .card-icon {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.about-vision-card.mission:hover .card-icon {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.about-vision-card.mission .about-vision-card-title {
+  color: #ffffff;
+}
+
+.about-vision-card.mission .about-vision-card-text {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* =========================================================
+   VALUES STRIP — Premium 3-Column
+   ========================================================= */
+.about-values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.about-value-item {
+  position: relative;
+  padding: 52px 40px;
+  background: #ffffff;
+  border-radius: 32px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              border-color 0.4s ease;
+  overflow: hidden;
+}
+
+/* Subtle top edge line */
+.about-value-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background: #e7ded2;
+  border-radius: 0 0 2px 2px;
+  transition: background 0.4s ease;
+}
+
+.about-value-item:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.05),
+    0 30px 60px rgba(0, 0, 0, 0.09);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.about-value-item:hover::before {
+  background: #1a1a1a;
+}
+
+/* Value index */
+.value-index {
+  display: block;
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: rgba(0, 0, 0, 0.18);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+/* Icon holder */
+.about-value-icon-box {
+  width: 60px;
+  height: 60px;
+  background: #f5f1eb;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  color: #1a1a1a;
+  transition: background 0.35s ease, transform 0.35s ease;
+}
+
+.about-value-item:hover .about-value-icon-box {
+  background: #1a1a1a;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.about-value-item:hover .about-value-icon-box svg {
+  color: #fff !important;
+}
+
+/* Value title */
+.about-value-title {
+  font-family: 'Marcellus', serif;
+  font-size: 22px;
+  color: #111111;
+  margin-bottom: 14px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+/* Value description */
+.about-value-desc {
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  color: #666;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1200px) {
+  .about-vision-main-title {
+    font-size: 48px;
+  }
+  .about-vision-card {
+    padding: 52px 48px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .about-vision-dual-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .about-vision-card.mission {
+    min-height: unset;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-vision-section {
+    padding: 90px 0 100px;
+  }
+  .about-vision-main-title {
+    font-size: 36px;
+    letter-spacing: -0.5px;
+  }
+  .about-vision-header {
+    margin-bottom: 56px;
+  }
+  .about-vision-card {
+    padding: 48px 36px;
+  }
+  .about-vision-card-title {
+    font-size: 28px;
+  }
+  .about-values-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-vision-main-title {
+    font-size: 30px;
+  }
+  .about-value-item {
+    padding: 40px 28px;
+  }
+}

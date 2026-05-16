@@ -6,15 +6,17 @@ import EditableText from './Editable/EditableText';
 import { useBuilder } from '../context/BuilderContext';
 import { Search, Calendar, User } from 'lucide-react';
 import { formatDate } from '../utils/dateFormatter';
+import { fetchBlogCategories } from '../services/api';
 
 const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [pageData, setPageData] = useState(initialData?.listing || {});
   const [blogs, setBlogs] = useState(initialBlogs);
+  const [dynamicCategories, setDynamicCategories] = useState([]);
 
-  console.log("[BlogListing] Component initialized with:", { 
+  console.log("[BlogListing] Component initialized with:", {
     initialBlogsCount: initialBlogs?.length || 0,
-    blogsStateCount: blogs?.length || 0 
+    blogsStateCount: blogs?.length || 0
   });
 
   // Sync state when initialData changes (SSR data)
@@ -22,6 +24,13 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
     if (initialData?.listing) {
       setPageData(initialData.listing);
     }
+
+    // Check URL params for pre-filtering
+    const params = new URLSearchParams(window.location.search);
+    const search = params.get('search');
+    const cat = params.get('category');
+    if (search) setSearchQuery(search);
+    if (cat) setActiveCategory(cat);
   }, [initialData]);
 
   useEffect(() => {
@@ -30,6 +39,16 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
       setBlogs(initialBlogs);
     }
   }, [initialBlogs]);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      const res = await fetchBlogCategories();
+      if (res?.success) {
+        setDynamicCategories(res.data);
+      }
+    };
+    loadCategories();
+  }, []);
 
   const {
     sidebarSearchPlaceholder = "Enter Key Word",
@@ -42,6 +61,44 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
     recentPosts = []
   } = pageData;
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [filteredBlogs, setFilteredBlogs] = useState(initialBlogs);
+
+  // Debounced search effect
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      let result = [...blogs];
+
+      // Filter by Search
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        result = result.filter(blog =>
+          blog.title?.toLowerCase().includes(q) ||
+          blog.category?.name?.toLowerCase().includes(q) ||
+          blog.author?.toLowerCase().includes(q) ||
+          blog.shortDescription?.toLowerCase().includes(q)
+        );
+      }
+
+      // Filter by Category
+      if (activeCategory !== "All") {
+        result = result.filter(blog =>
+          blog.category?.name?.toLowerCase() === activeCategory.toLowerCase()
+        );
+      }
+
+      setFilteredBlogs(result);
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [searchQuery, activeCategory, blogs]);
+
+  // Handle category click
+  const handleCategoryClick = (catName) => {
+    setActiveCategory(catName);
+  };
+
   // Real-time sync from Visual Builder
   useEffect(() => {
     if (isEditMode && siteConfig) {
@@ -52,14 +109,14 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
         if (key.startsWith('blog-listing.listing.')) {
           hasChanges = true;
           const path = key.replace('blog-listing.listing.', '');
-          
+
           if (path.includes('.')) {
             const parts = path.split('.');
             let current = updatedListing;
             for (let i = 0; i < parts.length - 1; i++) {
               const part = parts[i];
               if (!current[part]) {
-                current[part] = isNaN(parts[i+1]) ? {} : [];
+                current[part] = isNaN(parts[i + 1]) ? {} : [];
               }
               current = current[part];
             }
@@ -80,35 +137,45 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
     <EditableSection sectionId="blog-listing" label="Blog Listing Section">
       <section className="blog-listing-wrapper">
         <div className="blog-container">
-          
+
           {/* Left Side: Blog Grid */}
           <div className="blog-grid-content">
             <div className="blog-grid">
-              {blogs.map((blog, idx) => (
-                <div key={idx} className={`blog-card ${idx === 0 ? 'active-card' : ''}`}>
-                  <div className="blog-card-image">
-                    <img src={blog.blogImage || 'https://via.placeholder.com/600x400'} alt={blog.title} />
-                  </div>
-                  <div className="blog-card-info">
-                    <div className="blog-card-meta">
-                      <div className="meta-item">
-                        <Calendar size={14} />
-                        <span>{formatDate(blog.blogDate || blog.date)}</span>
-                      </div>
-                      <div className="meta-item">
-                        <User size={14} />
-                        <span>{blog.author}</span>
-                      </div>
+              {filteredBlogs.length > 0 ? (
+                filteredBlogs.map((blog, idx) => (
+                  <div key={idx} className={`blog-card ${idx === 0 ? 'active-card' : ''}`}>
+                    <div className="blog-card-image">
+                      <Link href={`/blog/${blog.slug}`}>
+                        <img src={blog.blogImage || 'https://via.placeholder.com/600x400'} alt={blog.title} />
+                      </Link>
                     </div>
-                    <h3 className="blog-card-title">
-                      {blog.title}
-                    </h3>
-                    <Link href={`/blog/${blog.slug}`} className="explore-link">
-                      Explore More
-                    </Link>
+                    <div className="blog-card-info">
+                      <div className="blog-card-meta">
+                        <div className="meta-item">
+                          <Calendar size={14} />
+                          <span>{formatDate(blog.blogDate || blog.date)}</span>
+                        </div>
+                        <div className="meta-item">
+                          <User size={14} />
+                          <span>{blog.author}</span>
+                        </div>
+                      </div>
+                      <h3 className="blog-card-title">
+                        <Link href={`/blog/${blog.slug}`} className="blog-title-link">
+                          {blog.title}
+                        </Link>
+                      </h3>
+                      <Link href={`/blog/${blog.slug}`} className="explore-link">
+                        Explore More
+                      </Link>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="no-blogs-found" style={{ gridColumn: '1/-1', padding: '100px 0', textAlign: 'center', fontFamily: 'Marcellus', fontSize: '24px', color: '#1a3760' }}>
+                  No matching blogs found
                 </div>
-              ))}
+              )}
             </div>
           </div>
 
@@ -118,7 +185,12 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
               {/* Search Widget */}
               <div className="sidebar-widget search-widget">
                 <div className="search-box">
-                  <input type="text" placeholder={sidebarSearchPlaceholder} />
+                  <input
+                    type="text"
+                    placeholder={sidebarSearchPlaceholder}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
                   <Search size={20} className="search-icon" />
                 </div>
               </div>
@@ -126,20 +198,31 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
               {/* Categories Widget */}
               <div className="sidebar-widget">
                 <h4 className="sidebar-title">
-                   <EditableText sectionId="blog-listing" fieldPath="listing.sidebarCategoriesTitle">
-                      {sidebarCategoriesTitle}
-                   </EditableText>
+                  <EditableText sectionId="blog-listing" fieldPath="listing.sidebarCategoriesTitle">
+                    {sidebarCategoriesTitle}
+                  </EditableText>
                 </h4>
                 <ul className="category-list">
-                  {categories.map((cat, idx) => (
-                    <li key={idx}>
-                      <EditableText sectionId="blog-listing" fieldPath={`listing.categories.${idx}.name`}>
+                  <li
+                    className={activeCategory === "All" ? "active" : ""}
+                    onClick={() => setActiveCategory("All")}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <span className="category-name">All Categories</span>
+                    <span className="count">({blogs.length})</span>
+                  </li>
+                  {dynamicCategories.map((cat, idx) => (
+                    <li
+                      key={idx}
+                      className={activeCategory === cat.name ? "active" : ""}
+                      onClick={() => setActiveCategory(cat.name)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <span className="category-name">
                         {cat.name}
-                      </EditableText>
+                      </span>
                       <span className="count">
-                        (<EditableText sectionId="blog-listing" fieldPath={`listing.categories.${idx}.count`} tag="span">
-                          {cat.count}
-                        </EditableText>)
+                        ({cat.count})
                       </span>
                     </li>
                   ))}
@@ -149,14 +232,14 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
               {/* Recent Posts Widget */}
               <div className="sidebar-widget">
                 <h4 className="sidebar-title">
-                   <EditableText sectionId="blog-listing" fieldPath="listing.sidebarRecentPostsTitle">
-                      {sidebarRecentPostsTitle}
-                   </EditableText>
+                  <EditableText sectionId="blog-listing" fieldPath="listing.sidebarRecentPostsTitle">
+                    {sidebarRecentPostsTitle}
+                  </EditableText>
                 </h4>
                 <div className="recent-posts">
                   {(blogs.slice(0, 4)).map((post, idx) => (
                     <div key={idx} className="recent-post-item">
-                      <div 
+                      <div
                         className="post-thumb"
                         style={{
                           backgroundImage: `url(${post.blogImage || post.image || 'https://via.placeholder.com/80'})`,
@@ -182,7 +265,7 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
 
               {/* Promo Banner Widget */}
               <div className="sidebar-widget promo-widget">
-                <div 
+                <div
                   className="promo-banner"
                   style={{
                     backgroundImage: `url(${promoImage || 'https://via.placeholder.com/320x350/D9D9D9/888888?text=Promo+Banner'})`,
@@ -273,9 +356,25 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
           }
           .explore-link {
             font-size: 14px;
-            text-decoration: underline;
             color: inherit;
             font-weight: 600;
+            text-decoration: underline !important;
+            display: inline-block;
+            padding-bottom: 2px;
+            transition: all 0.3s ease;
+          }
+          .explore-link:hover {
+            opacity: 0.8;
+            text-decoration: none !important;
+          }
+          .blog-title-link {
+            color: inherit;
+            text-decoration: none !important;
+            transition: opacity 0.3s ease;
+          }
+          .blog-title-link:hover {
+            opacity: 0.8;
+            text-decoration: none !important;
           }
 
           /* Sidebar */

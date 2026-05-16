@@ -50,48 +50,55 @@ const DUMMY_VIDEOS = [
   }
 ];
 
-const ServiceIntro = ({ data = {} }) => {
+const ServiceIntro = ({ data = {}, banner = {} }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [introData, setIntroData] = useState(data);
+  const [bannerData, setBannerData] = useState(banner);
   const [activeVideo, setActiveVideo] = useState(null);
   const swiperRef = useRef(null);
 
   // Sync from props
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (data) setIntroData(data);
-  }, [data]);
+    if (banner) setBannerData(banner);
+  }, [data, banner]);
 
   // Real-time sync from Visual Builder
   useEffect(() => {
     if (isEditMode && siteConfig) {
-      let hasUpdates = false;
-      const nextData = { ...introData };
+      let hasIntroUpdates = false;
+      let hasBannerUpdates = false;
+      const nextIntroData = { ...introData };
+      const nextBannerData = { ...bannerData };
       
       Object.keys(siteConfig).forEach(key => {
+        // Handle Intro Updates
         if (key.startsWith('service-intro.intro.')) {
           const fieldPath = key.replace('service-intro.intro.', '');
-          
-          // Handle nested updates (e.g., sliderSettings.autoplay)
           if (fieldPath.includes('.')) {
             const parts = fieldPath.split('.');
-            let current = nextData;
+            let current = nextIntroData;
             for (let i = 0; i < parts.length - 1; i++) {
               if (!current[parts[i]]) current[parts[i]] = {};
               current = current[parts[i]];
             }
             current[parts[parts.length - 1]] = siteConfig[key];
           } else {
-            nextData[fieldPath] = siteConfig[key];
+            nextIntroData[fieldPath] = siteConfig[key];
           }
-          hasUpdates = true;
+          hasIntroUpdates = true;
+        }
+
+        // Handle Banner Updates (for shared Hero/Intro fields)
+        if (key.startsWith('details-banner.banner.')) {
+          const fieldPath = key.replace('details-banner.banner.', '');
+          nextBannerData[fieldPath] = siteConfig[key];
+          hasBannerUpdates = true;
         }
       });
 
-      if (hasUpdates) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setIntroData(nextData);
-      }
+      if (hasIntroUpdates) setIntroData(nextIntroData);
+      if (hasBannerUpdates) setBannerData(nextBannerData);
     }
   }, [isEditMode, siteConfig]);
 
@@ -197,23 +204,23 @@ const ServiceIntro = ({ data = {} }) => {
             <div className="details-content-col">
               {/* Badge */}
               <span className="details-badge">
-                <EditableText sectionId="service-intro" fieldPath="intro.badgeText">
-                  {intro.badgeText || intro.badge || 'FOR UNWANTED HAIR'}
+                <EditableText sectionId="details-banner" fieldPath="banner.badgeText">
+                  {bannerData.badgeText || 'FOR UNWANTED HAIR'}
                 </EditableText>
               </span>
 
               {/* Title */}
               <h1 className="details-title">
-                <EditableText sectionId="service-intro" fieldPath="intro.title">
-                  {intro.title || 'Follicular Unit Extraction (FUE)'}
+                <EditableText sectionId="details-banner" fieldPath="banner.title">
+                  {bannerData.title || 'Follicular Unit Extraction (FUE)'}
                 </EditableText>
               </h1>
 
               {/* Meta Row */}
               <div className="details-meta-row">
                 <span className="details-rating-num">
-                  <EditableText sectionId="service-intro" fieldPath="intro.rating">
-                    {intro.rating || '4.85'}
+                  <EditableText sectionId="details-banner" fieldPath="banner.rating">
+                    {bannerData.rating || '4.85'}
                   </EditableText>
                 </span>
                 <div className="details-stars">
@@ -224,29 +231,33 @@ const ServiceIntro = ({ data = {} }) => {
                 <div className="details-duration">
                   <Clock size={14} />
                   <span>
-                    <EditableText sectionId="service-intro" fieldPath="intro.duration">
-                      {intro.duration || '180 mins'}
+                    <EditableText sectionId="details-banner" fieldPath="banner.duration">
+                      {bannerData.duration || '180 mins'}
                     </EditableText>
                   </span>
                 </div>
               </div>
 
-              {/* Subtitle / Service Name repeat */}
+              {/* Intro Section Heading */}
               <h3 className="details-subtitle">
-                <EditableText sectionId="service-intro" fieldPath="intro.title">
-                  {intro.title || 'Follicular Unit Extraction (FUE)'}
+                <EditableText sectionId="service-intro" fieldPath="intro.introHeading">
+                  {intro.introHeading || intro.title || ""}
                 </EditableText>
-                <div className="details-sub-subtitle">
+              </h3>
+
+              {/* Short Description / Tagline */}
+              {intro.shortDescription && (
+                <div className="details-intro-short-desc">
                   <EditableText sectionId="service-intro" fieldPath="intro.shortDescription">
-                    {intro.shortDescription || 'Safe, smart & skin-friendly'}
+                    {intro.shortDescription}
                   </EditableText>
                 </div>
-              </h3>
+              )}
 
               {/* Main Description */}
               <p className="details-description">
                 <EditableText sectionId="service-intro" fieldPath="intro.longDescription">
-                  {intro.longDescription || 'FUE is one of the most popular and limited modern procedure techniques for hair repair. Each hair follicle is removed individually and implanted into the thinning or bald areas, making sure that it\'s natural volume and growth.'}
+                  {intro.longDescription || 'FUE is one of the most popular and limited modern procedure techniques for hair repair.'}
                 </EditableText>
               </p>
 

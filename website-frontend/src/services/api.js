@@ -206,7 +206,9 @@ export const fetchFooter = async () => {
 
 export const fetchBlogs = async (params) => {
   try {
-    const res = await api.get('/blogs', { params });
+    const res = await api.get('/blogs', { 
+      params: { ...params, t: Date.now() } 
+    });
     return res.data;
   } catch (error) {
     console.error('Error fetching blogs', error);
@@ -226,7 +228,7 @@ export const fetchBlogBySlug = async (slug) => {
 
 export const fetchBlogCategories = async () => {
   try {
-    const res = await api.get('/blog-categories');
+    const res = await api.get(`/blogs/categories?t=${Date.now()}`);
     return res.data;
   } catch (error) {
     console.error('Error fetching blog categories', error);
@@ -244,6 +246,26 @@ export const fetchBlogPage = async () => {
   }
 };
 
+
+export const fetchComments = async (slug) => {
+  try {
+    const res = await api.get(`/blog-comments/${slug}?t=${Date.now()}`);
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching comments', error);
+    return null;
+  }
+};
+
+export const submitComment = async (data) => {
+  try {
+    const res = await api.post('/blog-comments', data);
+    return res.data;
+  } catch (error) {
+    console.error('[submitComment] API Error:', error.response?.data || error.message);
+    return error.response?.data || { success: false, message: error.message };
+  }
+};
 
 export const submitLead = async (data) => {
   try {

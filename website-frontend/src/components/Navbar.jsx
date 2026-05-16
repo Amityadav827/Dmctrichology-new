@@ -6,7 +6,7 @@ import { ChevronDown, Menu as MenuIcon, X } from 'lucide-react';
 export default function Navbar({ cmsMenu }) {
   const [defaultMenuItems] = useState([
     { label: 'Home', link: '/' },
-    { label: 'About Us', link: '/about-us' },
+    { label: 'About Us', link: '/about' },
     { label: 'Services', link: '/services', dropdown: [{label: 'Hair Transplant', link: '/services/hair-transplant'}] },
     { label: 'Results', link: '/results' },
     { label: 'Testimonials', link: '/testimonials' },

@@ -34,13 +34,12 @@ export const BuilderProvider = ({ children, initialTopBar, initialHero }) => {
   }, []);
 
   const updateField = (sectionId, fieldPath, value) => {
-    setSiteConfig((prev) => {
-      const newConfig = { ...prev };
-      // Logic to update nested fields could go here
-      return newConfig;
-    });
+    // Notify local listeners (like AboutUsClient) for instant preview
+    window.dispatchEvent(new CustomEvent('cms-update', { 
+      detail: { sectionId, fieldPath, value } 
+    }));
     
-    // Notify Dashboard of the change
+    // Notify Dashboard (Parent) of the change for persistence
     window.parent.postMessage({
       type: "FIELD_UPDATED",
       payload: { sectionId, fieldPath, value }

@@ -1,20 +1,89 @@
 const mongoose = require('mongoose');
 
-const StatSchema = new mongoose.Schema({
-  value: { type: String, default: '2k+' },
-  label: { type: String, default: 'Patients Healed' },
-  description: { type: String, default: 'Experience Compassionate Care Healthier Care Certified Brighter Smile.' },
-  showDivider: { type: Boolean, default: true }
-});
-
 const AboutUsSchema = new mongoose.Schema({
-  subtitle: { type: String, default: 'ABOUT US CARE' },
-  title: { type: String, default: 'WELCOME TO DMC TRICHOLOGY®' },
-  description: { type: String, default: 'At DMC Trichology, Advanced Hair Transplant Techniques Restore Your Hairline And Boost Confidence' },
-  icon: { type: String, default: '' },
-  stats: { type: [StatSchema], default: [] }
-}, {
-  timestamps: true
-});
+  banner: {
+    badgeText: { type: String, default: "ABOUT DMC TRICHOLOGY" },
+    title: { type: String, default: "About Us" },
+    breadcrumbText: { type: String, default: "Home / About Us" },
+    backgroundImage: { type: String, default: "" },
+    overlayOpacity: { type: Number, default: 0.5 },
+    overlayColor: { type: String, default: "#000000" },
+    textAlignment: { type: String, default: "center" },
+    spacingTop: { type: String, default: "150px" },
+    spacingBottom: { type: String, default: "150px" }
+  },
+
+  hero: {
+    badge: { type: String, default: "ABOUT DMC TRICHOLOGY" },
+    title: { type: String, default: "Experience the Pinnacle of Hair Care" },
+    subtitle: { type: String, default: "Our mission is to restore confidence through world-class trichology expertise and personalized care." },
+    backgroundImage: { type: String, default: "" },
+    videoUrl: { type: String, default: "" },
+    stats: [{
+      label: { type: String },
+      value: { type: String },
+      suffix: { type: String }
+    }]
+  },
+  
+  story: {
+    sectionTitle: { type: String, default: "Our Story" },
+    heading: { type: String, default: "Pioneering the Future of Hair Restoration" },
+    description: { type: String, default: "" },
+    mainImage: { type: String, default: "" },
+    secondaryImage: { type: String, default: "" },
+    experienceYears: { type: Number, default: 15 },
+    points: [{ text: { type: String } }]
+  },
+
+  journey: {
+    sectionTitle: { type: String, default: "Our Journey" },
+    milestones: [{
+      year: { type: String },
+      title: { type: String },
+      description: { type: String }
+    }]
+  },
+
+  vision: {
+    sectionTitle: { type: String, default: "Vision & Values" },
+    visionText: { type: String, default: "" },
+    missionText: { type: String, default: "" },
+    values: [{
+      icon: { type: String },
+      title: { type: String },
+      description: { type: String }
+    }]
+  },
+
+  experts: {
+    sectionTitle: { type: String, default: "Meet Our Experts" },
+    heading: { type: String, default: "The Hands Behind Your Transformation" },
+    team: [{
+      name: { type: String },
+      designation: { type: String },
+      specialization: { type: String },
+      image: { type: String },
+      bio: { type: String }
+    }]
+  },
+
+  testimonials: {
+    sectionTitle: { type: String, default: "Patient Stories" },
+    reviews: [{
+      patientName: { type: String },
+      reviewText: { type: String },
+      rating: { type: Number, default: 5 },
+      image: { type: String },
+      treatment: { type: String }
+    }]
+  },
+
+  seo: {
+    metaTitle: { type: String, default: "" },
+    metaDescription: { type: String, default: "" },
+    ogImage: { type: String, default: "" }
+  }
+}, { timestamps: true, collection: 'aboutus' });
 
 module.exports = mongoose.model('AboutUs', AboutUsSchema);

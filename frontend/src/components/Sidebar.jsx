@@ -108,9 +108,14 @@ function Sidebar() {
               </NavLink>
             )}
             {hasPermission("blog") && (
-              <NavLink to="/blogs" className={getNavClass}>
-                <FileText size={16} /> Blogs
-              </NavLink>
+              <>
+                <NavLink to="/blogs" className={getNavClass}>
+                  <FileText size={16} /> Blogs
+                </NavLink>
+                <NavLink to="/comments" className={getNavClass}>
+                  <Star size={16} /> Comments
+                </NavLink>
+              </>
             )}
 
             {/* Media */}
@@ -178,6 +183,9 @@ function Sidebar() {
             </NavLink>
             <NavLink to="/cms/visual-builder/service" className={getNavClass}>
               <Eye size={16} /> Visual Builder
+            </NavLink>
+            <NavLink to="/cms/service-details" className={getNavClass}>
+              <Layers size={16} /> Service Details CMS
             </NavLink>
 
             {/* Details Page CMS */}

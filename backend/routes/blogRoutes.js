@@ -6,12 +6,14 @@ const {
   updateBlog,
   deleteBlog,
   getBlogBySlug,
+  getBlogCategories,
 } = require("../controllers/blogController");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 const upload = require("../middleware/uploadMiddleware");
 
 const router = express.Router();
 
+router.get("/categories", getBlogCategories);
 router.get("/", getBlogs);
 router.get("/:id", getBlogById);
 router.get("/slug/:slug", getBlogBySlug);

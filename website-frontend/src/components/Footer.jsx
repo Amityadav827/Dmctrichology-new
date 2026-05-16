@@ -11,7 +11,37 @@ export default function Footer() {
     const loadData = async () => {
       const res = await fetchFooter();
       if (res?.success) {
-        setData(res.data);
+        let finalData = { ...res.data };
+        
+        // Override with Service Details CTA if on a details page
+        try {
+          if (typeof window !== 'undefined' && window.location.pathname.startsWith('/details/')) {
+            const slug = window.location.pathname.split('/').filter(Boolean).pop();
+            if (slug) {
+              const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
+              const overrideRes = await fetch(`${API_BASE}/service-details/${slug}`);
+              if (overrideRes.ok) {
+                const sJson = await overrideRes.json();
+                if (sJson.success && sJson.data?.footerCta) {
+                  const { heading, description, emailPlaceholder, buttonText } = sJson.data.footerCta;
+                  if (heading || description || emailPlaceholder || buttonText) {
+                    finalData.newsletter = {
+                      ...(finalData.newsletter || {}),
+                      ...(heading ? { heading } : {}),
+                      ...(description ? { description } : {}),
+                      ...(emailPlaceholder ? { placeholder: emailPlaceholder } : {}),
+                      ...(buttonText ? { buttonText } : {})
+                    };
+                  }
+                }
+              }
+            }
+          }
+        } catch (err) {
+          console.error("Failed to load footer overrides:", err);
+        }
+
+        setData(finalData);
       }
     };
     loadData();

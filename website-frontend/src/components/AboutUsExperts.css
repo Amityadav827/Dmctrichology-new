@@ -1,0 +1,328 @@
+/* =========================================================
+   MEET OUR EXPERTS — LUXURY MONOCHROME REDESIGN
+   Palette: #000 · #1a1a1a · #111 · #fafaf8 · #f5f1eb
+   Zero gold. Premium editorial medical brand aesthetic.
+   ========================================================= */
+
+/* ---------- Section ---------- */
+.about-experts-section {
+  position: relative;
+  background: #fafaf8;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Ambient depth blob */
+.about-experts-section::before {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -80px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.025) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---------- Container ---------- */
+.about-experts-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 90px 5% 100px;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.about-experts-header {
+  text-align: center;
+  margin-bottom: 88px;
+}
+
+/* Eyebrow tag with decorative lines */
+.about-experts-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Inter', 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.about-experts-tag::before,
+.about-experts-tag::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Main heading */
+.about-experts-main-title {
+  font-family: 'Marcellus', serif;
+  font-size: 52px;
+  color: #111111;
+  letter-spacing: -1px;
+  font-weight: 400;
+  line-height: 1.12;
+}
+
+/* =========================================================
+   CARDS GRID
+   ========================================================= */
+.about-experts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+/* ---- Individual Card ---- */
+.about-expert-card {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: #ffffff;
+  border-radius: 36px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.03),
+    0 20px 50px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              border-color 0.4s ease;
+}
+
+.about-expert-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    0 40px 90px rgba(0, 0, 0, 0.11);
+}
+
+/* Card index — subtle top-left label */
+.about-expert-index {
+  position: absolute;
+  top: 28px;
+  right: 32px;
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: rgba(0, 0, 0, 0.15);
+  text-transform: uppercase;
+  z-index: 5;
+}
+
+/* =========================================================
+   IMAGE SIDE
+   ========================================================= */
+.about-expert-img-wrapper {
+  width: 240px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  background: #f5f1eb;
+}
+
+.about-expert-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              filter 0.5s ease;
+}
+
+.about-expert-card:hover .about-expert-img {
+  transform: scale(1.06);
+}
+
+/* Subtle dark gradient overlay on image */
+.about-expert-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    transparent 40%,
+    rgba(10, 10, 10, 0.18) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.4s ease;
+}
+
+/* Bio reveal on hover */
+.about-expert-bio-box {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  z-index: 3;
+}
+
+.about-expert-card:hover .about-expert-bio-box {
+  opacity: 1;
+}
+
+.about-expert-bio {
+  color: rgba(255, 255, 255, 0.88);
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  line-height: 1.75;
+  text-align: center;
+  transform: translateY(12px);
+  transition: transform 0.45s ease;
+}
+
+.about-expert-card:hover .about-expert-bio {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   CONTENT SIDE
+   ========================================================= */
+.about-expert-info {
+  flex: 1;
+  padding: 48px 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Doctor name */
+.about-expert-name {
+  font-family: 'Marcellus', serif;
+  font-size: 30px;
+  color: #111111;
+  margin-bottom: 10px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+/* Designation — monochrome, no gold */
+.about-expert-designation {
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  color: #000000;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  opacity: 0.5;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+/* Divider */
+.about-expert-divider {
+  width: 36px;
+  height: 1.5px;
+  background: #1a1a1a;
+  margin-bottom: 24px;
+  opacity: 0.12;
+  transition: width 0.4s ease, opacity 0.4s ease;
+}
+
+.about-expert-card:hover .about-expert-divider {
+  width: 56px;
+  opacity: 0.25;
+}
+
+/* Specialization */
+.about-expert-spec {
+  display: block;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1280px) {
+  .about-experts-main-title {
+    font-size: 44px;
+  }
+  .about-expert-img-wrapper {
+    width: 200px;
+  }
+  .about-expert-info {
+    padding: 40px 36px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .about-expert-card {
+    flex-direction: column;
+    border-radius: 32px;
+  }
+  .about-expert-img-wrapper {
+    width: 100%;
+    height: 280px;
+  }
+  .about-expert-overlay {
+    background: linear-gradient(
+      to bottom,
+      transparent 40%,
+      rgba(10, 10, 10, 0.18) 100%
+    );
+  }
+  .about-expert-index {
+    top: 20px;
+    right: 24px;
+  }
+  .about-expert-info {
+    padding: 36px;
+    text-align: left;
+  }
+}
+
+@media (max-width: 992px) {
+  .about-experts-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-expert-img-wrapper {
+    height: 320px;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-experts-section {
+    padding: 90px 0 100px;
+  }
+  .about-experts-main-title {
+    font-size: 34px;
+    letter-spacing: -0.5px;
+  }
+  .about-experts-header {
+    margin-bottom: 56px;
+  }
+  .about-expert-img-wrapper {
+    height: 260px;
+  }
+  .about-expert-name {
+    font-size: 26px;
+  }
+  .about-expert-info {
+    padding: 28px;
+  }
+}

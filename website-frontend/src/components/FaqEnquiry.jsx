@@ -100,21 +100,21 @@ const FaqEnquiry = ({ data = {} }) => {
               
               <form className="details-enquiry-form" onSubmit={e => e.preventDefault()}>
                 <div className="details-form-group">
-                  <input type="text" placeholder="Name*" className="details-form-input" required />
+                  <input type="text" placeholder={sectionData.namePlaceholder || "Name*"} className="details-form-input" required />
                 </div>
                 <div className="details-form-group">
-                  <input type="email" placeholder="E-Mail Address*" className="details-form-input" required />
+                  <input type="email" placeholder={sectionData.emailPlaceholder || "E-Mail Address*"} className="details-form-input" required />
                 </div>
                 <div className="details-form-group select-wrapper">
                   <select className="details-form-input details-form-select" required defaultValue="">
-                    <option value="" disabled>Type Of Service Enquiry*</option>
+                    <option value="" disabled>{sectionData.servicePlaceholder || "Type Of Service Enquiry*"}</option>
                     {serviceOptions.map((opt, i) => (
                       <option key={i} value={opt}>{opt}</option>
                     ))}
                   </select>
                 </div>
                 <div className="details-form-group date-wrapper">
-                  <input type="date" placeholder="Select Date & Time*" className="details-form-input details-form-date" required />
+                  <input type="date" placeholder={sectionData.datePlaceholder || "Select Date & Time*"} className="details-form-input details-form-date" required />
                 </div>
                 <button type="submit" className="details-submit-btn">
                   <span>

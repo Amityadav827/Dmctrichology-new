@@ -17,11 +17,14 @@ import {
   Eye,
   Plus
 } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getFrontendPreviewUrl, FRONTEND_URL } from "../../utils/config";
 
 export default function VisualLiveBuilder() {
   const { slug = "home" } = useParams();
+  const [searchParams] = useSearchParams();
+  const serviceSlug = searchParams.get('service') || 'soprano-titanium-laser'; // default fallback
+  
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [viewMode, setViewMode] = useState("desktop"); // desktop, tablet, mobile
@@ -62,7 +65,6 @@ export default function VisualLiveBuilder() {
       return allSections.filter(s => ['footer-section'].includes(s.id));
     }
     if (currentSlug === 'home') {
-      // Home only sections (exclude global ones)
       return allSections.filter(s => !['topbar', 'header', 'footer-section'].includes(s.id));
     }
     if (currentSlug === 'service') {
@@ -97,20 +99,16 @@ export default function VisualLiveBuilder() {
     return allSections;
   };
 
-
-
-
   const sections = getSectionsForSlug(slug);
 
-  // Use centralized configuration for preview URL
-  const frontendUrl = getFrontendPreviewUrl(slug);
+  // Determine iframe URL
+  const frontendUrl = slug === 'details' ? `${FRONTEND_URL}/details/${serviceSlug}` : getFrontendPreviewUrl(slug);
   const baseUrl = FRONTEND_URL;
 
   const pendingChanges = useRef({});
   const saveTimeout = useRef(null);
 
   useEffect(() => {
-    // Listen for messages from the iframe (frontend)
     const handleMessage = (event) => {
       if (event.data.type === 'SECTION_CLICKED') {
         const clickedSectionId = event.data.payload.sectionId;
@@ -125,25 +123,21 @@ export default function VisualLiveBuilder() {
       if (event.data.type === 'FIELD_UPDATED') {
         const { sectionId, fieldPath, value } = event.data.payload;
         
-        // 1. Update local UI state
         setSiteConfig(prev => ({
           ...prev,
           [`${sectionId}.${fieldPath}`]: value
         }));
 
-        // 2. Queue for persistence
         if (!pendingChanges.current[sectionId]) {
           pendingChanges.current[sectionId] = {};
         }
         
-        // Handle nested fields like slides.0.title
         pendingChanges.current[sectionId][fieldPath] = value;
         
-        // 3. Debounced Auto-save
         if (saveTimeout.current) clearTimeout(saveTimeout.current);
         saveTimeout.current = setTimeout(() => {
           persistChanges();
-        }, 2000); // 2 second debounce
+        }, 2000);
       }
     };
 
@@ -155,7 +149,6 @@ export default function VisualLiveBuilder() {
     };
   }, [sections]);
 
-  // Sync state BACK to iframe whenever siteConfig changes
   useEffect(() => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
       iframeRef.current.contentWindow.postMessage({
@@ -174,8 +167,8 @@ export default function VisualLiveBuilder() {
       for (const sectionId of sectionsToUpdate) {
         const updates = pendingChanges.current[sectionId];
         let endpoint = '';
+        let isServiceDetailEndpoint = false;
         
-        // Map sectionId to correct API endpoint
         switch(sectionId) {
           case 'topbar': endpoint = '/topbar'; break;
           case 'header': endpoint = '/header'; break;
@@ -198,19 +191,18 @@ export default function VisualLiveBuilder() {
           case 'service-hero': endpoint = '/service-page-settings'; break;
           case 'service-listing': endpoint = '/service-listing-cards'; break;
           case 'service-listing-categories': endpoint = '/service-listing-categories'; break;
-          case 'details-banner': endpoint = '/details-page'; break;
-          case 'service-intro': endpoint = '/details-page'; break;
-          case 'process-slider': endpoint = '/details-page'; break;
-          case 'before-after-section': endpoint = '/details-page'; break;
-          case 'faq-enquiry-section': endpoint = '/details-page'; break;
-          case 'ideal-frequency-section': endpoint = '/details-page'; break;
+          case 'details-banner': endpoint = `/service-details/${serviceSlug}`; isServiceDetailEndpoint = true; break;
+          case 'service-intro': endpoint = `/service-details/${serviceSlug}`; isServiceDetailEndpoint = true; break;
+          case 'process-slider': endpoint = `/service-details/${serviceSlug}`; isServiceDetailEndpoint = true; break;
+          case 'before-after-section': endpoint = `/service-details/${serviceSlug}`; isServiceDetailEndpoint = true; break;
+          case 'faq-enquiry-section': endpoint = `/service-details/${serviceSlug}`; isServiceDetailEndpoint = true; break;
+          case 'ideal-frequency-section': endpoint = `/service-details/${serviceSlug}`; isServiceDetailEndpoint = true; break;
           case 'contact-hero': endpoint = '/contact-page'; break;
           case 'contact-consultation': endpoint = '/contact-page'; break;
           case 'contact-map': endpoint = '/contact-page'; break;
           case 'blog-hero': endpoint = '/blog-page'; break;
           case 'blog-listing': endpoint = '/blog-page'; break;
           default: endpoint = `/sections/${sectionId}`;
-
         }
 
         // Fetch current data first to avoid overwriting other fields

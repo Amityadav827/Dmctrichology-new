@@ -73,7 +73,7 @@ export default function GradeSlider() {
                {badgeText}
              </EditableText>
           </div>
-          <h2 className="section-title" style={{ color: '#fff !important' }}>
+          <h2 className="section-title" style={{ color: '#ffffff' }}>
             <EditableText sectionId="grade-slider" fieldPath="heading" tag="span">
               {heading}
             </EditableText>
@@ -250,6 +250,9 @@ export default function GradeSlider() {
 
         <style jsx>{`
           /* Extremely specific to override globals.css !important */
+          .grade-section .section-title {
+            color: #ffffff !important;
+          }
           .grade-section span.section-subtitle.grade-badge-text {
             color: #ffffff !important;
           }

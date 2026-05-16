@@ -2,7 +2,7 @@ const supabase = require("../config/supabase");
 const uploadToSupabase = require("../utils/uploadToSupabase");
 
 const mapToSupabase = (data) => {
-  return {
+  const result = {
     title: data.title,
     author: data.author,
     show_type: data.show_type || data.showType,
@@ -23,6 +23,19 @@ const mapToSupabase = (data) => {
     status: data.status,
     category_id: data.category_id || data.categoryId || null,
   };
+
+  if (data.faqs !== undefined) {
+    result.faqs = (() => {
+      try {
+        return typeof data.faqs === 'string' ? JSON.parse(data.faqs) : (data.faqs || []);
+      } catch (e) {
+        console.error("[mapToSupabase] FAQ Parse Error:", e.message);
+        return [];
+      }
+    })();
+  }
+
+  return result;
 };
 
 const mapFromSupabase = (data) => {
@@ -50,6 +63,14 @@ const mapFromSupabase = (data) => {
     status: data.status || "Published",
     categoryId: data.category_id,
     category: data.category,
+    faqs: (() => {
+      if (!data.faqs) return [];
+      try {
+        return typeof data.faqs === 'string' ? JSON.parse(data.faqs) : data.faqs;
+      } catch (e) {
+        return [];
+      }
+    })(),
     createdAt: data.created_at,
     updatedAt: data.updated_at,
   };
@@ -132,6 +153,33 @@ const getBlogs = async (req, res, next) => {
   }
 };
 
+const getBlogCategories = async (req, res, next) => {
+  try {
+    const { data: blogs, error } = await supabase
+      .from('blogs')
+      .select('category_id, category:blog_categories(name)')
+      .eq('status', 'Published');
+
+    if (error) return res.status(500).json({ success: false, message: error.message });
+
+    const categoryCounts = {};
+    blogs.forEach(blog => {
+      const name = blog.category?.name || "Uncategorized";
+      const normalized = name.trim();
+      const key = normalized.toLowerCase();
+      if (!categoryCounts[key]) {
+        categoryCounts[key] = { name: normalized, count: 0 };
+      }
+      categoryCounts[key].count += 1;
+    });
+
+    const result = Object.values(categoryCounts).filter(c => c.count > 0 && c.name !== "Uncategorized");
+    return res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getBlogById = async (req, res, next) => {
   try {
     const { data, error } = await supabase.from('blogs').select('*').eq('id', req.params.id).single();
@@ -144,9 +192,40 @@ const getBlogById = async (req, res, next) => {
 
 const getBlogBySlug = async (req, res, next) => {
   try {
-    const { data, error } = await supabase.from('blogs').select('*').eq('slug', req.params.slug).single();
-    if (error || !data) return res.status(404).json({ success: false, message: error ? error.message : "Blog not found" });
-    return res.status(200).json({ success: true, data: mapFromSupabase(data) });
+    const rawSlug = req.params.slug;
+    const normalizedSlug = String(rawSlug).trim().toLowerCase();
+    
+    // Try finding by normalized slug first
+    let { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .ilike('slug', normalizedSlug)
+      .limit(1);
+
+    let blog = data && data.length > 0 ? data[0] : null;
+
+    // FALLBACK: If not found, try to find a blog where the title matches the slug structure
+    if (!blog) {
+      const searchTitle = normalizedSlug.split('-').join('%');
+      const { data: fallbackData } = await supabase
+        .from('blogs')
+        .select('*')
+        .ilike('title', `%${searchTitle}%`)
+        .limit(1);
+      
+      blog = fallbackData && fallbackData.length > 0 ? fallbackData[0] : null;
+    }
+
+    if (!blog) {
+      return res.status(404).json({ success: false, message: "Blog not found" });
+    }
+
+    // Safety: Verify status is Published (case-insensitive)
+    if (blog.status?.toLowerCase() !== 'published') {
+      return res.status(404).json({ success: false, message: "Blog not published" });
+    }
+
+    return res.status(200).json({ success: true, data: mapFromSupabase(blog) });
   } catch (error) {
     next(error);
   }
@@ -169,6 +248,14 @@ const updateBlog = async (req, res, next) => {
     const updates = mapToSupabase(body);
     // Remove undefined fields
     Object.keys(updates).forEach(key => updates[key] === undefined && delete updates[key]);
+
+    // DEBUG LOGGING
+    const fs = require('fs');
+    const logData = `\n--- UPDATE BLOG ${new Date().toISOString()} ---\n` +
+                    `RAW BODY FAQS: ${body.faqs}\n` +
+                    `UPDATES FAQS: ${JSON.stringify(updates.faqs, null, 2)}\n` +
+                    `-------------------------------------------\n`;
+    fs.appendFileSync('debug_update.log', logData);
 
     console.log("[Update Blog] Updates to apply:", updates);
 
@@ -207,4 +294,5 @@ module.exports = {
   updateBlog,
   deleteBlog,
   getBlogBySlug,
+  getBlogCategories,
 };

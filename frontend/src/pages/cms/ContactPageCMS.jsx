@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
-import { 
-  Save, 
-  Loader2, 
-  MapPin, 
-  Phone, 
-  Clock, 
-  Settings, 
-  Layout, 
+import {
+  Save,
+  Loader2,
+  MapPin,
+  Phone,
+  Clock,
+  Settings,
+  Layout,
   Image as ImageIcon,
   CheckCircle2,
   Plus,

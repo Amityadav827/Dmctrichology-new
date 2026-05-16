@@ -173,7 +173,7 @@ const ServiceListing = ({ services: initialServices = [], categories: initialCat
                       {/* CTA Button — small outlined Figma style */}
                       <div className="service-card-footer">
                         <Link
-                          href={service.buttonLink || "/contact"}
+                          href={`/details/${service.slug}`}
                           className="service-card-cta"
                         >
                           <EditableText sectionId="service-listing" fieldPath={`${index}.buttonText`}>

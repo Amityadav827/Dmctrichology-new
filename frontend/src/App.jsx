@@ -35,6 +35,7 @@ import ServiceListingCMS from "./pages/cms/ServiceListingCMS";
 import HeroCMS from "./pages/cms/HeroCMS";
 import PageCompositionEditor from "./pages/cms/PageCompositionEditor";
 import AboutUsCMS from "./pages/cms/AboutUsCMS";
+import AboutUsVisualBuilder from "./pages/cms/AboutUsVisualBuilder";
 import ServicesCMS from "./pages/cms/ServicesCMS";
 import MarqueeFeaturesCMS from "./pages/cms/MarqueeFeaturesCMS";
 import WhyChooseUsCMS from "./pages/cms/WhyChooseUsCMS";
@@ -57,6 +58,8 @@ import FaqEnquiryCMS from "./pages/cms/FaqEnquiryCMS";
 import IdealFrequencyCMS from "./pages/cms/IdealFrequencyCMS";
 import ContactPageCMS from "./pages/cms/ContactPageCMS";
 import BlogHeroCMS from "./pages/cms/BlogHeroCMS";
+import ServiceDetailCMS from "./pages/cms/ServiceDetailCMS";
+import Comments from "./pages/Comments";
 
 
 import RedirectList from "./pages/RedirectList";
@@ -84,6 +87,14 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <AboutUsCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/visual-builder-about"
+          element={
+            <ProtectedRoute permission="cms">
+              <AboutUsVisualBuilder />
             </ProtectedRoute>
           }
         />
@@ -303,6 +314,14 @@ function App() {
           }
         />
         <Route
+          path="comments"
+          element={
+            <ProtectedRoute permission="blog">
+              <Comments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="pages"
           element={
             <ProtectedRoute permission="cms">
@@ -419,6 +438,14 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <BlogHeroCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/service-details"
+          element={
+            <ProtectedRoute permission="cms">
+              <ServiceDetailCMS />
             </ProtectedRoute>
           }
         />
