@@ -1026,11 +1026,15 @@
 .service-gallery-thumbnails-wrapper {
   position: relative;
   margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .service-gallery-thumbnails {
   width: 100%;
   padding: 0;
+  flex: 1;
 }
 
 .service-thumbnail-slide {
@@ -1085,10 +1089,7 @@
 
 /* Thumbnail Navigation Arrows */
 .thumbnail-nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 15;
+  position: relative;
   width: 40px;
   height: 40px;
   background: #1a1a1a;
@@ -1101,20 +1102,23 @@
   box-shadow: 0 4px 16px rgba(26, 26, 26, 0.2);
   transition: all 0.3s ease;
   color: #ffffff;
+  flex-shrink: 0;
+  padding: 0;
+  transform: none;
 }
 
 .thumbnail-nav-btn:hover {
   background: #111111;
   box-shadow: 0 6px 24px rgba(26, 26, 26, 0.3);
-  transform: translateY(-50%) scale(1.05);
+  transform: scale(1.05);
 }
 
 .thumbnail-prev {
-  left: 8px;
+  order: -1;
 }
 
 .thumbnail-next {
-  right: 8px;
+  order: 3;
 }
 
 /* ─── VIDEO DISPLAY ─────────────────────────────────────────────────────── */
@@ -1526,8 +1530,6 @@
 @media (max-width: 1200px) {
   .intro-main-heading { font-size: 40px; }
   .intro-flex-row { gap: 40px; }
-  .thumbnail-prev { left: -40px; }
-  .thumbnail-next { right: -40px; }
 }
 
 @media (max-width: 992px) {
@@ -1549,8 +1551,6 @@
   .benefits-checklist-grid {
     grid-template-columns: 1fr;
   }
-  .thumbnail-prev { left: 0; }
-  .thumbnail-next { right: 0; }
   .service-thumbnail {
     width: 70px;
     height: 70px;
@@ -1578,7 +1578,8 @@
     width: 60px;
     height: 60px;
   }
-  .thumbnail-prev { left: 0; }
-  .thumbnail-next { right: 0; }
+  .service-gallery-thumbnails-wrapper {
+    gap: 12px;
+  }
 }
 
