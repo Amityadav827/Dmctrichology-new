@@ -17,11 +17,9 @@ const modules = {
     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
     [{ 'align': [] }],
     ['link', 'image', 'video'],
-    ['table'],
     ['blockquote', 'code-block'],
     ['clean']
   ],
-  table: true
 };
 
 // Derive the uploads base URL from the API base URL
