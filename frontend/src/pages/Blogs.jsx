@@ -4,7 +4,7 @@ import { Plus, Edit2, Trash2, ArrowLeft, Image as ImageIcon, Search, Eye, Filter
 import Loader from "../components/Loader";
 import Table from "../components/Table";
 import api from "../api/client";
-import { getBlogCategories, getGalleryItems } from "../api/services";
+import { getBlogCategories, getGalleryItems, createGalleryItems } from "../api/services";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { FRONTEND_URL } from "../utils/config";
@@ -286,6 +286,7 @@ function Blogs() {
   const quillRef = useRef(null);
 
   // Gallery Picker state
+  const [showGalleryPicker, setShowGalleryPicker] = useState(false);
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryLoading, setGalleryLoading] = useState(false);
   const [gallerySearch, setGallerySearch] = useState("");
@@ -308,9 +309,9 @@ function Blogs() {
           if (quillRef.current) {
             const range = quillRef.current.getSelection();
             setSavedRange(range);
-            // Switch to Gallery Picker view
+            // Open inline Gallery Picker
             fetchGallery();
-            setView("gallery-picker");
+            setShowGalleryPicker(true);
           }
         }
       }
@@ -472,6 +473,27 @@ function Blogs() {
     }
   };
 
+  const handleGalleryUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const upData = new FormData();
+    upData.append("image", file);
+    upData.append("title", file.name.split('.')[0]);
+    upData.append("status", "Active");
+
+    try {
+      setGalleryLoading(true);
+      await createGalleryItems(upData);
+      toast.success("Image uploaded to library");
+      fetchGallery();
+    } catch (error) {
+      toast.error("Upload failed");
+    } finally {
+      setGalleryLoading(false);
+    }
+  };
+
   const fetchGallery = async () => {
     setGalleryLoading(true);
     try {
@@ -507,7 +529,7 @@ function Blogs() {
     const range = savedRange || { index: quillRef.current.getLength(), length: 0 };
     quillRef.current.clipboard.dangerouslyPasteHTML(range.index, figureHtml);
     
-    setView("form");
+    setShowGalleryPicker(false);
     setSavedRange(null);
     toast.success("Image inserted at cursor position");
   };
@@ -515,12 +537,11 @@ function Blogs() {
   // Click to Edit Image Logic (Double Click)
   const handleEditorDoubleClick = (e) => {
     if (e.target.tagName === 'IMG') {
-      // Save current image context and switch to gallery for replacement
-      // In WordPress style, double click usually opens the media library to replace
+      // Save current image context and open drawer for replacement
       const range = quillRef.current ? quillRef.current.getSelection() : null;
       setSavedRange(range || { index: 0, length: 0 });
       fetchGallery();
-      setView("gallery-picker");
+      setShowGalleryPicker(true);
       toast("Select a new image to replace", { icon: '🔄' });
     }
   };
@@ -1007,94 +1028,123 @@ function Blogs() {
           </div>
         </form>
       </div>
-        {/* No Modals - All Media logic now handled via 'gallery-picker' view */}
-
-        {/* Gallery Picker View - Professional WordPress Style Insertion */}
-        {view === "gallery-picker" && (
-          <div className="animate-in slide-in-from-right duration-300" style={{ position: "fixed", inset: 0, zIndex: 200, background: "#F8FAFC", display: "flex", flexDirection: "column" }}>
-            <div style={{ padding: "1.25rem 2rem", background: "#FFF", borderBottom: "1px solid #E2E8F0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div>
-                <h2 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#0F172A", margin: 0 }}>Media Library</h2>
-                <p style={{ fontSize: "0.875rem", color: "#64748B", margin: 0 }}>Select an image to insert into your blog post</p>
+        {/* Inline Gallery Picker Drawer - Professional Editorial Flow */}
+        {showGalleryPicker && (
+          <>
+            {/* Backdrop for focus */}
+            <div 
+              onClick={() => setShowGalleryPicker(false)}
+              className="animate-fade-in"
+              style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(15, 23, 42, 0.4)", backdropFilter: "blur(4px)", cursor: "pointer" }} 
+            />
+            
+            {/* Right Drawer */}
+            <div 
+              className="animate-in slide-in-from-right duration-300" 
+              style={{ 
+                position: "fixed", 
+                top: 0, 
+                right: 0, 
+                bottom: 0, 
+                width: "550px", 
+                zIndex: 1001, 
+                background: "#F8FAFC", 
+                display: "flex", 
+                flexDirection: "column",
+                boxShadow: "-20px 0 50px rgba(0,0,0,0.15)",
+                borderLeft: "1px solid #E2E8F0"
+              }}
+            >
+              {/* Drawer Header */}
+              <div style={{ padding: "1.5rem 2rem", background: "#FFF", borderBottom: "1px solid #E2E8F0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  <h2 style={{ fontSize: "1.25rem", fontWeight: 800, color: "#0F172A", margin: 0 }}>Media Library</h2>
+                  <p style={{ fontSize: "0.8rem", color: "#64748B", margin: 0 }}>Select or upload an asset</p>
+                </div>
+                <button 
+                  type="button"
+                  onClick={() => setShowGalleryPicker(false)} 
+                  style={{ width: "32px", height: "32px", borderRadius: "50%", border: "1px solid #E2E8F0", background: "#FFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#64748B" }}
+                >
+                  <X size={18} />
+                </button>
               </div>
-              <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-                <div style={{ position: "relative", width: "300px" }}>
-                  <Search size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "#94A3B8" }} />
+
+              {/* Action Bar */}
+              <div style={{ padding: "1rem 2rem", background: "#FFF", borderBottom: "1px solid #F1F5F9", display: "flex", gap: "1rem", alignItems: "center" }}>
+                <div style={{ position: "relative", flex: 1 }}>
+                  <Search size={16} style={{ position: "absolute", left: "0.875rem", top: "50%", transform: "translateY(-50%)", color: "#94A3B8" }} />
                   <input 
                     type="text" 
-                    placeholder="Search by title..." 
+                    placeholder="Search library..." 
                     className="form-input" 
-                    style={{ paddingLeft: "2.75rem", borderRadius: "12px" }}
+                    style={{ paddingLeft: "2.5rem", borderRadius: "10px", height: "40px", fontSize: "0.875rem" }}
                     value={gallerySearch}
                     onChange={(e) => setGallerySearch(e.target.value)}
                   />
                 </div>
-                <button 
-                  onClick={() => { setView("form"); setSavedRange(null); }} 
-                  className="btn-secondary"
-                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
-                >
-                  <X size={18} /> Cancel
-                </button>
-              </div>
-            </div>
-
-            <div style={{ flex: 1, padding: "2rem", overflowY: "auto" }}>
-              {galleryLoading ? (
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "40vh", gap: "1rem" }}>
-                  <Loader />
-                  <p style={{ fontWeight: 600, color: "#64748B" }}>Loading your library...</p>
+                <div style={{ position: "relative" }}>
+                  <input type="file" accept="image/*" onChange={handleGalleryUpload} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer", zIndex: 10 }} />
+                  <button type="button" className="btn-primary" style={{ height: "40px", padding: "0 1rem", fontSize: "0.875rem", borderRadius: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
+                    <Plus size={16} /> Upload New
+                  </button>
                 </div>
-              ) : (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "1.5rem" }}>
-                  {galleryItems.filter(item => (item.title || "").toLowerCase().includes(gallerySearch.toLowerCase())).map((item) => (
-                    <div 
-                      key={item._id} 
-                      onClick={() => selectGalleryImage(item)}
-                      style={{ 
-                        background: "#FFF", 
-                        borderRadius: "16px", 
-                        border: "1px solid #E2E8F0", 
-                        overflow: "hidden", 
-                        cursor: "pointer", 
-                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                        boxShadow: "0 1px 3px rgba(0,0,0,0.05)"
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.transform = "translateY(-4px)";
-                        e.currentTarget.style.boxShadow = "0 12px 20px -8px rgba(0,0,0,0.15)";
-                        e.currentTarget.style.borderColor = "#2563EB";
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.05)";
-                        e.currentTarget.style.borderColor = "#E2E8F0";
-                      }}
-                    >
-                      <div style={{ aspectRatio: "1/1", overflow: "hidden", background: "#F1F5F9" }}>
-                        <img 
-                          src={item.image.startsWith('http') ? item.image : `${(import.meta.env.VITE_API_URL || "https://dmctrichology-1.onrender.com/api").replace(/\/api$/, "")}${item.image.startsWith('/') ? '' : '/'}${item.image}`} 
-                          alt={item.title} 
-                          style={{ width: "100%", height: "100%", objectFit: "cover" }} 
-                        />
-                      </div>
-                      <div style={{ padding: "1rem" }}>
-                        <h4 style={{ fontSize: "0.875rem", fontWeight: 700, color: "#1E293B", margin: "0 0 0.25rem 0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                          {item.title || "Untitled Asset"}
-                        </h4>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                           <span style={{ fontSize: "0.7rem", color: "#64748B" }}>SEO: {item.altText ? "✅" : "❌"}</span>
-                           <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center", color: "#2563EB" }}>
-                              <Plus size={14} />
-                           </div>
+              </div>
+
+              {/* Grid Content */}
+              <div style={{ flex: 1, padding: "1.5rem 2rem", overflowY: "auto" }}>
+                {galleryLoading ? (
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "30vh", gap: "1rem" }}>
+                    <Loader />
+                    <p style={{ fontSize: "0.875rem", color: "#64748B" }}>Accessing library...</p>
+                  </div>
+                ) : (
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "1rem" }}>
+                    {galleryItems.filter(item => (item.title || "").toLowerCase().includes(gallerySearch.toLowerCase())).map((item) => (
+                      <div 
+                        key={item._id} 
+                        onClick={() => selectGalleryImage(item)}
+                        style={{ 
+                          background: "#FFF", 
+                          borderRadius: "12px", 
+                          border: "1px solid #E2E8F0", 
+                          overflow: "hidden", 
+                          cursor: "pointer", 
+                          transition: "all 0.2s" 
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.borderColor = "#2563EB";
+                          e.currentTarget.style.boxShadow = "0 4px 12px rgba(37, 99, 235, 0.1)";
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.borderColor = "#E2E8F0";
+                          e.currentTarget.style.boxShadow = "none";
+                        }}
+                      >
+                        <div style={{ aspectRatio: "1/1", overflow: "hidden" }}>
+                          <img 
+                            src={item.image.startsWith('http') ? item.image : `${(import.meta.env.VITE_API_URL || "https://dmctrichology-1.onrender.com/api").replace(/\/api$/, "")}${item.image.startsWith('/') ? '' : '/'}${item.image}`} 
+                            alt={item.title} 
+                            style={{ width: "100%", height: "100%", objectFit: "cover" }} 
+                          />
+                        </div>
+                        <div style={{ padding: "0.5rem" }}>
+                          <p style={{ fontSize: "0.75rem", fontWeight: 600, color: "#1E293B", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                            {item.title || "Untitled"}
+                          </p>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Footer Information */}
+              <div style={{ padding: "1rem 2rem", background: "#FFF", borderTop: "1px solid #E2E8F0", fontSize: "0.75rem", color: "#94A3B8" }}>
+                Tip: Images are inserted exactly at your cursor position. Double-click any image in the editor to replace it.
+              </div>
             </div>
-          </div>
+          </>
         )}
       </>
     );
