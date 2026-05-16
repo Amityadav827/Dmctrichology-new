@@ -273,9 +273,11 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
           flex: 1.1;
           min-width: 0;
           position: relative;
+          overflow: visible;
         }
         .media-card-wrapper {
           position: relative;
+          overflow: visible;
         }
         .service-main-media-container {
           position: relative;
@@ -284,6 +286,7 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
           border-radius: 40px;
           box-shadow: 0 40px 100px -20px rgba(0,0,0,0.1);
           margin-bottom: 30px;
+          overflow: visible;
         }
         .service-main-image-viewport {
           width: 100%;
