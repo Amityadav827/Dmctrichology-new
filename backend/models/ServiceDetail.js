@@ -82,6 +82,13 @@ const ServiceDetailSchema = new mongoose.Schema({
     buttonText: { type: String, default: "Schedule Your Visit" }
   },
 
+  contentBlocks: [{
+    heading: { type: String, default: "" },
+    description: { type: String, default: "" },
+    sortOrder: { type: Number, default: 0 },
+    isVisible: { type: Boolean, default: true }
+  }],
+
   seo: {
     metaTitle: { type: String, default: "" },
     metaDescription: { type: String, default: "" },

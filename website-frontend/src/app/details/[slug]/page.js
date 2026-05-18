@@ -6,6 +6,7 @@ import ProcessSlider from '../../../components/ProcessSlider';
 import BeforeAfterTreatment from '../../../components/BeforeAfterTreatment';
 import FaqEnquiry from '../../../components/FaqEnquiry';
 import IdealFrequency from '../../../components/IdealFrequency';
+import ServiceContentBlock from '../../../components/ServiceContentBlock';
 import '../../service.css';
 import '../../details.css';
 
@@ -75,6 +76,7 @@ export default async function DynamicDetailsPage({ params }) {
     <div className="bg-white min-h-screen">
       <DetailsBanner data={banner || {}} />
       <ServiceIntro data={intro || {}} banner={banner || {}} />
+      <ServiceContentBlock data={service.contentBlocks || []} />
       <ProcessSlider data={process || {}} />
       <IdealFrequency data={idealFrequency || {}} />
       <BeforeAfterTreatment data={beforeAfter || {}} />

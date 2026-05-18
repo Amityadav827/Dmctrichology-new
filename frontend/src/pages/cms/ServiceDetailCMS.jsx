@@ -404,6 +404,9 @@ export default function ServiceDetailCMS() {
               }
             }
           }
+          if (!fetchedData.contentBlocks) {
+            fetchedData.contentBlocks = [];
+          }
           setData(fetchedData);
         }
       })
@@ -421,7 +424,15 @@ export default function ServiceDetailCMS() {
             beforeAfter: { beforeTitle: "Before Treatment Checklist", afterTitle: "Aftercare Instructions", beforePoints: [], afterPoints: [], sectionBackground: "#f9f7f2" },
             faqEnquiry: { faqTitle: "Common Concerns Addressed", faqSubtitle: "", faqItems: [], serviceOptions: [], formTitle: "Enquire About This Treatment", buttonText: "Schedule Your Visit", namePlaceholder: "Name*", emailPlaceholder: "E-Mail Address*", servicePlaceholder: "Type Of Service Enquiry*", datePlaceholder: "Select Date & Time*" },
             footerCta: { heading: "", description: "", emailPlaceholder: "", buttonText: "" },
-            seo: { metaTitle: "", metaDescription: "", canonicalUrl: "", ogImage: "", schemaScript: "" }
+            seo: { metaTitle: "", metaDescription: "", canonicalUrl: "", ogImage: "", schemaScript: "" },
+            contentBlocks: [
+              {
+                heading: "WHAT IS A HAIR TRANSPLANT?",
+                description: "A hair transplant is a minimally invasive surgical procedure in which hair follicles are extracted from a donor site (Generally the back or sides of the head) and transplanted to the balding or thinning areas.\n\nIn other words, we can say that hair is taken from one part of the scalp area and implanted into another part where there is almost no hair.\n\nHair transplants are generally performed by hair transplant surgeons. The procedure can take 4–8 hours; most people can return to work within 2–5 days.\n\nHair transplants can give permanent, natural-looking results. However, the transplanted hair will fall out within 2–3 weeks, and new growth won't be noticeable for a few months.",
+                sortOrder: 1,
+                isVisible: true
+              }
+            ]
           });
         } else {
           toast.error("Failed to load service details");
@@ -461,6 +472,38 @@ export default function ServiceDetailCMS() {
   const reorderArrayItem = (section, arrayField, idx, direction) => {
     const newArr = moveArrayItem(data[section][arrayField] || [], idx, direction);
     updateSectionField(section, arrayField, newArr);
+  };
+
+  const addContentBlock = () => {
+    setData(prev => ({
+      ...prev,
+      contentBlocks: [
+        ...(prev.contentBlocks || []),
+        { heading: "NEW CONTENT BLOCK", description: "", sortOrder: (prev.contentBlocks?.length || 0) + 1, isVisible: true }
+      ]
+    }));
+  };
+
+  const updateContentBlock = (idx, field, val) => {
+    setData(prev => {
+      const arr = [...(prev.contentBlocks || [])];
+      arr[idx] = { ...arr[idx], [field]: val };
+      return { ...prev, contentBlocks: arr };
+    });
+  };
+
+  const removeContentBlock = (idx) => {
+    setData(prev => ({
+      ...prev,
+      contentBlocks: (prev.contentBlocks || []).filter((_, i) => i !== idx)
+    }));
+  };
+
+  const reorderContentBlock = (idx, direction) => {
+    setData(prev => {
+      const newArr = moveArrayItem(prev.contentBlocks || [], idx, direction);
+      return { ...prev, contentBlocks: newArr };
+    });
   };
 
   const handleSave = async () => {
@@ -546,6 +589,7 @@ export default function ServiceDetailCMS() {
           <div className="flex flex-wrap gap-2 bg-slate-200/50 p-1.5 rounded-[20px] mb-8 w-fit">
             {[
               { id: "banner", label: "Hero & Intro", icon: Layout },
+              { id: "contentBlocks", label: "Content Blocks", icon: Type },
               { id: "process", label: "Process Steps", icon: List },
               { id: "idealFrequency", label: "Suitability & CTA", icon: CheckCircle },
               { id: "beforeAfter", label: "Before/After", icon: RefreshCw },
@@ -675,6 +719,113 @@ export default function ServiceDetailCMS() {
                 </div>
               </div>
               </>
+            )}
+
+            {activeTab === 'contentBlocks' && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                 <div className="flex justify-between items-center mb-6">
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><Type size={18} className="text-blue-500"/> Content Blocks</h3>
+                      <p className="text-xs text-slate-400 mt-1">Manage long-form informational blocks on the service details page</p>
+                    </div>
+                    <button 
+                      onClick={addContentBlock}
+                      className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-md shadow-blue-200"
+                    >
+                      <Plus size={13}/> Add Content Block
+                    </button>
+                 </div>
+
+                 <div className="space-y-6">
+                    {(data.contentBlocks || []).map((block, i) => (
+                       <div key={i} className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 relative group flex flex-col gap-4 shadow-sm">
+                          {/* Top row: heading and order controls */}
+                          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+                             <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 bg-slate-900 text-white rounded-lg flex items-center justify-center font-bold text-xs">
+                                   {i + 1}
+                                </div>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Block {i + 1}</span>
+                             </div>
+                             <div className="flex items-center gap-2">
+                                <button 
+                                  onClick={() => reorderContentBlock(i, 'up')} 
+                                  disabled={i === 0}
+                                  className="p-1.5 bg-white text-slate-500 rounded-lg hover:bg-slate-100 disabled:opacity-30 border border-slate-200"
+                                >
+                                   <ArrowUp size={14} />
+                                </button>
+                                <button 
+                                  onClick={() => reorderContentBlock(i, 'down')} 
+                                  disabled={i === (data.contentBlocks?.length || 0) - 1}
+                                  className="p-1.5 bg-white text-slate-500 rounded-lg hover:bg-slate-100 disabled:opacity-30 border border-slate-200"
+                                >
+                                   <ArrowDown size={14} />
+                                </button>
+                                <button 
+                                  onClick={() => removeContentBlock(i)} 
+                                  className="p-1.5 bg-red-50 text-red-500 rounded-lg hover:bg-red-100 border border-red-100"
+                                >
+                                   <Trash2 size={14} />
+                                </button>
+                             </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                             <div className="md:col-span-2">
+                                <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Heading Title</label>
+                                <input 
+                                  type="text" 
+                                  value={block.heading || ""} 
+                                  onChange={e => updateContentBlock(i, "heading", e.target.value)} 
+                                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500 transition-all" 
+                                  placeholder="e.g. WHAT IS A HAIR TRANSPLANT?" 
+                                />
+                             </div>
+                             <div>
+                                <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Settings</label>
+                                <div className="flex gap-4 h-[46px] items-center">
+                                   <label className="flex items-center gap-2 cursor-pointer">
+                                      <input 
+                                        type="checkbox" 
+                                        checked={block.isVisible !== false} 
+                                        onChange={e => updateContentBlock(i, "isVisible", e.target.checked)} 
+                                        className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4" 
+                                      />
+                                      <span className="text-xs font-bold text-slate-600">Visible</span>
+                                   </label>
+                                   <div className="flex items-center gap-1.5">
+                                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Order:</span>
+                                      <input 
+                                        type="number" 
+                                        value={block.sortOrder ?? (i + 1)} 
+                                        onChange={e => updateContentBlock(i, "sortOrder", parseInt(e.target.value, 10) || 0)} 
+                                        className="w-16 px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-center" 
+                                      />
+                                   </div>
+                                </div>
+                             </div>
+                             <div className="md:col-span-3">
+                                <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Description Content (Preserves spacing & paragraph line breaks)</label>
+                                <textarea 
+                                  value={block.description || ""} 
+                                  onChange={e => updateContentBlock(i, "description", e.target.value)} 
+                                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all min-h-[160px]" 
+                                  placeholder="Write informational details... Spacing and paragraph line breaks will be preserved." 
+                                />
+                             </div>
+                          </div>
+                       </div>
+                    ))}
+                    {(data.contentBlocks || []).length === 0 && (
+                       <div className="text-center py-12 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+                          <Type size={32} className="text-slate-300 mx-auto mb-3" />
+                          <p className="text-sm text-slate-400 font-bold">No Content Blocks added yet</p>
+                          <p className="text-xs text-slate-300 mt-1">Click "Add Content Block" to add a new uppercase heading and descriptions section.</p>
+                       </div>
+                    )}
+                 </div>
+              </div>
             )}
 
             {/* Other tabs remain as in stable version */}

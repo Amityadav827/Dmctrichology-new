@@ -202,7 +202,15 @@ const generateServiceData = (title, slug, type) => {
       serviceOptions: ["Laser Hair Removal", "Hair Transplant", "Hair Fall Treatment", "Skin Rejuvenation", "Other"],
       formTitle: "Enquire About This Treatment",
       buttonText: "Schedule Your Visit"
-    }
+    },
+    contentBlocks: (type === 'transplant' || slug.includes('hair-transplant')) ? [
+      {
+        heading: "WHAT IS A HAIR TRANSPLANT?",
+        description: "A hair transplant is a minimally invasive surgical procedure in which hair follicles are extracted from a donor site (Generally the back or sides of the head) and transplanted to the balding or thinning areas.\n\nIn other words, we can say that hair is taken from one part of the scalp area and implanted into another part where there is almost no hair.\n\nHair transplants are generally performed by hair transplant surgeons. The procedure can take 4–8 hours; most people can return to work within 2–5 days.\n\nHair transplants can give permanent, natural-looking results. However, the transplanted hair will fall out within 2–3 weeks, and new growth won't be noticeable for a few months.",
+        sortOrder: 1,
+        isVisible: true
+      }
+    ] : []
   };
 };
 
