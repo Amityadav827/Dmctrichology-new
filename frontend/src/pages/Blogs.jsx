@@ -357,6 +357,7 @@ function Blogs() {
     setLoading(true);
     try {
       const { data } = await api.get("/blogs");
+      console.log("[Blogs CMS Frontend] Received count of blogs:", data.data?.length || 0);
       setItems(data.data || []);
     } catch (error) {
       toast.error(error.response?.data?.message || "Unable to load blogs");
@@ -1325,6 +1326,7 @@ function Blogs() {
     );
   }
 
+  console.log("[Blogs CMS Frontend] Rendering count of blogs in view list:", currentItems.length);
   return (
     <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {/* Search and Filters */}

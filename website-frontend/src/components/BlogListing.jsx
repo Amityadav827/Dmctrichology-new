@@ -133,6 +133,7 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
     }
   }, [isEditMode, siteConfig]);
 
+  console.log("[BlogListing Frontend] Received count:", blogs.length, "Rendering count of blogs in grid:", filteredBlogs.length);
   return (
     <EditableSection sectionId="blog-listing" label="Blog Listing Section">
       <section className="blog-listing-wrapper">

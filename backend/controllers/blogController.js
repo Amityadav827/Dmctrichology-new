@@ -132,6 +132,7 @@ const getBlogs = async (req, res, next) => {
     if (error) return res.status(500).json({ success: false, message: error.message });
 
     const formattedBlogs = data.map(blog => mapFromSupabase(blog));
+    console.log("[getBlogs Backend] Returning count of blogs:", formattedBlogs.length);
     return res.status(200).json({
       success: true,
       count: formattedBlogs.length,
