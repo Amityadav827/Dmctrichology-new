@@ -2,7 +2,6 @@ import './globals.css';
 import { BuilderProvider } from '../context/BuilderContext';
 import { fetchSiteSettings, fetchHeader, fetchTopBar } from '../services/api';
 import GlobalLayoutWrapper from '../components/GlobalLayoutWrapper';
-import GlobalLoader from '../components/GlobalLoader';
 import { Suspense } from 'react';
 
 export const dynamic = 'force-dynamic';
@@ -41,7 +40,7 @@ export default async function RootLayout({ children }) {
       </head>
       <body>
         <BuilderProvider>
-          <Suspense fallback={<GlobalLoader />}>
+          <Suspense fallback={null}>
             <GlobalLayoutWrapper 
               initialHeader={headerRes?.data} 
               initialTopBar={topbarRes?.data}
