@@ -27,21 +27,42 @@ exports.getServiceDetailBySlug = async (req, res) => {
 exports.saveServiceDetail = async (req, res) => {
   try {
     const { slug } = req.params;
-    const updateData = req.body;
+    const updateData = { ...req.body };
     
-    // Ensure the slug in body matches the URL
+    // Ensure the slug matches URL param
     updateData.slug = slug;
+
+    // Migrate legacy intro.videos → intro.introMedia if present
+    if (updateData.intro) {
+      if (updateData.intro.videos && !updateData.intro.introMedia) {
+        // Convert old videos array to new introMedia format
+        updateData.intro.introMedia = (updateData.intro.videos || []).map(v => ({
+          type: v.videoUrl ? 'video' : 'image',
+          url: v.thumbnail || v.image || v.videoUrl || '',
+          title: v.title || '',
+          alt: v.title || '',
+          thumbnail: v.thumbnail || v.image || ''
+        }));
+      }
+      // Remove legacy videos field to avoid schema confusion
+      delete updateData.intro.videos;
+    }
 
     const serviceDetail = await ServiceDetail.findOneAndUpdate(
       { slug },
-      updateData,
-      { new: true, upsert: true, setDefaultsOnInsert: true }
+      { $set: updateData },
+      { 
+        new: true, 
+        upsert: true, 
+        setDefaultsOnInsert: true,
+        runValidators: false  // allow partial updates without full doc validation
+      }
     );
     
     res.status(200).json({ success: true, data: serviceDetail, message: 'Service details saved successfully' });
   } catch (error) {
     console.error('Error saving service details:', error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    res.status(500).json({ success: false, message: 'Server error', error: error.message });
   }
 };
 

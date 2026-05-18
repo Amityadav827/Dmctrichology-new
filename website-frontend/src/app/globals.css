@@ -896,3 +896,46 @@ a {
 .builder-active .hide-in-builder {
   display: none !important;
 }
+
+/* ─── GLOBAL PREMIUM LOADER ───────────────────────────────────────── */
+.global-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f6f2;
+}
+
+.loader-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-spinner {
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  border: 3px solid rgba(0,0,0,0.08);
+  border-top-color: #111827;
+  animation: spin 0.8s linear infinite;
+}
+
+.loader-logo-placeholder {
+  position: absolute;
+  font-family: 'Marcellus', serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #111827;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+

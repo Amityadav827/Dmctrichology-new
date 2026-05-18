@@ -1,15 +1,35 @@
 const supabase = require("../config/supabase");
 const uploadToSupabase = require("../utils/uploadToSupabase");
 
+// Detect media type from URL extension (fallback when alt_text marker absent)
+const detectMediaTypeFromUrl = (url = '') => {
+  const videoExts = ['.mp4', '.webm', '.mov', '.avi', '.ogg'];
+  const lower = url.toLowerCase();
+  if (videoExts.some(ext => lower.includes(ext))) return 'video';
+  return 'image';
+};
+
 const transformItem = (item) => {
   if (!item) return null;
+  const url = item.image_url || '';
+  // media_type encoded in alt_text as prefix "[video]" to avoid schema change
+  let mediaType = 'image';
+  let altText = item.alt_text || '';
+  if (altText.startsWith('[video]')) {
+    mediaType = 'video';
+    altText = altText.replace('[video]', '').trim();
+  } else {
+    mediaType = detectMediaTypeFromUrl(url);
+  }
   return {
     _id: item.id,
     id: item.id,
-    imageUrl: item.image_url,
-    image: item.image_url,
+    imageUrl: url,
+    image: url,
+    url: url,
+    mediaType,
     title: item.title,
-    altText: item.alt_text,
+    altText,
     description: item.description,
     order: item.order,
     status: item.status,
@@ -20,12 +40,13 @@ const transformItem = (item) => {
 
 const createGalleryItem = async (req, res, next) => {
   try {
+    // Accept field name 'images' (legacy) OR 'media' (new unified)
     const files = req.files || [];
 
     if (!files.length) {
       return res.status(400).json({
         success: false,
-        message: "At least one image is required"
+        message: "At least one file is required"
       });
     }
 
@@ -35,11 +56,15 @@ const createGalleryItem = async (req, res, next) => {
     
     const itemsToInsert = [];
     for (let i = 0; i < files.length; i++) {
-      const publicUrl = await uploadToSupabase(files[i], 'gallery');
+      const file = files[i];
+      const isVideo = file.mimetype.startsWith('video/');
+      const publicUrl = await uploadToSupabase(file, 'gallery');
+      // Encode media type in alt_text prefix so we can retrieve it without DB schema change
+      const storedAltText = isVideo ? `[video]${altText}` : altText;
       itemsToInsert.push({
         image_url: publicUrl,
         title,
-        alt_text: altText,
+        alt_text: storedAltText,
         description,
         order: Number.isFinite(Number(req.body.order)) ? Number(req.body.order) + i : i,
         status: req.body.status || "active",
@@ -68,6 +93,7 @@ const createGalleryItem = async (req, res, next) => {
     next(error);
   }
 };
+
 
 const getGalleryItems = async (req, res, next) => {
   try {

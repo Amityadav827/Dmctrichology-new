@@ -144,10 +144,19 @@ export default function Gallery() {
 
   // ── Upload Handlers ───────────────────────────────────
   const addFiles = (fileList) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "video/mp4", "video/webm", "video/quicktime", "video/mov"];
     const newFiles = Array.from(fileList)
-      .filter(f => f.type.startsWith("image/"))
-      .map(f => ({ file: f, preview: URL.createObjectURL(f), name: f.name }));
-    if (!newFiles.length) { toast.error("Only image files are allowed"); return; }
+      .filter(f => {
+        const isAllowed = allowedTypes.includes(f.type) || f.type.startsWith("image/") || f.type.startsWith("video/");
+        return isAllowed;
+      })
+      .map(f => ({
+        file: f,
+        preview: URL.createObjectURL(f),
+        name: f.name,
+        isVideo: f.type.startsWith("video/")
+      }));
+    if (!newFiles.length) { toast.error("Only image (JPG, PNG, WebP) and video (MP4, WEBM, MOV) files are allowed"); return; }
     setUploadFiles(prev => [...prev, ...newFiles]);
   };
 
@@ -165,14 +174,15 @@ export default function Gallery() {
   };
 
   const handleUpload = async () => {
-    if (!uploadFiles.length) { toast.error("Select at least one image"); return; }
+    if (!uploadFiles.length) { toast.error("Select at least one media file"); return; }
     setUploadProgress(true);
     try {
       const fd = new FormData();
       fd.append("title", uploadTitle);
-      uploadFiles.forEach(f => fd.append("images", f.file));
+      // Append files to unified field name 'media'
+      uploadFiles.forEach(f => fd.append("media", f.file));
       await createGalleryItems(fd);
-      toast.success(`${uploadFiles.length} image(s) uploaded`);
+      toast.success(`${uploadFiles.length} media item(s) uploaded successfully`);
       setUploadFiles([]);
       setUploadTitle("");
       fetchItems();
@@ -182,6 +192,7 @@ export default function Gallery() {
       setUploadProgress(false);
     }
   };
+
 
   // ── Select image (open detail panel) ─────────────────
   const selectItem = (item) => {
@@ -295,9 +306,14 @@ export default function Gallery() {
       {previewUrl && (
         <div onClick={() => setPreviewUrl(null)} style={{ position: "fixed", inset: 0, zIndex: 50, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
           <button onClick={() => setPreviewUrl(null)} style={{ position: "absolute", top: "1rem", right: "1rem", background: "rgba(255,255,255,0.15)", border: "none", borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#fff" }}><X size={18} /></button>
-          <img src={previewUrl} alt="Preview" style={{ maxWidth: "90vw", maxHeight: "88vh", borderRadius: 12, objectFit: "contain" }} onClick={e => e.stopPropagation()} />
+          {previewUrl.toLowerCase().includes('.mp4') || previewUrl.toLowerCase().includes('.webm') || previewUrl.toLowerCase().includes('.mov') || previewUrl.includes('video') ? (
+            <video src={previewUrl} controls autoPlay style={{ maxWidth: "90vw", maxHeight: "88vh", borderRadius: 12, outline: "none" }} onClick={e => e.stopPropagation()} />
+          ) : (
+            <img src={previewUrl} alt="Preview" style={{ maxWidth: "90vw", maxHeight: "88vh", borderRadius: 12, objectFit: "contain" }} onClick={e => e.stopPropagation()} />
+          )}
         </div>
       )}
+
 
       {/* Page Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.75rem" }}>
@@ -326,7 +342,7 @@ export default function Gallery() {
 
       {/* Upload Area */}
       <div className="card-glass" style={{ padding: "1.25rem" }}>
-        <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 0.875rem 0" }}>Upload Images</p>
+        <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 0.875rem 0" }}>Upload Media</p>
         <div
           onDragOver={e => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
@@ -335,17 +351,28 @@ export default function Gallery() {
           style={{ border: `2px dashed ${dragOver ? "#2563EB" : "#CBD5E1"}`, borderRadius: 10, background: dragOver ? "#EFF6FF" : "#F8FAFC", padding: "1.5rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", cursor: "pointer", transition: "all 0.2s" }}
         >
           <Upload size={28} color={dragOver ? "#2563EB" : "#94A3B8"} />
-          <p style={{ margin: 0, fontSize: "0.875rem", fontWeight: 500, color: dragOver ? "#2563EB" : "#64748B" }}>Drag & drop images here, or click to browse</p>
-          <p style={{ margin: 0, fontSize: "0.75rem", color: "#94A3B8" }}>PNG, JPG, WebP — up to 5 MB each</p>
+          <p style={{ margin: 0, fontSize: "0.875rem", fontWeight: 500, color: dragOver ? "#2563EB" : "#64748B" }}>Drag & drop images or videos here, or click to browse</p>
+          <p style={{ margin: 0, fontSize: "0.75rem", color: "#94A3B8" }}>PNG, JPG, WebP, MP4, WEBM, MOV — up to 50 MB each</p>
         </div>
-        <input ref={fileInputRef} type="file" accept="image/*" multiple style={{ display: "none" }} onChange={e => addFiles(e.target.files)} />
+        <input ref={fileInputRef} type="file" accept="image/*,video/*" multiple style={{ display: "none" }} onChange={e => addFiles(e.target.files)} />
 
         {uploadFiles.length > 0 && (
           <div style={{ marginTop: "1rem" }}>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.625rem", marginBottom: "0.875rem" }}>
               {uploadFiles.map((f, idx) => (
-                <div key={idx} style={{ position: "relative", width: 72, height: 72, borderRadius: 8, overflow: "hidden", border: "1px solid #E2E8F0" }}>
-                  <img src={f.preview} alt={f.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <div key={idx} style={{ position: "relative", width: 72, height: 72, borderRadius: 8, overflow: "hidden", border: "1px solid #E2E8F0", background: "#000" }}>
+                  {f.isVideo ? (
+                    <div style={{ width: "100%", height: "100%", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <video src={f.preview} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.8 }} muted />
+                      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.3)" }}>
+                        <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <span style={{ borderStyle: "solid", borderWidth: "4px 0 4px 7px", borderColor: "transparent transparent transparent #000", marginLeft: 1 }} />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <img src={f.preview} alt={f.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  )}
                   <button onClick={e => { e.stopPropagation(); removeUploadFile(idx); }} style={{ position: "absolute", top: 2, right: 2, background: "rgba(0,0,0,0.6)", border: "none", borderRadius: "50%", width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#fff" }}><X size={10} /></button>
                 </div>
               ))}
@@ -355,18 +382,19 @@ export default function Gallery() {
                 type="text"
                 value={uploadTitle}
                 onChange={e => setUploadTitle(e.target.value)}
-                placeholder="Optional title for all images"
+                placeholder="Optional title for all items"
                 className="form-input"
                 style={{ maxWidth: 280 }}
               />
               <button onClick={handleUpload} disabled={uploadProgress} className="btn-primary">
-                {uploadProgress ? "Uploading…" : `Upload ${uploadFiles.length} Image${uploadFiles.length !== 1 ? "s" : ""}`}
+                {uploadProgress ? "Uploading…" : `Upload ${uploadFiles.length} Item${uploadFiles.length !== 1 ? "s" : ""}`}
               </button>
               <button onClick={() => setUploadFiles([])} className="btn-secondary">Clear</button>
             </div>
           </div>
         )}
       </div>
+
 
       {/* Filters */}
       <div className="card" style={{ padding: "0.875rem 1.25rem", display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center" }}>
@@ -414,18 +442,19 @@ export default function Gallery() {
       {/* Main 2-column area */}
       <div style={{ display: "grid", gridTemplateColumns: selected ? "1fr 320px" : "1fr", gap: "1.5rem", alignItems: "start" }}>
 
-        {/* LEFT: Image Grid */}
+        {/* LEFT: Media Grid */}
         <div>
           {filtered.length === 0 ? (
             <div style={{ padding: "3rem", textAlign: "center", color: "#94A3B8", background: "#fff", borderRadius: 12, border: "1px solid #E2E8F0" }}>
               <ImageIcon size={40} style={{ marginBottom: "0.75rem", opacity: 0.4 }} />
-              <p style={{ margin: 0, fontSize: "0.875rem" }}>No images found. Upload some above.</p>
+              <p style={{ margin: 0, fontSize: "0.875rem" }}>No media items found. Upload some above.</p>
             </div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "0.875rem" }}>
               {filtered.map(item => {
                 const isChecked = selectedIds.has(item._id);
                 const isActive = selected?._id === item._id;
+                const isVideo = item.mediaType === "video";
                 return (
                 <div
                   key={item._id}
@@ -454,8 +483,24 @@ export default function Gallery() {
                     </div>
                   </div>
 
-                  {/* Image */}
-                  <div style={{ height: 140, overflow: "hidden", background: "#F1F5F9" }}>
+                  {/* Media Content */}
+                  <div style={{ height: 140, overflow: "hidden", background: "#000", position: "relative" }}>
+                    {isVideo ? (
+                      <div style={{ width: "100%", height: "100%", position: "relative" }}>
+                        <video
+                          src={getImgUrl(item.image)}
+                          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                          muted
+                          playsInline
+                        />
+                        {/* Play Icon Overlay */}
+                        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.25)" }}>
+                          <div style={{ width: 34, height: 34, borderRadius: "50%", background: "rgba(255,255,255,0.9)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.2)" }}>
+                            <span style={{ borderStyle: "solid", borderWidth: "6px 0 6px 10px", borderColor: "transparent transparent transparent #000", marginLeft: 2 }} />
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
                       <img
                         src={getImgUrl(item.image) || "https://placehold.co/600x400?text=Gallery"}
                         alt={item.altText || item.title || "Gallery"}
@@ -467,6 +512,7 @@ export default function Gallery() {
                           e.target.src = "https://placehold.co/600x400?text=Image+Not+Found";
                         }}
                       />
+                    )}
                   </div>
 
                   {/* Status badge */}
@@ -498,6 +544,7 @@ export default function Gallery() {
           )}
         </div>
 
+
         {/* RIGHT: Detail Panel (sticky) */}
         {selected && (
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem", position: "sticky", top: 80 }}>
@@ -509,16 +556,25 @@ export default function Gallery() {
               </div>
 
               {/* Preview */}
-              <div style={{ borderRadius: 10, overflow: "hidden", marginBottom: "1rem", border: "1px solid #E2E8F0", cursor: "pointer", height: 180 }} onClick={() => setPreviewUrl(getImgUrl(selected.image))}>
-                <img 
-                  src={getImgUrl(selected.image)} 
-                  alt={selected.altText || "Preview"} 
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }} 
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "https://placehold.co/600x400?text=Image+Not+Found";
-                  }}
-                />
+              <div style={{ borderRadius: 10, overflow: "hidden", marginBottom: "1rem", border: "1px solid #E2E8F0", cursor: "pointer", height: 180, background: "#000" }} onClick={() => setPreviewUrl(getImgUrl(selected.image))}>
+                {selected.mediaType === "video" ? (
+                  <video
+                    src={getImgUrl(selected.image)}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    muted
+                    playsInline
+                  />
+                ) : (
+                  <img 
+                    src={getImgUrl(selected.image)} 
+                    alt={selected.altText || "Preview"} 
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }} 
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "https://placehold.co/600x400?text=Image+Not+Found";
+                    }}
+                  />
+                )}
               </div>
 
               {/* Upload date */}
@@ -529,12 +585,13 @@ export default function Gallery() {
               {/* Fields */}
               <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                 <div>
-                  <label className="form-label">Image URL</label>
+                  <label className="form-label">{selected.mediaType === "video" ? "Video URL" : "Image URL"}</label>
                   <div style={{ display: "flex", gap: "0.5rem" }}>
                     <input type="text" readOnly value={getImgUrl(selected.image)} className="form-input" style={{ flex: 1, backgroundColor: "#F8FAFC", color: "#64748B", cursor: "text", fontSize: "0.75rem" }} />
                     <button type="button" onClick={() => { navigator.clipboard.writeText(getImgUrl(selected.image)); toast.success("URL copied!"); }} className="btn-secondary" style={{ padding: "0 0.75rem", fontSize: "0.8rem", whiteSpace: "nowrap" }}>Copy URL</button>
                   </div>
                 </div>
+
                 <div>
                   <label className="form-label">Title</label>
                   <input type="text" value={detailForm.title} onChange={e => setDetailForm(p => ({ ...p, title: e.target.value }))} className="form-input" placeholder="Image title" />

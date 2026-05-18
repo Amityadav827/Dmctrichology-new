@@ -1,11 +1,28 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Star, Clock } from 'lucide-react';
+import { Star, StarHalf, Clock } from 'lucide-react';
 import EditableText from './Editable/EditableText';
 import EditableImage from './Editable/EditableImage';
 import Link from 'next/link';
 import { useBuilder } from '../context/BuilderContext';
 import EditableSection from './Editable/EditableSection';
+
+const renderListingStars = (rating) => {
+  const stars = [];
+  const numericRating = parseFloat(rating) || 0;
+
+  for (let i = 1; i <= 5; i++) {
+    if (numericRating >= i) {
+      stars.push(<Star key={i} size={11} fill="#F5B301" color="#F5B301" className="listing-star" />);
+    } else if (numericRating >= i - 0.5) {
+      stars.push(<StarHalf key={i} size={11} fill="#F5B301" color="#F5B301" className="listing-star" />);
+    } else {
+      stars.push(<Star key={i} size={11} color="#D1D5DB" className="listing-star" />);
+    }
+  }
+
+  return stars;
+};
 
 const ServiceListing = ({ services: initialServices = [], categories: initialCategories = [] }) => {
   const { isEditMode, siteConfig } = useBuilder();
@@ -144,17 +161,27 @@ const ServiceListing = ({ services: initialServices = [], categories: initialCat
                       </h3>
 
                       {/* Rating + Duration */}
-                      <div className="service-meta-row">
-                        <div className="service-rating">
-                          <Star size={11} fill="#D4AF37" color="#D4AF37" />
-                          <span>
-                            <EditableText sectionId="service-listing" fieldPath={`${index}.rating`}>
-                              {service.rating || "4.8"}
-                            </EditableText>
-                          </span>
+                      <div className="service-meta-row-premium">
+                        <span className="rating-num-premium">
+                          <EditableText sectionId="service-listing" fieldPath={`${index}.rating`}>
+                            {String(service.rating || "4.8")}
+                          </EditableText>
+                        </span>
+                        
+                        <div className="listing-stars-box">
+                          {renderListingStars(service.rating || 4.8)}
                         </div>
-                        <div className="service-duration">
-                          <Clock size={11} className="service-duration-icon" />
+                        
+                        <span className="review-count-premium">
+                          (<EditableText sectionId="service-listing" fieldPath={`${index}.reviewCount`}>
+                            {String(service.reviewCount || "1250")}
+                          </EditableText> Reviews)
+                        </span>
+
+                        <span className="meta-separator-premium">•</span>
+                        
+                        <div className="service-duration-premium">
+                          <Clock size={12} className="duration-icon-premium" />
                           <span>
                             <EditableText sectionId="service-listing" fieldPath={`${index}.duration`}>
                               {service.duration || "45 mins"}

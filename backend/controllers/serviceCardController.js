@@ -1,9 +1,30 @@
 const ServiceCard = require("../models/ServiceCard");
+const ServiceDetail = require("../models/ServiceDetail");
 
 exports.getServices = async (req, res) => {
   try {
     const services = await ServiceCard.find().sort({ sortOrder: 1 });
-    res.status(200).json({ success: true, data: services });
+    
+    // Dynamically retrieve real-time rating, reviewCount, and duration from corresponding ServiceDetail
+    const populatedServices = await Promise.all(
+      services.map(async (service) => {
+        const detail = await ServiceDetail.findOne({ slug: service.slug }).lean();
+        
+        // Merge values cleanly with safe backward compatibility fallbacks
+        const ratingVal = detail?.banner?.rating ?? 4.8;
+        const reviewCountVal = detail?.banner?.reviewCount ?? 1250;
+        const durationVal = detail?.banner?.duration || detail?.intro?.duration || service.duration || '45 mins';
+        
+        return {
+          ...service.toObject(),
+          rating: ratingVal,
+          reviewCount: reviewCountVal,
+          duration: durationVal
+        };
+      })
+    );
+
+    res.status(200).json({ success: true, data: populatedServices });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

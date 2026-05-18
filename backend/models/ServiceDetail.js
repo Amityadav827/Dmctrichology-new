@@ -10,7 +10,8 @@ const ServiceDetailSchema = new mongoose.Schema({
     title: { type: String, default: "" },
     subtitle: { type: String, default: "" },
     duration: { type: String, default: "" },
-    rating: { type: String, default: "4.9" },
+    rating: { type: Number, default: 4.9 },
+    reviewCount: { type: Number, default: 1250 },
     buttonText: { type: String, default: "Book Consultation" },
     backgroundImage: { type: String, default: "" },
     secondaryTitle: { type: String, default: "" },
@@ -28,11 +29,15 @@ const ServiceDetailSchema = new mongoose.Schema({
     longDescription: { type: String, default: "" },
     benefits: [{ text: { type: String } }],
     closingText: { type: String, default: "" },
-    introImages: [{
-      image: { type: String, default: "" },
+    introMedia: [{
+      type: { type: String, default: "image", enum: ["image", "video"] },
+      url: { type: String, default: "" },
       title: { type: String, default: "" },
-      alt: { type: String, default: "" }
+      alt: { type: String, default: "" },
+      thumbnail: { type: String, default: "" }
     }],
+    // Legacy field kept for backward compat — do not use in new code
+    videos: { type: Array, default: undefined }
   },
 
   process: {

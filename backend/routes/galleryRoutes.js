@@ -14,7 +14,21 @@ const router = express.Router();
 
 router.use(protect, adminOnly);
 
-router.route("/").post(upload.array("images", 20), createGalleryItem).get(getGalleryItems);
+router.route("/")
+  .post(upload.fields([
+    { name: 'images', maxCount: 20 },  // legacy field name
+    { name: 'media', maxCount: 20 }    // new unified field name
+  ]), (req, res, next) => {
+    // Normalize: merge 'media' files into req.files array format
+    if (!req.files) req.files = [];
+    else if (!Array.isArray(req.files)) {
+      const combined = [...(req.files.images || []), ...(req.files.media || [])];
+      req.files = combined;
+    }
+    next();
+  }, createGalleryItem)
+  .get(getGalleryItems);
+
 router
   .route("/:id")
   .get(getGalleryItemById)

@@ -7,18 +7,38 @@ export default function Navbar({ cmsMenu }) {
   const [defaultMenuItems] = useState([
     { label: 'Home', link: '/' },
     { label: 'About Us', link: '/about', dropdown: [{label: 'Dr. Nandani Dadu', link: '/about/dr-nandani'}] },
-    { label: 'Services', link: '/services', dropdown: [{label: 'Hair Transplant', link: '/services/hair-transplant'}] },
+    { label: 'Services', link: '/service', dropdown: [{label: 'Hair Transplant', link: '/details/fue-hair-transplant'}] },
     { label: 'Results', link: '/results' },
     { label: 'Testimonials', link: '/testimonials' },
     { label: 'Blog', link: '/blog' },
-    { label: 'Contact Us', link: '/contact' }
+    { label: 'Contact Us', link: '/contact-us' }
   ]);
   
   const menuItems = cmsMenu && cmsMenu.length > 0 ? cmsMenu : defaultMenuItems;
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef(null);
 
-  // Static items for now, dynamic fetch handled by Header parent
+  // Helper to ensure absolute links (starts with '/') and maps legacy '/services' to '/service'
+  const ensureAbsoluteLink = (link) => {
+    if (!link) return '/';
+    let clean = link.trim();
+    if (clean === 'services') clean = 'service';
+    if (clean === '/services') clean = '/service';
+    if (clean === 'contact') clean = 'contact-us';
+    if (clean === '/contact') clean = '/contact-us';
+    
+    if (
+      clean.startsWith('/') || 
+      clean.startsWith('#') || 
+      clean.startsWith('http://') || 
+      clean.startsWith('https://') || 
+      clean.startsWith('mailto:') || 
+      clean.startsWith('tel:')
+    ) {
+      return clean;
+    }
+    return `/${clean}`;
+  };
 
   // Close menu on outside click
   useEffect(() => {
@@ -57,7 +77,7 @@ export default function Navbar({ cmsMenu }) {
         {menuItems.map((item, i) => (
           <div key={i} className="nav-item" style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
             <a
-              href={item.link}
+              href={ensureAbsoluteLink(item.link)}
               onClick={() => setIsOpen(false)}
             >
               {item.label}
@@ -68,7 +88,7 @@ export default function Navbar({ cmsMenu }) {
                 {(item.dropdown || item.submenu).map((sub, j) => (
                   <a
                     key={j}
-                    href={sub.link}
+                    href={ensureAbsoluteLink(sub.link)}
                     className="dropdown-item"
                     onClick={() => setIsOpen(false)}
                   >

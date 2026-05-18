@@ -4,7 +4,7 @@ import TopBar from '../components/TopBar';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-export default function GlobalLayoutWrapper({ children }) {
+export default function GlobalLayoutWrapper({ children, initialHeader, initialTopBar }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   
@@ -17,8 +17,8 @@ export default function GlobalLayoutWrapper({ children }) {
   
   return (
     <>
-      {!isEditingFooter && <TopBar />}
-      {!isEditingFooter && <Header />}
+      {!isEditingFooter && <TopBar initialTopBar={initialTopBar} />}
+      {!isEditingFooter && <Header initialHeader={initialHeader} />}
       
       <main>
         {/* Hide main content if we are JUST editing header/footer to avoid confusion */}

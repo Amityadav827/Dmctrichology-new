@@ -6,8 +6,8 @@ import Link from 'next/link';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
-export default function Header() {
-  const [headerData, setHeaderData] = useState(null);
+export default function Header({ initialHeader }) {
+  const [headerData, setHeaderData] = useState(initialHeader || null);
 
   useEffect(() => {
     fetchHeader().then(data => {

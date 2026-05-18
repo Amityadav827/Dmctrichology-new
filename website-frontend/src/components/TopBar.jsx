@@ -5,7 +5,7 @@ import { useBuilder } from '../context/BuilderContext';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
-export default function TopBar() {
+export default function TopBar({ initialTopBar }) {
   const { topBarCMS, setTopBarCMS } = useBuilder();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function TopBar() {
     });
   }, [setTopBarCMS]);
 
-  const topBarData = topBarCMS;
+  const topBarData = topBarCMS || initialTopBar;
 
   const fallbackSettings = {
     phones: ['+91-8527830194', '+91-9810939319'],
