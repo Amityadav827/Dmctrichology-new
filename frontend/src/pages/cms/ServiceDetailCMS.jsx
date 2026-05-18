@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import {
   Save, Loader2, Layout, Type, List, CheckCircle, HelpCircle,
   Image as ImageIcon, Video, Plus, Trash2, RefreshCw, Globe, 
-  ArrowUp, ArrowDown, Upload, Film, ExternalLink
+  ArrowUp, ArrowDown, Upload, Film, ExternalLink, Star
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
