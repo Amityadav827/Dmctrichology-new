@@ -450,13 +450,13 @@
   margin-bottom: 18px;
   flex: 1;
 
-  /* Clamp to 5 lines & Prevent stretching */
+  /* Clamp to 4 lines & Prevent stretching */
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 112px;
+  max-height: 90px;
 }
 
 /* ─── CARD FOOTER — CTA ─────────────────────────────────────────── */
