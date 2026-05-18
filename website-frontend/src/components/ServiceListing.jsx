@@ -129,7 +129,7 @@ const ServiceListing = ({ services: initialServices = [], categories: initialCat
             <div className="sidebar-promo-card">
               <h4>Expert Consultation</h4>
               <p>Get personalized advice from our top trichologists.</p>
-              <Link href="/contact" className="promo-link">Book Now →</Link>
+              <Link href="/contact-us" className="promo-link">Book Now →</Link>
             </div>
           </div>
         </aside>
