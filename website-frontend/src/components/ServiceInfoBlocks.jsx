@@ -11,24 +11,22 @@ export default function ServiceInfoBlocks({ data }) {
   if (activeBlocks.length === 0) return null;
 
   return (
-    <div className="service-info-blocks-wrapper">
+    <div className="service-infoblocks-wrapper">
       {activeBlocks.map((block, i) => {
         const isCream = block.backgroundVariant === "cream";
         return (
           <section 
             key={i} 
-            className={`py-24 ${isCream ? "bg-[#FAF9F6]" : "bg-white"} border-b border-neutral-100`}
+            className={`service-infoblocks-item ${isCream ? "bg-cream" : "bg-white"}`}
           >
-            <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-              <div className="max-w-[900px] mx-auto">
-                <h2 className="text-3xl md:text-4xl text-neutral-900 font-serif mb-8 uppercase tracking-widest leading-snug">
-                  {block.heading}
-                </h2>
-                <div className="w-12 h-[1px] bg-[#c5a880] mb-8"></div>
-                <p className="text-base text-neutral-600 leading-relaxed font-light whitespace-pre-line">
-                  {block.description}
-                </p>
-              </div>
+            <div className="service-infoblocks-container">
+              <h2 className="service-infoblocks-heading">
+                {block.heading}
+              </h2>
+              <div className="service-infoblocks-divider"></div>
+              <p className="service-infoblocks-desc">
+                {block.description}
+              </p>
             </div>
           </section>
         );

@@ -20,42 +20,39 @@ export default function ServiceEditorialFaq({ data }) {
   };
 
   return (
-    <section className="service-editorial-faq py-24 bg-white border-t border-neutral-100">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-        <div className="max-w-[800px] mx-auto text-center mb-16">
-          <span className="text-[10px] uppercase tracking-widest text-[#c5a880] font-bold block mb-2">Expert Answers</span>
-          <h2 className="text-3xl md:text-4xl text-neutral-900 font-serif uppercase tracking-wider leading-snug">
+    <section className="service-edfaq-section">
+      <div className="service-edfaq-container">
+        <div className="service-edfaq-header">
+          <span className="service-edfaq-label">Expert Answers</span>
+          <h2 className="service-edfaq-heading">
             Editorial FAQ
           </h2>
-          <div className="w-16 h-[1px] bg-[#c5a880] mx-auto mt-4"></div>
+          <div className="service-edfaq-divider"></div>
         </div>
 
-        <div className="max-w-[900px] mx-auto space-y-4">
+        <div className="service-edfaq-list">
           {activeFaqs.map((faq, i) => {
             const isOpen = activeIndex === i;
             return (
-              <div 
-                key={i} 
-                className="bg-neutral-50 rounded-2xl border border-neutral-100/60 overflow-hidden transition-all duration-300"
-              >
+              <div key={i} className="service-edfaq-item">
                 <button
                   onClick={() => toggleFaq(i)}
-                  className="w-full px-6 py-6 md:px-8 flex items-center justify-between text-left gap-4 hover:bg-[#FAF9F6] transition-colors"
+                  className="service-edfaq-btn"
                 >
-                  <span className="text-base font-serif text-neutral-900 uppercase tracking-wider font-bold">
+                  <span className="service-edfaq-title">
                     {faq.question}
                   </span>
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-white border border-neutral-200/50 flex items-center justify-center text-neutral-600 shadow-sm">
-                    {isOpen ? <Minus size={12} /> : <Plus size={12} />}
+                  <div className="service-edfaq-icon-wrap">
+                    {isOpen ? (
+                      <Minus className="service-edfaq-icon" />
+                    ) : (
+                      <Plus className="service-edfaq-icon" />
+                    )}
                   </div>
                 </button>
                 
-                <div 
-                  className={`transition-all duration-500 ease-in-out overflow-hidden ${
-                    isOpen ? "max-h-[800px] opacity-100 border-t border-neutral-100" : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div className="px-6 py-6 md:px-8 text-sm text-neutral-600 leading-relaxed font-light whitespace-pre-line bg-white">
+                <div className={`service-edfaq-content ${isOpen ? "open" : ""}`}>
+                  <div className="service-edfaq-content-inner">
                     {faq.answer}
                   </div>
                 </div>

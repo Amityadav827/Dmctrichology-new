@@ -11,31 +11,28 @@ export default function ServiceTechniques({ data }) {
   if (activeTechniques.length === 0 && !sectionHeading) return null;
 
   return (
-    <section className="service-techniques-section py-24 bg-white">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-        <div className="max-w-[800px] mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl text-neutral-900 font-serif mb-4 uppercase tracking-wider leading-snug">
+    <section className="service-techniques-section">
+      <div className="service-techniques-container">
+        <div className="service-techniques-header">
+          <h2 className="service-techniques-heading">
             {sectionHeading || "Procedural Techniques"}
           </h2>
-          <div className="w-16 h-[1px] bg-[#c5a880] mx-auto"></div>
+          <div className="service-techniques-divider"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="service-techniques-grid">
           {activeTechniques.map((tech, i) => {
             const formattedNum = String(i + 1).padStart(2, "0");
             return (
-              <div 
-                key={i} 
-                className="bg-neutral-50 hover:bg-[#FAF9F6] p-8 rounded-3xl border border-neutral-100/60 hover:border-[#FAF9F6] hover:shadow-2xl hover:shadow-neutral-200/50 transition-all duration-500 flex flex-col justify-between"
-              >
+              <div key={i} className="service-techniques-card">
                 <div>
-                  <div className="text-[44px] font-serif text-[#c5a880]/30 font-light mb-6 tracking-tight">
+                  <div className="service-techniques-num">
                     {formattedNum}
                   </div>
-                  <h3 className="text-lg font-serif text-neutral-900 uppercase tracking-widest mb-4 font-bold">
+                  <h3 className="service-techniques-title">
                     {tech.title}
                   </h3>
-                  <p className="text-sm text-neutral-600 leading-relaxed font-light white-space-pre-line">
+                  <p className="service-techniques-desc">
                     {tech.description}
                   </p>
                 </div>
