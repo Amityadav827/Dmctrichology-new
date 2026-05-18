@@ -115,14 +115,11 @@ const createBlog = async (req, res, next) => {
 
 const getBlogs = async (req, res, next) => {
   try {
-    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
-    const limit = Math.max(parseInt(req.query.limit, 10) || 10, 1);
-    const skip = (page - 1) * limit;
     const search = String(req.query.search || "").trim();
 
     let query = supabase.from('blogs').select('*, category:blog_categories(name)', { count: 'exact' });
     if (search) {
-      query = query.or(`title.ilike.%${search}%,author.ilike.%${search}%,short_description.ilike.%${search}%`);
+      query = query.or(`title.ilike.%${search}%,author.ilike.%${search}%,slug.ilike.%${search}%`);
     }
 
     if (req.query.categoryId) {
@@ -130,9 +127,7 @@ const getBlogs = async (req, res, next) => {
     }
 
     const { data, count, error } = await query
-      .order('blog_date', { ascending: false })
-      .order('created_at', { ascending: false })
-      .range(skip, skip + limit - 1);
+      .order('created_at', { ascending: false });
 
     if (error) return res.status(500).json({ success: false, message: error.message });
 
@@ -142,10 +137,10 @@ const getBlogs = async (req, res, next) => {
       count: formattedBlogs.length,
       data: formattedBlogs,
       pagination: {
-        page,
-        limit,
+        page: 1,
+        limit: formattedBlogs.length || 1,
         total: count,
-        totalPages: Math.max(Math.ceil(count / limit), 1),
+        totalPages: 1,
       },
     });
   } catch (error) {

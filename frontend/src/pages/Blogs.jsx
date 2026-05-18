@@ -691,15 +691,16 @@ function Blogs() {
   // Table filtering and pagination
   const filteredItems = useMemo(() => {
     return items.filter(item => {
-      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            item.author.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = (item.title || "").toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            (item.author || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            (item.slug || "").toLowerCase().includes(searchQuery.toLowerCase());
       const matchesStatus = statusFilter === "All" || item.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
   }, [items, searchQuery, statusFilter]);
 
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
-  const currentItems = filteredItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalPages = 1;
+  const currentItems = filteredItems;
 
   if (loading) {
     return <Loader label="Loading blogs..." />;
@@ -1423,29 +1424,19 @@ function Blogs() {
           ))}
           {currentItems.length === 0 && (
             <tr>
-              <td colSpan={6} style={{ padding: "3rem", textAlign: "center", color: "#94A3B8", fontSize: "0.875rem" }}>
+              <td colSpan={7} style={{ padding: "3rem", textAlign: "center", color: "#94A3B8", fontSize: "0.875rem" }}>
                 No blogs found matching your criteria.
               </td>
             </tr>
           )}
         </Table>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "1rem", flexWrap: "wrap", gap: "0.5rem" }}>
-            <span style={{ fontSize: "0.875rem", color: "#64748B" }}>
-              Showing {(currentPage - 1) * itemsPerPage + 1}–{Math.min(currentPage * itemsPerPage, filteredItems.length)} of {filteredItems.length}
-            </span>
-            <div style={{ display: "flex", gap: "0.25rem" }}>
-              {Array.from({ length: totalPages }).map((_, i) => (
-                <button key={i} onClick={() => setCurrentPage(i + 1)}
-                  style={{ width: "32px", height: "32px", borderRadius: "6px", border: "1px solid", borderColor: currentPage === i + 1 ? "#2563EB" : "#E2E8F0", background: currentPage === i + 1 ? "#2563EB" : "#FFFFFF", color: currentPage === i + 1 ? "#FFFFFF" : "#475569", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer" }}>
-                  {i + 1}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Blog Count Summary */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "1rem", flexWrap: "wrap", gap: "0.5rem" }}>
+          <span style={{ fontSize: "0.875rem", color: "#64748B" }}>
+            Showing all {filteredItems.length} blog{filteredItems.length !== 1 ? 's' : ''}
+          </span>
+        </div>
       </div>
     </div>
   );
