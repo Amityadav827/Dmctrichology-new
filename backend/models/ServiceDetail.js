@@ -28,11 +28,15 @@ const ServiceDetailSchema = new mongoose.Schema({
     longDescription: { type: String, default: "" },
     benefits: [{ text: { type: String } }],
     closingText: { type: String, default: "" },
-    introImages: [{
-      image: { type: String, default: "" },
+    introMedia: [{
+      type: { type: String, default: "image", enum: ["image", "video"] },
+      url: { type: String, default: "" },
       title: { type: String, default: "" },
-      alt: { type: String, default: "" }
+      alt: { type: String, default: "" },
+      thumbnail: { type: String, default: "" }
     }],
+    // Legacy field kept for backward compat — do not use in new code
+    videos: { type: Array, default: undefined }
   },
 
   process: {

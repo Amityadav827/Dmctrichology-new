@@ -3,21 +3,209 @@ import axios from "../../api/client";
 import toast from "react-hot-toast";
 import {
   Save, Loader2, Layout, Type, List, CheckCircle, HelpCircle,
-  Image as ImageIcon, Plus, Trash2, RefreshCw, Globe, ArrowUp, ArrowDown, Settings
+  Image as ImageIcon, Video, Plus, Trash2, RefreshCw, Globe, 
+  ArrowUp, ArrowDown, Upload, Film, ExternalLink
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-// Helper component for Media Uploads
+// ─── Unified Media Item Editor (supports Image + Video) ───────────────────────
+function MediaItemEditor({ item, index, onUpdate, onRemove }) {
+  const [uploading, setUploading] = useState(false);
+  const [thumbUploading, setThumbUploading] = useState(false);
+
+  const uploadFile = async (file, fieldName, setLoadingFn) => {
+    const fd = new FormData();
+    fd.append('image', file);
+    setLoadingFn(true);
+    try {
+      const res = await axios.post('/service-details/upload', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (res.data?.success) {
+        onUpdate(fieldName, res.data.url);
+        toast.success(fieldName === 'url' ? "Media uploaded!" : "Thumbnail uploaded!");
+      } else {
+        toast.error("Upload failed");
+      }
+    } catch {
+      toast.error("Upload error");
+    } finally {
+      setLoadingFn(false);
+    }
+  };
+
+  const isVideo = item.type === 'video';
+  const previewUrl = isVideo ? (item.thumbnail || '') : (item.url || '');
+
+  return (
+    <div className="group relative bg-white rounded-[24px] border-2 border-slate-100 hover:border-blue-200 p-6 transition-all duration-300 shadow-sm hover:shadow-lg">
+      {/* Slide Number + Remove */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-md shadow-blue-200">
+            <span className="text-xs font-black text-white">{index + 1}</span>
+          </div>
+          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Slide {index + 1}</span>
+        </div>
+        <button 
+          onClick={onRemove} 
+          className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+        >
+          <Trash2 size={15} />
+        </button>
+      </div>
+
+      {/* Media Type Toggle */}
+      <div className="mb-5">
+        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Media Type</label>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => onUpdate('type', 'image')}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wide transition-all ${
+              !isVideo 
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 
+                : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+            }`}
+          >
+            <ImageIcon size={13} /> Image
+          </button>
+          <button
+            type="button"
+            onClick={() => onUpdate('type', 'video')}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wide transition-all ${
+              isVideo 
+                ? 'bg-violet-600 text-white shadow-md shadow-violet-200' 
+                : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+            }`}
+          >
+            <Film size={13} /> Video
+          </button>
+        </div>
+      </div>
+
+      {/* Title */}
+      <div className="mb-4">
+        <label className="block text-[10px] font-black uppercase text-slate-400 mb-1.5 tracking-widest">Slide Title</label>
+        <input 
+          type="text" 
+          value={item.title || ''} 
+          onChange={e => onUpdate('title', e.target.value)}
+          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          placeholder="e.g. Treatment Overview"
+        />
+      </div>
+
+      {/* Main Media URL + Upload */}
+      <div className="mb-4">
+        <label className="block text-[10px] font-black uppercase text-slate-400 mb-1.5 tracking-widest">
+          {isVideo ? 'Video File URL or Embed URL' : 'Image URL'}
+        </label>
+        <div className="flex gap-3 items-center">
+          {/* Preview Thumbnail */}
+          <div className="relative w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
+            {previewUrl ? (
+              <img src={previewUrl} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                {isVideo ? <Film size={20} className="text-slate-300" /> : <ImageIcon size={20} className="text-slate-300" />}
+              </div>
+            )}
+            {isVideo && previewUrl && (
+              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                <div className="w-6 h-6 bg-white/90 rounded-full flex items-center justify-center">
+                  <Film size={12} className="text-violet-600" />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* URL Input */}
+          <div className="flex-1 relative">
+            <input 
+              type="text" 
+              value={item.url || ''} 
+              onChange={e => onUpdate('url', e.target.value)}
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all pr-24"
+              placeholder={isVideo ? 'https://... (mp4/webm/embed)' : 'https://...'}
+            />
+            {!isVideo && (
+              <label className="absolute right-2 top-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase cursor-pointer transition-all flex items-center gap-1">
+                {uploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
+                Upload
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  className="hidden" 
+                  onChange={e => e.target.files[0] && uploadFile(e.target.files[0], 'url', setUploading)} 
+                />
+              </label>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Video Thumbnail (only for video type) */}
+      {isVideo && (
+        <div className="mb-4">
+          <label className="block text-[10px] font-black uppercase text-slate-400 mb-1.5 tracking-widest">Video Thumbnail Image</label>
+          <div className="flex gap-3 items-center">
+            <div className="w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
+              {item.thumbnail ? (
+                <img src={item.thumbnail} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <ImageIcon size={20} className="text-slate-300" />
+                </div>
+              )}
+            </div>
+            <div className="flex-1 relative">
+              <input 
+                type="text" 
+                value={item.thumbnail || ''} 
+                onChange={e => onUpdate('thumbnail', e.target.value)}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-violet-500 transition-all pr-24"
+                placeholder="Thumbnail URL..."
+              />
+              <label className="absolute right-2 top-1.5 bg-violet-50 text-violet-600 hover:bg-violet-100 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase cursor-pointer transition-all flex items-center gap-1">
+                {thumbUploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
+                Upload
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  className="hidden" 
+                  onChange={e => e.target.files[0] && uploadFile(e.target.files[0], 'thumbnail', setThumbUploading)} 
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Alt Text */}
+      <div>
+        <label className="block text-[10px] font-black uppercase text-slate-400 mb-1.5 tracking-widest">Alt Text (SEO)</label>
+        <input 
+          type="text" 
+          value={item.alt || ''} 
+          onChange={e => onUpdate('alt', e.target.value)}
+          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          placeholder="Describe this media for SEO..."
+        />
+      </div>
+    </div>
+  );
+}
+
+// ─── Standard Media Uploader (for other sections) ────────────────────────────
 function MediaUploader({ label, value, onChange }) {
   const [uploading, setUploading] = useState(false);
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     const fd = new FormData();
     fd.append('image', file);
-
     setUploading(true);
     try {
       const res = await axios.post('/service-details/upload', fd, {
@@ -29,7 +217,7 @@ function MediaUploader({ label, value, onChange }) {
       } else {
         toast.error("Upload failed: " + (res.data.message || "Unknown error"));
       }
-    } catch (err) {
+    } catch {
       toast.error("Error uploading image");
     } finally {
       setUploading(false);
@@ -121,7 +309,33 @@ export default function ServiceDetailCMS() {
     axios.get(`/service-details/${selectedSlug}`)
       .then(res => {
         if (res.data?.data) {
-          setData(res.data.data);
+          const fetchedData = res.data.data;
+          // Normalize intro media — convert any legacy format to introMedia
+          if (fetchedData.intro) {
+            const intro = fetchedData.intro;
+            if (!intro.introMedia || intro.introMedia.length === 0) {
+              if (Array.isArray(intro.videos) && intro.videos.length > 0) {
+                intro.introMedia = intro.videos.map(v => ({
+                  type: v.videoUrl ? 'video' : 'image',
+                  url: v.thumbnail || v.image || v.videoUrl || '',
+                  title: v.title || '',
+                  alt: v.title || '',
+                  thumbnail: v.thumbnail || v.image || ''
+                }));
+              } else if (Array.isArray(intro.introImages) && intro.introImages.length > 0) {
+                intro.introMedia = intro.introImages.map(img => ({
+                  type: 'image',
+                  url: img.image || img.url || '',
+                  title: img.title || '',
+                  alt: img.alt || img.title || '',
+                  thumbnail: img.image || img.url || ''
+                }));
+              } else {
+                intro.introMedia = [];
+              }
+            }
+          }
+          setData(fetchedData);
         }
       })
       .catch(err => {
@@ -132,7 +346,7 @@ export default function ServiceDetailCMS() {
             title: serviceInfo.title || "",
             category: serviceInfo.category || "",
             banner: { badgeText: "PREMIUM TREATMENT", title: serviceInfo.title || "", subtitle: "", duration: "45 mins", rating: "4.9", buttonText: "Book Consultation", backgroundImage: "" },
-            intro: { badgeText: "ABOUT THE TREATMENT", title: serviceInfo.title || "", rating: "4.9", duration: "45 mins", shortDescription: "", longDescription: "", benefits: [], closingText: "", videos: [] },
+            intro: { badgeText: "ABOUT THE TREATMENT", title: serviceInfo.title || "", rating: "4.9", duration: "45 mins", shortDescription: "", longDescription: "", benefits: [], closingText: "", introMedia: [] },
             process: { sectionTitle: "How it works?", processSteps: [] },
             idealFrequency: { frequencyTitle: "Treatment Frequency & Suitability", frequencyDescription: "", idealForPoints: [], notIdealForPoints: [], ctaTitle: "", ctaDescription: "", ctaButtonText: "", ctaButtonLink: "", ctaImage: "" },
             beforeAfter: { beforeTitle: "Before Treatment Checklist", afterTitle: "Aftercare Instructions", beforePoints: [], afterPoints: [], sectionBackground: "#f9f7f2" },
@@ -334,27 +548,38 @@ export default function ServiceDetailCMS() {
                       </div>
                     </div>
 
-                    {/* RIGHT: Intro Media */}
-                    <div>
-                      <div className="flex justify-between items-center mb-6">
-                        <label className="block text-[12px] font-black uppercase text-slate-900 tracking-widest">Intro Media / Videos</label>
-                        <button onClick={() => addArrayItem("intro", "videos", { title: "", thumbnail: "" })} className="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100"><Plus size={14}/></button>
-                      </div>
-                      <div className="space-y-4">
-                        {(data.intro.videos || []).map((v, i) => (
-                          <div key={i} className="bg-slate-50 p-5 rounded-2xl border border-slate-100 relative group">
-                            <button onClick={() => removeArrayItem("intro", "videos", i)} className="absolute top-3 right-3 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"><Trash2 size={16} /></button>
-                            <div className="space-y-4">
-                              <div>
-                                <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Slide Title</label>
-                                <input type="text" value={v.title || ""} onChange={e => updateArrayItem("intro", "videos", i, "title", e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm" />
-                              </div>
-                              <MediaUploader label="Slide Image" value={v.thumbnail} onChange={val => updateArrayItem("intro", "videos", i, "thumbnail", val)} />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                     <div>
+                       <div className="flex justify-between items-center mb-6">
+                         <div>
+                           <label className="block text-[12px] font-black uppercase text-slate-900 tracking-widest">Intro Media</label>
+                           <p className="text-[10px] text-slate-400 mt-1">Images & videos for the gallery slider</p>
+                         </div>
+                         <button 
+                           onClick={() => addArrayItem("intro", "introMedia", { type: "image", url: "", title: "", alt: "", thumbnail: "" })} 
+                           className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-md shadow-blue-200"
+                         >
+                           <Plus size={13}/> Add Slide
+                         </button>
+                       </div>
+                       <div className="space-y-4">
+                         {(data.intro.introMedia || []).map((item, i) => (
+                           <MediaItemEditor
+                             key={i}
+                             item={item}
+                             index={i}
+                             onUpdate={(field, val) => updateArrayItem("intro", "introMedia", i, field, val)}
+                             onRemove={() => removeArrayItem("intro", "introMedia", i)}
+                           />
+                         ))}
+                         {(data.intro.introMedia || []).length === 0 && (
+                           <div className="text-center py-10 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+                             <ImageIcon size={28} className="text-slate-300 mx-auto mb-3" />
+                             <p className="text-xs text-slate-400 font-semibold">No media slides yet</p>
+                             <p className="text-[10px] text-slate-300 mt-1">Click "Add Slide" to start building your gallery</p>
+                           </div>
+                         )}
+                       </div>
+                     </div>
                   </div>
                 </div>
               </div>
