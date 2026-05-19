@@ -15,6 +15,10 @@ import ServiceInfoBlocks from '../../../components/ServiceInfoBlocks';
 import ServiceAftercare from '../../../components/ServiceAftercare';
 import ServiceWhyChooseUs from '../../../components/ServiceWhyChooseUs';
 import ServiceEditorialFaq from '../../../components/ServiceEditorialFaq';
+import HairTransplantInfoSection from '../../../components/HairTransplantInfoSection';
+import HairTransplantWhyChooseSection from '../../../components/HairTransplantWhyChooseSection';
+import HairTransplantResultsSection from '../../../components/HairTransplantResultsSection';
+import HairTransplantVideosSection from '../../../components/HairTransplantVideosSection';
 import '../../service.css';
 import '../../details.css';
 
@@ -86,16 +90,24 @@ export default async function DynamicDetailsPage({ params }) {
       <ServiceIntro data={intro || {}} banner={banner || {}} />
       <ServiceContentBlock data={service.contentBlocks || []} />
       <ServiceBenefits data={service.benefitsSection || null} />
-      <ServiceIdealCandidates data={service.idealCandidates || null} />
+      <ServiceIdealCandidates data={service.idealCandidates || null} pageSlug={slug} />
       <ServiceNotCandidates data={service.notCandidatesSection || null} />
       <ServiceTechniques data={service.techniquesSection || null} />
-      <ServiceInfoBlocks data={service.infoBlocksSection || null} />
+      <ServiceInfoBlocks data={service.infoBlocksSection || null} pageSlug={slug} />
       <ProcessSlider data={process || {}} />
-      <ServiceAftercare data={service.aftercareSection || null} />
-      <ServiceWhyChooseUs data={service.whyChooseUsSection || null} />
-      <IdealFrequency data={idealFrequency || {}} />
-      <BeforeAfterTreatment data={beforeAfter || {}} />
-      <ServiceEditorialFaq data={service.editorialFaqSection || null} />
+      <ServiceAftercare data={service.aftercareSection || null} pageSlug={slug} />
+      <ServiceWhyChooseUs data={service.whyChooseUsSection || null} pageSlug={slug} />
+      {slug === 'best-hair-transplant' && <HairTransplantInfoSection />}
+      {slug === 'best-hair-transplant' && (
+        <HairTransplantWhyChooseSection
+          image={service.benefitsSection?.image || service.idealCandidates?.sectionImage || ''}
+        />
+      )}
+      {slug !== 'best-hair-transplant' && <IdealFrequency data={idealFrequency || {}} />}
+      {slug !== 'best-hair-transplant' && <BeforeAfterTreatment data={beforeAfter || {}} />}
+      <ServiceEditorialFaq data={service.editorialFaqSection || null} pageSlug={slug} />
+      {slug === 'best-hair-transplant' && <HairTransplantResultsSection />}
+      {slug === 'best-hair-transplant' && <HairTransplantVideosSection />}
       <FaqEnquiry data={faqEnquiry || {}} />
     </div>
   );

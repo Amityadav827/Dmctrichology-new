@@ -3,7 +3,9 @@
 import React, { useState } from "react";
 import { Plus, Minus } from "lucide-react";
 
-export default function ServiceEditorialFaq({ data }) {
+export default function ServiceEditorialFaq({ data, pageSlug = "" }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   if (!data || data.isVisible === false) return null;
 
   const { faqs } = data;
@@ -12,8 +14,6 @@ export default function ServiceEditorialFaq({ data }) {
     .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
 
   if (activeFaqs.length === 0) return null;
-
-  const [activeIndex, setActiveIndex] = useState(null);
 
   const toggleFaq = (idx) => {
     setActiveIndex(prev => (prev === idx ? null : idx));
@@ -60,6 +60,24 @@ export default function ServiceEditorialFaq({ data }) {
             );
           })}
         </div>
+
+        {pageSlug === "best-hair-transplant" && (
+          <div className="service-edfaq-google-review">
+            <h3 className="service-edfaq-google-review-heading">
+              Google Review
+            </h3>
+            <button className="service-edfaq-google-review-btn" type="button">
+              <span>VIEW MORE</span>
+              <span className="service-edfaq-google-review-arrow" aria-hidden="true">
+                <img
+                  src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ngfngyyxjj86kvn5nd5n.png"
+                  alt=""
+                  className="service-edfaq-google-review-arrow-icon"
+                />
+              </span>
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

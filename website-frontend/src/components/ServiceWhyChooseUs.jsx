@@ -1,7 +1,34 @@
 import React from "react";
-import { Award } from "lucide-react";
+import {
+  Award,
+  Ban,
+  Bed,
+  CalendarCheck,
+  Droplets,
+  Pill,
+  ShowerHead,
+  Sun,
+  Waves,
+} from "lucide-react";
 
-export default function ServiceWhyChooseUs({ data }) {
+const followUpText = "Schedule check-up appointments after 3 months and 6 months after the surgery to see the progress of the results.";
+
+const getAftercareIcon = (text = "") => {
+  const lower = text.toLowerCase();
+
+  if (lower.includes("saline") || lower.includes("spray")) return Droplets;
+  if (lower.includes("washed") || lower.includes("shampoo") || lower.includes("wash")) return ShowerHead;
+  if (lower.includes("rest") || lower.includes("recovery")) return Bed;
+  if (lower.includes("swimming") || lower.includes("steam") || lower.includes("hot bath")) return Waves;
+  if (lower.includes("painkiller") || lower.includes("medications") || lower.includes("antibiotics")) return Pill;
+  if (lower.includes("hair products") || lower.includes("tight headwear") || lower.includes("comb")) return Ban;
+  if (lower.includes("sunlight") || lower.includes("sun")) return Sun;
+  if (lower.includes("check-up") || lower.includes("appointment") || lower.includes("progress")) return CalendarCheck;
+
+  return Award;
+};
+
+export default function ServiceWhyChooseUs({ data, pageSlug = "" }) {
   if (!data || data.isVisible === false) return null;
 
   const { sectionHeading, introText, features } = data;
@@ -12,7 +39,7 @@ export default function ServiceWhyChooseUs({ data }) {
   if (activeFeatures.length === 0 && !sectionHeading) return null;
 
   return (
-    <section className="service-whychoose-section">
+    <section className={`service-whychoose-section ${pageSlug === "best-hair-transplant" ? "best-hair-transplant-scalp-care" : ""}`}>
       <div className="service-whychoose-container">
         <div className="service-whychoose-header">
           <div>
@@ -30,17 +57,30 @@ export default function ServiceWhyChooseUs({ data }) {
         </div>
 
         <div className="service-whychoose-grid">
-          {activeFeatures.map((ft, i) => (
-            <div key={i} className="service-whychoose-card">
-              <div className="service-whychoose-icon-wrap">
-                <Award className="service-whychoose-icon" />
+          {activeFeatures.map((ft, i) => {
+            const Icon = pageSlug === "best-hair-transplant" ? getAftercareIcon(ft.featureText) : Award;
+
+            return (
+              <div key={i} className="service-whychoose-card">
+                <div className="service-whychoose-icon-wrap">
+                  <Icon className="service-whychoose-icon" />
+                </div>
+                <p className="service-whychoose-card-text">
+                  {ft.featureText}
+                </p>
               </div>
-              <p className="service-whychoose-card-text">
-                {ft.featureText}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        {pageSlug === "best-hair-transplant" && (
+          <>
+            <p className="service-whychoose-followup-note">
+              {followUpText}
+            </p>
+
+          </>
+        )}
       </div>
     </section>
   );
