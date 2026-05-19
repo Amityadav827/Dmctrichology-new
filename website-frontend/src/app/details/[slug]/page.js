@@ -84,6 +84,13 @@ export default async function DynamicDetailsPage({ params }) {
 
   const { banner, intro, process, beforeAfter, faqEnquiry, idealFrequency } = service;
 
+  // Resolve dynamic sections gracefully falling back to pre-seeded static objects if not present in DB
+  const staticFallback = servicesData.find(s => s.slug.toLowerCase() === String(slug || "").toLowerCase().trim()) || {};
+  const googleReviewCta = service.googleReviewCta || staticFallback.googleReviewCta || null;
+  const resultsSection = service.resultsSection || staticFallback.resultsSection || null;
+  const videosSection = service.videosSection || staticFallback.videosSection || null;
+  const enquirySection = service.enquirySection || staticFallback.enquirySection || null;
+
   return (
     <div className="bg-white min-h-screen">
       <DetailsBanner data={banner || {}} />
@@ -105,10 +112,10 @@ export default async function DynamicDetailsPage({ params }) {
       )}
       {slug !== 'best-hair-transplant' && <IdealFrequency data={idealFrequency || {}} />}
       {slug !== 'best-hair-transplant' && <BeforeAfterTreatment data={beforeAfter || {}} />}
-      <ServiceEditorialFaq data={service.editorialFaqSection || null} pageSlug={slug} googleReviewCta={service.googleReviewCta} />
-      <HairTransplantResultsSection data={service.resultsSection} />
-      <HairTransplantVideosSection data={service.videosSection} />
-      <FaqEnquiry data={faqEnquiry || {}} enquirySection={service.enquirySection} />
+      <ServiceEditorialFaq data={service.editorialFaqSection || null} pageSlug={slug} googleReviewCta={googleReviewCta} />
+      <HairTransplantResultsSection data={resultsSection} />
+      <HairTransplantVideosSection data={videosSection} />
+      <FaqEnquiry data={faqEnquiry || {}} enquirySection={enquirySection} />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import EditableText from './Editable/EditableText';
 import EditableSection from './Editable/EditableSection';
 import { useBuilder } from '../context/BuilderContext';
 
-const FaqEnquiry = ({ data = {}, enquirySection = {} }) => {
+const FaqEnquiry = ({ data = {}, enquirySection }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [sectionData, setSectionData] = useState(data);
   const [openFaqIndex, setOpenFaqIndex] = useState(0); // First open by default
@@ -41,11 +41,14 @@ const FaqEnquiry = ({ data = {}, enquirySection = {} }) => {
     }
   }, [isEditMode, siteConfig]);
 
-  const faqs = sectionData.faqItems || [];
-  const showEnquiry = !enquirySection || enquirySection.isVisible !== false;
-  const serviceOptions = (enquirySection && Array.isArray(enquirySection.serviceOptions) && enquirySection.serviceOptions.length > 0)
-    ? enquirySection.serviceOptions 
-    : (sectionData.serviceOptions || []);
+  const faqs = sectionData?.faqItems || [];
+  
+  // Defensive normalization of enquirySection prop
+  const normalizedEnquiry = enquirySection || {};
+  const showEnquiry = normalizedEnquiry.isVisible !== false;
+  const serviceOptions = (normalizedEnquiry.serviceOptions && Array.isArray(normalizedEnquiry.serviceOptions) && normalizedEnquiry.serviceOptions.length > 0)
+    ? normalizedEnquiry.serviceOptions 
+    : (sectionData?.serviceOptions || []);
 
   const toggleFaq = (index) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -126,12 +129,12 @@ const FaqEnquiry = ({ data = {}, enquirySection = {} }) => {
           <div className="details-fe-left" style={!showEnquiry ? { width: '100%', maxWidth: 'none', flex: '0 0 100%' } : undefined}>
             <h2 className="details-fe-title">
               <EditableText sectionId="faq-enquiry-section" fieldPath="faqEnquiry.faqTitle">
-                {sectionData.faqTitle || 'Few Of The Common Concerns'}
+                {sectionData?.faqTitle || 'Few Of The Common Concerns'}
               </EditableText>
             </h2>
             <p className="details-fe-subtitle">
               <EditableText sectionId="faq-enquiry-section" fieldPath="faqEnquiry.faqSubtitle">
-                {sectionData.faqSubtitle || 'Common questions about our treatments.'}
+                {sectionData?.faqSubtitle || 'Common questions about our treatments.'}
               </EditableText>
             </p>
 
@@ -145,7 +148,7 @@ const FaqEnquiry = ({ data = {}, enquirySection = {} }) => {
                     className="details-faq-question" 
                     onClick={() => toggleFaq(index)}
                   >
-                    <span>{faq.question}</span>
+                    <span>{faq?.question || ''}</span>
                     <div className="details-faq-icon">
                       {openFaqIndex === index ? <Minus size={18} /> : <Plus size={18} />}
                     </div>
@@ -158,7 +161,7 @@ const FaqEnquiry = ({ data = {}, enquirySection = {} }) => {
                     }}
                   >
                     <div className="details-faq-answer-inner">
-                      {faq.answer}
+                      {faq?.answer || ''}
                     </div>
                   </div>
                 </div>
@@ -171,16 +174,16 @@ const FaqEnquiry = ({ data = {}, enquirySection = {} }) => {
             <div className="details-fe-right">
               <div 
                 className="details-enquiry-card" 
-                style={enquirySection.backgroundColor ? { backgroundColor: enquirySection.backgroundColor } : undefined}
+                style={normalizedEnquiry.backgroundColor ? { backgroundColor: normalizedEnquiry.backgroundColor } : undefined}
               >
                 <h3 className="details-enquiry-title">
                   <EditableText sectionId="faq-enquiry-section" fieldPath="faqEnquiry.formTitle">
-                    {enquirySection.title || sectionData.formTitle || 'Enquiry Here Below!'}
+                    {normalizedEnquiry.title || sectionData?.formTitle || 'Enquiry Here Below!'}
                   </EditableText>
                 </h3>
-                {enquirySection.description && (
+                {normalizedEnquiry.description && (
                   <p className="text-slate-400 text-xs mt-1 mb-4 text-center">
-                    {enquirySection.description}
+                    {normalizedEnquiry.description}
                   </p>
                 )}
                 
@@ -191,7 +194,7 @@ const FaqEnquiry = ({ data = {}, enquirySection = {} }) => {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      placeholder={sectionData.namePlaceholder || "Name*"} 
+                      placeholder={sectionData?.namePlaceholder || "Name*"} 
                       className="details-form-input" 
                       required 
                     />
@@ -202,7 +205,7 @@ const FaqEnquiry = ({ data = {}, enquirySection = {} }) => {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder={sectionData.emailPlaceholder || "E-Mail Address*"} 
+                      placeholder={sectionData?.emailPlaceholder || "E-Mail Address*"} 
                       className="details-form-input" 
                       required 
                     />
@@ -215,7 +218,7 @@ const FaqEnquiry = ({ data = {}, enquirySection = {} }) => {
                       className="details-form-input details-form-select" 
                       required
                     >
-                      <option value="" disabled>{sectionData.servicePlaceholder || "Type Of Service Enquiry*"}</option>
+                      <option value="" disabled>{sectionData?.servicePlaceholder || "Type Of Service Enquiry*"}</option>
                       {serviceOptions.map((opt, i) => (
                         <option key={i} value={opt}>{opt}</option>
                       ))}
@@ -227,7 +230,7 @@ const FaqEnquiry = ({ data = {}, enquirySection = {} }) => {
                       name="date"
                       value={formData.date}
                       onChange={handleInputChange}
-                      placeholder={sectionData.datePlaceholder || "Select Date & Time*"} 
+                      placeholder={sectionData?.datePlaceholder || "Select Date & Time*"} 
                       className="details-form-input details-form-date" 
                       required 
                     />
@@ -235,7 +238,7 @@ const FaqEnquiry = ({ data = {}, enquirySection = {} }) => {
                   <button type="submit" className="details-submit-btn" disabled={loading}>
                     <span>
                       <EditableText sectionId="faq-enquiry-section" fieldPath="faqEnquiry.buttonText">
-                        {loading ? 'Submitting...' : (enquirySection.submitButtonText || sectionData.buttonText || 'Schedule Your Visit')}
+                        {loading ? 'Submitting...' : (normalizedEnquiry.submitButtonText || sectionData?.buttonText || 'Schedule Your Visit')}
                       </EditableText>
                     </span>
                     <span className="details-btn-icon">↗</span>

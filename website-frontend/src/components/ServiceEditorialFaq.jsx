@@ -8,11 +8,14 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
 
   const faqs = data?.faqs || [];
   const activeFaqs = (faqs || [])
-    .filter(pt => pt.isVisible !== false)
+    .filter(pt => pt && pt.isVisible !== false)
     .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
 
   const showFaqs = data?.isVisible !== false && activeFaqs.length > 0;
-  const showReview = googleReviewCta && googleReviewCta.isVisible !== false;
+  
+  // Defensive normalization of googleReviewCta prop
+  const normalizedReview = googleReviewCta || {};
+  const showReview = normalizedReview.isVisible === true || (pageSlug === "best-hair-transplant" && normalizedReview.isVisible !== false);
 
   if (!showFaqs && !showReview) return null;
 
@@ -35,6 +38,7 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
 
             <div className="service-edfaq-list">
               {activeFaqs.map((faq, i) => {
+                if (!faq) return null;
                 const isOpen = activeIndex === i;
                 return (
                   <div key={i} className="service-edfaq-item">
@@ -43,7 +47,7 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
                       className="service-edfaq-btn"
                     >
                       <span className="service-edfaq-title">
-                        {faq.question}
+                        {faq.question || ""}
                       </span>
                       <div className="service-edfaq-icon-wrap">
                         {isOpen ? (
@@ -56,7 +60,7 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
                     
                     <div className={`service-edfaq-content ${isOpen ? "open" : ""}`}>
                       <div className="service-edfaq-content-inner">
-                        {faq.answer}
+                        {faq.answer || ""}
                       </div>
                     </div>
                   </div>
@@ -67,20 +71,20 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
         )}
 
         {showReview && (
-          <div className="service-edfaq-google-review" style={googleReviewCta.backgroundColor ? { backgroundColor: googleReviewCta.backgroundColor } : undefined}>
+          <div className="service-edfaq-google-review" style={normalizedReview.backgroundColor ? { backgroundColor: normalizedReview.backgroundColor } : undefined}>
             <h3 className="service-edfaq-google-review-heading">
-              {googleReviewCta.title || "Google Review"}
+              {normalizedReview.title || "Google Review"}
             </h3>
             <button 
               onClick={() => {
-                if (googleReviewCta.buttonLink) {
-                  window.location.href = googleReviewCta.buttonLink;
+                if (normalizedReview.buttonLink) {
+                  window.location.href = normalizedReview.buttonLink;
                 }
               }} 
               className="service-edfaq-google-review-btn" 
               type="button"
             >
-              <span>{googleReviewCta.buttonText || "VIEW MORE"}</span>
+              <span>{normalizedReview.buttonText || "VIEW MORE"}</span>
               <span className="service-edfaq-google-review-arrow" aria-hidden="true">
                 <img
                   src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ngfngyyxjj86kvn5nd5n.png"
