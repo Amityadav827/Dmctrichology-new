@@ -1818,17 +1818,15 @@
 
 /* ─── DYNAMIC IDEAL CANDIDATES SECTION ─────────────────────────── */
 .service-candidates-section {
-  background: #F8F6F1; /* warm cream background */
-  padding: 100px 5% 110px 5%; /* balanced airy vertical spacing */
-  border-top: 1px solid #E8E1D3; /* soft border */
-  border-bottom: 1px solid #E8E1D3; /* soft border */
+  background: #3d5a99;
+  padding: 100px 5% 110px;
 }
 
 .service-candidates-container {
   max-width: 1300px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr; /* premium 2-column layout */
+  grid-template-columns: 1.15fr 0.85fr;
   gap: 80px;
   align-items: center;
 }
@@ -1839,24 +1837,24 @@
 }
 
 .service-candidates-heading {
-  font-family: 'Marcellus', serif;
-  font-size: 32px;
-  color: #0D1B2A; /* primary deep navy */
+  color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 3px; /* elegant letter spacing */
+  letter-spacing: 3px;
   margin-bottom: 24px;
-  line-height: 1.25;
+  font-family: Marcellus, serif;
+  font-size: 32px;
   font-weight: 400;
+  line-height: 1.25;
 }
 
 .service-candidates-intro {
-  font-family: 'Lato', sans-serif;
-  font-size: 16px;
-  color: #5C5C5C; /* muted paragraph */
-  line-height: 1.8; /* breathable line spacing */
-  margin-bottom: 36px;
+  color: #ffffff;
   white-space: pre-line;
+  margin-bottom: 36px;
+  font-family: Lato, sans-serif;
+  font-size: 16px;
   font-weight: 400;
+  line-height: 1.8;
 }
 
 .service-candidates-list {
@@ -1865,7 +1863,7 @@
   margin: 0 0 36px 0;
   display: flex;
   flex-direction: column;
-  gap: 20px; /* not cramped, stronger spacing */
+  gap: 20px;
 }
 
 .service-candidates-list-item {
@@ -1875,40 +1873,40 @@
 }
 
 .service-ideal-check-icon-wrapper {
+  background: #3d5a99;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
   width: 22px;
   height: 22px;
-  border-radius: 50%;
-  border: 1px solid #C8A45D; /* luxury gold accent */
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
   margin-top: 2px;
-  box-shadow: 0 2px 6px rgba(200, 164, 93, 0.08);
+  display: flex;
+  box-shadow: 0 2px 6px #c8a45d14;
 }
 
 .service-ideal-check-icon {
-  color: #3D5A99; /* premium blue accent */
+  color: #ffffff;
   width: 10px;
   height: 10px;
 }
 
 .service-candidates-text {
-  font-family: 'Lato', sans-serif;
+  color: #ffffff;
+  font-family: Lato, sans-serif;
   font-size: 15px;
-  color: #1B1B1B; /* text dark */
+  font-weight: 400;
   line-height: 1.6;
-  font-weight: 600; /* strong visual hierarchy */
 }
 
 .service-candidates-conclusion {
-  font-family: 'Lato', sans-serif;
-  font-size: 15px;
-  color: #5C5C5C; /* muted paragraph */
-  line-height: 1.7;
+  color: #ffffff;
   white-space: pre-line;
+  font-family: Lato, sans-serif;
+  font-size: 15px;
   font-weight: 500;
+  line-height: 1.7;
 }
 
 .service-candidates-image-col {
@@ -1916,13 +1914,13 @@
 }
 
 .service-candidates-image-wrapper {
-  position: relative;
   background: #ffffff;
-  border: 1px solid #E8E1D3; /* soft border */
-  padding: 12px; /* elegant picture frame matting */
+  border: 1px solid #e8e1d3;
   border-radius: 28px;
+  padding: 12px;
+  position: relative;
   overflow: hidden;
-  box-shadow: 0 30px 70px rgba(13, 27, 42, 0.08); /* luxury deep navy soft shadow */
+  box-shadow: 0 30px 70px #0d1b2a14;
   aspect-ratio: 4 / 3;
 }
 
@@ -1931,7 +1929,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 16px; /* fits elegantly inside padding */
+  border-radius: 16px;
   transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
