@@ -465,42 +465,42 @@ function Contact() {
                           )}
                         </button>
                       </td>
-                      <td className="px-6 py-5 whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px] align-middle">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xs font-bold">
+                      <td className="px-6 py-5 whitespace-nowrap overflow-hidden text-ellipsis max-w-[140px] align-middle">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
                             {item.name.charAt(0).toUpperCase()}
                           </div>
-                          <span className="text-sm font-bold text-slate-900">{item.name}</span>
+                          <span className="text-sm font-bold text-slate-900 truncate" title={item.name}>{item.name}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-5 align-middle">
+                      <td className="px-6 py-5 align-middle max-w-[150px]">
                         <div className="flex flex-col gap-0.5">
-                          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-600">
-                            <Mail size={12} className="text-slate-400" />
-                            {item.email}
+                          <div className="flex items-center gap-1 text-xs font-medium text-slate-600 truncate" title={item.email}>
+                            <Mail size={12} className="text-slate-400 flex-shrink-0" />
+                            <span className="truncate">{item.email}</span>
                           </div>
-                          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-600">
-                            <Phone size={12} className="text-slate-400" />
-                            {item.mobile}
+                          <div className="flex items-center gap-1 text-xs font-medium text-slate-600 truncate" title={item.mobile}>
+                            <Phone size={12} className="text-slate-400 flex-shrink-0" />
+                            <span className="truncate">{item.mobile}</span>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-5 align-middle">
-                        <span className="text-xs font-bold text-slate-700 capitalize">
+                      <td className="px-6 py-5 align-middle max-w-[120px] truncate" title={getLeadEnquiryType(item)}>
+                        <span className="text-xs font-bold text-slate-700 capitalize truncate">
                           {getLeadEnquiryType(item)}
                         </span>
                       </td>
-                      <td className="px-6 py-5 align-middle">
+                      <td className="px-6 py-5 align-middle whitespace-nowrap">
                         <span className="text-xs font-semibold text-slate-600">
                           {getLeadPreferredDate(item)}
                         </span>
                       </td>
-                      <td className="px-6 py-5 align-middle">
-                        <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider">
+                      <td className="px-6 py-5 align-middle whitespace-nowrap">
+                        <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">
                           {item.source || 'contact-us'}
                         </span>
                       </td>
-                      <td className="px-6 py-5 max-w-xs align-middle">
+                      <td className="px-6 py-5 max-w-[130px] align-middle">
                         <button
                           type="button"
                           onClick={() => setMessageModal({ open: true, item })}
@@ -510,9 +510,9 @@ function Contact() {
                           {item.message?.replace(/\[Preferred Date:[^\]]+\]\s*\[Service:[^\]]+\]\n*/, '') || item.message}
                         </button>
                       </td>
-                      <td className="px-6 py-5 align-middle">
-                        <div className="flex items-center gap-4">
-                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                      <td className="px-6 py-5 align-middle whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap ${
                             statusOptions.find(o => o.value === item.status)?.color || 'bg-slate-100 text-slate-600'
                           }`}>
                             {item.status}
@@ -534,7 +534,7 @@ function Contact() {
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-5 text-right align-middle">
+                      <td className="px-6 py-5 text-right align-middle w-16">
                         <button
                           type="button"
                           onClick={() => handleDelete(item._id)}
