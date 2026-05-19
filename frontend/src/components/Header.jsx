@@ -23,6 +23,7 @@ const titles = {
   "/users/menu-operations": "Menu Operations",
   "/leads/callback": "Request Callback",
   "/leads/contact": "Contact Leads",
+  "/leads/treatment-enquiries": "Treatment Enquiries",
   "/leads/appointment": "Appointments",
 };
 

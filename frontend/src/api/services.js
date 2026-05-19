@@ -391,7 +391,10 @@ export const bulkDeleteContacts = async (payload) => {
   return data;
 };
 
-export const exportContactsCsv = async () => downloadCsv("/contact/export/csv", "contact-leads.csv");
+export const exportContactsCsv = async (params) => {
+  const queryStr = params ? new URLSearchParams(params).toString() : "";
+  return downloadCsv(`/contact/export/csv${queryStr ? `?${queryStr}` : ""}`, params?.source === 'service-details-enquiry' ? 'treatment-enquiries.csv' : 'contact-leads.csv');
+};
 
 export const getAppointments = async (params) => {
   const { data } = await api.get("/appointment", { params });

@@ -160,6 +160,9 @@ function Sidebar() {
                 <NavLink to="/leads/contact" className={getNavClass}>
                   <Mail size={16} /> Contact Leads
                 </NavLink>
+                <NavLink to="/leads/treatment-enquiries" className={getNavClass}>
+                  <Activity size={16} /> Treatment Enquiries
+                </NavLink>
               </>
             )}
           </>

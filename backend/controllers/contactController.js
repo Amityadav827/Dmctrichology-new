@@ -81,9 +81,17 @@ const getContacts = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const { data, count, error } = await supabase
+    let query = supabase
       .from('contacts')
-      .select('*', { count: 'exact' })
+      .select('*', { count: 'exact' });
+
+    if (req.query.source) {
+      query = query.eq('source', req.query.source);
+    } else {
+      query = query.neq('source', 'service-details-enquiry');
+    }
+
+    const { data, count, error } = await query
       .order('created_at', { ascending: false })
       .range(skip, skip + limit - 1);
 
@@ -173,7 +181,14 @@ const updateContactStatus = async (req, res, next) => {
 
 const exportContactsCsv = async (req, res, next) => {
   try {
-    const { data, error } = await supabase.from('contacts').select('*').order('created_at', { ascending: false });
+    let query = supabase.from('contacts').select('*');
+    if (req.query.source) {
+      query = query.eq('source', req.query.source);
+    } else {
+      query = query.neq('source', 'service-details-enquiry');
+    }
+
+    const { data, error } = await query.order('created_at', { ascending: false });
     if (error) return res.status(500).json({ success: false, message: error.message });
 
     // Simplified CSV generation for API parity
@@ -193,7 +208,7 @@ const exportContactsCsv = async (req, res, next) => {
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=contacts.csv");
+    res.setHeader("Content-Disposition", `attachment; filename=${req.query.source === 'service-details-enquiry' ? 'treatment-enquiries.csv' : 'contacts.csv'}`);
     return res.status(200).send(csv);
   } catch (error) {
     next(error);

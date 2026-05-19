@@ -22,6 +22,7 @@ import Operation from "./pages/Operation";
 import MenuOperation from "./pages/MenuOperation";
 import Callback from "./pages/Callback";
 import Contact from "./pages/Contact";
+import TreatmentEnquiries from "./pages/TreatmentEnquiries";
 import Blogs from "./pages/Blogs";
 import BlogCategory from "./pages/BlogCategory";
 import AppointmentList from "./pages/AppointmentList";
@@ -561,6 +562,14 @@ function App() {
           element={
             <ProtectedRoute permission="users">
               <Contact />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="leads/treatment-enquiries"
+          element={
+            <ProtectedRoute permission="users">
+              <TreatmentEnquiries />
             </ProtectedRoute>
           }
         />
