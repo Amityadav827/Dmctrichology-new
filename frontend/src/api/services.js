@@ -386,6 +386,11 @@ export const deleteContact = async (id) => {
   return data;
 };
 
+export const bulkDeleteContacts = async (payload) => {
+  const { data } = await api.post("/contact/bulk-delete", payload);
+  return data;
+};
+
 export const exportContactsCsv = async () => downloadCsv("/contact/export/csv", "contact-leads.csv");
 
 export const getAppointments = async (params) => {

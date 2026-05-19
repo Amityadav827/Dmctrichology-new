@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { 
   Search, Calendar, Mail, Phone, MessageSquare, 
   Trash2, Filter, ChevronDown, Check, X, Clock,
-  MoreVertical
+  MoreVertical, CheckSquare, Square, AlertTriangle, Loader2
 } from "lucide-react";
 import Loader from "../components/Loader";
 import {
@@ -12,6 +12,7 @@ import {
   exportContactsCsv,
   getContacts,
   updateContact,
+  bulkDeleteContacts,
 } from "../api/services";
 
 const statusOptions = [
@@ -177,6 +178,10 @@ function Contact() {
   const [exporting, setExporting] = useState(false);
   const [messageModal, setMessageModal] = useState({ open: false, item: null });
 
+  // Selection states
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 400);
     return () => clearTimeout(timer);
@@ -195,8 +200,12 @@ function Contact() {
         sortBy: "createdAt",
         sortOrder: "desc",
       });
-      setItems(response.data);
-      setPagination(response.pagination);
+      setItems(response.data || []);
+      setPagination(response.pagination || { page, limit: 10, total: 0, totalPages: 1 });
+      
+      // Keep only selected IDs that are actually present on current fetch
+      const currentIds = (response.data || []).map(i => i._id);
+      setSelectedIds(prev => prev.filter(id => currentIds.includes(id)));
     } catch (error) {
       toast.error(error.response?.data?.message || "Unable to load contact leads");
     } finally {
@@ -230,9 +239,48 @@ function Contact() {
     try {
       await deleteContact(id);
       toast.success("Lead deleted");
+      setSelectedIds(prev => prev.filter(x => x !== id));
       fetchItems(pagination.page);
     } catch (error) {
       toast.error(error.response?.data?.message || "Unable to delete lead");
+    } finally {
+      setActionId("");
+    }
+  };
+
+  const handleSelectId = (id, e) => {
+    if (e) e.stopPropagation();
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAll = () => {
+    const pageIds = items.map(item => item._id);
+    const allSelected = pageIds.every(id => selectedIds.includes(id));
+    if (allSelected) {
+      setSelectedIds(prev => prev.filter(id => !pageIds.includes(id)));
+    } else {
+      setSelectedIds(prev => [...new Set([...prev, ...pageIds])]);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    setActionId("bulk");
+
+    const previousItems = [...items];
+    setItems(prev => prev.filter(item => !selectedIds.includes(item._id)));
+
+    try {
+      await bulkDeleteContacts({ ids: selectedIds });
+      toast.success("Selected inquiries deleted successfully");
+      setSelectedIds([]);
+      setShowModal(false);
+      fetchItems(1);
+    } catch (error) {
+      setItems(previousItems);
+      toast.error("Bulk delete failed");
     } finally {
       setActionId("");
     }
@@ -261,20 +309,32 @@ function Contact() {
               Manage and track customer messages from the contact form
             </p>
           </div>
-          <button
-            onClick={handleExport}
-            disabled={exporting}
-            className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl text-sm font-bold hover:bg-slate-800 transition shadow-lg shadow-slate-200 disabled:opacity-50"
-          >
-            {exporting ? (
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-            ) : (
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
+          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+            {selectedIds.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setShowModal(true)}
+                className="flex items-center gap-2 px-5 py-3 bg-red-50 text-red-600 rounded-2xl hover:bg-red-100 transition-all font-bold text-sm border border-red-200 shadow-sm"
+              >
+                <Trash2 className="h-4 w-4" />
+                Delete Selected ({selectedIds.length})
+              </button>
             )}
-            <span>Export CSV</span>
-          </button>
+            <button
+              onClick={handleExport}
+              disabled={exporting}
+              className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl text-sm font-bold hover:bg-slate-800 transition shadow-lg shadow-slate-200 disabled:opacity-50"
+            >
+              {exporting ? (
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              )}
+              <span>Export CSV</span>
+            </button>
+          </div>
         </div>
 
         {/* Improved Filter Bar */}
@@ -328,6 +388,19 @@ function Contact() {
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-100">
+                  <th className="px-6 py-4 text-left w-12 align-middle">
+                    <button
+                      type="button"
+                      onClick={handleSelectAll}
+                      className="text-slate-400 hover:text-slate-600 transition outline-none"
+                    >
+                      {items.length > 0 && items.every(item => selectedIds.includes(item._id)) ? (
+                        <CheckSquare className="h-5 w-5 text-blue-600" />
+                      ) : (
+                        <Square className="h-5 w-5" />
+                      )}
+                    </button>
+                  </th>
                   <th className="px-6 py-4 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">Lead Name</th>
                   <th className="px-6 py-4 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact Info</th>
                   <th className="px-6 py-4 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">Message</th>
@@ -339,13 +412,26 @@ function Contact() {
               <tbody className="divide-y divide-slate-100">
                 {items.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-20 text-center text-slate-400 font-medium italic">
+                    <td colSpan="7" className="px-6 py-20 text-center text-slate-400 font-medium italic">
                       No contact inquiries found matching your filters.
                     </td>
                   </tr>
                 ) : (
                   items.map((item) => (
                     <tr key={item._id} className="hover:bg-slate-50/50 transition-colors group">
+                      <td className="px-6 py-5 whitespace-nowrap align-middle">
+                        <button
+                          type="button"
+                          onClick={(e) => handleSelectId(item._id, e)}
+                          className="text-slate-400 hover:text-slate-600 transition outline-none"
+                        >
+                          {selectedIds.includes(item._id) ? (
+                            <CheckSquare className="h-5 w-5 text-blue-600" />
+                          ) : (
+                            <Square className="h-5 w-5" />
+                          )}
+                        </button>
+                      </td>
                       <td className="px-6 py-5 whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px] align-middle">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xs font-bold">
@@ -496,9 +582,53 @@ function Contact() {
           </div>
         </div>
       )}
+
+      {/* Bulk Delete Confirmation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white w-full max-w-md rounded-[32px] shadow-2xl p-8 border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center gap-4 text-red-600 mb-6 bg-red-50 p-4 rounded-2xl border border-red-100">
+              <AlertTriangle className="h-10 w-10 flex-shrink-0" />
+              <div>
+                <h4 className="font-bold text-slate-900 text-lg">Confirm Bulk Delete</h4>
+                <p className="text-xs text-red-600 font-semibold mt-0.5">This action cannot be undone</p>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-600 leading-relaxed font-medium">
+              You are about to permanently delete <span className="font-bold text-slate-900">{selectedIds.length}</span> contact inquiries. Are you sure you want to proceed?
+            </p>
+
+            <div className="flex gap-3 mt-8">
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="flex-1 py-3.5 bg-slate-100 text-slate-700 font-bold rounded-2xl hover:bg-slate-200 transition text-sm cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleBulkDelete}
+                disabled={actionId === "bulk"}
+                className="flex-1 py-3.5 bg-red-600 text-white font-bold rounded-2xl hover:bg-red-700 transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-red-200 disabled:opacity-50 cursor-pointer"
+              >
+                {actionId === "bulk" ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  "Yes, Delete All"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default Contact;
 

@@ -175,6 +175,36 @@ const exportContactsCsv = async (req, res, next) => {
   }
 };
 
+const bulkDeleteContacts = async (req, res, next) => {
+  try {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a list of contact IDs to delete"
+      });
+    }
+
+    const { error } = await supabase
+      .from("contacts")
+      .delete()
+      .in("id", ids);
+
+    if (error) {
+      console.error("[bulkDeleteContacts] Error:", error.message);
+      return res.status(500).json({ success: false, message: "Failed to delete selected contact inquiries." });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Selected contact inquiries deleted successfully"
+    });
+  } catch (error) {
+    console.error("Error in bulkDeleteContacts:", error);
+    next(error);
+  }
+};
+
 module.exports = {
   createContact,
   getContacts,
@@ -183,4 +213,5 @@ module.exports = {
   deleteContact,
   updateContactStatus,
   exportContactsCsv,
+  bulkDeleteContacts,
 };
