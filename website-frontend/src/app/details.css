@@ -2002,19 +2002,18 @@
 }
 
 .service-not-candidates-divider {
+  background: #3d5a99;
   width: 60px;
   height: 1px;
-  background: #e53e3e;
   margin: 0 auto;
 }
 
 .service-not-candidates-box {
   max-width: 900px;
   margin: 0 auto;
-  background: #fcfbf7;
-  padding: 50px;
+  background: #3d5a99;
   border-radius: 24px;
-  border: 1px solid #f2ede2;
+  padding: 50px;
 }
 
 .service-not-candidates-grid {
@@ -2030,30 +2029,30 @@
 }
 
 .service-not-candidates-icon-wrap {
+  background: #3d5a99;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
   flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
   width: 22px;
   height: 22px;
-  background: #fff5f5;
-  border: 1px solid #e53e3e;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-top: 2px;
+  display: flex;
 }
 
 .service-not-candidates-icon {
+  color: #ffffff;
   width: 10px;
   height: 10px;
-  color: #e53e3e;
 }
 
 .service-not-candidates-text {
-  font-family: 'Lato', sans-serif;
+  color: #ffffff;
+  font-family: Lato, sans-serif;
   font-size: 15px;
-  color: #444444;
-  line-height: 1.6;
   font-weight: 500;
+  line-height: 1.6;
 }
 
 /* ─── DYNAMIC TECHNIQUES SECTION ─────────────────────────────── */
