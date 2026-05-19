@@ -17,12 +17,12 @@ const getDashboardStats = async (req, res, next) => {
       { data: recentUsers }
     ] = await Promise.all([
       supabase.from('callbacks').select('*', { count: 'exact', head: true }),
-      supabase.from('contact').select('*', { count: 'exact', head: true }),
+      supabase.from('contacts').select('*', { count: 'exact', head: true }),
       supabase.from('callbacks').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString()),
-      supabase.from('contact').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString()),
-      supabase.from('appointment').select('*', { count: 'exact', head: true }),
-      supabase.from('appointment').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString()),
-      supabase.from('appointment').select('*', { count: 'exact', head: true }).eq('status', 'Completed'),
+      supabase.from('contacts').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString()),
+      supabase.from('appointments').select('*', { count: 'exact', head: true }),
+      supabase.from('appointments').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString()),
+      supabase.from('appointments').select('*', { count: 'exact', head: true }).in('status', ['converted', 'Completed', 'completed']),
       supabase.from('users').select('*, role:roles(name)').order('created_at', { ascending: false }).limit(5)
     ]);
 

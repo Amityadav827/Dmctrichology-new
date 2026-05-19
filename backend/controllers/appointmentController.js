@@ -1,4 +1,4 @@
-const Appointment = require("../models/Appointment");
+const supabase = require("../config/supabase");
 
 const createAppointment = async (req, res, next) => {
   try {
@@ -28,12 +28,24 @@ const createAppointment = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Please select an appointment date and time." });
     }
 
+    const trimmedMobile = mobile.trim().replace(/\s+/g, '');
+
     // Check for duplicate submissions in the last 2 minutes (prevent spam)
-    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
-    const existing = await Appointment.findOne({
-      mobile: mobile.trim(),
-      createdAt: { $gte: twoMinutesAgo }
-    });
+    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+    
+    const { data: existing, error: checkError } = await supabase
+      .from("appointments")
+      .select("id")
+      .eq("mobile", trimmedMobile)
+      .gte("created_at", twoMinutesAgo)
+      .limit(1)
+      .maybeSingle();
+
+    if (checkError) {
+      console.error("[createAppointment] Check Error:", checkError.message);
+      return res.status(500).json({ success: false, message: "Something went wrong. Please try again." });
+    }
+
     if (existing) {
       return res.status(400).json({
         success: false,
@@ -41,22 +53,36 @@ const createAppointment = async (req, res, next) => {
       });
     }
 
-    const appointment = await Appointment.create({
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      mobile: mobile.trim().replace(/\s+/g, ''),
-      service: service.trim(),
-      appointmentDate: new Date(appointmentDate),
-      message: message ? message.trim() : "",
-      status: "new"
-    });
+    const { data: appointment, error: insertError } = await supabase
+      .from("appointments")
+      .insert([
+        {
+          name: name.trim(),
+          email: email.trim().toLowerCase(),
+          mobile: trimmedMobile,
+          service: service.trim(),
+          appointment_date: new Date(appointmentDate).toISOString(),
+          message: message ? message.trim() : "",
+          status: "new",
+          notes: ""
+        }
+      ])
+      .select()
+      .single();
+
+    if (insertError) {
+      console.error("[createAppointment] Insert Error:", insertError.message);
+      return res.status(500).json({ success: false, message: "Something went wrong. Please try again." });
+    }
 
     return res.status(201).json({
       success: true,
       data: {
-        ...appointment.toJSON(),
-        _id: appointment._id,
-        appointmentDate: appointment.appointmentDate
+        ...appointment,
+        _id: appointment.id,
+        appointmentDate: appointment.appointment_date,
+        createdAt: appointment.created_at,
+        updatedAt: appointment.updated_at
       }
     });
   } catch (error) {
@@ -71,45 +97,53 @@ const getAppointments = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const filter = {};
+    let query = supabase
+      .from("appointments")
+      .select("*", { count: "exact" });
 
     // 1. Live search filter
     if (req.query.search) {
-      const searchRegex = new RegExp(req.query.search.trim(), "i");
-      filter.$or = [
-        { name: searchRegex },
-        { email: searchRegex },
-        { mobile: searchRegex }
-      ];
+      const searchVal = `%${req.query.search.trim()}%`;
+      query = query.or(`name.ilike.${searchVal},email.ilike.${searchVal},mobile.ilike.${searchVal}`);
     }
 
     // 2. Status filter
     if (req.query.status) {
-      filter.status = req.query.status.trim();
+      query = query.eq("status", req.query.status.trim());
     }
 
     // 3. Date range filter
-    if (req.query.startDate || req.query.endDate) {
-      filter.createdAt = {};
-      if (req.query.startDate) {
-        filter.createdAt.$gte = new Date(req.query.startDate);
-      }
-      if (req.query.endDate) {
-        const end = `${req.query.endDate}T23:59:59.999Z`;
-        filter.createdAt.$lte = new Date(end);
-      }
+    if (req.query.startDate) {
+      query = query.gte("created_at", new Date(req.query.startDate).toISOString());
+    }
+    if (req.query.endDate) {
+      const end = `${req.query.endDate}T23:59:59.999Z`;
+      query = query.lte("created_at", new Date(end).toISOString());
     }
 
-    const total = await Appointment.countDocuments(filter);
-    const appointments = await Appointment.find(filter)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
+    // 4. Sort order
+    const sortBy = req.query.sortBy || "createdAt";
+    const sortOrder = req.query.sortOrder || "desc";
+    const isAscending = sortOrder === "asc";
+    const sortByField = sortBy === "appointmentDate" ? "appointment_date" : "created_at";
 
-    const formattedData = appointments.map(item => ({
-      ...item.toJSON(),
-      appointmentDate: item.appointmentDate,
-      _id: item._id
+    query = query
+      .order(sortByField, { ascending: isAscending })
+      .range(skip, skip + limit - 1);
+
+    const { data: appointments, count, error } = await query;
+
+    if (error) {
+      console.error("[getAppointments] Query Error:", error.message);
+      return res.status(500).json({ success: false, message: "Failed to retrieve appointments." });
+    }
+
+    const formattedData = (appointments || []).map(item => ({
+      ...item,
+      _id: item.id,
+      appointmentDate: item.appointment_date,
+      createdAt: item.created_at,
+      updatedAt: item.updated_at
     }));
 
     return res.status(200).json({
@@ -119,8 +153,8 @@ const getAppointments = async (req, res, next) => {
       pagination: {
         page,
         limit,
-        total,
-        totalPages: Math.ceil(total / limit),
+        total: count || 0,
+        totalPages: Math.ceil((count || 0) / limit),
       },
     });
   } catch (error) {
@@ -131,17 +165,24 @@ const getAppointments = async (req, res, next) => {
 
 const getAppointmentById = async (req, res, next) => {
   try {
-    const appointment = await Appointment.findById(req.params.id);
-    if (!appointment) {
+    const { data: appointment, error } = await supabase
+      .from("appointments")
+      .select("*")
+      .eq("id", req.params.id)
+      .single();
+
+    if (error || !appointment) {
       return res.status(404).json({ success: false, message: "Appointment request not found" });
     }
 
     return res.status(200).json({
       success: true,
       data: {
-        ...appointment.toJSON(),
-        _id: appointment._id,
-        appointmentDate: appointment.appointmentDate
+        ...appointment,
+        _id: appointment.id,
+        appointmentDate: appointment.appointment_date,
+        createdAt: appointment.created_at,
+        updatedAt: appointment.updated_at
       }
     });
   } catch (error) {
@@ -156,23 +197,27 @@ const updateAppointment = async (req, res, next) => {
     const updates = {};
     if (status) updates.status = status;
     if (notes !== undefined) updates.notes = notes;
+    updates.updated_at = new Date().toISOString();
 
-    const appointment = await Appointment.findByIdAndUpdate(
-      req.params.id,
-      { $set: updates },
-      { new: true, runValidators: true }
-    );
+    const { data: appointment, error } = await supabase
+      .from("appointments")
+      .update(updates)
+      .eq("id", req.params.id)
+      .select()
+      .single();
 
-    if (!appointment) {
+    if (error || !appointment) {
       return res.status(404).json({ success: false, message: "Appointment request not found" });
     }
 
     return res.status(200).json({
       success: true,
       data: {
-        ...appointment.toJSON(),
-        _id: appointment._id,
-        appointmentDate: appointment.appointmentDate
+        ...appointment,
+        _id: appointment.id,
+        appointmentDate: appointment.appointment_date,
+        createdAt: appointment.created_at,
+        updatedAt: appointment.updated_at
       }
     });
   } catch (error) {
@@ -183,10 +228,17 @@ const updateAppointment = async (req, res, next) => {
 
 const deleteAppointment = async (req, res, next) => {
   try {
-    const appointment = await Appointment.findByIdAndDelete(req.params.id);
-    if (!appointment) {
+    const { data: appointment, error } = await supabase
+      .from("appointments")
+      .delete()
+      .eq("id", req.params.id)
+      .select()
+      .maybeSingle();
+
+    if (error || !appointment) {
       return res.status(404).json({ success: false, message: "Appointment request not found" });
     }
+
     return res.status(200).json({
       success: true,
       message: "Appointment deleted successfully",
@@ -207,7 +259,15 @@ const bulkDeleteAppointments = async (req, res, next) => {
       });
     }
 
-    await Appointment.deleteMany({ _id: { $in: ids } });
+    const { error } = await supabase
+      .from("appointments")
+      .delete()
+      .in("id", ids);
+
+    if (error) {
+      console.error("[bulkDeleteAppointments] Error:", error.message);
+      return res.status(500).json({ success: false, message: "Failed to delete selected appointments." });
+    }
 
     return res.status(200).json({
       success: true,
@@ -221,43 +281,45 @@ const bulkDeleteAppointments = async (req, res, next) => {
 
 const exportAppointmentsCsv = async (req, res, next) => {
   try {
-    const filter = {};
+    let query = supabase
+      .from("appointments")
+      .select("*");
 
     // Apply exact same search / status / date range filters on export
     if (req.query.search) {
-      const searchRegex = new RegExp(req.query.search.trim(), "i");
-      filter.$or = [
-        { name: searchRegex },
-        { email: searchRegex },
-        { mobile: searchRegex }
-      ];
+      const searchVal = `%${req.query.search.trim()}%`;
+      query = query.or(`name.ilike.${searchVal},email.ilike.${searchVal},mobile.ilike.${searchVal}`);
     }
     if (req.query.status) {
-      filter.status = req.query.status.trim();
+      query = query.eq("status", req.query.status.trim());
     }
-    if (req.query.startDate || req.query.endDate) {
-      filter.createdAt = {};
-      if (req.query.startDate) {
-        filter.createdAt.$gte = new Date(req.query.startDate);
-      }
-      if (req.query.endDate) {
-        const end = `${req.query.endDate}T23:59:59.999Z`;
-        filter.createdAt.$lte = new Date(end);
-      }
+    if (req.query.startDate) {
+      query = query.gte("created_at", new Date(req.query.startDate).toISOString());
+    }
+    if (req.query.endDate) {
+      const end = `${req.query.endDate}T23:59:59.999Z`;
+      query = query.lte("created_at", new Date(end).toISOString());
     }
 
-    const appointments = await Appointment.find(filter).sort({ createdAt: -1 });
+    query = query.order("created_at", { ascending: false });
+
+    const { data: appointments, error } = await query;
+
+    if (error) {
+      console.error("[exportAppointmentsCsv] Error:", error.message);
+      return res.status(500).json({ success: false, message: "Failed to export CSV." });
+    }
 
     let csv = "ID,Name,Email,Mobile,Service,AppointmentDate,Status,Notes,CreatedAt\n";
-    appointments.forEach(row => {
-      const idStr = row._id.toString();
+    (appointments || []).forEach(row => {
+      const idStr = row.id;
       const nameStr = row.name.replace(/"/g, '""');
       const emailStr = row.email.replace(/"/g, '""');
       const serviceStr = row.service.replace(/"/g, '""');
       const notesStr = (row.notes || "").replace(/"/g, '""');
       
-      const apptDateStr = row.appointmentDate ? row.appointmentDate.toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
-      const createdStr = row.createdAt ? row.createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
+      const apptDateStr = row.appointment_date ? new Date(row.appointment_date).toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
+      const createdStr = row.created_at ? new Date(row.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
       
       csv += `"${idStr}","${nameStr}","${emailStr}","${row.mobile}","${serviceStr}","${apptDateStr}","${row.status}","${notesStr}","${createdStr}"\n`;
     });
@@ -280,3 +342,4 @@ module.exports = {
   bulkDeleteAppointments,
   exportAppointmentsCsv,
 };
+
