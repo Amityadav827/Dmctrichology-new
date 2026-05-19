@@ -151,6 +151,9 @@ function Sidebar() {
                 <NavLink to="/leads/callback" className={getNavClass}>
                   <PhoneCall size={16} /> Request Callback
                 </NavLink>
+                <NavLink to="/leads/appointment" className={getNavClass}>
+                  <CalendarCheck size={16} /> Consultation Requests
+                </NavLink>
                 <NavLink to="/leads/contact" className={getNavClass}>
                   <Mail size={16} /> Contact Leads
                 </NavLink>
@@ -234,11 +237,7 @@ function Sidebar() {
         {(hasPermission("seo") || hasPermission("testimonial")) && (
           <>
             <SectionLabel>SEO & Leads</SectionLabel>
-            {hasPermission("seo") && (
-              <NavLink to="/leads/appointment" className={getNavClass}>
-                <CalendarCheck size={16} /> Appointments
-              </NavLink>
-            )}
+
             {hasPermission("seo") && (
               <NavLink to="/seo/redirects" className={getNavClass}>
                 <LinkIcon size={16} /> Redirects
