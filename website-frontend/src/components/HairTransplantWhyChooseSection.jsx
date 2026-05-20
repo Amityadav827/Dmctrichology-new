@@ -1,30 +1,40 @@
 import React from "react";
 
-const points = [
-  "Expert Team of Surgeons",
-  "Advanced Techniques",
+const defaultPoints = [
+  "Expert Team of Specialists",
+  "Advanced Techniques & Equipment",
   "State-of-the-Art Facilities",
   "Personalized Treatment Plans",
-  "Best Results of Hair Transplant",
-  "Affordable Cost",
-  "Patient Positive Feedback",
-  "Patient Support and Care",
+  "Best In-Class Treatment Results",
+  "Affordable & Transparent Cost",
+  "Outstanding Patient Reviews",
+  "Dedicated Post-Care & Support",
 ];
 
-export default function HairTransplantWhyChooseSection({ image = "" }) {
+export default function HairTransplantWhyChooseSection({ data, image = "", serviceTitle = "", pageSlug = "" }) {
+  const resolvedHeading = data?.sectionHeading || `WHY CHOOSE DMC TRICHOLOGY FOR ${serviceTitle ? serviceTitle.toUpperCase() : "THIS TREATMENT"}?`;
+  const resolvedIntro = data?.introText || `Choose us for ${serviceTitle || "your treatment"} because we offer advanced procedures to ensure high-quality care for patients.`;
+  
+  const activePoints = data?.points || data?.bullets || defaultPoints;
+  const filteredPoints = activePoints
+    .map(p => (typeof p === "string" ? p : p.bulletText || p.text || ""))
+    .filter(Boolean);
+
+  if (filteredPoints.length === 0) return null;
+
   return (
     <section className="hair-transplant-why-section">
       <div className="hair-transplant-why-container">
         <div className="hair-transplant-why-content">
           <h2 className="hair-transplant-why-heading">
-            WHY CHOOSE DMC TRICHOLOGY FOR HAIR TRANSPLANT IN DELHI?
+            {resolvedHeading}
           </h2>
           <p className="hair-transplant-why-intro">
-            Choose us for a <strong>hair transplant in Delhi</strong> because we offer hair transplant procedures to ensure high-quality care for patients.
+            {resolvedIntro}
           </p>
           <ul className="hair-transplant-why-list">
-            {points.map((point) => (
-              <li className="hair-transplant-why-item" key={point}>
+            {filteredPoints.map((point, index) => (
+              <li className="hair-transplant-why-item" key={index}>
                 <span className="hair-transplant-why-check">
                   <svg
                     className="hair-transplant-why-check-icon"
@@ -46,7 +56,7 @@ export default function HairTransplantWhyChooseSection({ image = "" }) {
           <div className="hair-transplant-why-image-wrap">
             <img
               src={image}
-              alt="DMC Trichology hair transplant care"
+              alt={serviceTitle || "DMC Trichology care"}
               className="hair-transplant-why-image"
               loading="lazy"
             />

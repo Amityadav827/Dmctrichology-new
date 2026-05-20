@@ -1,7 +1,6 @@
 import React from "react";
-import { X } from "lucide-react";
 
-export default function ServiceNotCandidates({ data }) {
+export default function ServiceNotCandidates({ data, serviceTitle = "" }) {
   if (!data || data.isVisible === false) return null;
 
   const { sectionHeading, bullets } = data;
@@ -11,29 +10,31 @@ export default function ServiceNotCandidates({ data }) {
 
   if (activeBullets.length === 0 && !sectionHeading) return null;
 
-  return (
-    <section className="service-not-candidates-section">
-      <div className="service-not-candidates-container">
-        <div className="service-not-candidates-header">
-          <h2 className="service-not-candidates-heading">
-            {sectionHeading || "Contraindications & Exclusions"}
-          </h2>
-          <div className="service-not-candidates-divider"></div>
-        </div>
+  const displayHeading = sectionHeading || `WHO IS NOT A CANDIDATE FOR ${serviceTitle ? serviceTitle.toUpperCase() : "THIS TREATMENT"}?`;
 
-        <div className="service-not-candidates-box">
-          <div className="service-not-candidates-grid">
-            {activeBullets.map((pt, i) => (
-              <div key={i} className="service-not-candidates-item">
-                <div className="service-not-candidates-icon-wrap">
-                  <X className="service-not-candidates-icon" />
-                </div>
-                <p className="service-not-candidates-text">
-                  {pt.bulletText}
-                </p>
-              </div>
-            ))}
-          </div>
+  return (
+    <section className="best-hair-transplant-not-candidate-strip">
+      <div className="best-hair-transplant-not-candidate-inner">
+        <h2 className="best-hair-transplant-not-candidate-heading">
+          {displayHeading}
+        </h2>
+        <div className="best-hair-transplant-not-candidate-list">
+          {activeBullets.map((pt, i) => (
+            <div key={i} className="best-hair-transplant-not-candidate-item">
+              <span className="best-hair-transplant-not-candidate-check">
+                <svg
+                  className="best-hair-transplant-not-candidate-icon"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                </svg>
+              </span>
+              <span>{pt.bulletText}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

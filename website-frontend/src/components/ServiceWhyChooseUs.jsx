@@ -38,8 +38,14 @@ export default function ServiceWhyChooseUs({ data, pageSlug = "" }) {
 
   if (activeFeatures.length === 0 && !sectionHeading) return null;
 
+  const lowerSlug = (pageSlug || "").toLowerCase();
+  const hasSurgery = lowerSlug.includes("transplant") || lowerSlug.includes("surgery") || lowerSlug.includes("fue");
+  const dynamicFollowUp = hasSurgery 
+    ? "Schedule check-up appointments after 3 months and 6 months after the surgery to see the progress of the results." 
+    : "Schedule regular follow-up sessions as advised by our specialists to monitor your progress and maintain optimal results.";
+
   return (
-    <section className={`service-whychoose-section ${pageSlug === "best-hair-transplant" ? "best-hair-transplant-scalp-care" : ""}`}>
+    <section className="service-whychoose-section best-hair-transplant-scalp-care">
       <div className="service-whychoose-container">
         <div className="service-whychoose-header">
           <div>
@@ -58,7 +64,7 @@ export default function ServiceWhyChooseUs({ data, pageSlug = "" }) {
 
         <div className="service-whychoose-grid">
           {activeFeatures.map((ft, i) => {
-            const Icon = pageSlug === "best-hair-transplant" ? getAftercareIcon(ft.featureText) : Award;
+            const Icon = getAftercareIcon(ft.featureText);
 
             return (
               <div key={i} className="service-whychoose-card">
@@ -73,14 +79,9 @@ export default function ServiceWhyChooseUs({ data, pageSlug = "" }) {
           })}
         </div>
 
-        {pageSlug === "best-hair-transplant" && (
-          <>
-            <p className="service-whychoose-followup-note">
-              {followUpText}
-            </p>
-
-          </>
-        )}
+        <p className="service-whychoose-followup-note">
+          {dynamicFollowUp}
+        </p>
       </div>
     </section>
   );

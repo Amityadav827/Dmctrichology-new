@@ -14,15 +14,19 @@ export default function ServiceInfoBlocks({ data, pageSlug = "" }) {
     <div className="service-infoblocks-wrapper">
       {activeBlocks.map((block, i) => {
         const isCream = block.backgroundVariant === "cream";
-        const isBestHairTransplantProcedure =
-          pageSlug === "best-hair-transplant" &&
-          String(block.heading || "").toLowerCase().includes("hair transplant procedure");
+        const headingLower = String(block.heading || "").toLowerCase();
+        const isPremiumProcedureBlock =
+          headingLower.includes("procedure") ||
+          headingLower.includes("process") ||
+          headingLower.includes("how it works") ||
+          headingLower.includes("treatment steps") ||
+          headingLower.includes("step by step");
         const descriptionParts = String(block.description || "")
           .split(/\n+/)
           .map(part => part.trim())
           .filter(Boolean);
 
-        if (isBestHairTransplantProcedure) {
+        if (isPremiumProcedureBlock) {
           return (
             <section
               key={i}

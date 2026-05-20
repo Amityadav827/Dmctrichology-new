@@ -15,7 +15,7 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
   
   // Defensive normalization of googleReviewCta prop
   const normalizedReview = googleReviewCta || {};
-  const showReview = normalizedReview.isVisible === true || (pageSlug === "best-hair-transplant" && normalizedReview.isVisible !== false);
+  const showReview = normalizedReview && normalizedReview.isVisible !== false;
 
   if (!showFaqs && !showReview) return null;
 
