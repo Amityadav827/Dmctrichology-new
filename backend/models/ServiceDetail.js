@@ -164,6 +164,8 @@ const ServiceDetailSchema = new mongoose.Schema({
   },
 
   editorialFaqSection: {
+    sectionSubtitle: { type: String, default: "EXPERT ANSWERS" },
+    sectionTitle: { type: String, default: "EDITORIAL FAQ" },
     faqs: [{
       question: { type: String, default: "" },
       answer: { type: String, default: "" },

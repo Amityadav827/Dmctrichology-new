@@ -2298,6 +2298,41 @@ export default function ServiceDetailCMS() {
                 </div>
 
                 <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Section Subtitle</label>
+                      <input 
+                        type="text" 
+                        value={data.editorialFaqSection?.sectionSubtitle ?? ""} 
+                        onChange={e => setData(prev => ({
+                          ...prev,
+                          editorialFaqSection: {
+                            ...(prev.editorialFaqSection || {}),
+                            sectionSubtitle: e.target.value
+                          }
+                        }))} 
+                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" 
+                        placeholder="EXPERT ANSWERS"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Section Title</label>
+                      <input 
+                        type="text" 
+                        value={data.editorialFaqSection?.sectionTitle ?? ""} 
+                        onChange={e => setData(prev => ({
+                          ...prev,
+                          editorialFaqSection: {
+                            ...(prev.editorialFaqSection || {}),
+                            sectionTitle: e.target.value
+                          }
+                        }))} 
+                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" 
+                        placeholder="EDITORIAL FAQ"
+                      />
+                    </div>
+                  </div>
+
                   <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
                     <div className="space-y-4">
                       <div className="flex justify-between items-center">

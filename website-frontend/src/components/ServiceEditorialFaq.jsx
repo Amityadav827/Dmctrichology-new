@@ -29,9 +29,9 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
         {showFaqs && (
           <>
             <div className="service-edfaq-header">
-              <span className="service-edfaq-label">Expert Answers</span>
+              <span className="service-edfaq-label">{data?.sectionSubtitle || "EXPERT ANSWERS"}</span>
               <h2 className="service-edfaq-heading">
-                Editorial FAQ
+                {data?.sectionTitle || "EDITORIAL FAQ"}
               </h2>
               <div className="service-edfaq-divider"></div>
             </div>
