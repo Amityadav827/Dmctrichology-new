@@ -366,7 +366,7 @@ function TreatmentEnquiries() {
 
         {/* Improved Filter Bar */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="relative col-span-1 md:col-span-2">
+          <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input
               type="text"
@@ -377,37 +377,34 @@ function TreatmentEnquiries() {
             />
           </div>
 
-          <div>
-            <FilterDropdown
-              value={status}
-              onChange={setStatus}
-              options={statusOptions}
-              label="All Statuses"
-              icon={Filter}
+          <FilterDropdown
+            value={status}
+            onChange={setStatus}
+            options={statusOptions}
+            label="All Statuses"
+            icon={Filter}
+          />
+
+          <div className="relative">
+            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:bg-white transition outline-none font-bold text-slate-600"
+              title="Start Date"
             />
           </div>
 
-          <div className="flex gap-2">
-            <div className="relative flex-1">
-              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="w-full pl-11 pr-3 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-xs font-bold text-slate-600 outline-none hover:bg-white hover:border-slate-200 transition h-[52px]"
-                title="Start Date"
-              />
-            </div>
-            <div className="relative flex-1">
-              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full pl-11 pr-3 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-xs font-bold text-slate-600 outline-none hover:bg-white hover:border-slate-200 transition h-[52px]"
-                title="End Date"
-              />
-            </div>
+          <div className="relative">
+            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:bg-white transition outline-none font-bold text-slate-600"
+              title="End Date"
+            />
           </div>
         </div>
       </div>
