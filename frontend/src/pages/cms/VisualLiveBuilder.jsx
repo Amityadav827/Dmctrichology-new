@@ -108,6 +108,12 @@ export default function VisualLiveBuilder() {
         { id: 'virtual-tour-cards', label: 'Virtual Tour Gallery Cards' }
       ];
     }
+    if (currentSlug === 'influencers') {
+      return [
+        { id: 'influencer-hero', label: 'Influencer Hero Banner' },
+        { id: 'influencer-cards', label: 'Influencer Showcase Cards' }
+      ];
+    }
     return allSections;
   };
 
@@ -218,6 +224,8 @@ export default function VisualLiveBuilder() {
           case 'press-media-cards': endpoint = '/press-media'; break;
           case 'virtual-tour-hero': endpoint = '/virtual-tour'; break;
           case 'virtual-tour-cards': endpoint = '/virtual-tour'; break;
+          case 'influencer-hero': endpoint = '/influencers'; break;
+          case 'influencer-cards': endpoint = '/influencers'; break;
           default: endpoint = `/sections/${sectionId}`;
         }
 
@@ -462,7 +470,9 @@ export default function VisualLiveBuilder() {
                             'Press Media Hero Banner': '/cms/press-media',
                             'Press Media Featured Cards': '/cms/press-media',
                             'Virtual Tour Hero Banner': '/cms/virtual-tour',
-                            'Virtual Tour Gallery Cards': '/cms/virtual-tour'
+                            'Virtual Tour Gallery Cards': '/cms/virtual-tour',
+                            'Influencer Hero Banner': '/cms/influencers',
+                            'Influencer Showcase Cards': '/cms/influencers'
                           };
                           if(routeMap[activeSection.label]) navigate(routeMap[activeSection.label]);
                         }}

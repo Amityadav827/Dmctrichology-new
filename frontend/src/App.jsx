@@ -53,6 +53,7 @@ import FaqCMS from "./pages/cms/FaqCMS";
 import BlogsHomeCMS from "./pages/cms/BlogsHomeCMS";
 import PressMediaCMS from "./pages/cms/PressMediaCMS";
 import VirtualTourCMS from "./pages/cms/VirtualTourCMS";
+import InfluencerCMS from "./pages/cms/InfluencerCMS";
 import VisualLiveBuilder from "./pages/cms/VisualLiveBuilder";
 import DetailsBannerCMS from "./pages/cms/DetailsBannerCMS";
 import ServiceIntroCMS from "./pages/cms/ServiceIntroCMS";
@@ -211,6 +212,14 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <VirtualTourCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/influencers"
+          element={
+            <ProtectedRoute permission="cms">
+              <InfluencerCMS />
             </ProtectedRoute>
           }
         />
