@@ -1,7 +1,54 @@
 "use client";
 import React from 'react';
+import EditableSection from './Editable/EditableSection';
+import EditableText from './Editable/EditableText';
+import { useBuilder } from '../context/BuilderContext';
 
-const PressMediaHero = ({ data }) => {
+const PressMediaHero = ({ data: initialData }) => {
+  const { isEditMode, siteConfig } = useBuilder();
+  const [data, setData] = React.useState(initialData || {});
+
+  // Real-time sync from Visual Builder (postMessage UPDATE_CONFIG)
+  React.useEffect(() => {
+    if (isEditMode && siteConfig) {
+      const updatedData = { ...data };
+      let hasChanges = false;
+
+      Object.keys(siteConfig).forEach(key => {
+        if (key.startsWith('press-media-hero.hero.')) {
+          hasChanges = true;
+          const field = key.replace('press-media-hero.hero.', '');
+          updatedData[field] = siteConfig[key];
+        }
+      });
+
+      if (hasChanges) setData(updatedData);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditMode, siteConfig]);
+
+  // Sync when initial server data changes
+  React.useEffect(() => {
+    if (initialData) setData(initialData);
+  }, [initialData]);
+
+  // Real-time sync from cms-update custom events (e.g. PressMediaSection on home)
+  React.useEffect(() => {
+    const handleCmsUpdate = (e) => {
+      if (e.detail.sectionId === 'press-media-hero') {
+        const { fieldPath, value } = e.detail;
+        setData(prev => {
+          const next = { ...prev };
+          const field = fieldPath.replace('hero.', '');
+          next[field] = value;
+          return next;
+        });
+      }
+    };
+    window.addEventListener('cms-update', handleCmsUpdate);
+    return () => window.removeEventListener('cms-update', handleCmsUpdate);
+  }, []);
+
   const {
     title = 'Press & Media',
     breadcrumbText = 'Press & Media',
@@ -13,43 +60,53 @@ const PressMediaHero = ({ data }) => {
 
   return (
     <>
-      <section
-        className="pm-hero-banner"
-        style={{
-          minHeight: bannerHeight,
-          backgroundImage: bannerImage ? `url(${bannerImage})` : 'none',
-        }}
-      >
-        {/* Gradient overlay */}
-        <div
-          className="pm-hero-overlay"
-          style={{ opacity: overlayOpacity }}
-        />
+      <EditableSection sectionId="press-media-hero" label="Press Media Hero Banner">
+        <section
+          className="pm-hero-banner"
+          style={{
+            minHeight: bannerHeight,
+            backgroundImage: bannerImage ? `url(${bannerImage})` : 'none',
+          }}
+        >
+          {/* Gradient overlay */}
+          <div
+            className="pm-hero-overlay"
+            style={{ opacity: overlayOpacity }}
+          />
 
-        {/* Floating particles */}
-        <div className="pm-hero-particles" aria-hidden="true">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className={`pm-particle pm-particle-${i + 1}`} />
-          ))}
-        </div>
-
-        {/* Content */}
-        <div className="pm-hero-content max-w-[1400px] mx-auto w-full">
-          <div className="pm-hero-badge">Press & Media Coverage</div>
-
-          <h1 className="pm-hero-title">{title}</h1>
-
-          <div className="pm-hero-breadcrumb">
-            <a href="/" className="pm-bc-home">Home</a>
-            <span className="pm-bc-sep" aria-hidden="true">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M4.5 2.5L7.5 6L4.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </span>
-            <span className="pm-bc-current">{breadcrumbText}</span>
+          {/* Floating particles */}
+          <div className="pm-hero-particles" aria-hidden="true">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className={`pm-particle pm-particle-${i + 1}`} />
+            ))}
           </div>
-        </div>
-      </section>
+
+          {/* Content */}
+          <div className="pm-hero-content max-w-[1400px] mx-auto w-full">
+            <div className="pm-hero-badge">Press &amp; Media Coverage</div>
+
+            <h1 className="pm-hero-title">
+              <EditableText sectionId="press-media-hero" fieldPath="hero.title">
+                {String(title || '')}
+              </EditableText>
+            </h1>
+
+            <div className="pm-hero-breadcrumb">
+              <a href="/" className="pm-bc-home">Home</a>
+              <span className="pm-bc-sep" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M4.5 2.5L7.5 6L4.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
+              <span className="pm-bc-current">
+                <EditableText sectionId="press-media-hero" fieldPath="hero.breadcrumbText">
+                  {String(breadcrumbText || '')}
+                </EditableText>
+              </span>
+            </div>
+          </div>
+        </section>
+      </EditableSection>
 
       <style>{`
         .pm-hero-banner {
@@ -172,9 +229,7 @@ const PressMediaHero = ({ data }) => {
           transition: color 0.2s ease;
         }
 
-        .pm-bc-home:hover {
-          color: #ffffff;
-        }
+        .pm-bc-home:hover { color: #ffffff; }
 
         .pm-bc-sep {
           color: rgba(255,255,255,0.4);
@@ -182,32 +237,17 @@ const PressMediaHero = ({ data }) => {
           align-items: center;
         }
 
-        .pm-bc-current {
-          color: #ffffff;
-          font-weight: 400;
-        }
+        .pm-bc-current { color: #ffffff; font-weight: 400; }
 
         @media (max-width: 768px) {
-          .pm-hero-banner {
-            padding: 140px 5% 80px;
-            min-height: 320px !important;
-          }
-          .pm-hero-title {
-            font-size: 40px !important;
-          }
-          .pm-particle-3,
-          .pm-particle-7 {
-            display: none;
-          }
+          .pm-hero-banner { padding: 140px 5% 80px; min-height: 320px !important; }
+          .pm-hero-title { font-size: 40px !important; }
+          .pm-particle-3, .pm-particle-7 { display: none; }
         }
 
         @media (max-width: 480px) {
-          .pm-hero-title {
-            font-size: 32px !important;
-          }
-          .pm-hero-badge {
-            font-size: 10px;
-          }
+          .pm-hero-title { font-size: 32px !important; }
+          .pm-hero-badge { font-size: 10px; }
         }
       `}</style>
     </>

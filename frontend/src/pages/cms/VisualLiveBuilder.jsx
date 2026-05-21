@@ -96,6 +96,12 @@ export default function VisualLiveBuilder() {
         { id: 'blog-listing', label: 'Blog Listing Section' }
       ];
     }
+    if (currentSlug === 'press-media') {
+      return [
+        { id: 'press-media-hero', label: 'Press Media Hero Banner' },
+        { id: 'press-media-cards', label: 'Press Media Featured Cards' }
+      ];
+    }
     return allSections;
   };
 
@@ -202,6 +208,8 @@ export default function VisualLiveBuilder() {
           case 'contact-map': endpoint = '/contact-page'; break;
           case 'blog-hero': endpoint = '/blog-page'; break;
           case 'blog-listing': endpoint = '/blog-page'; break;
+          case 'press-media-hero': endpoint = '/press-media'; break;
+          case 'press-media-cards': endpoint = '/press-media'; break;
           default: endpoint = `/sections/${sectionId}`;
         }
 
@@ -442,7 +450,9 @@ export default function VisualLiveBuilder() {
                             'Location Map Section': '/cms/contact-page',
                             'Contact Page Consultation': '/cms/contact-page',
                             'Blog Hero Banner': '/cms/blog-page',
-                            'Blog Listing Section': '/cms/blog-page'
+                            'Blog Listing Section': '/cms/blog-page',
+                            'Press Media Hero Banner': '/cms/press-media',
+                            'Press Media Featured Cards': '/cms/press-media'
                           };
                           if(routeMap[activeSection.label]) navigate(routeMap[activeSection.label]);
                         }}
