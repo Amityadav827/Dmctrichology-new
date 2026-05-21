@@ -89,7 +89,7 @@ const VirtualTourHero = ({ data: initialData }) => {
               </EditableText>
             </h1>
 
-            <div className="vt-hero-breadcrumb mb-8">
+            <div className="vt-hero-breadcrumb">
               <a href="/" className="vt-bc-home">Home</a>
               <span className="vt-bc-sep" aria-hidden="true">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -102,14 +102,6 @@ const VirtualTourHero = ({ data: initialData }) => {
                 </EditableText>
               </span>
             </div>
-
-            {ctaText && (
-              <a href={ctaLink} className="vt-hero-cta">
-                <EditableText sectionId="virtual-tour-hero" fieldPath="hero.ctaText">
-                  {String(ctaText)}
-                </EditableText>
-              </a>
-            )}
           </div>
         </section>
       </EditableSection>
