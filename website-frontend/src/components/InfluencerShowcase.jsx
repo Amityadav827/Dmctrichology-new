@@ -152,7 +152,6 @@ const InfluencerCard = ({ card, idx }) => {
                 <video
                     ref={videoRef}
                     src={videoData.src}
-                    poster={card.thumbnail || undefined}
                     muted={isMuted}
                     loop={card.loop ?? true}
                     playsInline
@@ -186,17 +185,6 @@ const InfluencerCard = ({ card, idx }) => {
                     <path d="M24 16v16m-8-8h16" stroke="rgba(59,89,152,0.4)" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
             </div>
-        )}
-      </div>
-
-      {/* Content below video */}
-      <div className="inf-card-content">
-        <h3 className="inf-card-title">{card.title}</h3>
-        <p className="inf-card-desc">{card.subtitle}</p>
-        {card.ctaLink && card.ctaLink !== '#' && (
-          <a href={card.ctaLink} target="_blank" rel="noopener noreferrer" className="inf-card-btn">
-            {card.ctaText || 'Watch Now'}
-          </a>
         )}
       </div>
     </div>
@@ -256,10 +244,9 @@ const GalleryStyles = () => (
     .inf-card-media-wrap {
       position: relative;
       width: 100%;
-      height: 480px; /* Fixed height for video section */
+      height: 100%; /* Take full height of card */
       overflow: hidden;
       background: #000;
-      flex-shrink: 0;
     }
 
     .inf-card-video, .inf-card-iframe {
@@ -310,54 +297,6 @@ const GalleryStyles = () => (
     .inf-ctrl-btn:hover {
         background: rgba(59,89,152,0.8);
         transform: scale(1.1);
-    }
-
-    .inf-card-content {
-      padding: 24px;
-      background: #ffffff;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .inf-card-title {
-      font-family: 'Marcellus', serif !important;
-      font-size: 20px !important;
-      color: #1a2740 !important;
-      margin: 0 0 8px !important;
-      line-height: 1.3 !important;
-    }
-
-    .inf-card-desc {
-      font-family: 'Lato', sans-serif;
-      font-size: 14px;
-      color: #64748b;
-      margin: 0 0 20px;
-      line-height: 1.5;
-      flex-grow: 1;
-    }
-
-    .inf-card-btn {
-      align-self: flex-start;
-      display: inline-block;
-      padding: 10px 24px;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      color: #3b5998;
-      font-family: 'Lato', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      border-radius: 100px;
-      text-decoration: none;
-      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-    }
-
-    .inf-card-btn:hover {
-      background: #3b5998;
-      color: #ffffff;
-      border-color: #3b5998;
     }
 
     @media (max-width: 1024px) {

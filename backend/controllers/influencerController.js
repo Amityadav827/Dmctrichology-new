@@ -4,11 +4,6 @@ const defaultInfluencerCards = [
   {
     id: '1',
     videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    thumbnail: 'https://res.cloudinary.com/dseixl6px/image/upload/v1714467794/sample.jpg',
-    title: 'Dr. Nivedita Dadu',
-    subtitle: 'Laser Hair Reduction',
-    ctaText: 'Watch on Instagram',
-    ctaLink: '#',
     autoplay: false,
     muted: true,
     loop: true,

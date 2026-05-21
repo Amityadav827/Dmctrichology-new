@@ -61,11 +61,6 @@ const DEFAULT_HERO = {
 const DEFAULT_CARD = {
   id: '',
   videoUrl: '',
-  thumbnail: '',
-  title: '',
-  subtitle: '',
-  ctaText: 'Watch on Instagram',
-  ctaLink: '#',
   autoplay: false,
   muted: true,
   loop: true,
@@ -184,25 +179,6 @@ export default function InfluencerCMS() {
     });
   };
 
-  const handleCardImageUpload = async (e, index) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const formData = new FormData();
-    formData.append('image', file);
-    try {
-      toast.loading('Uploading thumbnail...', { id: 'upload-card' });
-      const res = await axios.post('/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      if (res.data.success) {
-        updateCard(index, 'thumbnail', res.data.url);
-        toast.success('Uploaded successfully', { id: 'upload-card' });
-      }
-    } catch (err) {
-      toast.error('Upload failed', { id: 'upload-card' });
-    }
-  };
-  
   const handleCardVideoUpload = async (e, index) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -496,64 +472,6 @@ export default function InfluencerCMS() {
                             className="w-4 h-4 rounded text-blue-600"
                         /> Loop
                     </label>
-                </div>
-
-                <Field label="Video Thumbnail (Optional Poster Image)">
-                  <div className="space-y-4">
-                    {card.thumbnail && <ImgPreview src={card.thumbnail} className="w-24 h-24 object-cover rounded-xl" />}
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={card.thumbnail}
-                        onChange={(e) => updateCard(index, 'thumbnail', e.target.value)}
-                        placeholder="Image URL"
-                        className={`${inputCls} flex-1`}
-                      />
-                      <label className="flex items-center justify-center px-4 bg-slate-100 text-slate-700 rounded-xl cursor-pointer hover:bg-slate-200 transition-colors font-bold text-sm shrink-0">
-                        Upload
-                        <input type="file" className="hidden" accept="image/*" onChange={(e) => handleCardImageUpload(e, index)} />
-                      </label>
-                    </div>
-                  </div>
-                </Field>
-
-                <Field label="Title (e.g. Influencer Name)">
-                  <input
-                    type="text"
-                    value={card.title}
-                    onChange={(e) => updateCard(index, 'title', e.target.value)}
-                    className={inputCls}
-                  />
-                </Field>
-
-                <Field label="Subtitle / Short Description">
-                  <textarea
-                    value={card.subtitle}
-                    onChange={(e) => updateCard(index, 'subtitle', e.target.value)}
-                    className={inputCls}
-                    rows={2}
-                  />
-                </Field>
-
-                <div className="grid grid-cols-2 gap-4">
-                    <Field label="CTA Button Text">
-                    <input
-                        type="text"
-                        value={card.ctaText}
-                        onChange={(e) => updateCard(index, 'ctaText', e.target.value)}
-                        className={inputCls}
-                        placeholder="Watch on Instagram"
-                    />
-                    </Field>
-                    <Field label="CTA Button Link">
-                    <input
-                        type="text"
-                        value={card.ctaLink}
-                        onChange={(e) => updateCard(index, 'ctaLink', e.target.value)}
-                        className={inputCls}
-                        placeholder="https://instagram.com/..."
-                    />
-                    </Field>
                 </div>
 
               </div>
