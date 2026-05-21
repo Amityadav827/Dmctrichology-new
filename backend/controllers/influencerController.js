@@ -3,33 +3,17 @@ const Influencer = require('../models/Influencer');
 const defaultInfluencerCards = [
   {
     id: '1',
-    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', // Placeholder video
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
     thumbnail: 'https://res.cloudinary.com/dseixl6px/image/upload/v1714467794/sample.jpg',
-    influencerName: 'John Doe',
-    caption: 'Best clinic experience ever!',
-    instagramLink: '#',
+    title: 'Dr. Nivedita Dadu',
+    subtitle: 'Laser Hair Reduction',
+    ctaText: 'Watch on Instagram',
+    ctaLink: '#',
+    autoplay: false,
+    muted: true,
+    loop: true,
     isVisible: true,
     order: 0
-  },
-  {
-    id: '2',
-    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    thumbnail: 'https://res.cloudinary.com/dseixl6px/image/upload/v1714467794/sample.jpg',
-    influencerName: 'Jane Smith',
-    caption: 'Highly recommend their treatments.',
-    instagramLink: '#',
-    isVisible: true,
-    order: 1
-  },
-  {
-    id: '3',
-    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    thumbnail: 'https://res.cloudinary.com/dseixl6px/image/upload/v1714467794/sample.jpg',
-    influencerName: 'Alex Johnson',
-    caption: 'Amazing results in just weeks.',
-    instagramLink: '#',
-    isVisible: true,
-    order: 2
   }
 ];
 
@@ -58,7 +42,6 @@ exports.updateInfluencers = async (req, res) => {
 
     const u = req.body;
 
-    if (u.hero !== undefined) data.hero = { ...data.hero.toObject?.() ?? data.hero, ...u.hero };
     if (u.influencerCards !== undefined) data.influencerCards = u.influencerCards;
 
     await data.save();
