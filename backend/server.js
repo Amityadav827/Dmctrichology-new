@@ -65,6 +65,7 @@ const contactPageRoutes = require("./routes/contactPageRoutes");
 const blogPageRoutes = require("./routes/blogPageRoutes");
 const blogCommentRoutes = require("./routes/commentRoutes");
 const scienceConsultationRoutes = require("./routes/scienceConsultationRoutes");
+const aboutDrNandaniRoutes = require("./routes/aboutDrNandaniRoutes");
 
 // Database Connection
 const connectDB = require("./config/db");
@@ -205,6 +206,7 @@ app.use("/api/contact-page", contactPageRoutes);
 app.use("/api/blog-page", blogPageRoutes);
 app.use("/api/blog-comments", blogCommentRoutes);
 app.use("/api/science-consultations", scienceConsultationRoutes);
+app.use("/api/about-dr-nandani", aboutDrNandaniRoutes);
 
 
 // SEO

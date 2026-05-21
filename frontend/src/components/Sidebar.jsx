@@ -6,7 +6,7 @@ import {
   FileText, Scissors, Layers, HelpCircle, Activity, List,
   Video, PlayCircle, Image as ImageIcon, Users, Shield,
   Key, Menu as MenuIcon, Settings, Wrench, Globe, Link as LinkIcon, Bot,
-  ChevronDown, ChevronRight, Home, Eye, FlaskConical
+  ChevronDown, ChevronRight, Home, Eye, FlaskConical, User
 } from "lucide-react";
 
 const getNavClass = ({ isActive }) =>
@@ -103,9 +103,14 @@ function Sidebar() {
           <>
             <SectionLabel>Content</SectionLabel>
             {hasPermission("cms") && (
-              <NavLink to="/pages" className={getNavClass}>
-                <Layers size={16} /> Pages
-              </NavLink>
+              <>
+                <NavLink to="/pages" className={getNavClass}>
+                  <Layers size={16} /> Pages
+                </NavLink>
+                <NavLink to="/cms/about-dr-nandani" className={getNavClass}>
+                  <User size={16} /> About Dr Nandani
+                </NavLink>
+              </>
             )}
             {hasPermission("blog") && (
               <>
@@ -156,6 +161,9 @@ function Sidebar() {
                 </NavLink>
                 <NavLink to="/leads/science-consultation" className={getNavClass}>
                   <FlaskConical size={16} /> Science Consultation Leads
+                </NavLink>
+                <NavLink to="/leads/dr-nandani" className={getNavClass}>
+                  <User size={16} /> Dr Nandani Leads
                 </NavLink>
                 <NavLink to="/leads/newsletter" className={getNavClass}>
                   <Users size={16} /> Newsletter Subscribers

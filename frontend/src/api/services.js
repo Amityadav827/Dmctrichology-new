@@ -657,3 +657,32 @@ export const updateRobotsContent = async (payload) => {
   const { data } = await api.put("/seo/robots", payload);
   return data;
 };
+
+// ========================
+// ✅ Dr. Nandani Leads
+// ========================
+
+export const getDrNandaniLeads = async (params) => {
+  const { data } = await api.get("/about-dr-nandani/leads", { params });
+  return data;
+};
+
+export const updateDrNandaniLead = async (id, payload) => {
+  const { data } = await api.put(`/about-dr-nandani/leads/${id}`, payload);
+  return data;
+};
+
+export const deleteDrNandaniLead = async (id) => {
+  const { data } = await api.delete(`/about-dr-nandani/leads/${id}`);
+  return data;
+};
+
+export const bulkDeleteDrNandaniLeads = async (payload) => {
+  const { data } = await api.post("/about-dr-nandani/leads/bulk-delete", payload);
+  return data;
+};
+
+export const exportDrNandaniLeadsCsv = async (params) => {
+  const queryStr = params ? new URLSearchParams(params).toString() : "";
+  return downloadCsv(`/about-dr-nandani/leads/export${queryStr ? `?${queryStr}` : ""}`, "dr-nandani-leads.csv");
+};

@@ -57,6 +57,8 @@ import VirtualTourCMS from "./pages/cms/VirtualTourCMS";
 import InfluencerCMS from "./pages/cms/InfluencerCMS";
 import ScienceDmcCMS from "./pages/cms/ScienceDmcCMS";
 import VisualLiveBuilder from "./pages/cms/VisualLiveBuilder";
+import AboutDrNandaniCMS from "./pages/cms/AboutDrNandaniCMS";
+import DrNandaniLeads from "./pages/DrNandaniLeads";
 import DetailsBannerCMS from "./pages/cms/DetailsBannerCMS";
 import ServiceIntroCMS from "./pages/cms/ServiceIntroCMS";
 import ProcessSliderCMS from "./pages/cms/ProcessSliderCMS";
@@ -230,6 +232,14 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <ScienceDmcCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/about-dr-nandani"
+          element={
+            <ProtectedRoute permission="cms">
+              <AboutDrNandaniCMS />
             </ProtectedRoute>
           }
         />
@@ -622,6 +632,14 @@ function App() {
           element={
             <ProtectedRoute permission="users">
               <ScienceConsultationList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="leads/dr-nandani"
+          element={
+            <ProtectedRoute permission="users">
+              <DrNandaniLeads />
             </ProtectedRoute>
           }
         />
