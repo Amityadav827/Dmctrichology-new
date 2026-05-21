@@ -28,48 +28,63 @@ export default async function DynamicSlugPage({ params }) {
     if (res.ok) {
       const json = await res.json();
       pageData = json.data;
-    } else if (res.status === 404 && slug === 'science-at-dmc-trichology') {
+    } else if (res.status === 404 && (slug === 'science-at-dmc' || slug === 'science-at-dmc-trichology')) {
       // Fallback for hardcoded URL if not created in CMS
-      pageData = { title: 'Science at DMC Trichology' };
+      pageData = { title: 'Science at DMC Trichology', slug };
     } else {
       notFound();
     }
     
     // 2. Check if the CMS page is our custom premium Science page
-    // We check by title or if the slug is the old fallback
-    if (pageData && (pageData.title === 'Science at DMC Trichology' || slug === 'science-at-dmc-trichology')) {
+    // We check by slug or if the CMS page title matches
+    const isSciencePage = 
+      slug === 'science-at-dmc' || 
+      slug === 'science-at-dmc-trichology' || 
+      (pageData && (pageData.title === 'Science at DMC Trichology' || pageData.title === 'Science at DMC'));
+
+    if (isSciencePage) {
       // Fetch Science specific modular content
       let scienceSections = {
-        hero: null,
-        intro: null,
-        features: null,
-        consultation: null
+        hero: {},
+        intro: {},
+        features: {},
+        consultation: {}
       };
 
       try {
         const scienceRes = await fetch(`${API_BASE}/science-dmc`, {
           cache: 'no-store'
         });
-        const scienceJson = await scienceRes.json();
-        if (scienceJson.success) {
-          const config = scienceJson.data?.config || {};
-          scienceSections = {
-            hero: config.hero || null,
-            intro: config.intro || null,
-            features: config.features || null,
-            consultation: config.consultation || null
-          };
+        
+        if (scienceRes.ok) {
+          const scienceJson = await scienceRes.json();
+          if (scienceJson.success && scienceJson.data) {
+            const rawData = scienceJson.data;
+            const config = rawData.config || rawData || {};
+            scienceSections = {
+              hero: config.hero || {},
+              intro: config.introSection || config.intro || {},
+              features: config.dualFeatureSection || config.features || {},
+              consultation: config.consultationSection || config.consultation || {}
+            };
+          }
         }
       } catch (err) {
         console.error('Error fetching science specific content:', err);
       }
 
+      // Add complete null safety and fallback structures
+      const heroData = scienceSections.hero || {};
+      const introData = scienceSections.intro || {};
+      const featuresData = scienceSections.features || {};
+      const consultationData = scienceSections.consultation || {};
+
       return (
         <main className="science-dmc-page">
-          <ScienceHero data={scienceSections.hero} />
-          <ScienceIntro data={scienceSections.intro} />
-          <ScienceDualFeatures data={scienceSections.features} />
-          <ScienceConsultation data={scienceSections.consultation} />
+          <ScienceHero data={heroData} />
+          <ScienceIntro data={introData} />
+          <ScienceDualFeatures data={featuresData} />
+          <ScienceConsultation data={consultationData} />
         </main>
       );
     }

@@ -32,8 +32,8 @@ const ScienceDualFeatures = ({ data: initialData = {} }) => {
     return () => window.removeEventListener('cms-update', handleCmsUpdate);
   }, []);
 
-  const left = data.leftCard || {};
-  const right = data.rightCard || {};
+  const left = data?.leftCard || {};
+  const right = data?.rightCard || {};
 
   return (
     <EditableSection sectionId="science-dual-features" label="Science Dual Features">

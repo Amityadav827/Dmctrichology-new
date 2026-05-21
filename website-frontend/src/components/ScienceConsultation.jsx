@@ -57,9 +57,9 @@ const ScienceConsultation = ({ data: initialData = {} }) => {
     }
   };
 
-  const bgStyle = data.backgroundImage 
-    ? { backgroundImage: `linear-gradient(rgba(13, 13, 26, 0.8), rgba(13, 13, 26, 0.95)), url(${data.backgroundImage})`, backgroundSize: 'cover' } 
-    : { backgroundColor: data.backgroundColor || '#0D0D1A' };
+  const bgStyle = data?.backgroundImage 
+    ? { backgroundImage: `linear-gradient(rgba(13, 13, 26, 0.8), rgba(13, 13, 26, 0.95)), url(${data?.backgroundImage})`, backgroundSize: 'cover' } 
+    : { backgroundColor: data?.backgroundColor || '#0D0D1A' };
 
   return (
     <EditableSection sectionId="science-consultation" label="Science Consultation Form">
@@ -67,8 +67,8 @@ const ScienceConsultation = ({ data: initialData = {} }) => {
         <div className="sci-consult-container">
           
           <div className="sci-consult-header">
-            <h2 className="sci-consult-title">{data.title || 'Begin Your Journey'}</h2>
-            <p className="sci-consult-timing">{data.timingText || 'Available Mon - Sat: 10:00 AM - 7:00 PM'}</p>
+            <h2 className="sci-consult-title">{data?.title || 'Begin Your Journey'}</h2>
+            <p className="sci-consult-timing">{data?.timingText || 'Available Mon - Sat: 10:00 AM - 7:00 PM'}</p>
           </div>
 
           {success && <div className="sci-alert sci-alert-success">✓ Consultation request sent successfully! We will contact you soon.</div>}

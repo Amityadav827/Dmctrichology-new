@@ -23,19 +23,19 @@ const ScienceHero = ({ data: initialData = {} }) => {
     return () => window.removeEventListener('cms-update', handleCmsUpdate);
   }, []);
 
-  const bgImage = data.bannerImage || 'https://res.cloudinary.com/dseixl6px/image/upload/v1714467794/sample.jpg';
+  const bgImage = data?.bannerImage || 'https://res.cloudinary.com/dseixl6px/image/upload/v1714467794/sample.jpg';
 
   return (
     <EditableSection sectionId="science-hero" label="Science Hero Banner">
       <section 
         className="sci-hero-section"
         style={{ 
-          minHeight: data.bannerHeight || '60vh',
-          backgroundColor: data.backgroundColor || '#3b5998'
+          minHeight: data?.bannerHeight || '60vh',
+          backgroundColor: data?.backgroundColor || '#3b5998'
         }}
       >
         <div className="sci-hero-bg" style={{ backgroundImage: `url(${bgImage})` }}>
-          <div className="sci-hero-overlay" style={{ opacity: data.overlayOpacity ?? 0.55 }}></div>
+          <div className="sci-hero-overlay" style={{ opacity: data?.overlayOpacity ?? 0.55 }}></div>
         </div>
 
         {/* Floating Particles for premium feel */}
@@ -45,15 +45,15 @@ const ScienceHero = ({ data: initialData = {} }) => {
 
         <div className="sci-hero-content">
           <div className="sci-breadcrumb">
-            {data.breadcrumbText || 'Home > Science at DMC Trichology'}
+            {data?.breadcrumbText || 'Home > Science at DMC Trichology'}
           </div>
           
-          <h2 className="sci-hero-eyebrow">{data.subtitle || 'ADVANCED HAIR RESTORATION SCIENCE'}</h2>
-          <h1 className="sci-hero-title">{data.title || 'Science at DMC Trichology'}</h1>
+          <h2 className="sci-hero-eyebrow">{data?.subtitle || 'ADVANCED HAIR RESTORATION SCIENCE'}</h2>
+          <h1 className="sci-hero-title">{data?.title || 'Science at DMC Trichology'}</h1>
           
-          {data.ctaLink && data.ctaLink !== '#' && (
-            <a href={data.ctaLink} className="sci-hero-cta">
-              {data.ctaText || 'Book Consultation'}
+          {data?.ctaLink && data?.ctaLink !== '#' && (
+            <a href={data?.ctaLink} className="sci-hero-cta">
+              {data?.ctaText || 'Book Consultation'}
             </a>
           )}
         </div>

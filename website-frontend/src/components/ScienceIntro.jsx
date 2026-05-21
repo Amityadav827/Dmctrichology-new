@@ -25,13 +25,13 @@ const ScienceIntro = ({ data: initialData = {} }) => {
 
   return (
     <EditableSection sectionId="science-intro" label="Science Intro Section">
-      <section className="sci-intro-section" style={{ backgroundImage: data.backgroundImage ? `url(${data.backgroundImage})` : 'none' }}>
+      <section className="sci-intro-section" style={{ backgroundImage: data?.backgroundImage ? `url(${data?.backgroundImage})` : 'none' }}>
         <div className="sci-intro-container">
           <div className="sci-intro-card">
-            <h2 className="sci-intro-heading">{data.heading || 'The Science Behind Hair Restoration'}</h2>
+            <h2 className="sci-intro-heading">{data?.heading || 'The Science Behind Hair Restoration'}</h2>
             <div className="sci-intro-divider"></div>
             <p className="sci-intro-desc">
-              {data.description || 'At DMC Trichology, we blend cutting-edge medical science with artistic precision to deliver natural-looking hair restoration. Our protocols are rooted in evidence-based medicine.'}
+              {data?.description || 'At DMC Trichology, we blend cutting-edge medical science with artistic precision to deliver natural-looking hair restoration. Our protocols are rooted in evidence-based medicine.'}
             </p>
           </div>
         </div>
