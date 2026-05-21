@@ -197,6 +197,16 @@ export const fetchPressMedia = async () => {
   }
 };
 
+export const fetchPressMediaPage = async () => {
+  try {
+    const res = await api.get(`/press-media?t=${Date.now()}`);
+    return res.data;
+  } catch (error) {
+    console.error('Error fetching press media page', error);
+    return null;
+  }
+};
+
 export const fetchFooter = async () => {
   try {
     const res = await api.get(`/footer?t=${Date.now()}`);
