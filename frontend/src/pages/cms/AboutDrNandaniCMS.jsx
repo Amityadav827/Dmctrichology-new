@@ -182,6 +182,7 @@ export default function AboutDrNandaniCMS() {
           <SectionTab id="credentials" label="CREDENTIALS SECTION" icon={Award} />
           <SectionTab id="trust" label="TRUST SECTION" icon={ShieldCheck} />
           <SectionTab id="other-specialities" label="OTHER SPECIALITIES" icon={Award} />
+          <SectionTab id="testimonials" label="TESTIMONIALS" icon={ShieldCheck} />
           <SectionTab id="seo" label="SEO & METADATA" icon={Globe} />
         </div>
       </div>
@@ -1556,6 +1557,214 @@ export default function AboutDrNandaniCMS() {
                     className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
                   />
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TESTIMONIALS SECTION */}
+        {activeSection === "testimonials" && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+            {/* Heading & Layout Config */}
+            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+              <h3 className="text-lg font-black mb-8 text-slate-800 flex items-center gap-3">
+                <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600">
+                  <ShieldCheck size={18} />
+                </div>
+                Testimonials Heading & Layout Settings
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="md:col-span-2">
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Section Main Heading</label>
+                  <input
+                    type="text"
+                    value={data.testimonialsSection?.heading || ""}
+                    onChange={e => updateNestedField("testimonialsSection.heading", e.target.value)}
+                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">View More Button Text</label>
+                  <input
+                    type="text"
+                    value={data.testimonialsSection?.viewMoreText || ""}
+                    onChange={e => updateNestedField("testimonialsSection.viewMoreText", e.target.value)}
+                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">View More Button URL</label>
+                  <input
+                    type="text"
+                    value={data.testimonialsSection?.viewMoreUrl || ""}
+                    onChange={e => updateNestedField("testimonialsSection.viewMoreUrl", e.target.value)}
+                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                    placeholder="https://..."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Section Background Color (Default: #3b5998)</label>
+                  <div className="flex gap-3 items-center">
+                    <input
+                      type="color"
+                      value={data.testimonialsSection?.backgroundColor || "#3b5998"}
+                      onChange={e => updateNestedField("testimonialsSection.backgroundColor", e.target.value)}
+                      className="w-12 h-12 rounded-xl border border-slate-200 cursor-pointer overflow-hidden shrink-0"
+                    />
+                    <input
+                      type="text"
+                      value={data.testimonialsSection?.backgroundColor || ""}
+                      onChange={e => updateNestedField("testimonialsSection.backgroundColor", e.target.value)}
+                      className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Card Background Color (Default: #000000)</label>
+                  <div className="flex gap-3 items-center">
+                    <input
+                      type="color"
+                      value={data.testimonialsSection?.cardBackgroundColor || "#000000"}
+                      onChange={e => updateNestedField("testimonialsSection.cardBackgroundColor", e.target.value)}
+                      className="w-12 h-12 rounded-xl border border-slate-200 cursor-pointer overflow-hidden shrink-0"
+                    />
+                    <input
+                      type="text"
+                      value={data.testimonialsSection?.cardBackgroundColor || ""}
+                      onChange={e => updateNestedField("testimonialsSection.cardBackgroundColor", e.target.value)}
+                      className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Content Max Width (e.g. 1400px)</label>
+                  <input
+                    type="text"
+                    value={data.testimonialsSection?.contentMaxWidth || ""}
+                    onChange={e => updateNestedField("testimonialsSection.contentMaxWidth", e.target.value)}
+                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Card Grid Gap (Default: 35px)</label>
+                  <input
+                    type="text"
+                    value={data.testimonialsSection?.gridGap || ""}
+                    onChange={e => updateNestedField("testimonialsSection.gridGap", e.target.value)}
+                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Section Padding Top (Default: 100px)</label>
+                  <input
+                    type="text"
+                    value={data.testimonialsSection?.paddingTop || ""}
+                    onChange={e => updateNestedField("testimonialsSection.paddingTop", e.target.value)}
+                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Section Padding Bottom (Default: 100px)</label>
+                  <input
+                    type="text"
+                    value={data.testimonialsSection?.paddingBottom || ""}
+                    onChange={e => updateNestedField("testimonialsSection.paddingBottom", e.target.value)}
+                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Repeatable Testimonial Cards */}
+            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+              <div className="flex items-center justify-between mb-8">
+                <h3 className="text-lg font-black text-slate-800 flex items-center gap-3">
+                  <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600">
+                    <ShieldCheck size={18} />
+                  </div>
+                  Patient Testimonial Cards
+                </h3>
+                <button
+                  onClick={() => {
+                    const current = data.testimonialsSection?.testimonials || [];
+                    updateNestedField("testimonialsSection.testimonials", [...current, { text: "New testimonial text here...", patientName: "Patient Name", disclaimer: "* Opinions/Results may vary from person to person.", stars: 5 }]);
+                  }}
+                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm"
+                >
+                  + Add Testimonial
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {(data.testimonialsSection?.testimonials || []).map((t, idx) => (
+                  <div key={idx} className="p-6 bg-slate-50 rounded-[20px] border border-slate-100 space-y-4 relative">
+                    <button
+                      onClick={() => {
+                        const filtered = data.testimonialsSection.testimonials.filter((_, cIdx) => cIdx !== idx);
+                        updateNestedField("testimonialsSection.testimonials", filtered);
+                      }}
+                      className="absolute top-6 right-6 p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
+                      title="Remove testimonial"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pr-10">
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Patient Name</label>
+                        <input
+                          type="text"
+                          value={t.patientName || ""}
+                          onChange={e => updateNestedField(`testimonialsSection.testimonials.${idx}.patientName`, e.target.value)}
+                          className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-sm font-bold text-slate-800 focus:border-indigo-300 transition-all outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Star Rating (1–5)</label>
+                        <input
+                          type="number"
+                          min="1" max="5"
+                          value={t.stars || 5}
+                          onChange={e => updateNestedField(`testimonialsSection.testimonials.${idx}.stars`, parseInt(e.target.value))}
+                          className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-sm font-bold text-slate-800 focus:border-indigo-300 transition-all outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Disclaimer Text</label>
+                        <input
+                          type="text"
+                          value={t.disclaimer || ""}
+                          onChange={e => updateNestedField(`testimonialsSection.testimonials.${idx}.disclaimer`, e.target.value)}
+                          className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-sm font-bold text-slate-800 focus:border-indigo-300 transition-all outline-none"
+                        />
+                      </div>
+                      <div className="md:col-span-3">
+                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Testimonial Text</label>
+                        <textarea
+                          rows={4}
+                          value={t.text || ""}
+                          onChange={e => updateNestedField(`testimonialsSection.testimonials.${idx}.text`, e.target.value)}
+                          className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-sm font-semibold text-slate-800 focus:border-indigo-300 transition-all outline-none resize-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {(data.testimonialsSection?.testimonials || []).length === 0 && (
+                  <div className="text-center py-12 bg-slate-50 rounded-[24px] border border-dashed border-slate-200">
+                    <p className="text-sm font-bold text-slate-400">No testimonials configured yet. Click the button above to add one.</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -131,7 +131,8 @@ export default function VisualLiveBuilder() {
         { id: 'about-nandani-education', label: 'Dr Nandani Edu & Exp' },
         { id: 'about-nandani-credentials', label: 'Dr Nandani Credentials' },
         { id: 'about-nandani-trust', label: 'Why Patients Trust Dr. Nandani' },
-        { id: 'about-nandani-other-specialities', label: 'Other Specialities Section' }
+        { id: 'about-nandani-other-specialities', label: 'Other Specialities Section' },
+        { id: 'about-nandani-testimonials', label: 'Patient Testimonials Section' }
       ];
     }
     return allSections;
@@ -258,7 +259,8 @@ export default function VisualLiveBuilder() {
           case 'about-nandani-education':
           case 'about-nandani-credentials':
           case 'about-nandani-trust':
-          case 'about-nandani-other-specialities': endpoint = '/about-dr-nandani'; break;
+          case 'about-nandani-other-specialities':
+          case 'about-nandani-testimonials': endpoint = '/about-dr-nandani'; break;
           default: endpoint = `/sections/${sectionId}`;
         }
 
@@ -518,7 +520,8 @@ export default function VisualLiveBuilder() {
                             'Dr Nandani Edu & Exp': '/cms/about-dr-nandani',
                             'Dr Nandani Credentials': '/cms/about-dr-nandani',
                             'Why Patients Trust Dr. Nandani': '/cms/about-dr-nandani',
-                            'Other Specialities Section': '/cms/about-dr-nandani'
+                            'Other Specialities Section': '/cms/about-dr-nandani',
+                            'Patient Testimonials Section': '/cms/about-dr-nandani'
                           };
                           if(routeMap[activeSection.label]) navigate(routeMap[activeSection.label]);
                         }}

@@ -200,6 +200,37 @@ const staticFallback = {
     paddingTop: "100px",
     paddingBottom: "100px",
     gridGap: "70px"
+  },
+  testimonialsSection: {
+    heading: "Patient Testimonials",
+    testimonials: [
+      {
+        text: "Dr. Nandani Dadu is an excellent hair specialist in Delhi. I visited her clinic for hair loss treatment, and the results have been outstanding. She is very knowledgeable and patient, taking time to explain everything clearly.",
+        patientName: "Sanadhan Chaima",
+        disclaimer: "* Opinions/Results may vary from person to person.",
+        stars: 5
+      },
+      {
+        text: "Dr. Nandani Dadu is the best hair transplant surgeon in Delhi. I underwent a hair transplant procedure at her clinic, and the results have been amazing. She uses advanced techniques and ensures a comfortable procedure.",
+        patientName: "Akhilesh Singh",
+        disclaimer: "* Opinions/Results may vary from person to person.",
+        stars: 5
+      },
+      {
+        text: "Dr. Nandani Dadu is undoubtedly the best hair specialist in Delhi. She helped me regain confidence with her effective treatment for hair thinning. Her approach is personalized, focusing on understanding the root cause of hair problems.",
+        patientName: "Naveen Yadav",
+        disclaimer: "* Opinions/Results may vary from person to person.",
+        stars: 5
+      }
+    ],
+    viewMoreText: "VIEW MORE",
+    viewMoreUrl: "https://dmctrichology-mkm4.vercel.app/clients-feedback",
+    backgroundColor: "#3b5998",
+    cardBackgroundColor: "#000000",
+    contentMaxWidth: "1400px",
+    paddingTop: "100px",
+    paddingBottom: "100px",
+    gridGap: "35px"
   }
 };
 

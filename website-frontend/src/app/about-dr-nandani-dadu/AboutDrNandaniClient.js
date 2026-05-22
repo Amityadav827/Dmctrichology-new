@@ -11,6 +11,7 @@ import AboutDrNandaniEducationExperience from '../../components/AboutDrNandaniEd
 import AboutDrNandaniCredentials from '../../components/AboutDrNandaniCredentials';
 import AboutDrNandaniTrust from '../../components/AboutDrNandaniTrust';
 import AboutDrNandaniOtherSpecialities from '../../components/AboutDrNandaniOtherSpecialities';
+import AboutDrNandaniTestimonials from '../../components/AboutDrNandaniTestimonials';
 
 export default function AboutDrNandaniClient({ initialData }) {
   const [pageData, setPageData] = useState(initialData);
@@ -35,7 +36,8 @@ export default function AboutDrNandaniClient({ initialData }) {
         'about-nandani-education.',
         'about-nandani-credentials.',
         'about-nandani-trust.',
-        'about-nandani-other-specialities.'
+        'about-nandani-other-specialities.',
+        'about-nandani-testimonials.'
       ];
 
       Object.keys(siteConfig).forEach(key => {
@@ -71,6 +73,9 @@ export default function AboutDrNandaniClient({ initialData }) {
         } else if (prefix === 'about-nandani-other-specialities.') {
           if (!newData.otherSpecialitiesSection) newData.otherSpecialitiesSection = {};
           current = newData.otherSpecialitiesSection;
+        } else if (prefix === 'about-nandani-testimonials.') {
+          if (!newData.testimonialsSection) newData.testimonialsSection = {};
+          current = newData.testimonialsSection;
         } else {
           current = newData;
         }
@@ -128,6 +133,9 @@ export default function AboutDrNandaniClient({ initialData }) {
         } else if (sectionId === 'about-nandani-other-specialities') {
           if (!newData.otherSpecialitiesSection) newData.otherSpecialitiesSection = {};
           current = newData.otherSpecialitiesSection;
+        } else if (sectionId === 'about-nandani-testimonials') {
+          if (!newData.testimonialsSection) newData.testimonialsSection = {};
+          current = newData.testimonialsSection;
         } else {
           current = newData;
         }
@@ -157,6 +165,7 @@ export default function AboutDrNandaniClient({ initialData }) {
       <AboutDrNandaniCredentials data={pageData.credentialsSection || {}} />
       <AboutDrNandaniTrust data={pageData.trustSection || {}} />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection || {}} />
+      <AboutDrNandaniTestimonials data={pageData.testimonialsSection || {}} />
     </main>
   );
 }

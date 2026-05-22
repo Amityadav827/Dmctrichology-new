@@ -139,6 +139,24 @@ const AboutDrNandaniSchema = new mongoose.Schema({
     paddingTop: { type: String, default: "100px" },
     paddingBottom: { type: String, default: "100px" },
     gridGap: { type: String, default: "70px" }
+  },
+
+  testimonialsSection: {
+    heading: { type: String, default: "Patient Testimonials" },
+    testimonials: [{
+      text: { type: String },
+      patientName: { type: String },
+      disclaimer: { type: String },
+      stars: { type: Number, default: 5 }
+    }],
+    viewMoreText: { type: String, default: "VIEW MORE" },
+    viewMoreUrl: { type: String, default: "https://dmctrichology-mkm4.vercel.app/clients-feedback" },
+    backgroundColor: { type: String, default: "#3b5998" },
+    cardBackgroundColor: { type: String, default: "#000000" },
+    contentMaxWidth: { type: String, default: "1400px" },
+    paddingTop: { type: String, default: "100px" },
+    paddingBottom: { type: String, default: "100px" },
+    gridGap: { type: String, default: "35px" }
   }
 }, { timestamps: true, collection: 'aboutdrnandani' });
 
