@@ -42,13 +42,13 @@ const defaultFaqItems = [
   }
 ];
 
-// Render **bold** as gold highlights
+// Render **bold** as accent highlights
 function renderAnswer(text) {
   if (!text) return '';
   const parts = text.split(/\*\*(.*?)\*\*/g);
   return parts.map((part, i) =>
     i % 2 === 1
-      ? <strong key={i} style={{ color: '#D4AF37', fontWeight: '600' }}>{part}</strong>
+      ? <strong key={i} style={{ color: '#3b5998', fontWeight: '700' }}>{part}</strong>
       : <span key={i}>{part}</span>
   );
 }
@@ -61,7 +61,7 @@ function ChevronIcon({ isOpen }) {
       height="22"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#D4AF37"
+      stroke="#000000"
       strokeWidth="2.2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -82,8 +82,8 @@ export default function AboutDrNandaniFAQ({ data = {} }) {
     faqItems = defaultFaqItems,
     defaultOpenIndex = 0,
     backgroundColor = "#3b5998",
-    accordionBg = "#000000",
-    accordionActiveBg = "#111111",
+    accordionBg = "#ffffff",
+    accordionActiveBg = "#f5f5f5",
     contentMaxWidth = "1200px",
     paddingTop = "100px",
     paddingBottom = "120px"
@@ -141,12 +141,12 @@ export default function AboutDrNandaniFAQ({ data = {} }) {
                 {heading}
               </EditableText>
             </h2>
-            {/* Gold accent line */}
+            {/* Subtle white accent line */}
             <div
               style={{
                 width: "72px",
                 height: "2px",
-                backgroundColor: "#D4AF37",
+                backgroundColor: "rgba(255,255,255,0.45)",
                 margin: "0 auto"
               }}
             />
@@ -161,17 +161,17 @@ export default function AboutDrNandaniFAQ({ data = {} }) {
                   key={idx}
                   className="dmc-faq-item"
                   style={{
-                    backgroundColor: isOpen ? (accordionActiveBg || "#111111") : (accordionBg || "#000000"),
+                    backgroundColor: isOpen ? (accordionActiveBg || "#f5f5f5") : (accordionBg || "#ffffff"),
                     border: isOpen
-                      ? "1px solid rgba(212,175,55,0.6)"
-                      : "1px solid rgba(212,175,55,0.25)",
+                      ? "1px solid rgba(0,0,0,0.15)"
+                      : "1px solid rgba(0,0,0,0.08)",
                     borderRadius: "0px",
                     marginBottom: "18px",
                     overflow: "hidden",
                     transition: "background 0.3s ease, border-color 0.3s ease",
                     boxShadow: isOpen
-                      ? "0 8px 32px rgba(0,0,0,0.45)"
-                      : "0 2px 12px rgba(0,0,0,0.25)"
+                      ? "0 6px 24px rgba(0,0,0,0.10)"
+                      : "0 1px 6px rgba(0,0,0,0.06)"
                   }}
                 >
                   {/* Question Row */}
@@ -197,7 +197,7 @@ export default function AboutDrNandaniFAQ({ data = {} }) {
                       style={{
                         fontSize: "17px",
                         fontWeight: "400",
-                        color: "#ffffff",
+                        color: "#000000",
                         fontFamily: "'Marcellus', serif",
                         letterSpacing: "0.02em",
                         lineHeight: "1.4",
@@ -226,14 +226,14 @@ export default function AboutDrNandaniFAQ({ data = {} }) {
                     <div
                       style={{
                         padding: "0 32px 32px 32px",
-                        borderTop: "1px solid rgba(212,175,55,0.18)"
+                        borderTop: "1px solid rgba(0,0,0,0.08)"
                       }}
                     >
                       <p
                         style={{
                           fontSize: "15px",
                           lineHeight: "1.9",
-                          color: "rgba(255,255,255,0.88)",
+                          color: "rgba(0,0,0,0.78)",
                           fontFamily: "'Marcellus', serif",
                           margin: "22px 0 0 0"
                         }}
@@ -261,12 +261,12 @@ export default function AboutDrNandaniFAQ({ data = {} }) {
         }
 
         .dmc-faq-question:focus-visible {
-          outline: 2px solid #D4AF37;
+          outline: 2px solid #3b5998;
           outline-offset: -2px;
         }
 
         .dmc-faq-item:hover {
-          border-color: rgba(212, 175, 55, 0.5) !important;
+          border-color: rgba(0, 0, 0, 0.15) !important;
         }
 
         /* Tablet */
