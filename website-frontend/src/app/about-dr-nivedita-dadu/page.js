@@ -125,14 +125,14 @@ const staticFallback = {
     paddingTop: '72px',
     paddingBottom: '72px',
     publications: [
-      { id: 1, title: 'Dainik Bhaskar', imageUrl: '', link: '', enabled: true },
-      { id: 2, title: 'NDTV', imageUrl: '', link: '', enabled: true },
-      { id: 3, title: 'Femina', imageUrl: '', link: '', enabled: true },
-      { id: 4, title: 'Deccan Herald', imageUrl: '', link: '', enabled: true },
-      { id: 5, title: "Woman's Era", imageUrl: '', link: '', enabled: true },
-      { id: 6, title: 'Hindustan Times', imageUrl: '', link: '', enabled: true },
+      { id: 1, title: 'Dainik Bhaskar', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Dainik_Bhaskar_logo.svg/320px-Dainik_Bhaskar_logo.svg.png', link: '', enabled: true },
+      { id: 2, title: 'NDTV', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/NDTV_logo.svg/320px-NDTV_logo.svg.png', link: '', enabled: true },
+      { id: 3, title: 'Femina', imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cb/Femina_magazine_logo.svg/320px-Femina_magazine_logo.svg.png', link: '', enabled: true },
+      { id: 4, title: 'Deccan Herald', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Deccan_Herald_logo.svg/320px-Deccan_Herald_logo.svg.png', link: '', enabled: true },
+      { id: 5, title: "Woman's Era", imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/16/Woman%27s_Era_magazine_logo.svg/320px-Woman%27s_Era_magazine_logo.svg.png', link: '', enabled: true },
+      { id: 6, title: 'Hindustan Times', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Hindustan_times_logo.svg/320px-hindustan_times_logo.svg.png', link: '', enabled: true },
       { id: 7, title: 'Stayfit', imageUrl: '', link: '', enabled: true },
-      { id: 8, title: 'Practo', imageUrl: '', link: '', enabled: true },
+      { id: 8, title: 'Practo', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Practo_Logo.svg/320px-Practo_Logo.svg.png', link: '', enabled: true },
       { id: 9, title: 'Mail Today', imageUrl: '', link: '', enabled: true }
     ]
   },
