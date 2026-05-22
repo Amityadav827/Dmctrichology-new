@@ -273,8 +273,8 @@ const fallbackData = {
     ],
     defaultOpenIndex: 0,
     backgroundColor: "#3b5998",
-    accordionBg: "#000000",
-    accordionActiveBg: "#111111",
+    accordionBg: "#ffffff",
+    accordionActiveBg: "#f5f5f5",
     contentMaxWidth: "1200px",
     paddingTop: "100px",
     paddingBottom: "120px"

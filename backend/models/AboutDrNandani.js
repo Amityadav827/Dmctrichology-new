@@ -167,8 +167,8 @@ const AboutDrNandaniSchema = new mongoose.Schema({
     }],
     defaultOpenIndex: { type: Number, default: 0 },
     backgroundColor: { type: String, default: "#3b5998" },
-    accordionBg: { type: String, default: "#000000" },
-    accordionActiveBg: { type: String, default: "#111111" },
+    accordionBg: { type: String, default: "#ffffff" },
+    accordionActiveBg: { type: String, default: "#f5f5f5" },
     contentMaxWidth: { type: String, default: "1200px" },
     paddingTop: { type: String, default: "100px" },
     paddingBottom: { type: String, default: "120px" }
