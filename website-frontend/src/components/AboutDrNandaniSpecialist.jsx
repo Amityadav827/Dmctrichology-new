@@ -43,7 +43,7 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
         style={{
           backgroundColor: sectionBgColor || "#FFFFFF",
           padding: "80px 24px",
-          fontFamily: "'Playfair Display', 'Didot', 'Georgia', serif",
+          fontFamily: "'Marcellus', serif",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -70,7 +70,7 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
               fontWeight: "600",
               color: textColor,
               marginBottom: "36px",
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Marcellus', serif",
               letterSpacing: "0.02em"
             }}
           >
@@ -86,7 +86,7 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
               lineHeight: "1.8",
               color: descColor,
               marginBottom: "24px",
-              fontFamily: "'Inter', sans-serif",
+              fontFamily: "'Marcellus', serif",
               textAlign: "justify",
               fontWeight: "300"
             }}
@@ -103,7 +103,7 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
               lineHeight: "1.8",
               color: descColor,
               marginBottom: "28px",
-              fontFamily: "'Inter', sans-serif",
+              fontFamily: "'Marcellus', serif",
               textAlign: "justify",
               fontWeight: "300"
             }}
@@ -120,7 +120,7 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
               fontWeight: "700",
               color: textColor,
               marginBottom: "24px",
-              fontFamily: "'Inter', sans-serif"
+              fontFamily: "'Marcellus', serif"
             }}
           >
             <EditableText sectionId="about-nandani-specialist" fieldPath="specialist.highlightedText">
@@ -168,7 +168,7 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
                     fontWeight: "600",
                     letterSpacing: "0.03em",
                     color: bulletColor, // Primary brand blue or white for treatment labels
-                    fontFamily: "'Inter', sans-serif"
+                    fontFamily: "'Marcellus', serif"
                   }}
                 >
                   <EditableText sectionId="about-nandani-specialist" fieldPath={`specialist.bullets.${idx}`}>
@@ -181,6 +181,10 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
         </div>
       </div>
       <style jsx global>{`
+        .dr-nandani-specialist-section,
+        .dr-nandani-specialist-section * {
+          font-family: 'Marcellus', serif !important;
+        }
         @media (max-width: 768px) {
           .dr-nandani-specialist-card {
             padding: 32px 24px !important;
