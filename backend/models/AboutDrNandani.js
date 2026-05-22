@@ -119,6 +119,8 @@ const AboutDrNandaniSchema = new mongoose.Schema({
       description: { type: String }
     }],
     conclusionParagraph: { type: String, default: "Dr. Nandani Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandani Dadu now!" },
+    backgroundColor: { type: String, default: "#ffffff" },
+    contentMaxWidth: { type: String, default: "1280px" },
     paddingTop: { type: String, default: "110px" },
     paddingBottom: { type: String, default: "110px" }
   }

@@ -178,6 +178,8 @@ const staticFallback = {
       }
     ],
     conclusionParagraph: "Dr. Nandani Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandani Dadu now!",
+    backgroundColor: "#ffffff",
+    contentMaxWidth: "1280px",
     paddingTop: "110px",
     paddingBottom: "110px"
   }

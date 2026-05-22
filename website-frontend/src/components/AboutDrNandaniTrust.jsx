@@ -35,6 +35,8 @@ export default function AboutDrNandaniTrust({ data = {} }) {
     imageMaxWidth,
     trustPoints,
     conclusionParagraph,
+    backgroundColor = "#ffffff",
+    contentMaxWidth = "1280px",
     paddingTop = "110px",
     paddingBottom = "110px"
   } = data || {};
@@ -53,7 +55,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
       <div 
         className="nandani-trust-section-wrapper"
         style={{
-          backgroundColor: "#ffffff",
+          backgroundColor: backgroundColor || "#ffffff",
           width: "100%",
           paddingTop: resolvedPaddingTop || "110px",
           paddingBottom: resolvedPaddingBottom || "110px",
@@ -68,8 +70,16 @@ export default function AboutDrNandaniTrust({ data = {} }) {
             box-sizing: border-box;
           }
           
+          .nandani-trust-section-wrapper p,
+          .nandani-trust-section-wrapper span,
+          .nandani-trust-section-wrapper h2,
+          .nandani-trust-section-wrapper h3,
+          .nandani-trust-section-wrapper li {
+            color: #000000 !important;
+          }
+          
           .nandani-trust-container {
-            max-width: 1280px;
+            max-width: ${contentMaxWidth || "1280px"};
             margin: 0 auto;
             padding: 0 24px;
           }
@@ -79,7 +89,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
             font-size: 48px;
             font-weight: 500;
             text-align: center;
-            color: #3b5998;
+            color: #000000 !important;
             margin: 0 auto 60px auto;
             line-height: 1.3;
             max-width: 1000px;
@@ -162,7 +172,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           .nandani-trust-point-title {
             font-size: 20px;
             font-weight: 600;
-            color: #3b5998;
+            color: #000000 !important;
             margin: 0 0 10px 0;
             line-height: 1.4;
             display: inline-block;
@@ -171,7 +181,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           .nandani-trust-point-desc {
             font-size: 18px;
             line-height: 2;
-            color: #3b5998;
+            color: #000000 !important;
             margin: 0;
             text-align: justify;
           }
@@ -181,9 +191,9 @@ export default function AboutDrNandaniTrust({ data = {} }) {
             margin-top: 56px;
             font-size: 19px;
             line-height: 2.1;
-            color: #3b5998;
+            color: #000000 !important;
             text-align: justify;
-            border-top: 1px solid rgba(59, 89, 152, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
             padding-top: 40px;
           }
 

@@ -119,7 +119,7 @@ export default function AboutDrNandaniCMS() {
   const SectionTab = ({ id, label, icon: Icon }) => (
     <button
       onClick={() => setActiveSection(id)}
-      className={`flex items-center justify-center gap-2 px-3 py-4 text-[11px] font-black tracking-wider transition-all border-b-2 whitespace-nowrap flex-1 ${
+      className={`flex items-center justify-center gap-2 px-4 py-3 text-[11px] font-black tracking-wider transition-all border-b-2 whitespace-nowrap ${
         activeSection === id 
         ? "border-indigo-600 text-indigo-600 bg-indigo-50/40" 
         : "border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50"
@@ -171,8 +171,8 @@ export default function AboutDrNandaniCMS() {
           </div>
         </div>
 
-        {/* Section Tabs - Strictly Isolated */}
-        <div className="max-w-[1600px] mx-auto px-4 flex items-center justify-between overflow-x-auto border-t border-slate-100 bg-white scrollbar-hide">
+        {/* Section Tabs - Strictly Isolated & Wrapping for 100% Visibility */}
+        <div className="max-w-[1600px] mx-auto px-4 flex flex-wrap items-center gap-1 border-t border-slate-100 bg-white py-1">
           <SectionTab id="hero" label="HERO DESIGN & COPY" icon={User} />
           <SectionTab id="breadcrumb" label="BREADCRUMB CONFIG" icon={Sliders} />
           <SectionTab id="form" label="CONSULTATION FORM DESIGN" icon={ShieldCheck} />
@@ -1203,6 +1203,34 @@ export default function AboutDrNandaniCMS() {
                     className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
                   />
                 </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Section Background Color (Default: #ffffff)</label>
+                  <div className="flex gap-3 items-center">
+                    <input 
+                      type="color" 
+                      value={data.trustSection?.backgroundColor || "#ffffff"} 
+                      onChange={e => updateNestedField("trustSection.backgroundColor", e.target.value)} 
+                      className="w-12 h-12 rounded-xl border border-slate-200 cursor-pointer overflow-hidden shrink-0" 
+                    />
+                    <input 
+                      type="text" 
+                      value={data.trustSection?.backgroundColor || ""} 
+                      onChange={e => updateNestedField("trustSection.backgroundColor", e.target.value)} 
+                      className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Content Max Width (e.g. 1280px, 100%)</label>
+                  <input 
+                    type="text" 
+                    value={data.trustSection?.contentMaxWidth || ""} 
+                    onChange={e => updateNestedField("trustSection.contentMaxWidth", e.target.value)} 
+                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
+                  />
+                </div>
               </div>
             </div>
 
@@ -1237,7 +1265,7 @@ export default function AboutDrNandaniCMS() {
                       className="absolute top-6 right-6 p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
                       title="Remove trust point"
                     >
-                      <Trash size={16} />
+                      <Trash2 size={16} />
                     </button>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pr-10">
