@@ -12,6 +12,7 @@ import AboutDrNiveditaCredentials from '../../components/AboutDrNiveditaCredenti
 import AboutDrNiveditaFeaturedIn from '../../components/AboutDrNiveditaFeaturedIn';
 import AboutDrNiveditaPatientCare from '../../components/AboutDrNiveditaPatientCare';
 import AboutDrNiveditaOtherSpecialities from '../../components/AboutDrNiveditaOtherSpecialities';
+import AboutDrNiveditaAssociations from '../../components/AboutDrNiveditaAssociations';
 
 // Map sectionId prefix → pageData key
 const SECTION_MAP = {
@@ -24,6 +25,7 @@ const SECTION_MAP = {
   'about-nivedita-featured-in.':          'featuredInSection',
   'about-nivedita-patient-care.':         'patientCareSection',
   'about-nivedita-other-specialities.':   'otherSpecialitiesSection',
+  'about-nivedita-associations.':         'associationsSection',
 };
 
 const SECTION_ID_MAP = {
@@ -36,6 +38,7 @@ const SECTION_ID_MAP = {
   'about-nivedita-featured-in':         'featuredInSection',
   'about-nivedita-patient-care':        'patientCareSection',
   'about-nivedita-other-specialities':  'otherSpecialitiesSection',
+  'about-nivedita-associations':        'associationsSection',
 };
 
 function applyDeepPath(obj, fieldPath, value) {
@@ -111,6 +114,7 @@ export default function AboutDrNiveditaClient({ initialData }) {
       <AboutDrNiveditaFeaturedIn data={pageData.featuredInSection || {}} />
       <AboutDrNiveditaPatientCare data={pageData.patientCareSection || {}} />
       <AboutDrNiveditaOtherSpecialities data={pageData.otherSpecialitiesSection || {}} />
+      <AboutDrNiveditaAssociations data={pageData.associationsSection || {}} />
     </main>
   );
 }

@@ -156,6 +156,25 @@ const AboutDrNiveditaSchema = new mongoose.Schema({
     rightCardBgColor: { type: String, default: '#ffffff' },
     rightCardContent: { type: String, default: '<p>Dr. Nivedita Dadu maintains a highly professional environment to offer quality clinical care. She is one of the most recognised and respected skin & hair specialist professionals making her the best dermatologist giving customised treatment solutions that work- not just today, but for life.</p>' }
   },
+  associationsSection: {
+    sectionHeading:  { type: String, default: 'ASSOCIATIONS' },
+    sectionBgColor:  { type: String, default: '#ffffff' },
+    paddingTop:      { type: String, default: '72px' },
+    paddingBottom:   { type: String, default: '72px' },
+    logoSpacing:     { type: String, default: '24px' },
+    logoHeight:      { type: String, default: '90px' },
+    logoCardPadding: { type: String, default: '20px 28px' },
+    associations: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: [
+        { id: 1, title: 'IADVL',                          imageUrl: '', link: '', enabled: true },
+        { id: 2, title: 'World Trichology Society',        imageUrl: '', link: '', enabled: true },
+        { id: 3, title: 'AAM MMI',                         imageUrl: '', link: '', enabled: true },
+        { id: 4, title: 'EADV',                            imageUrl: '', link: '', enabled: true },
+        { id: 5, title: 'Association of Cutaneous Surgeons', imageUrl: '', link: '', enabled: true }
+      ]
+    }
+  },
   seo: {
     metaTitle: { type: String, default: 'Dr. Nivedita Dadu | Expert Dermatologist & Trichologist in Delhi' },
     metaDescription: { type: String, default: 'Consult Dr. Nivedita Dadu, renowned Dermatologist and Trichologist at DMC Trichology Delhi. Expert in advanced hair restoration, scalp treatments, and dermatological care.' },

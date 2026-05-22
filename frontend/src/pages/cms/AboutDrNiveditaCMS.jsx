@@ -113,6 +113,7 @@ export default function AboutDrNiveditaCMS() {
   const credentials = data.credentialsSection || {};
   const featuredIn = data.featuredInSection || {};
   const patientCare = data.patientCareSection || {};
+  const associations = data.associationsSection || {};
   const otherSpec = data.otherSpecialitiesSection || {};
   const seo = data.seo || {};
 
@@ -149,6 +150,7 @@ export default function AboutDrNiveditaCMS() {
         <button style={s.tab(activeSection === "featured")} onClick={() => setActiveSection("featured")}><Star size={13} /> Featured In</button>
         <button style={s.tab(activeSection === "patientcare")} onClick={() => setActiveSection("patientcare")}><User size={13} /> Patient Care</button>
         <button style={s.tab(activeSection === "other")} onClick={() => setActiveSection("other")}><Settings size={13} /> Other Specialities</button>
+        <button style={s.tab(activeSection === "associations")} onClick={() => setActiveSection("associations")}><Award size={13} /> Associations</button>
         <button style={s.tab(activeSection === "seo")} onClick={() => setActiveSection("seo")}><Globe size={13} /> SEO & Metadata</button>
       </div>
 
@@ -748,6 +750,84 @@ export default function AboutDrNiveditaCMS() {
               <label style={s.label}>Card Content (HTML supported)</label>
               <textarea style={{ ...s.textarea, minHeight: 160 }} value={patientCare.rightCardContent || ""} onChange={e => updateSectionField("patientCareSection", "rightCardContent", e.target.value)} rows={7} />
             </div>
+          </div>
+        </>
+      )}
+
+      {/* ── ASSOCIATIONS SECTION ─────────────────────────────────── */}
+      {activeSection === "associations" && (
+        <>
+          <div style={s.card}>
+            <p style={s.cardTitle}><Award size={16} color="#3b5998" /> Section Settings</p>
+            <div style={s.grid2}>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Section Heading</label>
+                <input style={s.input} value={associations.sectionHeading || ""} onChange={e => updateSectionField("associationsSection", "sectionHeading", e.target.value)} placeholder="ASSOCIATIONS" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Background Color</label>
+                <div style={s.colorRow}>
+                  <input type="color" value={associations.sectionBgColor || "#ffffff"} onChange={e => updateSectionField("associationsSection", "sectionBgColor", e.target.value)} style={{ width: 40, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 }} />
+                  <input style={{ ...s.input, flex: 1 }} value={associations.sectionBgColor || "#ffffff"} onChange={e => updateSectionField("associationsSection", "sectionBgColor", e.target.value)} />
+                </div>
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Padding Top</label>
+                <input style={s.input} value={associations.paddingTop || "72px"} onChange={e => updateSectionField("associationsSection", "paddingTop", e.target.value)} placeholder="72px" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Padding Bottom</label>
+                <input style={s.input} value={associations.paddingBottom || "72px"} onChange={e => updateSectionField("associationsSection", "paddingBottom", e.target.value)} placeholder="72px" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Logo Spacing (gap)</label>
+                <input style={s.input} value={associations.logoSpacing || "24px"} onChange={e => updateSectionField("associationsSection", "logoSpacing", e.target.value)} placeholder="24px" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Logo Card Height</label>
+                <input style={s.input} value={associations.logoHeight || "90px"} onChange={e => updateSectionField("associationsSection", "logoHeight", e.target.value)} placeholder="90px" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Logo Card Padding</label>
+                <input style={s.input} value={associations.logoCardPadding || "20px 28px"} onChange={e => updateSectionField("associationsSection", "logoCardPadding", e.target.value)} placeholder="20px 28px" />
+              </div>
+            </div>
+          </div>
+
+          <div style={s.card}>
+            <p style={s.cardTitle}><ImageIcon size={16} color="#3b5998" /> Association Logos</p>
+            <p style={{ fontSize: 12, color: "#64748b", marginBottom: 16 }}>Each association appears as a bordered logo card. Upload an image URL or leave blank to show the name as text. Logos load with a subtle grayscale effect and sharpen on hover.</p>
+            {(associations.associations || []).map((assoc, idx) => (
+              <div key={idx} style={{ background: "#f8fafc", borderRadius: 8, padding: "14px", marginBottom: 12, border: "1px solid #e2e8f0" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: "#1e293b" }}>Association #{idx + 1}</span>
+                  <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                    <label style={{ fontSize: 12, color: "#475569", display: "flex", gap: 6, alignItems: "center", cursor: "pointer" }}>
+                      <input type="checkbox" checked={assoc.enabled !== false} onChange={e => updateNestedField(`associationsSection.associations.${idx}.enabled`, e.target.checked)} /> Enabled
+                    </label>
+                    <button style={s.removeBtn} onClick={() => { const upd = [...(associations.associations || [])]; upd.splice(idx, 1); updateSectionField("associationsSection", "associations", upd); }}><Trash2 size={13} /></button>
+                  </div>
+                </div>
+                <div style={s.grid2}>
+                  <div style={s.fieldGroup}>
+                    <label style={s.label}>Association Name</label>
+                    <input style={s.input} value={assoc.title || ""} onChange={e => updateNestedField(`associationsSection.associations.${idx}.title`, e.target.value)} placeholder="IADVL" />
+                  </div>
+                  <div style={s.fieldGroup}>
+                    <label style={s.label}>External Link (optional)</label>
+                    <input style={s.input} value={assoc.link || ""} onChange={e => updateNestedField(`associationsSection.associations.${idx}.link`, e.target.value)} placeholder="https://..." />
+                  </div>
+                </div>
+                <div style={s.fieldGroup}>
+                  <label style={s.label}>Logo Image URL</label>
+                  <input style={s.input} value={assoc.imageUrl || ""} onChange={e => updateNestedField(`associationsSection.associations.${idx}.imageUrl`, e.target.value)} placeholder="https://..." />
+                </div>
+                {assoc.imageUrl && <div style={{ ...s.imgPreviewBox, maxWidth: 120 }}><img src={assoc.imageUrl} alt={assoc.title} style={{ width: "100%", display: "block", objectFit: "contain", maxHeight: 60 }} /></div>}
+              </div>
+            ))}
+            <button style={s.addBtn} onClick={() => updateSectionField("associationsSection", "associations", [...(associations.associations || []), { id: Date.now(), title: "New Association", imageUrl: "", link: "", enabled: true }])}>
+              <Plus size={14} /> Add Association
+            </button>
           </div>
         </>
       )}

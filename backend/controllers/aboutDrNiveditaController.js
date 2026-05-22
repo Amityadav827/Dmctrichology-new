@@ -138,6 +138,22 @@ const fallbackData = {
     rightCardBgColor: '#ffffff',
     rightCardContent: '<p>Dr. Nivedita Dadu maintains a highly professional environment to offer quality clinical care. She is one of the most recognised and respected skin & hair specialist professionals making her the best dermatologist giving customised treatment solutions that work- not just today, but for life.</p>'
   },
+  associationsSection: {
+    sectionHeading:  'ASSOCIATIONS',
+    sectionBgColor:  '#ffffff',
+    paddingTop:      '72px',
+    paddingBottom:   '72px',
+    logoSpacing:     '24px',
+    logoHeight:      '90px',
+    logoCardPadding: '20px 28px',
+    associations: [
+      { id: 1, title: 'IADVL',                          imageUrl: '', link: '', enabled: true },
+      { id: 2, title: 'World Trichology Society',        imageUrl: '', link: '', enabled: true },
+      { id: 3, title: 'AAM MMI',                         imageUrl: '', link: '', enabled: true },
+      { id: 4, title: 'EADV',                            imageUrl: '', link: '', enabled: true },
+      { id: 5, title: 'Association of Cutaneous Surgeons', imageUrl: '', link: '', enabled: true }
+    ]
+  },
   seo: {
     metaTitle: 'Dr. Nivedita Dadu | Expert Dermatologist & Trichologist in Delhi',
     metaDescription: 'Consult Dr. Nivedita Dadu, renowned Dermatologist and Trichologist at DMC Trichology Delhi. Expert in advanced hair restoration, scalp treatments, and dermatological care.',

@@ -146,7 +146,8 @@ export default function VisualLiveBuilder() {
         { id: 'about-nivedita-credentials', label: 'Dr Nivedita Credentials' },
         { id: 'about-nivedita-featured-in', label: 'Dr Nivedita Featured In' },
         { id: 'about-nivedita-patient-care', label: 'Dr Nivedita Patient Care' },
-        { id: 'about-nivedita-other-specialities', label: 'Dr Nivedita Other Specialities' }
+        { id: 'about-nivedita-other-specialities', label: 'Dr Nivedita Other Specialities' },
+        { id: 'about-nivedita-associations', label: 'Dr Nivedita Associations' }
       ];
     }
     return allSections;
@@ -546,7 +547,8 @@ export default function VisualLiveBuilder() {
                             'Dr Nivedita Credentials': '/cms/about-dr-nivedita',
                             'Dr Nivedita Featured In': '/cms/about-dr-nivedita',
                             'Dr Nivedita Patient Care': '/cms/about-dr-nivedita',
-                            'Dr Nivedita Other Specialities': '/cms/about-dr-nivedita'
+                            'Dr Nivedita Other Specialities': '/cms/about-dr-nivedita',
+                            'Dr Nivedita Associations': '/cms/about-dr-nivedita'
                           };
                           if(routeMap[activeSection.label]) navigate(routeMap[activeSection.label]);
                         }}
