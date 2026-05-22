@@ -58,6 +58,7 @@ import InfluencerCMS from "./pages/cms/InfluencerCMS";
 import ScienceDmcCMS from "./pages/cms/ScienceDmcCMS";
 import VisualLiveBuilder from "./pages/cms/VisualLiveBuilder";
 import AboutDrNandaniCMS from "./pages/cms/AboutDrNandaniCMS";
+import AboutDrNiveditaCMS from "./pages/cms/AboutDrNiveditaCMS";
 import DrNandaniLeads from "./pages/DrNandaniLeads";
 import DetailsBannerCMS from "./pages/cms/DetailsBannerCMS";
 import ServiceIntroCMS from "./pages/cms/ServiceIntroCMS";
@@ -240,6 +241,14 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <AboutDrNandaniCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/about-dr-nivedita"
+          element={
+            <ProtectedRoute permission="cms">
+              <AboutDrNiveditaCMS />
             </ProtectedRoute>
           }
         />

@@ -136,6 +136,12 @@ export default function VisualLiveBuilder() {
         { id: 'about-nandani-faq', label: 'FAQ Section' }
       ];
     }
+    if (currentSlug === 'about-dr-nivedita-dadu') {
+      return [
+        { id: 'about-nivedita-hero', label: 'About Dr Nivedita Hero' },
+        { id: 'about-nivedita-specialist', label: 'Dr Nivedita Specialist Info' }
+      ];
+    }
     return allSections;
   };
 
@@ -524,7 +530,9 @@ export default function VisualLiveBuilder() {
                             'Why Patients Trust Dr. Nandani': '/cms/about-dr-nandani',
                             'Other Specialities Section': '/cms/about-dr-nandani',
                             'Patient Testimonials Section': '/cms/about-dr-nandani',
-                            'FAQ Section': '/cms/about-dr-nandani'
+                            'FAQ Section': '/cms/about-dr-nandani',
+                            'About Dr Nivedita Hero': '/cms/about-dr-nivedita',
+                            'Dr Nivedita Specialist Info': '/cms/about-dr-nivedita'
                           };
                           if(routeMap[activeSection.label]) navigate(routeMap[activeSection.label]);
                         }}

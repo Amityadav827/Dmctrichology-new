@@ -144,6 +144,9 @@ function Sidebar() {
                       <NavLink to="/cms/about-dr-nandani" className={getNavClass}>
                         <User size={16} /> About Dr Nandani
                       </NavLink>
+                      <NavLink to="/cms/about-dr-nivedita" className={getNavClass}>
+                        <User size={16} /> About Dr Nivedita
+                      </NavLink>
                     </div>
                   )}
                 </div>
