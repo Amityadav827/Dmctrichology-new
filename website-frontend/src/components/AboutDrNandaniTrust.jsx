@@ -79,7 +79,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
             font-size: 48px;
             font-weight: 500;
             text-align: center;
-            color: #3b5998;
+            color: #000000;
             margin: 0 auto 60px auto;
             line-height: 1.3;
             max-width: 1000px;
@@ -95,12 +95,12 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           /* Two-column editorial grid */
           .nandani-trust-grid {
             display: grid;
-            grid-template-cols: 42% 58%;
+            grid-template-cols: 1fr 1fr;
             gap: 55px;
             align-items: start;
           }
 
-          @media (max-width: 968px) {
+          @media (max-width: 767px) {
             .nandani-trust-grid {
               grid-template-cols: 1fr;
               gap: 40px;
@@ -229,7 +229,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
                       height="20"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="#D4AF37"
+                      stroke="#000000"
                       strokeWidth="4"
                       strokeLinecap="round"
                       strokeLinejoin="round"
