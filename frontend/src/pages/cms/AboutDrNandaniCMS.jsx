@@ -183,6 +183,7 @@ export default function AboutDrNandaniCMS() {
           <SectionTab id="trust" label="TRUST SECTION" icon={ShieldCheck} />
           <SectionTab id="other-specialities" label="OTHER SPECIALITIES" icon={Award} />
           <SectionTab id="testimonials" label="TESTIMONIALS" icon={ShieldCheck} />
+          <SectionTab id="faq-section" label="FAQ SECTION" icon={Globe} />
           <SectionTab id="seo" label="SEO & METADATA" icon={Globe} />
         </div>
       </div>
@@ -1763,6 +1764,135 @@ export default function AboutDrNandaniCMS() {
                 {(data.testimonialsSection?.testimonials || []).length === 0 && (
                   <div className="text-center py-12 bg-slate-50 rounded-[24px] border border-dashed border-slate-200">
                     <p className="text-sm font-bold text-slate-400">No testimonials configured yet. Click the button above to add one.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* FAQ SECTION */}
+        {activeSection === "faq-section" && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+            {/* Heading & Colors */}
+            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+              <h3 className="text-lg font-black mb-8 text-slate-800 flex items-center gap-3">
+                <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600">
+                  <Globe size={18} />
+                </div>
+                FAQ Section Settings
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="md:col-span-2">
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Section Heading</label>
+                  <input
+                    type="text"
+                    value={data.faqSection?.heading || ""}
+                    onChange={e => updateNestedField("faqSection.heading", e.target.value)}
+                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Default Open FAQ Index (0-based)</label>
+                  <input
+                    type="number" min="0"
+                    value={data.faqSection?.defaultOpenIndex ?? 0}
+                    onChange={e => updateNestedField("faqSection.defaultOpenIndex", parseInt(e.target.value))}
+                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Content Max Width (e.g. 1200px)</label>
+                  <input
+                    type="text"
+                    value={data.faqSection?.contentMaxWidth || ""}
+                    onChange={e => updateNestedField("faqSection.contentMaxWidth", e.target.value)}
+                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Section Background Color (Default: #3b5998)</label>
+                  <div className="flex gap-3 items-center">
+                    <input type="color" value={data.faqSection?.backgroundColor || "#3b5998"} onChange={e => updateNestedField("faqSection.backgroundColor", e.target.value)} className="w-12 h-12 rounded-xl border border-slate-200 cursor-pointer overflow-hidden shrink-0" />
+                    <input type="text" value={data.faqSection?.backgroundColor || ""} onChange={e => updateNestedField("faqSection.backgroundColor", e.target.value)} className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Accordion Background (Default: #000000)</label>
+                  <div className="flex gap-3 items-center">
+                    <input type="color" value={data.faqSection?.accordionBg || "#000000"} onChange={e => updateNestedField("faqSection.accordionBg", e.target.value)} className="w-12 h-12 rounded-xl border border-slate-200 cursor-pointer overflow-hidden shrink-0" />
+                    <input type="text" value={data.faqSection?.accordionBg || ""} onChange={e => updateNestedField("faqSection.accordionBg", e.target.value)} className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Accordion Active Background (Default: #111111)</label>
+                  <div className="flex gap-3 items-center">
+                    <input type="color" value={data.faqSection?.accordionActiveBg || "#111111"} onChange={e => updateNestedField("faqSection.accordionActiveBg", e.target.value)} className="w-12 h-12 rounded-xl border border-slate-200 cursor-pointer overflow-hidden shrink-0" />
+                    <input type="text" value={data.faqSection?.accordionActiveBg || ""} onChange={e => updateNestedField("faqSection.accordionActiveBg", e.target.value)} className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Padding Top (Default: 100px)</label>
+                  <input type="text" value={data.faqSection?.paddingTop || ""} onChange={e => updateNestedField("faqSection.paddingTop", e.target.value)} className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Padding Bottom (Default: 120px)</label>
+                  <input type="text" value={data.faqSection?.paddingBottom || ""} onChange={e => updateNestedField("faqSection.paddingBottom", e.target.value)} className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" />
+                </div>
+              </div>
+            </div>
+
+            {/* Repeatable FAQ Items */}
+            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+              <div className="flex items-center justify-between mb-8">
+                <h3 className="text-lg font-black text-slate-800 flex items-center gap-3">
+                  <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600"><Globe size={18} /></div>
+                  FAQ Items
+                </h3>
+                <button
+                  onClick={() => {
+                    const current = data.faqSection?.faqItems || [];
+                    updateNestedField("faqSection.faqItems", [...current, { question: "New Question?", answer: "Answer goes here..." }]);
+                  }}
+                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm"
+                >+ Add FAQ</button>
+              </div>
+              <div className="space-y-5">
+                {(data.faqSection?.faqItems || []).map((faq, idx) => (
+                  <div key={idx} className="p-6 bg-slate-50 rounded-[20px] border border-slate-100 space-y-4 relative">
+                    <button
+                      onClick={() => {
+                        const filtered = data.faqSection.faqItems.filter((_, cIdx) => cIdx !== idx);
+                        updateNestedField("faqSection.faqItems", filtered);
+                      }}
+                      className="absolute top-5 right-5 p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
+                      title="Remove FAQ"
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                    <div className="pr-10">
+                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Question</label>
+                      <input
+                        type="text"
+                        value={faq.question || ""}
+                        onChange={e => updateNestedField(`faqSection.faqItems.${idx}.question`, e.target.value)}
+                        className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-sm font-bold text-slate-800 focus:border-indigo-300 transition-all outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Answer (use **text** for gold highlights)</label>
+                      <textarea
+                        rows={4}
+                        value={faq.answer || ""}
+                        onChange={e => updateNestedField(`faqSection.faqItems.${idx}.answer`, e.target.value)}
+                        className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-sm font-semibold text-slate-800 focus:border-indigo-300 transition-all outline-none resize-none"
+                      />
+                    </div>
+                  </div>
+                ))}
+                {(data.faqSection?.faqItems || []).length === 0 && (
+                  <div className="text-center py-12 bg-slate-50 rounded-[24px] border border-dashed border-slate-200">
+                    <p className="text-sm font-bold text-slate-400">No FAQ items yet. Click the button above to add one.</p>
                   </div>
                 )}
               </div>

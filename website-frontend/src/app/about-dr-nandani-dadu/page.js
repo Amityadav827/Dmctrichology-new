@@ -231,6 +231,27 @@ const staticFallback = {
     paddingTop: "100px",
     paddingBottom: "100px",
     gridGap: "35px"
+  },
+  faqSection: {
+    heading: "FAQs About Best Hair Transplant Surgeon in Delhi",
+    faqItems: [
+      { question: "1. Who is the best hair transplant surgeon in Delhi?", answer: "The creator of the DMC Golden Touch hair transplant technique, which guarantees quicker outcomes, is Dr. Nandini Dadu. The **best hair transplant surgeon in Delhi** is a co-founder of DMC Trichology." },
+      { question: "2. Who is the No 1 hair transplant surgeon in India?", answer: "Dr. Nandini Dadu is widely regarded as one of India's top hair transplant surgeons. With over a decade of specialized experience and thousands of successful procedures, she has earned the trust of patients across India and abroad." },
+      { question: "3. Which type of doctor is best for hair?", answer: "A dermatologist or a trichologist who specializes in hair and scalp disorders is the best doctor for hair concerns. Dr. Nandini Dadu is a board-certified trichologist with specialized expertise in both medical and surgical hair restoration." },
+      { question: "4. What is a hair specialist called?", answer: "A doctor who specializes in hair and scalp conditions is called a trichologist. For surgical hair restoration, they may also be referred to as a hair transplant surgeon or dermatological surgeon." },
+      { question: "5. How do I choose a hair surgeon?", answer: "When choosing a hair surgeon, consider their experience, patient testimonials, before-and-after results, the technology they use, and their approach to personalized treatment." },
+      { question: "6. Is hair surgery good?", answer: "Yes, hair transplant surgery, when performed by a qualified and experienced surgeon, is a safe and highly effective solution for permanent hair restoration. Modern techniques like FUE offer minimal scarring and natural-looking results." },
+      { question: "7. What is the difference between a dermatologist and a hair specialist?", answer: "A dermatologist treats a broad range of skin and hair conditions, while a trichologist or hair specialist focuses exclusively on hair and scalp health." },
+      { question: "8. Which treatment is permanent for hair loss?", answer: "Hair transplant surgery (FUE/FUT) is the most permanent solution for hair loss. The transplanted follicles are resistant to the hormones that cause hair loss, ensuring long-lasting results with proper post-care." },
+      { question: "9. What is the safest treatment for hair loss?", answer: "For non-surgical options, treatments like PRP therapy, mesotherapy, and laser treatments are safe and effective. For surgical solutions, FUE hair transplant is considered the safest with minimal scarring and quick recovery time." }
+    ],
+    defaultOpenIndex: 0,
+    backgroundColor: "#3b5998",
+    accordionBg: "#000000",
+    accordionActiveBg: "#111111",
+    contentMaxWidth: "1200px",
+    paddingTop: "100px",
+    paddingBottom: "120px"
   }
 };
 

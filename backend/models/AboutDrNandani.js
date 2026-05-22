@@ -157,6 +157,21 @@ const AboutDrNandaniSchema = new mongoose.Schema({
     paddingTop: { type: String, default: "100px" },
     paddingBottom: { type: String, default: "100px" },
     gridGap: { type: String, default: "35px" }
+  },
+
+  faqSection: {
+    heading: { type: String, default: "FAQs About Best Hair Transplant Surgeon in Delhi" },
+    faqItems: [{
+      question: { type: String },
+      answer: { type: String }
+    }],
+    defaultOpenIndex: { type: Number, default: 0 },
+    backgroundColor: { type: String, default: "#3b5998" },
+    accordionBg: { type: String, default: "#000000" },
+    accordionActiveBg: { type: String, default: "#111111" },
+    contentMaxWidth: { type: String, default: "1200px" },
+    paddingTop: { type: String, default: "100px" },
+    paddingBottom: { type: String, default: "120px" }
   }
 }, { timestamps: true, collection: 'aboutdrnandani' });
 

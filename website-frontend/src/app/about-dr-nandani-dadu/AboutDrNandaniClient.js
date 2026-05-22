@@ -12,6 +12,7 @@ import AboutDrNandaniCredentials from '../../components/AboutDrNandaniCredential
 import AboutDrNandaniTrust from '../../components/AboutDrNandaniTrust';
 import AboutDrNandaniOtherSpecialities from '../../components/AboutDrNandaniOtherSpecialities';
 import AboutDrNandaniTestimonials from '../../components/AboutDrNandaniTestimonials';
+import AboutDrNandaniFAQ from '../../components/AboutDrNandaniFAQ';
 
 export default function AboutDrNandaniClient({ initialData }) {
   const [pageData, setPageData] = useState(initialData);
@@ -37,7 +38,8 @@ export default function AboutDrNandaniClient({ initialData }) {
         'about-nandani-credentials.',
         'about-nandani-trust.',
         'about-nandani-other-specialities.',
-        'about-nandani-testimonials.'
+        'about-nandani-testimonials.',
+        'about-nandani-faq.'
       ];
 
       Object.keys(siteConfig).forEach(key => {
@@ -76,6 +78,9 @@ export default function AboutDrNandaniClient({ initialData }) {
         } else if (prefix === 'about-nandani-testimonials.') {
           if (!newData.testimonialsSection) newData.testimonialsSection = {};
           current = newData.testimonialsSection;
+        } else if (prefix === 'about-nandani-faq.') {
+          if (!newData.faqSection) newData.faqSection = {};
+          current = newData.faqSection;
         } else {
           current = newData;
         }
@@ -136,6 +141,9 @@ export default function AboutDrNandaniClient({ initialData }) {
         } else if (sectionId === 'about-nandani-testimonials') {
           if (!newData.testimonialsSection) newData.testimonialsSection = {};
           current = newData.testimonialsSection;
+        } else if (sectionId === 'about-nandani-faq') {
+          if (!newData.faqSection) newData.faqSection = {};
+          current = newData.faqSection;
         } else {
           current = newData;
         }
@@ -166,6 +174,7 @@ export default function AboutDrNandaniClient({ initialData }) {
       <AboutDrNandaniTrust data={pageData.trustSection || {}} />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection || {}} />
       <AboutDrNandaniTestimonials data={pageData.testimonialsSection || {}} />
+      <AboutDrNandaniFAQ data={pageData.faqSection || {}} />
     </main>
   );
 }
