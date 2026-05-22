@@ -224,7 +224,7 @@ const fallbackData = {
     ],
     viewMoreText: "VIEW MORE",
     viewMoreUrl: "https://dmctrichology-mkm4.vercel.app/clients-feedback",
-    backgroundColor: "#3b5998",
+    backgroundColor: "#ffffff",
     cardBackgroundColor: "#000000",
     contentMaxWidth: "1400px",
     paddingTop: "100px",

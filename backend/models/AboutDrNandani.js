@@ -151,7 +151,7 @@ const AboutDrNandaniSchema = new mongoose.Schema({
     }],
     viewMoreText: { type: String, default: "VIEW MORE" },
     viewMoreUrl: { type: String, default: "https://dmctrichology-mkm4.vercel.app/clients-feedback" },
-    backgroundColor: { type: String, default: "#3b5998" },
+    backgroundColor: { type: String, default: "#ffffff" },
     cardBackgroundColor: { type: String, default: "#000000" },
     contentMaxWidth: { type: String, default: "1400px" },
     paddingTop: { type: String, default: "100px" },
