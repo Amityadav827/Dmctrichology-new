@@ -5,33 +5,48 @@ import EditableText from './Editable/EditableText';
 import EditableImage from './Editable/EditableImage';
 
 export default function AboutDrNandaniTrust({ data = {} }) {
+  const defaultTrustPoints = [
+    {
+      title: "Unparalleled Expertise",
+      description: "Dr. Nandani Dadu performs the best hair loss, thinning, and baldness procedures. She has continuously contributed to improving many lives by providing excellent hair transplant results. Through her honesty, hard work, and passionate service, she aims to change every frown into a smile."
+    },
+    {
+      title: "Vast Hair Restoration Procedures",
+      description: "Her expertise lies in hair procedures, such as DMC Mesogrow, Advanced HGP, Keravive Hair, Hair Rituals, and DMC-Golden Touch for hair transplants."
+    },
+    {
+      title: "Expert in Complex Procedures",
+      description: "She also takes a keen interest in performing complex procedures, such as repair hair transplants, body hair transplants, high-density transplants, her signature approach, DMC-Golden Touch, and more."
+    },
+    {
+      title: "Expert Precision for Natural Results",
+      description: "When it comes to hair transplants, the key factor is that the results should look natural. Dr. Dadu utilises her artistic abilities to provide a natural hairline. It gives patients confidence and leaves no proof that they underwent a hair transplant."
+    }
+  ];
+
+  const defaultConclusion = "Dr. Nandani Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandani Dadu now!";
+  const defaultImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png";
+  const defaultHeading = "Why Do Patients Trust Dr. Nandani Dadu As a Hair Transplant Doctor in Delhi?";
+
   const {
-    heading = "Why Do Patients Trust Dr. Nandani Dadu As a Hair Transplant Doctor in Delhi?",
-    image = "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
-    imageAlt = "Dr. Nandani Dadu",
-    imageMaxWidth = "100%",
-    trustPoints = [
-      {
-        title: "Unparalleled Expertise",
-        description: "Dr. Nandani Dadu performs the best hair loss, thinning, and baldness procedures. She has continuously contributed to improving many lives by providing excellent hair transplant results. Through her honesty, hard work, and passionate service, she aims to change every frown into a smile."
-      },
-      {
-        title: "Vast Hair Restoration Procedures",
-        description: "Her expertise lies in hair procedures, such as DMC Mesogrow, Advanced HGP, Keravive Hair, Hair Rituals, and DMC-Golden Touch for hair transplants."
-      },
-      {
-        title: "Expert in Complex Procedures",
-        description: "She also takes a keen interest in performing complex procedures, such as repair hair transplants, body hair transplants, high-density transplants, her signature approach, DMC-Golden Touch, and more."
-      },
-      {
-        title: "Expert Precision for Natural Results",
-        description: "When it comes to hair transplants, the key factor is that the results should look natural. Dr. Dadu utilises her artistic abilities to provide a natural hairline. It gives patients confidence and leaves no proof that they underwent a hair transplant."
-      }
-    ],
-    conclusionParagraph = "Dr. Nandani Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandani Dadu now!",
+    heading,
+    image,
+    imageAlt,
+    imageMaxWidth,
+    trustPoints,
+    conclusionParagraph,
     paddingTop = "110px",
     paddingBottom = "110px"
-  } = data;
+  } = data || {};
+
+  const resolvedHeading = heading || defaultHeading;
+  const resolvedImage = image || defaultImage;
+  const resolvedImageAlt = imageAlt || "Dr. Nandani Dadu";
+  const resolvedImageMaxWidth = imageMaxWidth || "100%";
+  const resolvedTrustPoints = (!trustPoints || trustPoints.length === 0) ? defaultTrustPoints : trustPoints;
+  const resolvedConclusion = conclusionParagraph || defaultConclusion;
+  const resolvedPaddingTop = paddingTop || "110px";
+  const resolvedPaddingBottom = paddingBottom || "110px";
 
   return (
     <EditableSection sectionId="about-nandani-trust" label="Why Patients Trust Dr. Nandani">
@@ -40,8 +55,8 @@ export default function AboutDrNandaniTrust({ data = {} }) {
         style={{
           backgroundColor: "#ffffff",
           width: "100%",
-          paddingTop: paddingTop || "110px",
-          paddingBottom: paddingBottom || "110px",
+          paddingTop: resolvedPaddingTop || "110px",
+          paddingBottom: resolvedPaddingBottom || "110px",
           position: "relative",
           boxSizing: "border-box"
         }}
@@ -95,7 +110,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           /* Left premium image card */
           .nandani-trust-image-card {
             background-color: #ffffff;
-            border: 4px solid #D4AF37;
+            border: 4px solid #3b5998;
             padding: 10px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
             border-radius: 0px !important; /* SQUARE CORNERS only */
@@ -147,7 +162,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           .nandani-trust-point-title {
             font-size: 20px;
             font-weight: 600;
-            color: #3b5998;
+            color: #000000;
             margin: 0 0 10px 0;
             line-height: 1.4;
             display: inline-block;
@@ -156,7 +171,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           .nandani-trust-point-desc {
             font-size: 18px;
             line-height: 2;
-            color: #3b5998;
+            color: #000000;
             margin: 0;
             text-align: justify;
           }
@@ -166,7 +181,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
             margin-top: 56px;
             font-size: 19px;
             line-height: 2.1;
-            color: #3b5998;
+            color: #000000;
             text-align: justify;
             border-top: 1px solid rgba(59, 89, 152, 0.1);
             padding-top: 40px;
@@ -184,7 +199,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           {/* Centered Heading */}
           <h2 className="nandani-trust-heading">
             <EditableText sectionId="about-nandani-trust" fieldPath="trustSection.heading" tag="span">
-              {heading}
+              {resolvedHeading}
             </EditableText>
           </h2>
 
@@ -192,20 +207,20 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           <div className="nandani-trust-grid">
             
             {/* Left Side: Premium Image Frame */}
-            <div className="nandani-trust-image-card" style={{ maxWidth: imageMaxWidth || "100%" }}>
+            <div className="nandani-trust-image-card" style={{ maxWidth: resolvedImageMaxWidth || "100%" }}>
               <div className="nandani-trust-img-wrap">
                 <EditableImage
                   sectionId="about-nandani-trust"
+                  src={resolvedImage}
+                  alt={resolvedImageAlt}
                   fieldPath="trustSection.image"
-                  src={image}
-                  alt={imageAlt || "Dr. Nandani Dadu"}
                 />
               </div>
             </div>
 
             {/* Right Side: Repeatable Trust Points */}
             <div className="nandani-trust-points-list">
-              {trustPoints.map((point, idx) => (
+              {resolvedTrustPoints.map((point, idx) => (
                 <div key={idx} className="nandani-trust-point-item">
                   <div className="nandani-trust-point-icon">
                     {/* Premium gold tick/check icon */}
@@ -249,14 +264,14 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           </div>
 
           {/* Bottom Concluding Editorial Paragraph */}
-          {conclusionParagraph && (
+          {resolvedConclusion && (
             <div className="nandani-trust-conclusion">
               <EditableText
                 sectionId="about-nandani-trust"
                 fieldPath="trustSection.conclusionParagraph"
                 tag="p"
               >
-                {conclusionParagraph}
+                {resolvedConclusion}
               </EditableText>
             </div>
           )}
