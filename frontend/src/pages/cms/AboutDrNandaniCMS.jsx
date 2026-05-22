@@ -789,143 +789,166 @@ export default function AboutDrNandaniCMS() {
               </div>
             </div>
 
-            {/* EDUCATION ITEMS */}
-            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
-              <div className="flex justify-between items-center mb-8">
-                <h3 className="text-lg font-black text-slate-800 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600">
-                    <Award size={18} />
-                  </div>
-                  Education Qualifications List
-                </h3>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const currentItems = data.educationExperience?.educationItems || [];
-                    updateNestedField("educationExperience.educationItems", [...currentItems, { degree: "NEW DEGREE / BADGE", institution: "UNIVERSAL INSTITUTE", year: "2026" }]);
-                  }}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-bold hover:bg-indigo-100 transition-all"
-                >
-                  <Plus size={14} />
-                  Add Qualification
-                </button>
-              </div>
+            {/* SINGLE PREMIUM CONTAINER FOR BOTH EDUCATION & EXPERIENCE */}
+            <div 
+              className="premium-inline-editor bg-white rounded-[14px] border p-6 md:p-8 space-y-10"
+              style={{ 
+                borderColor: "rgba(59,89,152,0.12)",
+                fontFamily: "'Marcellus', serif"
+              }}
+            >
+              <style>{`
+                .premium-inline-editor input,
+                .premium-inline-editor span,
+                .premium-inline-editor button,
+                .premium-inline-editor h3,
+                .premium-inline-editor h4 {
+                  font-family: 'Marcellus', serif !important;
+                }
+                .premium-inline-editor input::placeholder {
+                  font-family: 'Marcellus', serif !important;
+                  color: #94a3b8;
+                }
+              `}</style>
 
-              <div className="space-y-6">
-                {(data.educationExperience?.educationItems || []).map((item, idx) => (
-                  <div key={idx} className="p-6 bg-slate-50/50 rounded-2xl border border-slate-100 relative group">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const filtered = data.educationExperience.educationItems.filter((_, iIdx) => iIdx !== idx);
-                        updateNestedField("educationExperience.educationItems", filtered);
-                      }}
-                      className="absolute top-4 right-4 p-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-xl transition-all"
+              {/* EDUCATION SECTION */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                  <h4 className="text-base font-bold text-slate-800 uppercase tracking-wider">
+                    Education:
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currentItems = data.educationExperience?.educationItems || [];
+                      updateNestedField("educationExperience.educationItems", [...currentItems, { degree: "NEW DEGREE / BADGE", institution: "UNIVERSAL INSTITUTE", year: "2026" }]);
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-all"
+                  >
+                    <Plus size={12} />
+                    Add Qualification
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {(data.educationExperience?.educationItems || []).map((item, idx) => (
+                    <div 
+                      key={idx} 
+                      className="flex flex-col md:flex-row items-center gap-2 md:gap-4 py-2 px-3 hover:bg-slate-50/50 rounded-xl transition-all group"
                     >
-                      <Trash2 size={14} />
-                    </button>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pr-10">
-                      <div>
-                        <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Degree / Certificate Name</label>
+                      <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-[1fr_auto_1.5fr_auto_1fr] items-center gap-2 md:gap-3">
                         <input 
                           type="text" 
+                          placeholder="Degree Name"
                           value={item.degree || ""} 
                           onChange={e => updateNestedField(`educationExperience.educationItems.${idx}.degree`, e.target.value)} 
-                          className="w-full px-4 py-3 bg-white border border-slate-150 rounded-xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-300" 
+                          className="w-full px-3 py-2 bg-transparent border-b border-slate-100 hover:border-slate-300 focus:border-indigo-400 text-sm font-medium text-slate-800 outline-none transition-all" 
                         />
-                      </div>
-                      <div>
-                        <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Institution / College</label>
+                        <span className="hidden md:inline text-slate-300 font-light">—</span>
                         <input 
                           type="text" 
+                          placeholder="Institute Name"
                           value={item.institution || ""} 
                           onChange={e => updateNestedField(`educationExperience.educationItems.${idx}.institution`, e.target.value)} 
-                          className="w-full px-4 py-3 bg-white border border-slate-150 rounded-xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-300" 
+                          className="w-full px-3 py-2 bg-transparent border-b border-slate-100 hover:border-slate-300 focus:border-indigo-400 text-sm font-medium text-slate-800 outline-none transition-all" 
                         />
-                      </div>
-                      <div>
-                        <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Passing Year</label>
+                        <span className="hidden md:inline text-slate-300 font-light">—</span>
                         <input 
                           type="text" 
+                          placeholder="Year"
                           value={item.year || ""} 
                           onChange={e => updateNestedField(`educationExperience.educationItems.${idx}.year`, e.target.value)} 
-                          className="w-full px-4 py-3 bg-white border border-slate-150 rounded-xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-300" 
+                          className="w-full px-3 py-2 bg-transparent border-b border-slate-100 hover:border-slate-300 focus:border-indigo-400 text-sm font-medium text-slate-800 outline-none transition-all" 
                         />
                       </div>
+                      
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const filtered = data.educationExperience.educationItems.filter((_, iIdx) => iIdx !== idx);
+                          updateNestedField("educationExperience.educationItems", filtered);
+                        }}
+                        className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg opacity-80 hover:opacity-100 transition-all self-end md:self-auto"
+                        title="Delete Qualification"
+                      >
+                        <Trash2 size={14} />
+                      </button>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* EXPERIENCE ITEMS */}
-            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
-              <div className="flex justify-between items-center mb-8">
-                <h3 className="text-lg font-black text-slate-800 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600">
-                    <Sliders size={18} />
-                  </div>
-                  Professional Experience Records
-                </h3>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const currentItems = data.educationExperience?.experienceItems || [];
-                    updateNestedField("educationExperience.experienceItems", [...currentItems, { role: "NEW MEDICAL ROLE", hospital: "CLINIC OR HOSPITAL PLACE", duration: "2026 - Present" }]);
-                  }}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-bold hover:bg-indigo-100 transition-all"
-                >
-                  <Plus size={14} />
-                  Add Experience
-                </button>
+                  ))}
+                  {(data.educationExperience?.educationItems || []).length === 0 && (
+                    <div className="text-sm text-slate-400 italic py-2 pl-3">No education qualifications added. Click Add Qualification to add one.</div>
+                  )}
+                </div>
               </div>
 
-              <div className="space-y-6">
-                {(data.educationExperience?.experienceItems || []).map((item, idx) => (
-                  <div key={idx} className="p-6 bg-slate-50/50 rounded-2xl border border-slate-100 relative group">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const filtered = data.educationExperience.experienceItems.filter((_, iIdx) => iIdx !== idx);
-                        updateNestedField("educationExperience.experienceItems", filtered);
-                      }}
-                      className="absolute top-4 right-4 p-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-xl transition-all"
+              {/* EXPERIENCE SECTION */}
+              <div className="space-y-4 pt-4 border-t border-slate-100">
+                <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                  <h4 className="text-base font-bold text-slate-800 uppercase tracking-wider">
+                    Experience:
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currentItems = data.educationExperience?.experienceItems || [];
+                      updateNestedField("educationExperience.experienceItems", [...currentItems, { role: "NEW MEDICAL ROLE", hospital: "CLINIC OR HOSPITAL PLACE", duration: "2026 - Present" }]);
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-all"
+                  >
+                    <Plus size={12} />
+                    Add Experience
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {(data.educationExperience?.experienceItems || []).map((item, idx) => (
+                    <div 
+                      key={idx} 
+                      className="flex flex-col md:flex-row items-center gap-2 md:gap-4 py-2 px-3 hover:bg-slate-50/50 rounded-xl transition-all group"
                     >
-                      <Trash2 size={14} />
-                    </button>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pr-10">
-                      <div>
-                        <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Job Role / Designation</label>
+                      <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-[1fr_auto_1.5fr_auto_1fr] items-center gap-2 md:gap-3">
                         <input 
                           type="text" 
+                          placeholder="Role"
                           value={item.role || ""} 
                           onChange={e => updateNestedField(`educationExperience.experienceItems.${idx}.role`, e.target.value)} 
-                          className="w-full px-4 py-3 bg-white border border-slate-150 rounded-xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-300" 
+                          className="w-full px-3 py-2 bg-transparent border-b border-slate-100 hover:border-slate-300 focus:border-indigo-400 text-sm font-medium text-slate-800 outline-none transition-all" 
                         />
-                      </div>
-                      <div>
-                        <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Hospital / Medical Center</label>
+                        <span className="hidden md:inline text-slate-300 font-light">—</span>
                         <input 
                           type="text" 
+                          placeholder="Hospital"
                           value={item.hospital || ""} 
                           onChange={e => updateNestedField(`educationExperience.experienceItems.${idx}.hospital`, e.target.value)} 
-                          className="w-full px-4 py-3 bg-white border border-slate-150 rounded-xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-300" 
+                          className="w-full px-3 py-2 bg-transparent border-b border-slate-100 hover:border-slate-300 focus:border-indigo-400 text-sm font-medium text-slate-800 outline-none transition-all" 
                         />
-                      </div>
-                      <div>
-                        <label className="block text-[9px] font-black uppercase text-slate-400 mb-2 tracking-widest">Tenure Duration</label>
+                        <span className="hidden md:inline text-slate-300 font-light">—</span>
                         <input 
                           type="text" 
+                          placeholder="Duration"
                           value={item.duration || ""} 
                           onChange={e => updateNestedField(`educationExperience.experienceItems.${idx}.duration`, e.target.value)} 
-                          className="w-full px-4 py-3 bg-white border border-slate-150 rounded-xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-300" 
+                          className="w-full px-3 py-2 bg-transparent border-b border-slate-100 hover:border-slate-300 focus:border-indigo-400 text-sm font-medium text-slate-800 outline-none transition-all" 
                         />
                       </div>
+                      
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const filtered = data.educationExperience.experienceItems.filter((_, iIdx) => iIdx !== idx);
+                          updateNestedField("educationExperience.experienceItems", filtered);
+                        }}
+                        className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg opacity-80 hover:opacity-100 transition-all self-end md:self-auto"
+                        title="Delete Experience"
+                      >
+                        <Trash2 size={14} />
+                      </button>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                  {(data.educationExperience?.experienceItems || []).length === 0 && (
+                    <div className="text-sm text-slate-400 italic py-2 pl-3">No professional experience records added. Click Add Experience to add one.</div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
