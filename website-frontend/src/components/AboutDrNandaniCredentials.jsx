@@ -95,7 +95,7 @@ export default function AboutDrNandaniCredentials({ data = {} }) {
             font-size: 48px;
             font-weight: 500;
             text-align: center;
-            color: #3b5998;
+            color: #000000;
             margin: 0 0 24px 0;
             letter-spacing: 0.02em;
           }
@@ -126,7 +126,7 @@ export default function AboutDrNandaniCredentials({ data = {} }) {
           .nandani-badge-text {
             font-size: 16px;
             font-weight: 500;
-            color: #3b5998;
+            color: #000000;
             letter-spacing: 0.01em;
           }
 
@@ -154,7 +154,7 @@ export default function AboutDrNandaniCredentials({ data = {} }) {
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #3b5998;
+            color: #000000;
             margin-bottom: 24px;
             line-height: 1.4;
           }
@@ -162,7 +162,7 @@ export default function AboutDrNandaniCredentials({ data = {} }) {
           .nandani-column-body-text {
             font-size: 17px;
             line-height: 2;
-            color: #3b5998;
+            color: #000000;
             text-align: justify;
           }
 
