@@ -2,15 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
 import {
-  Save,
-  Loader2,
-  Image as ImageIcon,
-  Eye,
-  Settings,
-  User,
-  Globe,
-  Plus,
-  Trash2
+  Save, Loader2, Image as ImageIcon, Eye, Settings, User,
+  Globe, Plus, Trash2, Award, BookOpen, Briefcase, Star, Layout
 } from "lucide-react";
 
 export default function AboutDrNiveditaCMS() {
@@ -28,9 +21,7 @@ export default function AboutDrNiveditaCMS() {
       if (res.success && res.data) setData(res.data);
     } catch {
       toast.error("Failed to load Dr. Nivedita page settings");
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
 
   const updateSectionField = (section, field, value) => {
@@ -58,9 +49,7 @@ export default function AboutDrNiveditaCMS() {
       if (res.success) { toast.success("Dr. Nivedita Dadu CMS saved successfully"); setData(res.data); }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to save settings");
-    } finally {
-      setSaving(false);
-    }
+    } finally { setSaving(false); }
   };
 
   const handleImageUpload = async (e, section, field) => {
@@ -73,15 +62,12 @@ export default function AboutDrNiveditaCMS() {
       const { data: res } = await axios.post("/about-dr-nivedita/upload-image", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
-      if (res.success) {
-        updateSectionField(section, field, res.url);
-        toast.success("Image uploaded successfully");
-      }
+      if (res.success) { updateSectionField(section, field, res.url); toast.success("Image uploaded successfully"); }
     } catch { toast.error("Image upload failed"); }
     finally { setUploadingImage(false); }
   };
 
-  // ── Styles ──────────────────────────────────────────────────────────────────
+  // ── Styles ───────────────────────────────────────────────────────────────────
   const s = {
     page: { padding: "24px", fontFamily: "'Inter', sans-serif", maxWidth: "1100px" },
     header: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px", flexWrap: "wrap", gap: "12px" },
@@ -93,7 +79,7 @@ export default function AboutDrNiveditaCMS() {
     saveBtnDisabled: { opacity: 0.6, cursor: "not-allowed" },
     previewBtn: { display: "flex", alignItems: "center", gap: "6px", padding: "10px 16px", borderRadius: "8px", background: "#f1f5f9", color: "#475569", border: "1px solid #e2e8f0", fontWeight: "500", cursor: "pointer", fontSize: "13px", textDecoration: "none" },
     tabsContainer: { display: "flex", gap: "4px", marginBottom: "24px", background: "#f8fafc", padding: "6px", borderRadius: "12px", border: "1px solid #e2e8f0", flexWrap: "wrap" },
-    tab: (active) => ({ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: active ? "600" : "400", fontSize: "13px", background: active ? "#fff" : "transparent", color: active ? "#3b5998" : "#64748b", boxShadow: active ? "0 1px 3px rgba(0,0,0,0.1)" : "none", transition: "all 0.2s" }),
+    tab: (active) => ({ display: "flex", alignItems: "center", gap: "6px", padding: "8px 14px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: active ? "600" : "400", fontSize: "12px", background: active ? "#fff" : "transparent", color: active ? "#3b5998" : "#64748b", boxShadow: active ? "0 1px 3px rgba(0,0,0,0.1)" : "none", transition: "all 0.2s", whiteSpace: "nowrap" }),
     card: { background: "#fff", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "24px", marginBottom: "20px" },
     cardTitle: { fontSize: "15px", fontWeight: "700", color: "#1e293b", marginBottom: "20px", display: "flex", alignItems: "center", gap: "8px" },
     label: { display: "block", fontSize: "12px", fontWeight: "600", color: "#475569", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" },
@@ -106,7 +92,9 @@ export default function AboutDrNiveditaCMS() {
     bulletRow: { display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" },
     bulletInput: { flex: 1, padding: "8px 12px", borderRadius: "8px", border: "1px solid #e2e8f0", fontSize: "13px", fontFamily: "inherit" },
     removeBtn: { padding: "6px 10px", borderRadius: "6px", background: "#fff0f0", color: "#e53e3e", border: "1px solid #feb2b2", cursor: "pointer", display: "flex", alignItems: "center" },
-    addBtn: { display: "inline-flex", alignItems: "center", gap: "6px", padding: "8px 14px", borderRadius: "8px", background: "#f0f7ff", color: "#3b5998", border: "1px solid #bfdbfe", cursor: "pointer", fontSize: "13px", fontWeight: "500", marginTop: "8px" }
+    addBtn: { display: "inline-flex", alignItems: "center", gap: "6px", padding: "8px 14px", borderRadius: "8px", background: "#f0f7ff", color: "#3b5998", border: "1px solid #bfdbfe", cursor: "pointer", fontSize: "13px", fontWeight: "500", marginTop: "8px" },
+    colorRow: { display: "flex", alignItems: "center", gap: "10px" },
+    sectionDivider: { borderTop: "1px dashed #e2e8f0", marginTop: "20px", paddingTop: "20px" }
   };
 
   if (loading) return (
@@ -118,7 +106,12 @@ export default function AboutDrNiveditaCMS() {
   if (!data) return <div style={{ color: "#e53e3e", padding: "24px" }}>Failed to load settings. Please refresh.</div>;
 
   const hero = data.hero || {};
+  const breadcrumb = data.breadcrumb || {};
   const specialist = data.specialist || {};
+  const membership = data.membership || {};
+  const eduExp = data.educationExperience || {};
+  const credentials = data.credentialsSection || {};
+  const otherSpec = data.otherSpecialitiesSection || {};
   const seo = data.seo || {};
 
   return (
@@ -129,18 +122,14 @@ export default function AboutDrNiveditaCMS() {
           <div style={s.iconBox}><User size={20} color="#fff" /></div>
           <div>
             <p style={s.title}>About Dr. Nivedita Dadu CMS</p>
-            <p style={s.subtitle}>Section 1 Isolated Builder</p>
+            <p style={s.subtitle}>Full Isolated CMS Builder — All Sections</p>
           </div>
         </div>
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <a href="https://dmctrichology-mkm4.vercel.app/about-dr-nivedita-dadu" target="_blank" rel="noopener noreferrer" style={s.previewBtn}>
             <Eye size={14} /> Live Preview
           </a>
-          <button
-            style={{ ...s.saveBtn, ...(saving ? s.saveBtnDisabled : {}) }}
-            onClick={handleSave}
-            disabled={saving}
-          >
+          <button style={{ ...s.saveBtn, ...(saving ? s.saveBtnDisabled : {}) }} onClick={handleSave} disabled={saving}>
             {saving ? <Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} /> : <Save size={15} />}
             {saving ? "Saving..." : "Save Changes"}
           </button>
@@ -149,15 +138,14 @@ export default function AboutDrNiveditaCMS() {
 
       {/* Tabs */}
       <div style={s.tabsContainer}>
-        <button style={s.tab(activeSection === "hero")} onClick={() => setActiveSection("hero")}>
-          <User size={14} /> Hero Design & Copy
-        </button>
-        <button style={s.tab(activeSection === "specialist")} onClick={() => setActiveSection("specialist")}>
-          <Settings size={14} /> Specialist Info
-        </button>
-        <button style={s.tab(activeSection === "seo")} onClick={() => setActiveSection("seo")}>
-          <Globe size={14} /> SEO & Metadata
-        </button>
+        <button style={s.tab(activeSection === "hero")} onClick={() => setActiveSection("hero")}><User size={13} /> Hero Design & Copy</button>
+        <button style={s.tab(activeSection === "breadcrumb")} onClick={() => setActiveSection("breadcrumb")}><Layout size={13} /> Breadcrumb Config</button>
+        <button style={s.tab(activeSection === "specialist")} onClick={() => setActiveSection("specialist")}><Star size={13} /> Specialist Info</button>
+        <button style={s.tab(activeSection === "membership")} onClick={() => setActiveSection("membership")}><Award size={13} /> Membership Section</button>
+        <button style={s.tab(activeSection === "education")} onClick={() => setActiveSection("education")}><BookOpen size={13} /> Education & Experience</button>
+        <button style={s.tab(activeSection === "credentials")} onClick={() => setActiveSection("credentials")}><Briefcase size={13} /> Credentials Section</button>
+        <button style={s.tab(activeSection === "other")} onClick={() => setActiveSection("other")}><Settings size={13} /> Other Specialities</button>
+        <button style={s.tab(activeSection === "seo")} onClick={() => setActiveSection("seo")}><Globe size={13} /> SEO & Metadata</button>
       </div>
 
       {/* ── HERO SECTION ─────────────────────────────── */}
@@ -180,9 +168,9 @@ export default function AboutDrNiveditaCMS() {
               </div>
               <div style={s.fieldGroup}>
                 <label style={s.label}>Background Color</label>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <input type="color" value={hero.backgroundColor || "#1a1a2e"} onChange={e => updateSectionField("hero", "backgroundColor", e.target.value)} style={{ width: "40px", height: "36px", border: "1px solid #e2e8f0", borderRadius: "6px", cursor: "pointer", padding: "2px" }} />
-                  <input style={{ ...s.input, flex: 1 }} value={hero.backgroundColor || "#1a1a2e"} onChange={e => updateSectionField("hero", "backgroundColor", e.target.value)} />
+                <div style={s.colorRow}>
+                  <input type="color" value={hero.backgroundColor || "#3b5998"} onChange={e => updateSectionField("hero", "backgroundColor", e.target.value)} style={{ width: "40px", height: "36px", border: "1px solid #e2e8f0", borderRadius: "6px", cursor: "pointer", padding: "2px" }} />
+                  <input style={{ ...s.input, flex: 1 }} value={hero.backgroundColor || "#3b5998"} onChange={e => updateSectionField("hero", "backgroundColor", e.target.value)} />
                 </div>
               </div>
             </div>
@@ -198,11 +186,7 @@ export default function AboutDrNiveditaCMS() {
               <label style={s.label}>Doctor Portrait URL</label>
               <input style={s.input} value={hero.doctorImage || ""} onChange={e => updateSectionField("hero", "doctorImage", e.target.value)} placeholder="https://..." />
             </div>
-            {hero.doctorImage && (
-              <div style={s.imgPreviewBox}>
-                <img src={hero.doctorImage} alt="Doctor" style={{ width: "100%", display: "block" }} />
-              </div>
-            )}
+            {hero.doctorImage && (<div style={s.imgPreviewBox}><img src={hero.doctorImage} alt="Doctor" style={{ width: "100%", display: "block" }} /></div>)}
             <label style={s.uploadLabel}>
               {uploadingImage ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : <ImageIcon size={13} />}
               {uploadingImage ? "Uploading..." : "Upload New Image"}
@@ -236,6 +220,34 @@ export default function AboutDrNiveditaCMS() {
         </>
       )}
 
+      {/* ── BREADCRUMB SECTION ──────────────────────── */}
+      {activeSection === "breadcrumb" && (
+        <div style={s.card}>
+          <p style={s.cardTitle}><Layout size={16} color="#3b5998" /> Breadcrumb Configuration</p>
+          <div style={s.grid2}>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Parent Label (Home link text)</label>
+              <input style={s.input} value={breadcrumb.parentLabel || ""} onChange={e => updateSectionField("breadcrumb", "parentLabel", e.target.value)} placeholder="Home" />
+            </div>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Parent URL</label>
+              <input style={s.input} value={breadcrumb.parentUrl || ""} onChange={e => updateSectionField("breadcrumb", "parentUrl", e.target.value)} placeholder="/" />
+            </div>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Current Page Text</label>
+              <input style={s.input} value={breadcrumb.currentPageText || ""} onChange={e => updateSectionField("breadcrumb", "currentPageText", e.target.value)} placeholder="About Dr Nivedita Dadu" />
+            </div>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Breadcrumb Bar Background Color</label>
+              <div style={s.colorRow}>
+                <input type="color" value={breadcrumb.backgroundColor || "#f8f9fa"} onChange={e => updateSectionField("breadcrumb", "backgroundColor", e.target.value)} style={{ width: 40, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 }} />
+                <input style={{ ...s.input, flex: 1 }} value={breadcrumb.backgroundColor || "#f8f9fa"} onChange={e => updateSectionField("breadcrumb", "backgroundColor", e.target.value)} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── SPECIALIST SECTION ───────────────────────── */}
       {activeSection === "specialist" && (
         <>
@@ -255,47 +267,333 @@ export default function AboutDrNiveditaCMS() {
             </div>
             <div style={s.fieldGroup}>
               <label style={s.label}>Highlighted Text (before bullets)</label>
-              <input style={s.input} value={specialist.highlightedText || ""} onChange={e => updateSectionField("specialist", "highlightedText", e.target.value)} placeholder="She specializes in cutting-edge treatments including:" />
+              <input style={s.input} value={specialist.highlightedText || ""} onChange={e => updateSectionField("specialist", "highlightedText", e.target.value)} />
             </div>
           </div>
-
           <div style={s.card}>
             <p style={s.cardTitle}><Settings size={16} color="#3b5998" /> Treatment Bullets</p>
             {(specialist.bullets || []).map((bullet, idx) => (
               <div key={idx} style={s.bulletRow}>
                 <input style={s.bulletInput} value={bullet} onChange={e => updateNestedField(`specialist.bullets.${idx}`, e.target.value)} placeholder={`Bullet ${idx + 1}`} />
-                <button style={s.removeBtn} onClick={() => {
-                  const updated = [...(specialist.bullets || [])];
-                  updated.splice(idx, 1);
-                  updateSectionField("specialist", "bullets", updated);
-                }}>
-                  <Trash2 size={14} />
-                </button>
+                <button style={s.removeBtn} onClick={() => { const upd = [...(specialist.bullets || [])]; upd.splice(idx, 1); updateSectionField("specialist", "bullets", upd); }}><Trash2 size={14} /></button>
               </div>
             ))}
-            <button style={s.addBtn} onClick={() => updateSectionField("specialist", "bullets", [...(specialist.bullets || []), "New Treatment"])}>
-              <Plus size={14} /> Add Bullet
-            </button>
+            <button style={s.addBtn} onClick={() => updateSectionField("specialist", "bullets", [...(specialist.bullets || []), "New Treatment"])}><Plus size={14} /> Add Bullet</button>
           </div>
-
           <div style={s.card}>
             <p style={s.cardTitle}><ImageIcon size={16} color="#3b5998" /> Section Colors</p>
             <div style={s.grid2}>
               <div style={s.fieldGroup}>
                 <label style={s.label}>Section Background Color</label>
-                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                <div style={s.colorRow}>
                   <input type="color" value={specialist.sectionBgColor || "#ffffff"} onChange={e => updateSectionField("specialist", "sectionBgColor", e.target.value)} style={{ width: 40, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 }} />
                   <input style={{ ...s.input, flex: 1 }} value={specialist.sectionBgColor || "#ffffff"} onChange={e => updateSectionField("specialist", "sectionBgColor", e.target.value)} />
                 </div>
               </div>
               <div style={s.fieldGroup}>
                 <label style={s.label}>Card Background Color</label>
-                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                <div style={s.colorRow}>
                   <input type="color" value={specialist.cardBgColor || "#3b5998"} onChange={e => updateSectionField("specialist", "cardBgColor", e.target.value)} style={{ width: 40, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 }} />
                   <input style={{ ...s.input, flex: 1 }} value={specialist.cardBgColor || "#3b5998"} onChange={e => updateSectionField("specialist", "cardBgColor", e.target.value)} />
                 </div>
               </div>
             </div>
+          </div>
+        </>
+      )}
+
+      {/* ── MEMBERSHIP SECTION ────────────────────────── */}
+      {activeSection === "membership" && (
+        <>
+          <div style={s.card}>
+            <p style={s.cardTitle}><Award size={16} color="#3b5998" /> Membership Section Settings</p>
+            <div style={s.grid2}>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Section Heading</label>
+                <input style={s.input} value={membership.sectionHeading || ""} onChange={e => updateSectionField("membership", "sectionHeading", e.target.value)} placeholder="MEMBERSHIP" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Background Color</label>
+                <div style={s.colorRow}>
+                  <input type="color" value={membership.sectionBgColor || "#ffffff"} onChange={e => updateSectionField("membership", "sectionBgColor", e.target.value)} style={{ width: 40, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 }} />
+                  <input style={{ ...s.input, flex: 1 }} value={membership.sectionBgColor || "#ffffff"} onChange={e => updateSectionField("membership", "sectionBgColor", e.target.value)} />
+                </div>
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Padding Top</label>
+                <input style={s.input} value={membership.paddingTop || "60px"} onChange={e => updateSectionField("membership", "paddingTop", e.target.value)} placeholder="60px" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Padding Bottom</label>
+                <input style={s.input} value={membership.paddingBottom || "60px"} onChange={e => updateSectionField("membership", "paddingBottom", e.target.value)} placeholder="60px" />
+              </div>
+            </div>
+          </div>
+
+          <div style={s.card}>
+            <p style={s.cardTitle}><ImageIcon size={16} color="#3b5998" /> Organisation Logos</p>
+            {(membership.logos || []).map((logo, idx) => (
+              <div key={idx} style={{ background: "#f8fafc", borderRadius: 8, padding: "14px", marginBottom: 12, border: "1px solid #e2e8f0" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: "#1e293b" }}>Logo #{idx + 1}</span>
+                  <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                    <label style={{ fontSize: 12, color: "#475569", display: "flex", gap: 6, alignItems: "center", cursor: "pointer" }}>
+                      <input type="checkbox" checked={logo.enabled !== false} onChange={e => updateNestedField(`membership.logos.${idx}.enabled`, e.target.checked)} /> Enabled
+                    </label>
+                    <button style={s.removeBtn} onClick={() => { const upd = [...(membership.logos || [])]; upd.splice(idx, 1); updateSectionField("membership", "logos", upd); }}><Trash2 size={13} /></button>
+                  </div>
+                </div>
+                <div style={s.grid2}>
+                  <div style={s.fieldGroup}>
+                    <label style={s.label}>Organisation Title</label>
+                    <input style={s.input} value={logo.title || ""} onChange={e => updateNestedField(`membership.logos.${idx}.title`, e.target.value)} placeholder="EADV" />
+                  </div>
+                  <div style={s.fieldGroup}>
+                    <label style={s.label}>External Link (optional)</label>
+                    <input style={s.input} value={logo.link || ""} onChange={e => updateNestedField(`membership.logos.${idx}.link`, e.target.value)} placeholder="https://..." />
+                  </div>
+                </div>
+                <div style={s.fieldGroup}>
+                  <label style={s.label}>Logo Image URL</label>
+                  <input style={s.input} value={logo.imageUrl || ""} onChange={e => updateNestedField(`membership.logos.${idx}.imageUrl`, e.target.value)} placeholder="https://..." />
+                </div>
+                {logo.imageUrl && <div style={{ ...s.imgPreviewBox, maxWidth: 100 }}><img src={logo.imageUrl} alt={logo.title} style={{ width: "100%", display: "block" }} /></div>}
+              </div>
+            ))}
+            <button style={s.addBtn} onClick={() => updateSectionField("membership", "logos", [...(membership.logos || []), { id: Date.now(), title: "New Organisation", imageUrl: "", link: "", enabled: true }])}>
+              <Plus size={14} /> Add Logo
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* ── EDUCATION & EXPERIENCE ────────────────────── */}
+      {activeSection === "education" && (
+        <>
+          <div style={s.card}>
+            <p style={s.cardTitle}><BookOpen size={16} color="#3b5998" /> Section Settings</p>
+            <div style={s.grid2}>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Education Card Title</label>
+                <input style={s.input} value={eduExp.educationTitle || ""} onChange={e => updateSectionField("educationExperience", "educationTitle", e.target.value)} placeholder="EDUCATION" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Experience Card Title</label>
+                <input style={s.input} value={eduExp.experienceTitle || ""} onChange={e => updateSectionField("educationExperience", "experienceTitle", e.target.value)} placeholder="EXPERIENCE" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Section Background Color</label>
+                <div style={s.colorRow}>
+                  <input type="color" value={eduExp.sectionBgColor || "#ffffff"} onChange={e => updateSectionField("educationExperience", "sectionBgColor", e.target.value)} style={{ width: 40, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 }} />
+                  <input style={{ ...s.input, flex: 1 }} value={eduExp.sectionBgColor || "#ffffff"} onChange={e => updateSectionField("educationExperience", "sectionBgColor", e.target.value)} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={s.card}>
+            <p style={s.cardTitle}><BookOpen size={16} color="#3b5998" /> Education Items</p>
+            {(eduExp.educationItems || []).map((item, idx) => (
+              <div key={idx} style={{ background: "#f8fafc", borderRadius: 8, padding: "14px", marginBottom: 12, border: "1px solid #e2e8f0" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>Education #{idx + 1}</span>
+                  <button style={s.removeBtn} onClick={() => { const upd = [...(eduExp.educationItems || [])]; upd.splice(idx, 1); updateSectionField("educationExperience", "educationItems", upd); }}><Trash2 size={13} /></button>
+                </div>
+                <div style={s.grid2}>
+                  <div style={s.fieldGroup}>
+                    <label style={s.label}>Degree / Qualification</label>
+                    <input style={s.input} value={item.degree || ""} onChange={e => updateNestedField(`educationExperience.educationItems.${idx}.degree`, e.target.value)} placeholder="MBBS" />
+                  </div>
+                  <div style={s.fieldGroup}>
+                    <label style={s.label}>Year</label>
+                    <input style={s.input} value={item.year || ""} onChange={e => updateNestedField(`educationExperience.educationItems.${idx}.year`, e.target.value)} placeholder="2005" />
+                  </div>
+                </div>
+                <div style={s.fieldGroup}>
+                  <label style={s.label}>Institution</label>
+                  <input style={s.input} value={item.institution || ""} onChange={e => updateNestedField(`educationExperience.educationItems.${idx}.institution`, e.target.value)} placeholder="Institution name" />
+                </div>
+              </div>
+            ))}
+            <button style={s.addBtn} onClick={() => updateSectionField("educationExperience", "educationItems", [...(eduExp.educationItems || []), { degree: "", institution: "", year: "" }])}>
+              <Plus size={14} /> Add Education Item
+            </button>
+          </div>
+
+          <div style={s.card}>
+            <p style={s.cardTitle}><Briefcase size={16} color="#3b5998" /> Experience Items</p>
+            {(eduExp.experienceItems || []).map((item, idx) => (
+              <div key={idx} style={{ background: "#f8fafc", borderRadius: 8, padding: "14px", marginBottom: 12, border: "1px solid #e2e8f0" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>Experience #{idx + 1}</span>
+                  <button style={s.removeBtn} onClick={() => { const upd = [...(eduExp.experienceItems || [])]; upd.splice(idx, 1); updateSectionField("educationExperience", "experienceItems", upd); }}><Trash2 size={13} /></button>
+                </div>
+                <div style={s.grid2}>
+                  <div style={s.fieldGroup}>
+                    <label style={s.label}>Role / Position</label>
+                    <input style={s.input} value={item.role || ""} onChange={e => updateNestedField(`educationExperience.experienceItems.${idx}.role`, e.target.value)} placeholder="Senior Dermatologist" />
+                  </div>
+                  <div style={s.fieldGroup}>
+                    <label style={s.label}>Duration / Year</label>
+                    <input style={s.input} value={item.duration || ""} onChange={e => updateNestedField(`educationExperience.experienceItems.${idx}.duration`, e.target.value)} placeholder="2004 - 2008" />
+                  </div>
+                </div>
+                <div style={s.fieldGroup}>
+                  <label style={s.label}>Hospital / Organisation</label>
+                  <input style={s.input} value={item.hospital || ""} onChange={e => updateNestedField(`educationExperience.experienceItems.${idx}.hospital`, e.target.value)} placeholder="Hospital name" />
+                </div>
+              </div>
+            ))}
+            <button style={s.addBtn} onClick={() => updateSectionField("educationExperience", "experienceItems", [...(eduExp.experienceItems || []), { role: "", hospital: "", duration: "" }])}>
+              <Plus size={14} /> Add Experience Item
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* ── CREDENTIALS SECTION ──────────────────────── */}
+      {activeSection === "credentials" && (
+        <>
+          <div style={s.card}>
+            <p style={s.cardTitle}><Briefcase size={16} color="#3b5998" /> Banner & Heading</p>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Banner Image URL</label>
+              <input style={s.input} value={credentials.bannerImage || ""} onChange={e => updateSectionField("credentialsSection", "bannerImage", e.target.value)} placeholder="https://..." />
+            </div>
+            {credentials.bannerImage && (<div style={s.imgPreviewBox}><img src={credentials.bannerImage} alt="Banner" style={{ width: "100%", display: "block" }} /></div>)}
+            <label style={s.uploadLabel}>
+              {uploadingImage ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : <ImageIcon size={13} />}
+              {uploadingImage ? "Uploading..." : "Upload Banner Image"}
+              <input type="file" accept="image/*" onChange={e => handleImageUpload(e, "credentialsSection", "bannerImage")} style={{ display: "none" }} disabled={uploadingImage} />
+            </label>
+            <div style={s.sectionDivider} />
+            <div style={s.grid2}>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Section Heading</label>
+                <input style={s.input} value={credentials.heading || ""} onChange={e => updateSectionField("credentialsSection", "heading", e.target.value)} placeholder="Credentials" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Banner Overlay Opacity (0.0 – 1.0)</label>
+                <input type="number" min="0" max="1" step="0.05" style={s.input} value={credentials.overlayOpacity ?? 0.35} onChange={e => updateSectionField("credentialsSection", "overlayOpacity", parseFloat(e.target.value))} />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Padding Bottom</label>
+                <input style={s.input} value={credentials.paddingBottom || "80px"} onChange={e => updateSectionField("credentialsSection", "paddingBottom", e.target.value)} placeholder="80px" />
+              </div>
+            </div>
+          </div>
+
+          <div style={s.card}>
+            <p style={s.cardTitle}><Award size={16} color="#3b5998" /> Credential Badges</p>
+            {(credentials.credentialsList || []).map((cred, idx) => (
+              <div key={idx} style={s.bulletRow}>
+                <input style={s.bulletInput} value={cred.text || ""} onChange={e => updateNestedField(`credentialsSection.credentialsList.${idx}.text`, e.target.value)} placeholder={`Credential ${idx + 1}`} />
+                <button style={s.removeBtn} onClick={() => { const upd = [...(credentials.credentialsList || [])]; upd.splice(idx, 1); updateSectionField("credentialsSection", "credentialsList", upd); }}><Trash2 size={14} /></button>
+              </div>
+            ))}
+            <button style={s.addBtn} onClick={() => updateSectionField("credentialsSection", "credentialsList", [...(credentials.credentialsList || []), { text: "New Credential" }])}>
+              <Plus size={14} /> Add Credential
+            </button>
+          </div>
+
+          <div style={s.card}>
+            <p style={s.cardTitle}><BookOpen size={16} color="#3b5998" /> Editorial Content (Two Columns)</p>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Left Column Heading</label>
+              <input style={s.input} value={credentials.leftHeading || ""} onChange={e => updateSectionField("credentialsSection", "leftHeading", e.target.value)} placeholder="EXPERTISE IN DERMATOLOGY & HAIR TREATMENT" />
+            </div>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Left Column Content (HTML supported)</label>
+              <textarea style={{ ...s.textarea, minHeight: 140 }} value={credentials.leftText || ""} onChange={e => updateSectionField("credentialsSection", "leftText", e.target.value)} rows={6} />
+            </div>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Right Column Heading</label>
+              <input style={s.input} value={credentials.rightHeading || ""} onChange={e => updateSectionField("credentialsSection", "rightHeading", e.target.value)} placeholder="COMMITMENT TO PATIENT CARE" />
+            </div>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Right Column Content (HTML supported)</label>
+              <textarea style={{ ...s.textarea, minHeight: 140 }} value={credentials.rightText || ""} onChange={e => updateSectionField("credentialsSection", "rightText", e.target.value)} rows={6} />
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ── OTHER SPECIALITIES ────────────────────────── */}
+      {activeSection === "other" && (
+        <>
+          <div style={s.card}>
+            <p style={s.cardTitle}><Settings size={16} color="#3b5998" /> Section Settings</p>
+            <div style={s.grid2}>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Section Heading</label>
+                <input style={s.input} value={otherSpec.heading || ""} onChange={e => updateSectionField("otherSpecialitiesSection", "heading", e.target.value)} placeholder="Other Specialities" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Content Max Width</label>
+                <input style={s.input} value={otherSpec.contentMaxWidth || "1200px"} onChange={e => updateSectionField("otherSpecialitiesSection", "contentMaxWidth", e.target.value)} placeholder="1200px" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Section Background Color</label>
+                <div style={s.colorRow}>
+                  <input type="color" value={otherSpec.backgroundColor || "#ffffff"} onChange={e => updateSectionField("otherSpecialitiesSection", "backgroundColor", e.target.value)} style={{ width: 40, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 }} />
+                  <input style={{ ...s.input, flex: 1 }} value={otherSpec.backgroundColor || "#ffffff"} onChange={e => updateSectionField("otherSpecialitiesSection", "backgroundColor", e.target.value)} />
+                </div>
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Card Background Color</label>
+                <div style={s.colorRow}>
+                  <input type="color" value={otherSpec.cardBackgroundColor || "#3b5998"} onChange={e => updateSectionField("otherSpecialitiesSection", "cardBackgroundColor", e.target.value)} style={{ width: 40, height: 36, border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", padding: 2 }} />
+                  <input style={{ ...s.input, flex: 1 }} value={otherSpec.cardBackgroundColor || "#3b5998"} onChange={e => updateSectionField("otherSpecialitiesSection", "cardBackgroundColor", e.target.value)} />
+                </div>
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Padding Top</label>
+                <input style={s.input} value={otherSpec.paddingTop || "100px"} onChange={e => updateSectionField("otherSpecialitiesSection", "paddingTop", e.target.value)} placeholder="100px" />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.label}>Padding Bottom</label>
+                <input style={s.input} value={otherSpec.paddingBottom || "100px"} onChange={e => updateSectionField("otherSpecialitiesSection", "paddingBottom", e.target.value)} placeholder="100px" />
+              </div>
+            </div>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Intro Paragraph</label>
+              <textarea style={s.textarea} value={otherSpec.introParagraph || ""} onChange={e => updateSectionField("otherSpecialitiesSection", "introParagraph", e.target.value)} rows={3} />
+            </div>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Conclusion Paragraph (use **bold** for gold highlight)</label>
+              <textarea style={s.textarea} value={otherSpec.conclusionParagraph || ""} onChange={e => updateSectionField("otherSpecialitiesSection", "conclusionParagraph", e.target.value)} rows={3} />
+            </div>
+          </div>
+
+          <div style={s.card}>
+            <p style={s.cardTitle}><Star size={16} color="#3b5998" /> Speciality Bullets</p>
+            {(otherSpec.specialitiesList || []).map((bullet, idx) => (
+              <div key={idx} style={s.bulletRow}>
+                <input style={s.bulletInput} value={bullet.title || ""} onChange={e => updateNestedField(`otherSpecialitiesSection.specialitiesList.${idx}.title`, e.target.value)} placeholder={`Speciality ${idx + 1}`} />
+                <button style={s.removeBtn} onClick={() => { const upd = [...(otherSpec.specialitiesList || [])]; upd.splice(idx, 1); updateSectionField("otherSpecialitiesSection", "specialitiesList", upd); }}><Trash2 size={14} /></button>
+              </div>
+            ))}
+            <button style={s.addBtn} onClick={() => updateSectionField("otherSpecialitiesSection", "specialitiesList", [...(otherSpec.specialitiesList || []), { title: "New Speciality," }])}>
+              <Plus size={14} /> Add Speciality
+            </button>
+          </div>
+
+          <div style={s.card}>
+            <p style={s.cardTitle}><ImageIcon size={16} color="#3b5998" /> Right Side Image</p>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Image URL</label>
+              <input style={s.input} value={otherSpec.image || ""} onChange={e => updateSectionField("otherSpecialitiesSection", "image", e.target.value)} placeholder="https://..." />
+            </div>
+            <div style={s.fieldGroup}>
+              <label style={s.label}>Image Alt Text</label>
+              <input style={s.input} value={otherSpec.imageAlt || ""} onChange={e => updateSectionField("otherSpecialitiesSection", "imageAlt", e.target.value)} placeholder="Dr. Nivedita Other Specialities" />
+            </div>
+            {otherSpec.image && (<div style={s.imgPreviewBox}><img src={otherSpec.image} alt={otherSpec.imageAlt} style={{ width: "100%", display: "block" }} /></div>)}
+            <label style={s.uploadLabel}>
+              {uploadingImage ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : <ImageIcon size={13} />}
+              {uploadingImage ? "Uploading..." : "Upload Section Image"}
+              <input type="file" accept="image/*" onChange={e => handleImageUpload(e, "otherSpecialitiesSection", "image")} style={{ display: "none" }} disabled={uploadingImage} />
+            </label>
           </div>
         </>
       )}
@@ -316,11 +614,7 @@ export default function AboutDrNiveditaCMS() {
             <label style={s.label}>OG Image URL</label>
             <input style={s.input} value={seo.ogImage || ""} onChange={e => updateSectionField("seo", "ogImage", e.target.value)} placeholder="https://..." />
           </div>
-          {seo.ogImage && (
-            <div style={s.imgPreviewBox}>
-              <img src={seo.ogImage} alt="OG" style={{ width: "100%", display: "block" }} />
-            </div>
-          )}
+          {seo.ogImage && (<div style={s.imgPreviewBox}><img src={seo.ogImage} alt="OG" style={{ width: "100%", display: "block" }} /></div>)}
         </div>
       )}
 

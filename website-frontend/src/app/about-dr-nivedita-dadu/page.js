@@ -55,6 +55,69 @@ const staticFallback = {
     sectionBgColor: '#ffffff',
     cardBgColor: '#3b5998'
   },
+  membership: {
+    sectionHeading: 'MEMBERSHIP',
+    sectionBgColor: '#ffffff',
+    paddingTop: '60px',
+    paddingBottom: '60px',
+    logos: [
+      { id: 1, title: 'EADV', imageUrl: '', link: '', enabled: true },
+      { id: 2, title: 'IAM', imageUrl: '', link: '', enabled: true },
+      { id: 3, title: 'IADVL', imageUrl: '', link: '', enabled: true },
+      { id: 4, title: 'Trichology Society', imageUrl: '', link: '', enabled: true },
+      { id: 5, title: 'ISOINEL', imageUrl: '', link: '', enabled: true }
+    ]
+  },
+  educationExperience: {
+    sectionBgColor: '#FFFFFF',
+    educationTitle: 'EDUCATION',
+    experienceTitle: 'EXPERIENCE',
+    educationItems: [
+      { degree: 'MBBS', institution: 'Himalayan Institute of Medical Sciences (HIMS), Dehradun', year: '2000' },
+      { degree: 'MD (Dermatology)', institution: 'Himalayan Institute of Medical Sciences (HIMS), Dehradun', year: '2004' }
+    ],
+    experienceItems: [
+      { role: 'Senior Dermatologist', hospital: 'Dr. Ram Manohar Lohia Hospital, New Delhi', duration: '2004 - 2008' },
+      { role: 'Fellowship In Hair Science & Trichology', hospital: 'King Edward Memorial Hospital, Mumbai', duration: '2008 - 2010' },
+      { role: 'Consultant Dermatologist', hospital: 'Primus Hospital, New Delhi', duration: '2010 - 2012' },
+      { role: 'Co-Founder & Senior Dermatologist', hospital: 'DMC Trichology, New Delhi', duration: '2012 - Present' }
+    ]
+  },
+  credentialsSection: {
+    bannerImage: '',
+    overlayOpacity: 0.35,
+    heading: 'Credentials',
+    credentialsList: [
+      { text: 'Fellowship In Aesthetic Dermatology' },
+      { text: 'Fellowship In Hair Science' },
+      { text: 'Member — IADVL (Indian Association of Dermatologists)' }
+    ],
+    leftHeading: 'EXPERTISE IN DERMATOLOGY & HAIR TREATMENT',
+    leftText: "<p>Dr. Nivedita Dadu's cutting-edge Hair Loss Treatment techniques have made a significant difference. She is recognized as a <strong>leading dermatologist and trichologist in Delhi</strong> available at DMC Trichology, Vasant Vihar (South Delhi), & Rajouri Garden (West Delhi).</p>",
+    rightHeading: 'COMMITMENT TO PATIENT CARE',
+    rightText: "<p>Dr. Nivedita Dadu places a high value on the doctor-patient relationship, ensuring individualized care at every step of the treatment journey at DMC Trichology.</p>",
+    paddingBottom: '80px'
+  },
+  otherSpecialitiesSection: {
+    heading: 'Other Specialities',
+    introParagraph: 'Apart from being a leading expert in Trichological Sciences, Dr. Nivedita Dadu is also a diligent specialist in advanced dermatology, performing a number of cosmetic procedures such as:',
+    specialitiesList: [
+      { title: 'Laser Skin Resurfacing & Rejuvenation,' },
+      { title: 'Chemical Peels & Advanced Facials,' },
+      { title: 'Botox, Fillers & Anti-Ageing Treatments,' },
+      { title: 'Pigmentation & Melasma Management,' },
+      { title: 'Acne & Scar Treatment Protocols.' }
+    ],
+    conclusionParagraph: 'For more information, contact the **best dermatologist in Delhi** at DMC Trichology. We have our centres located at Vasant Vihar (South Delhi) & Rajouri Garden (West Delhi).',
+    image: '',
+    imageAlt: 'Dr. Nivedita Other Specialities',
+    backgroundColor: '#ffffff',
+    cardBackgroundColor: '#3b5998',
+    contentMaxWidth: '1200px',
+    paddingTop: '100px',
+    paddingBottom: '100px',
+    gridGap: '70px'
+  },
   seo: {
     metaTitle: 'Dr. Nivedita Dadu | Expert Dermatologist & Trichologist in Delhi',
     metaDescription: 'Consult Dr. Nivedita Dadu, renowned Dermatologist and Trichologist at DMC Trichology Delhi.',

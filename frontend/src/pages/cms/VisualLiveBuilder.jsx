@@ -140,7 +140,11 @@ export default function VisualLiveBuilder() {
       return [
         { id: 'about-nivedita-hero', label: 'About Dr Nivedita Hero' },
         { id: 'about-nivedita-breadcrumb', label: 'Dr Nivedita Breadcrumb' },
-        { id: 'about-nivedita-specialist', label: 'Dr Nivedita Specialist Info' }
+        { id: 'about-nivedita-specialist', label: 'Dr Nivedita Specialist Info' },
+        { id: 'about-nivedita-membership', label: 'Dr Nivedita Membership Section' },
+        { id: 'about-nivedita-education', label: 'Dr Nivedita Edu & Exp' },
+        { id: 'about-nivedita-credentials', label: 'Dr Nivedita Credentials' },
+        { id: 'about-nivedita-other-specialities', label: 'Dr Nivedita Other Specialities' }
       ];
     }
     return allSections;
@@ -533,7 +537,12 @@ export default function VisualLiveBuilder() {
                             'Patient Testimonials Section': '/cms/about-dr-nandani',
                             'FAQ Section': '/cms/about-dr-nandani',
                             'About Dr Nivedita Hero': '/cms/about-dr-nivedita',
-                            'Dr Nivedita Specialist Info': '/cms/about-dr-nivedita'
+                            'Dr Nivedita Breadcrumb': '/cms/about-dr-nivedita',
+                            'Dr Nivedita Specialist Info': '/cms/about-dr-nivedita',
+                            'Dr Nivedita Membership Section': '/cms/about-dr-nivedita',
+                            'Dr Nivedita Edu & Exp': '/cms/about-dr-nivedita',
+                            'Dr Nivedita Credentials': '/cms/about-dr-nivedita',
+                            'Dr Nivedita Other Specialities': '/cms/about-dr-nivedita'
                           };
                           if(routeMap[activeSection.label]) navigate(routeMap[activeSection.label]);
                         }}
