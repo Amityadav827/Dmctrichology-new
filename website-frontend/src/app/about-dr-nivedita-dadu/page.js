@@ -31,8 +31,14 @@ const staticFallback = {
     messagePlaceholder: 'Enter Your Message Here',
     captchaPlaceholder: 'Code*',
     submitButtonText: 'Schedule Your Visit',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: '#3b5998',
     overlayOpacity: 0.45
+  },
+  breadcrumb: {
+    parentLabel: 'Home',
+    parentUrl: '/',
+    currentPageText: 'About Dr Nivedita Dadu',
+    backgroundColor: '#f8f9fa'
   },
   specialist: {
     heading: 'Best Dermatologist & Hair Specialist in Delhi',

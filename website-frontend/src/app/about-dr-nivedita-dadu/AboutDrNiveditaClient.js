@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useBuilder } from '../../context/BuilderContext';
 import AboutDrNiveditaHero from '../../components/AboutDrNiveditaHero';
+import AboutDrNiveditaBreadcrumb from '../../components/AboutDrNiveditaBreadcrumb';
 import AboutDrNiveditaSpecialist from '../../components/AboutDrNiveditaSpecialist';
 
 export default function AboutDrNiveditaClient({ initialData }) {
@@ -22,6 +23,7 @@ export default function AboutDrNiveditaClient({ initialData }) {
 
       const sectionPrefixes = [
         'about-nivedita-hero.',
+        'about-nivedita-breadcrumb.',
         'about-nivedita-specialist.'
       ];
 
@@ -36,6 +38,9 @@ export default function AboutDrNiveditaClient({ initialData }) {
         if (matchedPrefix === 'about-nivedita-hero.') {
           if (!newData.hero) newData.hero = {};
           current = newData.hero;
+        } else if (matchedPrefix === 'about-nivedita-breadcrumb.') {
+          if (!newData.breadcrumb) newData.breadcrumb = {};
+          current = newData.breadcrumb;
         } else if (matchedPrefix === 'about-nivedita-specialist.') {
           if (!newData.specialist) newData.specialist = {};
           current = newData.specialist;
@@ -73,6 +78,9 @@ export default function AboutDrNiveditaClient({ initialData }) {
         if (sectionId === 'about-nivedita-hero') {
           if (!newData.hero) newData.hero = {};
           current = newData.hero;
+        } else if (sectionId === 'about-nivedita-breadcrumb') {
+          if (!newData.breadcrumb) newData.breadcrumb = {};
+          current = newData.breadcrumb;
         } else if (sectionId === 'about-nivedita-specialist') {
           if (!newData.specialist) newData.specialist = {};
           current = newData.specialist;
@@ -98,6 +106,7 @@ export default function AboutDrNiveditaClient({ initialData }) {
   return (
     <main>
       <AboutDrNiveditaHero data={pageData.hero || {}} />
+      <AboutDrNiveditaBreadcrumb data={pageData.breadcrumb || {}} />
       <AboutDrNiveditaSpecialist data={pageData.specialist || {}} />
     </main>
   );

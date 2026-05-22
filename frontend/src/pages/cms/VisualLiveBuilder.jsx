@@ -139,6 +139,7 @@ export default function VisualLiveBuilder() {
     if (currentSlug === 'about-dr-nivedita-dadu') {
       return [
         { id: 'about-nivedita-hero', label: 'About Dr Nivedita Hero' },
+        { id: 'about-nivedita-breadcrumb', label: 'Dr Nivedita Breadcrumb' },
         { id: 'about-nivedita-specialist', label: 'Dr Nivedita Specialist Info' }
       ];
     }

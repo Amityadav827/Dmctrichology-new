@@ -15,8 +15,14 @@ const AboutDrNiveditaSchema = new mongoose.Schema({
     messagePlaceholder: { type: String, default: 'Enter Your Message Here' },
     captchaPlaceholder: { type: String, default: 'Code*' },
     submitButtonText: { type: String, default: 'Schedule Your Visit' },
-    backgroundColor: { type: String, default: '#1a1a2e' },
+    backgroundColor: { type: String, default: '#3b5998' },
     overlayOpacity: { type: Number, default: 0.45 }
+  },
+  breadcrumb: {
+    parentLabel: { type: String, default: 'Home' },
+    parentUrl: { type: String, default: '/' },
+    currentPageText: { type: String, default: 'About Dr Nivedita Dadu' },
+    backgroundColor: { type: String, default: '#f8f9fa' }
   },
   specialist: {
     heading: { type: String, default: 'Best Dermatologist & Hair Specialist in Delhi' },
