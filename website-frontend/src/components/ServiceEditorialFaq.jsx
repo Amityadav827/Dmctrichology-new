@@ -3,8 +3,15 @@
 import React, { useState } from "react";
 import { Plus, Minus } from "lucide-react";
 
+const hairCostFaqDescription = `Choosing the right hair transplant clinic matters when seeking a successful hair transplant surgery. If you are searching for the best clinic for hair transplant, look no further than DMC Trichology. Many patients go for hair transplant surgery at DMC Trichology, as it stands out among other clinics, because of the following reasons:
+
+DMC Trichology is a pioneer in hair transplant services, conveniently located in Delhi at Rajouri Garden (West Delhi) & Vasant Vihar (South Delhi).
+
+DMC trichology has a legacy of excellence in its hair transplant services.`;
+
 export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewCta }) {
   const [activeIndex, useStateActiveIndex] = useState(0);
+  const isHairCostDelhiPage = ['hair-transplant-cost-in-delhi', 'hair-transplant-cost-in-india'].includes(String(pageSlug || '').toLowerCase());
 
   const faqs = data?.faqs || [];
   const activeFaqs = (faqs || [])
@@ -23,6 +30,12 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
     useStateActiveIndex(prev => (prev === idx ? null : idx));
   };
 
+  const description = data?.sectionDescription || (isHairCostDelhiPage ? hairCostFaqDescription : "");
+  const descriptionParagraphs = String(description || "")
+    .split(/\n+/)
+    .map(item => item.trim())
+    .filter(Boolean);
+
   return (
     <section className="service-edfaq-section">
       <div className="service-edfaq-container">
@@ -34,6 +47,13 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
                 {data?.sectionTitle || "EDITORIAL FAQ"}
               </h2>
               <div className="service-edfaq-divider"></div>
+              {descriptionParagraphs.length > 0 && (
+                <div className="service-edfaq-description">
+                  {descriptionParagraphs.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="service-edfaq-list">

@@ -2,6 +2,7 @@ import React from 'react';
 
 export default function ServiceIdealCandidates({ data, pageSlug = "" }) {
   if (!data) return null;
+  if (data.isVisible === false) return null;
 
   const { sectionHeading, introText, bottomConclusionText, sectionImage, altText, bullets } = data;
 

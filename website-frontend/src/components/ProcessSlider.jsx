@@ -36,6 +36,8 @@ const ProcessSlider = ({ data = {} }) => {
     }
   }, [isEditMode, siteConfig]);
 
+  if (processData?.isVisible === false) return null;
+
   const steps = processData.processSteps || [];
   const maxIndex = Math.max(0, steps.length - VISIBLE);
 

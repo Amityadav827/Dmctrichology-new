@@ -8,6 +8,11 @@ import FaqEnquiry from '../../../components/FaqEnquiry';
 import IdealFrequency from '../../../components/IdealFrequency';
 import ServiceContentBlock from '../../../components/ServiceContentBlock';
 import ServiceBenefits from '../../../components/ServiceBenefits';
+import FueProcedureSection from '../../../components/FueProcedureSection';
+import FueCostSection from '../../../components/FueCostSection';
+import FueOptingBenefitsSection from '../../../components/FueOptingBenefitsSection';
+import BodyHairIntroSection from '../../../components/BodyHairIntroSection';
+import BodyHairSuitableSection from '../../../components/BodyHairSuitableSection';
 import ServiceIdealCandidates from '../../../components/ServiceIdealCandidates';
 import ServiceNotCandidates from '../../../components/ServiceNotCandidates';
 import ServiceTechniques from '../../../components/ServiceTechniques';
@@ -149,7 +154,7 @@ function getFallbackNotCandidates(service, staticFallback) {
       { bulletText: "Pregnant or lactating women.", sortOrder: 2, isVisible: true },
       { bulletText: "Those with a history of keloidal tendency.", sortOrder: 3, isVisible: true }
     ],
-    isVisible: true
+    isVisible: dbSection.isVisible !== false
   };
 }
 
@@ -157,7 +162,12 @@ export default async function DynamicDetailsPage({ params }) {
   const resolvedParams = await params;
   const { slug } = resolvedParams;
   
-  const service = await fetchServiceData(slug);
+  let service = await fetchServiceData(slug);
+  const normalizedSlug = String(slug || '').toLowerCase().trim();
+
+  if (!service && normalizedSlug === 'hair-transplant-cost-in-delhi') {
+    service = servicesData.find(s => s.slug.toLowerCase() === 'hair-transplant-cost-in-delhi') || null;
+  }
 
   if (!service) {
     notFound();
@@ -171,6 +181,9 @@ export default async function DynamicDetailsPage({ params }) {
   const resultsSection = service.resultsSection || staticFallback.resultsSection || null;
   const videosSection = service.videosSection || staticFallback.videosSection || null;
   const enquirySection = service.enquirySection || staticFallback.enquirySection || null;
+  const isHairCostDelhiPage = ['hair-transplant-cost-in-delhi', 'hair-transplant-cost-in-india'].includes(normalizedSlug);
+  const isFueHairTransplantPage = normalizedSlug === 'fue-hair-transplant';
+  const showVideosSection = !isHairCostDelhiPage || videosSection?.showOnCostPage === true;
 
   const isTransplantCategory = service.category === 'transplant' || slug.includes('transplant') || slug.includes('hair-transplant');
   const showTransplantInfo = isTransplantCategory || !!service.hairTransplantInfoSection;
@@ -186,25 +199,35 @@ export default async function DynamicDetailsPage({ params }) {
     <div className="bg-white min-h-screen">
       <DetailsBanner data={banner || {}} />
       <ServiceIntro data={intro || {}} banner={banner || {}} />
-      <ServiceContentBlock data={service.contentBlocks || []} />
-      <ServiceBenefits data={service.benefitsSection || null} />
-      <ServiceIdealCandidates data={service.idealCandidates || null} pageSlug={slug} />
-      <ServiceNotCandidates 
-        data={resolvedNotCandidates} 
-        serviceTitle={service.banner?.title || service.title || ''} 
+      <BodyHairIntroSection data={service.bodyHairIntroSection || null} pageSlug={slug} />
+      <ServiceContentBlock data={service.contentBlocks || []} pageSlug={slug} />
+      <ServiceBenefits
+        data={isHairCostDelhiPage ? (service.benefitsSection || staticFallback.benefitsSection || {}) : (service.benefitsSection || null)}
+        pageSlug={slug}
       />
-      <ServiceTechniques data={service.techniquesSection || null} />
-      <ServiceInfoBlocks data={service.infoBlocksSection || null} pageSlug={slug} />
-      <ProcessSlider data={process || {}} />
-      <ServiceAftercare data={resolvedAftercare} pageSlug={slug} />
-      <ServiceWhyChooseUs data={resolvedWhyChoose} pageSlug={slug} />
-      {showTransplantInfo && (
+      <FueProcedureSection data={service.fueProcedureSection || null} pageSlug={slug} />
+      {!isHairCostDelhiPage && <ServiceIdealCandidates data={service.idealCandidates || null} pageSlug={slug} />}
+      {!isHairCostDelhiPage && (
+        <ServiceNotCandidates 
+          data={resolvedNotCandidates} 
+          serviceTitle={service.banner?.title || service.title || ''} 
+        />
+      )}
+      <BodyHairSuitableSection data={service.bodyHairSuitableSection || null} pageSlug={slug} />
+      <FueCostSection data={service.fueCostSection || null} pageSlug={slug} />
+      <FueOptingBenefitsSection data={service.fueOptingBenefitsSection || null} pageSlug={slug} />
+      {!isHairCostDelhiPage && <ServiceTechniques data={service.techniquesSection || null} />}
+      {!isHairCostDelhiPage && <ServiceInfoBlocks data={service.infoBlocksSection || null} pageSlug={slug} />}
+      {!isHairCostDelhiPage && <ProcessSlider data={process || {}} />}
+      {!isHairCostDelhiPage && !isFueHairTransplantPage && <ServiceAftercare data={resolvedAftercare} pageSlug={slug} />}
+      {!isHairCostDelhiPage && !isFueHairTransplantPage && <ServiceWhyChooseUs data={resolvedWhyChoose} pageSlug={slug} />}
+      {!isHairCostDelhiPage && showTransplantInfo && (
         <HairTransplantInfoSection 
           data={service.hairTransplantInfoSection || null} 
           pageSlug={slug} 
         />
       )}
-      {showTransplantWhyChoose && (
+      {!isHairCostDelhiPage && showTransplantWhyChoose && (
         <HairTransplantWhyChooseSection
           data={service.hairTransplantWhyChooseSection || null}
           image={service.benefitsSection?.image || service.idealCandidates?.sectionImage || staticFallback.benefitsSection?.image || ''}
@@ -216,7 +239,7 @@ export default async function DynamicDetailsPage({ params }) {
       {showBeforeAfter && <BeforeAfterTreatment data={beforeAfter || {}} />}
       <ServiceEditorialFaq data={service.editorialFaqSection || null} pageSlug={slug} googleReviewCta={googleReviewCta} />
       <HairTransplantResultsSection data={resultsSection} />
-      <HairTransplantVideosSection data={videosSection} />
+      {showVideosSection && <HairTransplantVideosSection data={videosSection} />}
       <FaqEnquiry data={faqEnquiry || {}} enquirySection={enquirySection} pageSlug={slug} />
     </div>
   );

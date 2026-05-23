@@ -310,6 +310,7 @@ const generateServiceData = (title, slug, type) => {
 export const servicesData = [
   generateServiceData("Soprano Titanium Laser", "soprano-titanium-laser", "laser"),
   generateServiceData("Best Hair Transplant", "best-hair-transplant", "transplant"),
+  generateServiceData("Hair Transplant Cost in Delhi", "hair-transplant-cost-in-delhi", "transplant"),
   generateServiceData("FUE Hair Transplant", "fue-hair-transplant", "transplant"),
   generateServiceData("Advanced GFC Therapy", "advanced-gfc-therapy", "regrowth"),
   generateServiceData("PRP Plus+", "prp-plus", "regrowth"),

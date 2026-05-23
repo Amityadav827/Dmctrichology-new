@@ -124,6 +124,9 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
   const intro = introData.intro || introData;
   const mediaItems = normalizeMedia(intro);
   const benefits = intro.benefits || [];
+  const genericClosingPattern = /^Restore your confidence with our seamless .+ procedure, performed by award-winning surgeons\.$/i;
+  const closingText = String(intro.closingText || '').trim();
+  const shouldShowClosingText = closingText && !genericClosingPattern.test(closingText);
   const currentItem = mediaItems[selectedIndex] || mediaItems[0];
   const isVideo = currentItem?.type === 'video';
 
@@ -346,10 +349,10 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
             )}
 
             {/* Closing Text */}
-            {intro.closingText && (
+            {shouldShowClosingText && (
               <p className="details-closing">
                 <EditableText sectionId="service-intro" fieldPath="intro.closingText">
-                  {intro.closingText}
+                  {closingText}
                 </EditableText>
               </p>
             )}

@@ -339,3 +339,237 @@ tbody tr {
 tbody tr:hover {
   background-color: #F8FAFC;
 }
+
+/* Direct service page editor: flat, compact editing surface */
+.service-editor-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.service-editor-sections > div {
+  margin-top: 0 !important;
+  padding: 14px 16px !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+
+.service-editor-sections > div > h3,
+.service-editor-sections > div > .flex:first-child h3 {
+  font-size: 16px !important;
+  margin: 0 !important;
+  color: #0f172a !important;
+}
+
+.service-editor-sections > div > h3,
+.service-editor-sections > div > .flex:first-child {
+  padding-bottom: 10px !important;
+  margin-bottom: 12px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.service-editor-sections > div > .flex:first-child p {
+  display: none;
+}
+
+.service-detail-direct-editor label {
+  margin-bottom: 5px !important;
+  font-size: 10px !important;
+}
+
+.service-detail-direct-editor input[type="text"],
+.service-detail-direct-editor input[type="number"],
+.service-detail-direct-editor input[type="email"],
+.service-detail-direct-editor textarea,
+.service-detail-direct-editor select {
+  border-radius: 10px !important;
+  padding: 9px 12px !important;
+  min-height: 40px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.service-detail-direct-editor textarea {
+  min-height: 96px !important;
+  resize: vertical;
+  line-height: 1.5 !important;
+}
+
+.service-detail-direct-editor .grid {
+  gap: 12px !important;
+}
+
+.service-detail-direct-editor .space-y-8 > :not([hidden]) ~ :not([hidden]),
+.service-detail-direct-editor .space-y-6 > :not([hidden]) ~ :not([hidden]),
+.service-detail-direct-editor .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 12px !important;
+}
+
+.service-detail-direct-editor .bg-slate-50.p-6,
+.service-detail-direct-editor .bg-white.p-6,
+.service-detail-direct-editor .bg-white.p-4,
+.service-detail-direct-editor .p-10,
+.service-detail-direct-editor .p-8 {
+  padding: 12px !important;
+  border-radius: 12px !important;
+}
+
+.service-detail-direct-editor .border-t.pt-8 {
+  padding-top: 12px !important;
+  margin-top: 12px !important;
+}
+
+.service-detail-direct-editor [class*="min-h-[140px]"],
+.service-detail-direct-editor [class*="min-h-[120px]"],
+.service-detail-direct-editor [class*="min-h-[100px]"],
+.service-detail-direct-editor [class*="min-h-[90px]"],
+.service-detail-direct-editor [class*="min-h-[80px]"] {
+  min-height: 92px !important;
+}
+
+.service-detail-direct-editor .group.relative.bg-white {
+  padding: 12px !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+.service-detail-direct-editor .group.relative.bg-white .mb-5,
+.service-detail-direct-editor .group.relative.bg-white .mb-4,
+.service-detail-direct-editor .group.relative.bg-white .space-y-2 {
+  margin-bottom: 10px !important;
+}
+
+.service-detail-direct-editor .group.relative.bg-white .w-16.h-16 {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 10px !important;
+}
+
+.service-detail-direct-editor .group.relative.bg-white .w-8.h-8 {
+  width: 28px !important;
+  height: 28px !important;
+}
+
+.service-detail-direct-editor .group.relative.bg-white button,
+.service-detail-direct-editor .group.relative.bg-white label[class*="cursor-pointer"],
+.service-detail-direct-editor button[class*="uppercase"] {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.service-detail-direct-editor .group.relative.bg-white input {
+  min-height: 38px !important;
+}
+
+.service-detail-direct-editor .text-center.py-10,
+.service-detail-direct-editor .text-center.py-8 {
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+}
+
+.service-detail-direct-editor .md\:grid-cols-2 > div:empty,
+.service-detail-direct-editor .space-y-3:empty,
+.service-detail-direct-editor .space-y-4:empty {
+  display: none;
+}
+
+.service-detail-direct-editor .border-b.pb-2,
+.service-detail-direct-editor .border-b.pb-4 {
+  padding-bottom: 8px !important;
+}
+
+.service-detail-direct-editor .pt-4 {
+  padding-top: 8px !important;
+}
+
+.service-details-parent-row {
+  position: relative;
+}
+
+.service-details-parent-row .nav-item {
+  padding-right: 2.25rem;
+}
+
+.service-details-toggle {
+  position: absolute;
+  right: 0.45rem;
+  top: 50%;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748B;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.service-details-toggle:hover {
+  background: rgba(29, 78, 216, 0.08);
+  color: #1D4ED8;
+}
+
+.service-details-toggle svg {
+  transition: transform 0.18s ease;
+}
+
+.service-details-toggle.open svg {
+  transform: rotate(90deg);
+}
+
+.service-details-subnav {
+  margin: 0.35rem 0 0.25rem 1.15rem;
+  padding-left: 0.65rem;
+  border-left: 1px solid #D8E2F0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.service-detail-subitem {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 30px;
+  padding: 0.38rem 0.55rem;
+  border-radius: 8px;
+  color: #64748B;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.service-detail-subitem:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.service-detail-subitem.active {
+  background: #DBEAFE;
+  color: #1D4ED8;
+}
+
+.service-detail-subitem.muted {
+  color: #94A3B8;
+  font-style: italic;
+}
+
+.service-detail-subdot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  flex: 0 0 auto;
+  opacity: 0.7;
+}
+
+.service-detail-subtext {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

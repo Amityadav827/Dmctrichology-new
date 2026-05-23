@@ -283,6 +283,8 @@ const generateServiceData = (title, slug, type) => {
 };
 
 module.exports = { servicesData: [
+  generateServiceData("Best Hair Transplant", "best-hair-transplant", "transplant"),
+  generateServiceData("Hair Transplant Cost in Delhi", "hair-transplant-cost-in-delhi", "transplant"),
   generateServiceData("Soprano Titanium Laser", "soprano-titanium-laser", "laser"),
   generateServiceData("FUE Hair Transplant", "fue-hair-transplant", "transplant"),
   generateServiceData("Advanced GFC Therapy", "advanced-gfc-therapy", "regrowth"),

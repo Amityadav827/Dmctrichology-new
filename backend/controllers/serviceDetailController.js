@@ -1,22 +1,40 @@
 const ServiceDetail = require('../models/ServiceDetail');
 const { servicesData } = require('../utils/servicesDataFallback');
 
+const slugAliases = {
+  'hair-transplant-cost-in-delhi': 'hair-transplant-cost-in-india'
+};
+
+const getSlugLookupCandidates = (slug) => {
+  const candidates = [slug];
+  if (slugAliases[slug]) candidates.push(slugAliases[slug]);
+  return [...new Set(candidates.filter(Boolean))];
+};
+
 // Get service details by slug
 exports.getServiceDetailBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
-    let serviceDetail = await ServiceDetail.findOne({ slug });
+    const lookupCandidates = getSlugLookupCandidates(slug);
+    let serviceDetail = await ServiceDetail.findOne({ slug: { $in: lookupCandidates } });
     
     if (!serviceDetail) {
       // Fallback to static existing frontend structure
-      const fallbackData = servicesData.find(s => s.slug.toLowerCase() === slug.toLowerCase());
+      const fallbackData = servicesData.find(s =>
+        lookupCandidates.some(candidate => s.slug.toLowerCase() === candidate.toLowerCase())
+      );
       if (fallbackData) {
-        return res.status(200).json({ success: true, data: fallbackData, isFallback: true });
+        return res.status(200).json({
+          success: true,
+          data: { ...fallbackData, slug },
+          isFallback: true
+        });
       }
       return res.status(404).json({ success: false, message: 'Service details not found' });
     }
     
-    res.status(200).json({ success: true, data: serviceDetail });
+    const data = serviceDetail.toObject ? serviceDetail.toObject() : serviceDetail;
+    res.status(200).json({ success: true, data: { ...data, slug } });
   } catch (error) {
     console.error('Error fetching service details:', error);
     res.status(500).json({ success: false, message: 'Server error' });
@@ -27,10 +45,17 @@ exports.getServiceDetailBySlug = async (req, res) => {
 exports.saveServiceDetail = async (req, res) => {
   try {
     const { slug } = req.params;
+    const lookupCandidates = getSlugLookupCandidates(slug);
+    const existingServiceDetail = await ServiceDetail.findOne({ slug: { $in: lookupCandidates } }).select('slug');
+    const lookupSlug = existingServiceDetail?.slug || slug;
     const updateData = { ...req.body };
     
     // Ensure the slug matches URL param
     updateData.slug = slug;
+    delete updateData._id;
+    delete updateData.__v;
+    delete updateData.createdAt;
+    delete updateData.updatedAt;
 
     // Migrate legacy intro.videos → intro.introMedia if present
     if (updateData.intro) {
@@ -49,7 +74,7 @@ exports.saveServiceDetail = async (req, res) => {
     }
 
     const serviceDetail = await ServiceDetail.findOneAndUpdate(
-      { slug },
+      { slug: lookupSlug },
       { $set: updateData },
       { 
         new: true, 

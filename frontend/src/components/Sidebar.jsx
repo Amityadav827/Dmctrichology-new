@@ -1,6 +1,7 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { hasPermission } from "../utils/auth";
+import api from "../api/client";
 import {
   LayoutDashboard, Search, Star, PhoneCall, Mail, CalendarCheck,
   FileText, Scissors, Layers, HelpCircle, Activity, List,
@@ -32,6 +33,36 @@ function Sidebar() {
   const [isAboutUsOpen, setIsAboutUsOpen] = React.useState(() => 
     window.location.pathname.startsWith("/cms/about-dr-nandani")
   );
+  const [isServiceDetailsOpen, setIsServiceDetailsOpen] = React.useState(true);
+  const [serviceDetailsItems, setServiceDetailsItems] = React.useState([]);
+  const location = useLocation();
+  const isServiceDetailsCms = location.pathname === "/cms/service-details";
+  const selectedServiceSlug = React.useMemo(() => {
+    return new URLSearchParams(location.search).get("service") || "";
+  }, [location.search]);
+
+  React.useEffect(() => {
+    let isMounted = true;
+
+    api.get("/service-listing-cards")
+      .then((res) => {
+        if (!isMounted) return;
+        const list = Array.isArray(res.data?.data) ? res.data.data : [];
+        setServiceDetailsItems(
+          list
+            .filter((service) => service?.slug)
+            .sort((a, b) => (a.title || "").localeCompare(b.title || "", undefined, { sensitivity: "base" }))
+        );
+      })
+      .catch(() => {
+        if (isMounted) setServiceDetailsItems([]);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       {/* Brand Header */}
@@ -247,9 +278,50 @@ function Sidebar() {
             <NavLink to="/cms/visual-builder/service" className={getNavClass}>
               <Eye size={16} /> Visual Builder
             </NavLink>
-            <NavLink to="/cms/service-details" className={getNavClass}>
-              <Layers size={16} /> Service Details CMS
-            </NavLink>
+            <div className="service-details-parent-row">
+              <NavLink to="/cms/service-details" className={getNavClass}>
+                <Layers size={16} /> Service Details CMS
+              </NavLink>
+              <button
+                type="button"
+                className={`service-details-toggle${isServiceDetailsOpen ? " open" : ""}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsServiceDetailsOpen((prev) => !prev);
+                }}
+                aria-label={isServiceDetailsOpen ? "Collapse service details menu" : "Expand service details menu"}
+                aria-expanded={isServiceDetailsOpen}
+              >
+                <ChevronRight size={15} />
+              </button>
+            </div>
+            {isServiceDetailsOpen && (isServiceDetailsCms || serviceDetailsItems.length > 0) && (
+              <div className="service-details-subnav">
+                {serviceDetailsItems.length > 0 ? (
+                  serviceDetailsItems.map((service) => (
+                    <NavLink
+                      key={service.slug}
+                      to={`/cms/service-details?service=${encodeURIComponent(service.slug)}`}
+                      className={() =>
+                        isServiceDetailsCms && selectedServiceSlug === service.slug
+                          ? "service-detail-subitem active"
+                          : "service-detail-subitem"
+                      }
+                      title={service.title}
+                    >
+                      <span className="service-detail-subdot" />
+                      <span className="service-detail-subtext">{service.title}</span>
+                    </NavLink>
+                  ))
+                ) : (
+                  <div className="service-detail-subitem muted">
+                    <span className="service-detail-subdot" />
+                    Loading services...
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Details Page CMS */}
             <SectionLabel>Details Page CMS</SectionLabel>

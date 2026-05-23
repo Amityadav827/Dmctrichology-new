@@ -59,11 +59,34 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '' }) => {
   const faqs = sectionData?.faqItems || [];
   
   // Defensive normalization of enquirySection prop
+  const isHairCostDelhiPage = ['hair-transplant-cost-in-delhi', 'hair-transplant-cost-in-india'].includes(String(pageSlug || '').toLowerCase());
+  const consultationHeading = 'REQUEST A CONSULTATION';
+  const consultationDescription = 'Clinic Timings ( By Appointments Only )\nMonday to Saturday : 9:00 AM to 8:00 PM\nSunday : 10:00 AM to 7:00 PM';
   const normalizedEnquiry = enquirySection || {};
+  const leftTitle = isHairCostDelhiPage && (!sectionData?.faqTitle || sectionData.faqTitle === 'Common Concerns Addressed')
+    ? consultationHeading
+    : (sectionData?.faqTitle || 'Few Of The Common Concerns');
+  const leftDescription = isHairCostDelhiPage && (!sectionData?.faqSubtitle || sectionData.faqSubtitle === 'Common questions about our treatments.')
+    ? consultationDescription
+    : (sectionData?.faqSubtitle || 'Common questions about our treatments.');
+  const formTitle = isHairCostDelhiPage && (!normalizedEnquiry.title || normalizedEnquiry.title === 'Enquire About This Treatment')
+    ? consultationHeading
+    : (normalizedEnquiry.title || sectionData?.formTitle || 'Enquiry Here Below!');
+  const formDescription = isHairCostDelhiPage && (!normalizedEnquiry.description || normalizedEnquiry.description === 'Schedule your visit for this specialized treatment.')
+    ? consultationDescription
+    : (normalizedEnquiry.description || '');
   const showEnquiry = normalizedEnquiry.isVisible !== false;
   const serviceOptions = (normalizedEnquiry.serviceOptions && Array.isArray(normalizedEnquiry.serviceOptions) && normalizedEnquiry.serviceOptions.length > 0)
     ? normalizedEnquiry.serviceOptions 
     : (sectionData?.serviceOptions || []);
+  const leftDescriptionLines = String(leftDescription)
+    .split(/\n+/)
+    .map(line => line.trim())
+    .filter(Boolean);
+  const formDescriptionLines = String(formDescription)
+    .split(/\n+/)
+    .map(line => line.trim())
+    .filter(Boolean);
 
   const toggleFaq = (index) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -173,14 +196,18 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '' }) => {
           <div className="details-fe-left" style={!showEnquiry ? { width: '100%', maxWidth: 'none', flex: '0 0 100%' } : undefined}>
             <h2 className="details-fe-title">
               <EditableText sectionId="faq-enquiry-section" fieldPath="faqEnquiry.faqTitle">
-                {sectionData?.faqTitle || 'Few Of The Common Concerns'}
+                {leftTitle}
               </EditableText>
             </h2>
-            <p className="details-fe-subtitle">
-              <EditableText sectionId="faq-enquiry-section" fieldPath="faqEnquiry.faqSubtitle">
-                {sectionData?.faqSubtitle || 'Common questions about our treatments.'}
-              </EditableText>
-            </p>
+            <div className="details-fe-subtitle">
+              {leftDescriptionLines.map((line, index) => (
+                <p key={index}>
+                  <EditableText sectionId="faq-enquiry-section" fieldPath="faqEnquiry.faqSubtitle">
+                    {line}
+                  </EditableText>
+                </p>
+              ))}
+            </div>
 
             <div className="details-faq-accordion">
               {faqs.map((faq, index) => {
@@ -226,13 +253,15 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '' }) => {
               >
                 <h3 className="details-enquiry-title">
                   <EditableText sectionId="faq-enquiry-section" fieldPath="faqEnquiry.formTitle">
-                    {normalizedEnquiry.title || sectionData?.formTitle || 'Enquiry Here Below!'}
+                    {formTitle}
                   </EditableText>
                 </h3>
-                {normalizedEnquiry.description && (
-                  <p className="text-slate-400 text-xs mt-1 mb-4 text-center">
-                    {normalizedEnquiry.description}
-                  </p>
+                {formDescriptionLines.length > 0 && (
+                  <div className="details-enquiry-description">
+                    {formDescriptionLines.map((line, index) => (
+                      <p key={index}>{line}</p>
+                    ))}
+                  </div>
                 )}
                 
                 <form className="details-enquiry-form" onSubmit={handleSubmit}>

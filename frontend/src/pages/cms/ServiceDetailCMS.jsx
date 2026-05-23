@@ -6,8 +6,205 @@ import {
   Image as ImageIcon, Video, Plus, Trash2, RefreshCw, Globe, 
   ArrowUp, ArrowDown, Upload, Film, ExternalLink, Star
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ServiceSearchSelector from "../../components/ServiceSearchSelector";
+
+const HAIR_COST_DELHI_SLUGS = ["hair-transplant-cost-in-delhi", "hair-transplant-cost-in-india"];
+
+const hairCostFactorDescription = `However, most commonly, two factors determine the cost of a hair transplant procedure in most hair transplant clinics.
+
+- The stage of baldness
+- The number of hair grafts (or per follicles).
+
+One can better understand the **hair transplant cost in Delhi** by consulting with the hair transplant experts at DMC Trichology Centre.
+
+Dealing with hair loss problems and deciding to get a hair transplantation is a big decision. To begin with, who should we consult? Where to get the Transplant? All these questions need sufficient answers. So, there are certainly the most essential conditions to consider besides the cost factor. These include:
+
+- Experience of the Clinic
+- Hair Transplant Technique
+- Risk Factors
+- Recovery Time
+- Success Rate.
+
+Getting a hair transplant procedure at an economical rate is everybody's choice, provided the quality standard of the clinical procedure is not compromised. The reason is that hair transplant surgery is nothing less than any surgical procedure and requires optimum expertise and precautions.
+
+Our experts at DMC Trichology are the best at determining the **_hair transplant cost in Delhi._** The experts are specialised in providing state-of-the-art hair transplant procedures at the most reasonable and affordable cost without compromising the quality standard necessary for a most natural hairline and permanent result.`;
+
+const isHairCostDelhiSlug = (slug) => HAIR_COST_DELHI_SLUGS.includes(String(slug || "").toLowerCase());
+
+const hairCostBenefitsSectionDefaults = {
+  heading: "HOW MUCH HAIR TRANSPLANT COST IN DELHI AT DMC TRICHOLOGY?",
+  description: "The price of hair transplant surgery will vary significantly from case to case. It depends on a number of variables, including the hair transplant surgeon's experience, the reputation of the clinic, the approach used, the degree of hair loss, and the quantity of grafts required. During the visit, the trichologist will determine the number of grafts required to cover your bald area or based on the severity of hair loss.",
+  secondaryHeading: "HOW MUCH DOES A FUT HAIR TRANSPLANT COST?",
+  secondaryDescription: "Follicular Unit Transplantation or FUT or strip surgery, is a hair transplant technique in which healthy hair follicles or grafts are extracted from a strip that is extracted from the hair-bearing part of the skin. Then they are transplanted to areas affected with hair loss.",
+  benefitStripHeading: "BENEFITS OF HAIR TRANSPLANT AT DMC TRICHOLOGY",
+  altText: "Hair transplant cost consultation"
+};
+
+const hairCostBenefitPoints = [
+  "Natural regrowth of hair",
+  "Minimum downtime",
+  "Pain-free with no visible scars",
+  "Long-term cost efficient"
+];
+
+const hairCostEditorialFaqDescription = `Choosing the right hair transplant clinic matters when seeking a successful hair transplant surgery. If you are searching for the best clinic for hair transplant, look no further than DMC Trichology. Many patients go for hair transplant surgery at DMC Trichology, as it stands out among other clinics, because of the following reasons:
+
+DMC Trichology is a pioneer in hair transplant services, conveniently located in Delhi at Rajouri Garden (West Delhi) & Vasant Vihar (South Delhi).
+
+DMC trichology has a legacy of excellence in its hair transplant services.`;
+
+const consultationHeading = "REQUEST A CONSULTATION";
+const consultationDescription = "Clinic Timings ( By Appointments Only )\nMonday to Saturday : 9:00 AM to 8:00 PM\nSunday : 10:00 AM to 7:00 PM";
+const FUE_DETAIL_SLUGS = ["fue-hair-transplant"];
+const BODY_HAIR_DETAIL_SLUGS = ["body-hair-transplant-bht"];
+const fueProcedureDefaults = {
+  heading: "FUE HAIR TRANSPLANT PROCEDURE",
+  image: "/images/service-details/fue-procedure.webp",
+  altText: "FUE hair transplant procedure at DMC Trichology",
+  content: `The FUE technique involves extracting healthy follicular hair units from the donor scalp area, usually from the back or side of the scalp, and implanting them into the recipient area. It is performed with a sophisticated surgical tool to extract individual follicular units without damaging the neighbouring tissue.
+
+The procedure is minimally invasive & discreet. The donor area is carefully shaved to remain undetectable and thus allows the patient to return to normal activities in no time.
+
+Our leading **hair transplant surgeon** at DMC Trichology expertise in providing the **best FUE hair transplant in Delhi**. We are among the very few in the nation to have mastered the skill of complicated injectables associated with hair transplants. Being an expert in pain medicine and critical care, our surgeons provide the safest FUE hair transplantation with zero risk factors & optimal results.
+
+To get the best FUE hair transplant or to learn about the FUE hair transplant cost in Delhi, visit DMC Trichology Centre. We have centres at Rajouri Garden (West Delhi) & Vasant Vihar (South Delhi).`,
+  isVisible: true
+};
+const fueCostSectionDefaults = {
+  heading: "FUE HAIR TRANSPLANT COST IN DELHI",
+  introText: "The key elements that affect the cost of FUE hair transplant in Delhi are:",
+  points: [
+    { pointText: "Number of grafts required to cover the balding area", sortOrder: 1, isVisible: true },
+    { pointText: "Extend of hair loss", sortOrder: 2, isVisible: true },
+    { pointText: "quality and thickness of the donor's hair", sortOrder: 3, isVisible: true },
+    { pointText: "Experience and skill of the hair transplant surgeon", sortOrder: 4, isVisible: true },
+    { pointText: "post-surgery care and follow-up appointments", sortOrder: 5, isVisible: true },
+    { pointText: "Clinics facility with technology offered", sortOrder: 6, isVisible: true },
+    { pointText: "Customization of the treatment to enhance the result.", sortOrder: 7, isVisible: true }
+  ],
+  noteText: "The cost per graft ranges from Rs 20 to Rs 120. It is decided based on the donor site's health.",
+  image: "/images/service-details/fue-cost-info.webp",
+  altText: "FUE hair transplant cost in Delhi chart",
+  tableHeaders: ["No. of Grafts", "FUE Hair Transplant Cost in Delhi"],
+  tableRows: [
+    { grafts: "< 2000", cost: "50K", sortOrder: 1, isVisible: true },
+    { grafts: "2500-3500", cost: "60K-84K", sortOrder: 2, isVisible: true },
+    { grafts: "3500-4500", cost: "84K- 108K", sortOrder: 3, isVisible: true },
+    { grafts: "4500-5500", cost: "108K-132K", sortOrder: 4, isVisible: true },
+    { grafts: "More than 6000", cost: "144K", sortOrder: 5, isVisible: true }
+  ],
+  isVisible: true
+};
+const fueOptingBenefitsDefaults = {
+  heading: "BENEFITS OF OPTING FOR A FUE HAIR TRANSPLANT",
+  introText: "It is critical to remember that each individual is unique, and so are their needs and intended objectives from cosmetic surgery like FUE hair transplant in Delhi, India. If you are considering FUE hair transplant as a solution to your hair loss or thinning, you should schedule a thorough consultation with one of the skilled hair transplant surgeons at DMC Trichology. During the consultation, you can know what FUE hair transplant has set for you and whether you are a good candidate for it.",
+  leadText: "The benefits of electing a FUE hair transplant include:",
+  benefits: [
+    { title: "Minimally invasive", description: "FUE hair transplantation involves the removal of donor hair follicles using a micro-punch tool and their placement into the micro-holes created at the recipient site. The surgery is the least invasive and associated with minimal scarring, discomfort, side effects, risks, complications, and downtime.", sortOrder: 1, isVisible: true },
+    { title: "Hair styling flexibility", description: "Following the hair transplantation surgery recovery period, patients may be able to style their hair short or long, as per their choice without worrying about having noticeable, ugly scars.", sortOrder: 2, isVisible: true },
+    { title: "Natural-looking results", description: "The purpose of the FUE procedure is natural hair restoration in the areas of hair thinning or hair loss. The hair follicles are transplanted at an angle matching the natural growth pattern of the patient's existing hair. This means no one expects the patient and the surgeon to be able to tell that a hair transplant has been performed.", sortOrder: 3, isVisible: true },
+    { title: "Minimal discomfort", description: "Individual experiences of undergoing a FUE hair transplant may vary. Many patients report little to no discomfort during the FUE hair transplantation because of the effect of local anaesthesia. Some report experiencing soreness or sensitivity following the surgery.", sortOrder: 4, isVisible: true },
+    { title: "No stitches or staples", description: "FUE hair transplant does not involve the making of incisions and the use of sutures or staples. Rather, it involves the use of micro-punch devices to extract hair follicles.", sortOrder: 5, isVisible: true },
+    { title: "Minimal scarring", description: "Unlike FUT hair transplants, where linear scarring occurs at the donor site, harvesting grafts by the FUE technique leaves behind micro-punch holes.", sortOrder: 6, isVisible: true },
+    { title: "Recovery", description: "Recovery time is typically faster with the FUE treatment in Delhi than other hair transplanting procedures because it is the least invasive. It is generally expected to take around 72 hours, though individual recovery times may vary.", sortOrder: 7, isVisible: true }
+  ],
+  isVisible: true
+};
+const isFueDetailSlug = (slug) => FUE_DETAIL_SLUGS.includes(String(slug || "").toLowerCase());
+const isBodyHairDetailSlug = (slug) => BODY_HAIR_DETAIL_SLUGS.includes(String(slug || "").toLowerCase());
+
+const bodyHairIntroDefaults = {
+  heading: "WHAT IS BODY HAIR TRANSPLANT?",
+  content: `Men and women suffering from extensive hair loss or baldness often wonder whether they have sufficient healthy hair follicles for performing hair transplants. Here comes a sigh of relief! In case of not enough donor hair grafts, a body hair transplant can be an ideal solution to combat scalp hair loss.
+
+The best body hair transplant or BHT is available at an affordable price at DMC Trichology. You can contact us to know your candidacy.
+
+BHT is a cosmetic surgical procedure, a permanent hair restoration method, wherein healthy hair follicles are taken from any hair-bearing body site and implanted in the bald areas of the scalp to provide full hair coverage. It is solely done using a FUE (Follicular Unit Extraction) technique. The body areas that can serve as donor sites include the beard, chest, stomach, leg, armpits, and pubic area.`,
+  isVisible: true
+};
+
+const bodyHairSuitableDefaults = {
+  heading: "SUITABLE CANDIDATES",
+  procedureHeading: "PROCEDURE",
+  procedureContent: `Like in any other Hair Restoration procedures, follicular unit extraction (FUE) technique is best suited in Body Hair Transplantation as well. It is one of the best techniques used at our centre to provide the best body hair transplant in Delhi, Vasant Vihar (South Delhi) & Rajouri Garden (West Delhi). Instead of strip harvesting of hair with skin, individual extraction of follicular units from various parts of the body including beard, chest, arms, legs in hirsute candidates are often used as the source of secondary donor supply. This procedure can be successfully done either alone or with donor scalp hairs for greater coverage.
+
+Follicular unit extraction for body hair transplant utilises a unique & sophisticated sharp tip punches to create minimal tissue damaged and the individual graft is harvested one at a time. With this procedure, there is no linear scarring and no post surgical discomfort. Due to quicker healing of wounds and less traumatic for patients, FUE is the best option for Body Hair Transplant.`,
+  candidates: [
+    "Advanced grades of Androgenetic Alopecia with limited donor scalp hair to give sufficient coverage.",
+    "Extensive Scarring Alopecia in which no adequate donor hair is available due to scarring patches.",
+    "To correct & repair previous poor results from traditional hair transplant methods.",
+    "To enhance the volume & hair density for those with retrograde thinning of scalp donor."
+  ],
+  benefitsHeading: "BENEFITS",
+  benefitsIntro: "Following are a few of the body hair transplant in Delhi performed at our centre:",
+  benefits: [
+    "Through BHT, people with severe hair loss issues can be a potential candidate for a hair transplant with a pool of donor hairs.",
+    "There is no limitation to harvesting hair grafts if future transplantation is needed.",
+    "Any definitive hair designed is made practicable with BHT for as many as hair grafts can be extracted."
+  ],
+  concernsHeading: "CONCERNS",
+  concernsContent: `Body Hair Transplantation is comparatively a demanding procedure that requires higher skills & precision to achieve optimal results. Since the characteristics of body hair grafts as compared to scalp hair vary distinctively in texture, density, colour, etc it needs exceptional skills in creating a seeming resemblance to natural appearance throughout the implantation.
+
+DMC-TRICHOLOGY is known to yield highly effective results with our most notable hair transplant surgeons. This makes the centre well renowned for providing the best body hair transplant in Delhi. Our experts are the most esteemed hair specialists committed to providing the best outcome in any surgical procedure being conducted at the centre.`,
+  isVisible: true
+};
+
+const isGenericBenefitPointSet = (points = []) => {
+  const text = points.map(point => String(point?.benefitText || "").toLowerCase()).join(" ");
+  return points.length < 4 || text.includes("painless and non-invasive") || text.includes("maximizes hair density") || text.includes("minimal post-treatment");
+};
+
+const normalizeHairCostBenefitsSection = (benefitsSection = {}) => ({
+  ...benefitsSection,
+  heading: !benefitsSection?.heading || String(benefitsSection.heading).toLowerCase().includes("key benefits")
+    ? hairCostBenefitsSectionDefaults.heading
+    : benefitsSection.heading,
+  description: benefitsSection?.description || hairCostBenefitsSectionDefaults.description,
+  secondaryHeading: benefitsSection?.secondaryHeading || hairCostBenefitsSectionDefaults.secondaryHeading,
+  secondaryDescription: benefitsSection?.secondaryDescription || hairCostBenefitsSectionDefaults.secondaryDescription,
+  benefitStripHeading: benefitsSection?.benefitStripHeading || hairCostBenefitsSectionDefaults.benefitStripHeading,
+  altText: benefitsSection?.altText || hairCostBenefitsSectionDefaults.altText,
+  points: (!benefitsSection?.points?.length || isGenericBenefitPointSet(benefitsSection.points) ? hairCostBenefitPoints.map((benefitText, index) => ({
+    benefitText,
+    icon: "",
+    sortOrder: index + 1,
+    isVisible: true
+  })) : benefitsSection.points)
+});
+
+const normalizeHairCostContentBlocks = (contentBlocks = []) => {
+  const blocks = Array.isArray(contentBlocks) ? [...contentBlocks] : [];
+  const targetIndex = blocks.findIndex((block) =>
+    String(block?.heading || "").toLowerCase().includes("what factors influence the cost of a hair transplant")
+  );
+
+  if (targetIndex === -1) {
+    return [
+      ...blocks,
+      {
+        heading: "WHAT FACTORS INFLUENCE THE COST OF A HAIR TRANSPLANT?",
+        description: hairCostFactorDescription,
+        sortOrder: blocks.length + 1,
+        isVisible: true
+      }
+    ];
+  }
+
+  const currentDescription = String(blocks[targetIndex]?.description || "");
+  const hasDashboardTickFormat = currentDescription
+    .split(/\r?\n/)
+    .some((line) => /^[-*]\s+/.test(line.trim()));
+
+  if (!hasDashboardTickFormat) {
+    blocks[targetIndex] = {
+      ...blocks[targetIndex],
+      description: hairCostFactorDescription
+    };
+  }
+
+  return blocks;
+};
 
 // ─── Unified Media Item Editor (supports Image + Video) ───────────────────────
 function MediaItemEditor({ item, index, onUpdate, onRemove, onPickFromLibrary }) {
@@ -289,8 +486,197 @@ const moveArrayItem = (arr, index, direction) => {
   return newArr;
 };
 
+const numberedItems = (items) => items.map((text, index) => ({
+  bulletText: text,
+  featureText: text,
+  benefitText: text,
+  sortOrder: index + 1,
+  isVisible: true
+}));
+
+const bestHairTransplantTemplate = {
+  title: "Best Hair Transplant",
+  category: "transplant",
+  banner: {
+    badgeText: "BEST HAIR CLINIC",
+    title: "Best Hair Transplant",
+    subtitle: "Advanced hair restoration with natural-looking density and expert surgical planning.",
+    duration: "6-8 hours",
+    rating: "4.9",
+    buttonText: "Book Consultation",
+    backgroundImage: "",
+    secondaryTitle: "Best Hair Transplant",
+    tagline: "Natural Hair Restoration",
+    shortDescription: "Advanced hair restoration with natural-looking density and expert surgical planning."
+  },
+  intro: {
+    badgeText: "ABOUT THE TREATMENT",
+    title: "Best Hair Transplant",
+    introHeading: "Best Hair Transplant",
+    rating: "4.9",
+    duration: "6-8 hours",
+    shortDescription: "A permanent solution for thinning hair, bald patches, and receding hairline.",
+    longDescription: "A hair transplant is a minimally invasive surgical procedure in which hair follicles are extracted from a donor site, generally the back or sides of the head, and transplanted to the balding or thinning areas.\n\nHair transplants can give permanent, natural-looking results when planned carefully around your face structure, donor area, and future hair loss pattern.",
+    benefits: [
+      { text: "Permanent and natural-looking results" },
+      { text: "Customized hairline planning" },
+      { text: "Advanced techniques for better density" },
+      { text: "Clear post-procedure aftercare guidance" }
+    ],
+    closingText: "At DMC Trichology, every hair transplant plan is designed around your donor area, scalp health, and expected long-term result.",
+    introMedia: []
+  },
+  contentBlocks: [
+    {
+      heading: "WHAT IS A HAIR TRANSPLANT?",
+      description: "A hair transplant is a minimally invasive surgical procedure in which hair follicles are extracted from a donor site, generally the back or sides of the head, and transplanted to the balding or thinning areas.\n\nIn other words, hair is taken from one part of the scalp area and implanted into another part where there is almost no hair.\n\nHair transplants are generally performed by hair transplant surgeons. The procedure can take 4-8 hours; most people can return to work within 2-5 days.\n\nHair transplants can give permanent, natural-looking results. However, the transplanted hair will fall out within 2-3 weeks, and new growth will not be noticeable for a few months.",
+      sortOrder: 1,
+      isVisible: true
+    }
+  ],
+  benefitsSection: {
+    heading: "KEY BENEFITS OF HAIR TRANSPLANT",
+    image: "",
+    altText: "Hair transplant benefits",
+    points: numberedItems([
+      "Restores a natural-looking hairline.",
+      "Uses your own healthy donor hair.",
+      "Offers permanent growth in transplanted areas.",
+      "Improves density in thinning or bald areas."
+    ])
+  },
+  idealCandidates: {
+    sectionHeading: "IDEAL CANDIDATES FOR HAIR TRANSPLANT",
+    introText: "Hair transplant is a suitable option for adults, both men and women, who:",
+    bottomConclusionText: "",
+    sectionImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
+    altText: "Ideal candidates for hair transplant",
+    bullets: numberedItems([
+      "Are distressed with their looks affected by different kinds of alopecia (except alopecia areata) or having thinning hair, receding hairline, or bald spots/patches.",
+      "People experiencing baldness in patches, widening hair partition, and hair thinning and less volume are candidates for this procedure.",
+      "Are having enough healthy hair growth at the back or sides of their head to serve as donor areas.",
+      "Are unable to restore their natural hair growth with non-surgical alternatives like meso grow, RRT, HGP, mesotherapy, and others.",
+      "Are having healthy scalp with good skin laxity and no active infections, injuries, or skin conditions.",
+      "Are physically and mentally healthy without any illnesses or conditions that could interfere with the surgery outcome.",
+      "They have realistic expectations of their surgery results and a positive outlook toward their treatment.",
+      "Women with thinning hair and receding hairline.",
+      "People looking for a change in their existing hairline."
+    ])
+  },
+  notCandidatesSection: {
+    sectionHeading: "WHO IS NOT A CANDIDATE FOR HAIR TRANSPLANT SURGERY?",
+    bullets: numberedItems([
+      "Those with a keloidal tendency",
+      "Those with active infection or inflammation on the scalp."
+    ])
+  },
+  techniquesSection: {
+    sectionHeading: "HAIR TRANSPLANT TECHNIQUES",
+    techniques: [
+      {
+        title: "FUE HAIR TRANSPLANT",
+        description: "FUE is a modern extraction method where individual follicles are taken from the donor area and implanted into the required area with careful angle and density planning.",
+        sortOrder: 1,
+        isVisible: true
+      },
+      {
+        title: "FUT HAIR TRANSPLANT",
+        description: "FUT may be recommended in selected cases where a larger number of grafts are required and the donor area allows strip-based harvesting.",
+        sortOrder: 2,
+        isVisible: true
+      }
+    ]
+  },
+  infoBlocksSection: {
+    blocks: [
+      {
+        heading: "WHAT HAPPENS DURING THE HAIR TRANSPLANT PROCEDURE?",
+        description: "During the surgery, the hair from the 'donor' area of the scalp is trimmed short. This makes the procedure easy to perform. Then, the head area where the hair grows is thick and anaesthetized safely.\n\nThe small hair grafts are extracted, and then transplanted into the front or bald area of the scalp.",
+        backgroundVariant: "white",
+        sortOrder: 1,
+        isVisible: true
+      }
+    ]
+  },
+  aftercareSection: {
+    sectionHeading: "WHAT TO EXPECT AFTER HAIR TRANSPLANT PROCEDURE?",
+    introText: "There will be small red scabs on the recipient site. They will be visible for about 7-10 days. One can see their normal appearance after 10-15 days after surgery. There will be a slight redness that might be visible for a few days.",
+    bullets: numberedItems([
+      "WHEN DO YOU SEE RESULTS FROM HAIR TRANSPLANT SURGERY?"
+    ]),
+    conclusionText: "After about 2-4 months of receiving a hair transplant, your transplanted hair will start to push through your skin, which is fine initially. The hair growth happens at different times and speeds, resulting in a patchy start. You can expect full growth of your transplanted hair in about a year."
+  },
+  whyChooseUsSection: {
+    sectionHeading: "HOW TO TAKE CARE OF SCALP AFTER HAIR TRANSPLANT?",
+    introText: "Post-hair transplant, you must follow these aftercare steps as set by the hair transplant surgeons:",
+    features: numberedItems([
+      "Spray the scalp with saline for 1 to 4 days to speed healing and prevent incision infection and scabbing.",
+      "48 hours post-procedure, the scalp is washed with medicated shampoo.",
+      "Take proper rest in the initial few days to speed up your recovery.",
+      "Avoid swimming, smoking, alcohol consumption, steam rooms, sun tanning beds, hot baths, and high-impact exercise for a few days.",
+      "Take prescribed painkillers, anti-inflammatory medications, and antibiotics to reduce pain, swelling, and chances of infection.",
+      "Avoid the application of any hair products.",
+      "Do not wear tight headwear like caps and helmets that can cause sweating and delay healing.",
+      "Avoid exposing the scalp to direct sunlight.",
+      "Do not comb hair in the initial few days.",
+      "Gently wash the scalp after 5 to 7 days of the surgery, and normally wash hair after about 2 weeks.",
+      "Schedule check-up appointments after 3 months and 6 months after the surgery to see the progress of the results."
+    ])
+  },
+  hairTransplantInfoSection: {
+    isVisible: true,
+    cards: [
+      {
+        title: "HOW LONG DOES THE HAIR TRANSPLANT PROCEDURE TAKE?",
+        content: "Hair transplant surgery lasts for a few hours. The procedure duration is decided based on the surgical technique chosen and the size of the area to be covered with donor hair. Mostly, the hair transplantation procedure is over in a single day, but two sessions may be required in case of extensive hair loss.",
+        isVisible: true,
+        sortOrder: 1
+      },
+      {
+        title: "IS HAIR TRANSPLANT SURGERY PAINFUL?",
+        content: "The procedure is performed under anaesthetic, and the method does not cause any pain. The scalp will feel a little numb and tender once the anaesthesia wears off. There will be a little redness and swelling for a few days after surgery. One can take mild painkillers (as advised by the doctor) to alleviate any pain and discomfort following surgery.\n\nYou will be surprised to have a comfortable experience during a hair transplant surgery in Delhi, India, at DMC Trichology. As local anaesthesia will be injected into the donor and recipient areas, the only pain or discomfort felt by you during the operation would be the injections. After the hair transplant, there will be slight irritation, redness, or swelling, but such discomfort quickly subsides.",
+        isVisible: true,
+        sortOrder: 2
+      }
+    ]
+  },
+  hairTransplantWhyChooseSection: {
+    sectionHeading: "WHY CHOOSE DMC TRICHOLOGY FOR HAIR TRANSPLANT IN DELHI?",
+    introText: "Choose us for a hair transplant in Delhi because we offer hair transplant procedures to ensure high-quality care for patients.",
+    points: [
+      "Expert Team of Surgeons",
+      "Advanced Techniques",
+      "State-of-the-Art Facilities",
+      "Personalized Treatment Plans",
+      "Best Results of Hair Transplant",
+      "Affordable Cost",
+      "Patient Positive Feedback",
+      "Patient Support and Care"
+    ]
+  }
+};
+
+const getServiceDetailTemplate = (slug) => {
+  if (slug === "best-hair-transplant") return bestHairTransplantTemplate;
+  return null;
+};
+
+const applyTemplateToData = (currentData, template, selectedSlug, serviceInfo = {}) => ({
+  ...(currentData || {}),
+  ...template,
+  slug: selectedSlug,
+  title: serviceInfo.title || template.title || currentData?.title || "",
+  category: serviceInfo.category || template.category || currentData?.category || "",
+  seo: {
+    ...(currentData?.seo || {}),
+    ...(template.seo || {})
+  }
+});
+
 export default function ServiceDetailCMS() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const serviceSlugFromUrl = searchParams.get("service") || "";
   const [services, setServices] = useState([]);
   const [selectedSlug, setSelectedSlug] = useState("");
   const [data, setData] = useState(null);
@@ -310,6 +696,7 @@ export default function ServiceDetailCMS() {
   const [galleryLoading, setGalleryLoading] = useState(false);
   const [gallerySearch, setGallerySearch] = useState("");
   const [activePickerTarget, setActivePickerTarget] = useState(null); // { index: number, field: 'url' | 'thumbnail' }
+  const activeTemplate = getServiceDetailTemplate(selectedSlug);
 
   const fetchGallery = async () => {
     setGalleryLoading(true);
@@ -349,6 +736,15 @@ export default function ServiceDetailCMS() {
     toast.success("Media selected from gallery!");
   };
 
+  const selectServiceForEditing = (slug, options = {}) => {
+    if (!slug) return;
+    setSelectedSlug(slug);
+    setActiveTab("banner");
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set("service", slug);
+    setSearchParams(nextParams, { replace: options.replace ?? false });
+  };
 
   const fetchServices = async () => {
     try {
@@ -364,13 +760,19 @@ export default function ServiceDetailCMS() {
   };
 
   useEffect(() => {
-    fetchServices().then(data => {
-      if (data.length > 0) {
-        setSelectedSlug(data[0].slug);
+    fetchServices().then(list => {
+      if (list.length > 0) {
+        const serviceExistsInUrl = serviceSlugFromUrl && list.some(service => service.slug === serviceSlugFromUrl);
+        selectServiceForEditing(serviceExistsInUrl ? serviceSlugFromUrl : list[0].slug, { replace: true });
       }
       setLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    if (!serviceSlugFromUrl || serviceSlugFromUrl === selectedSlug) return;
+    setSelectedSlug(serviceSlugFromUrl);
+  }, [serviceSlugFromUrl, selectedSlug]);
 
   useEffect(() => {
     if (!selectedSlug) return;
@@ -408,15 +810,98 @@ export default function ServiceDetailCMS() {
           if (!fetchedData.contentBlocks) {
             fetchedData.contentBlocks = [];
           }
+          if (isHairCostDelhiSlug(selectedSlug)) {
+            fetchedData.contentBlocks = normalizeHairCostContentBlocks(fetchedData.contentBlocks);
+          }
           if (!fetchedData.benefitsSection) {
             fetchedData.benefitsSection = { heading: "Key Benefits of the Treatment", image: "", altText: "", points: [] };
           } else if (!fetchedData.benefitsSection.points) {
             fetchedData.benefitsSection.points = [];
           }
+          if (isHairCostDelhiSlug(selectedSlug)) {
+            fetchedData.benefitsSection = normalizeHairCostBenefitsSection(fetchedData.benefitsSection);
+          }
+          if (!fetchedData.fueProcedureSection) {
+            fetchedData.fueProcedureSection = { ...fueProcedureDefaults };
+          } else if (isFueDetailSlug(selectedSlug)) {
+            fetchedData.fueProcedureSection = {
+              ...fueProcedureDefaults,
+              ...fetchedData.fueProcedureSection,
+              heading: fetchedData.fueProcedureSection.heading || fueProcedureDefaults.heading,
+              content: fetchedData.fueProcedureSection.content || fueProcedureDefaults.content,
+              image: fetchedData.fueProcedureSection.image || fueProcedureDefaults.image,
+              altText: fetchedData.fueProcedureSection.altText || fueProcedureDefaults.altText,
+              isVisible: fetchedData.fueProcedureSection.isVisible !== false
+            };
+          }
+          if (!fetchedData.fueCostSection) {
+            fetchedData.fueCostSection = isFueDetailSlug(selectedSlug) ? { ...fueCostSectionDefaults } : { heading: "", introText: "", points: [], noteText: "", image: "", altText: "", tableHeaders: [], tableRows: [], isVisible: true };
+          } else if (isFueDetailSlug(selectedSlug)) {
+            fetchedData.fueCostSection = {
+              ...fueCostSectionDefaults,
+              ...fetchedData.fueCostSection,
+              heading: fetchedData.fueCostSection.heading || fueCostSectionDefaults.heading,
+              introText: fetchedData.fueCostSection.introText || fueCostSectionDefaults.introText,
+              points: fetchedData.fueCostSection.points?.length ? fetchedData.fueCostSection.points : fueCostSectionDefaults.points,
+              noteText: fetchedData.fueCostSection.noteText || fueCostSectionDefaults.noteText,
+              image: fetchedData.fueCostSection.image || fueCostSectionDefaults.image,
+              altText: fetchedData.fueCostSection.altText || fueCostSectionDefaults.altText,
+              tableHeaders: fetchedData.fueCostSection.tableHeaders?.length ? fetchedData.fueCostSection.tableHeaders : fueCostSectionDefaults.tableHeaders,
+              tableRows: fetchedData.fueCostSection.tableRows?.length ? fetchedData.fueCostSection.tableRows : fueCostSectionDefaults.tableRows,
+              isVisible: fetchedData.fueCostSection.isVisible !== false
+            };
+          }
+          if (!fetchedData.fueOptingBenefitsSection) {
+            fetchedData.fueOptingBenefitsSection = isFueDetailSlug(selectedSlug) ? { ...fueOptingBenefitsDefaults } : { heading: "", introText: "", leadText: "", benefits: [], isVisible: true };
+          } else if (isFueDetailSlug(selectedSlug)) {
+            fetchedData.fueOptingBenefitsSection = {
+              ...fueOptingBenefitsDefaults,
+              ...fetchedData.fueOptingBenefitsSection,
+              heading: fetchedData.fueOptingBenefitsSection.heading || fueOptingBenefitsDefaults.heading,
+              introText: fetchedData.fueOptingBenefitsSection.introText || fueOptingBenefitsDefaults.introText,
+              leadText: fetchedData.fueOptingBenefitsSection.leadText || fueOptingBenefitsDefaults.leadText,
+              benefits: fetchedData.fueOptingBenefitsSection.benefits?.length ? fetchedData.fueOptingBenefitsSection.benefits : fueOptingBenefitsDefaults.benefits,
+              isVisible: fetchedData.fueOptingBenefitsSection.isVisible !== false
+            };
+          }
           if (!fetchedData.idealCandidates) {
             fetchedData.idealCandidates = { sectionHeading: "Ideal Candidates", introText: "", bottomConclusionText: "", sectionImage: "", altText: "", bullets: [] };
           } else if (!fetchedData.idealCandidates.bullets) {
             fetchedData.idealCandidates.bullets = [];
+          }
+          if (!fetchedData.bodyHairIntroSection) {
+            fetchedData.bodyHairIntroSection = isBodyHairDetailSlug(selectedSlug) ? { ...bodyHairIntroDefaults } : { heading: "", content: "", isVisible: true };
+          } else if (isBodyHairDetailSlug(selectedSlug)) {
+            fetchedData.bodyHairIntroSection = {
+              ...bodyHairIntroDefaults,
+              ...fetchedData.bodyHairIntroSection,
+              heading: fetchedData.bodyHairIntroSection.heading || bodyHairIntroDefaults.heading,
+              content: fetchedData.bodyHairIntroSection.content || bodyHairIntroDefaults.content,
+              isVisible: fetchedData.bodyHairIntroSection.isVisible !== false
+            };
+          }
+          if (!fetchedData.bodyHairSuitableSection) {
+            fetchedData.bodyHairSuitableSection = isBodyHairDetailSlug(selectedSlug)
+              ? { ...bodyHairSuitableDefaults }
+              : { heading: "", procedureHeading: "", procedureContent: "", candidates: [], benefitsHeading: "", benefitsIntro: "", benefits: [], concernsHeading: "", concernsContent: "", isVisible: true };
+          } else if (isBodyHairDetailSlug(selectedSlug)) {
+            fetchedData.bodyHairSuitableSection = {
+              ...bodyHairSuitableDefaults,
+              ...fetchedData.bodyHairSuitableSection,
+              heading: fetchedData.bodyHairSuitableSection.heading || bodyHairSuitableDefaults.heading,
+              procedureHeading: fetchedData.bodyHairSuitableSection.procedureHeading || bodyHairSuitableDefaults.procedureHeading,
+              procedureContent: fetchedData.bodyHairSuitableSection.procedureContent || bodyHairSuitableDefaults.procedureContent,
+              candidates: fetchedData.bodyHairSuitableSection.candidates?.length ? fetchedData.bodyHairSuitableSection.candidates : bodyHairSuitableDefaults.candidates,
+              benefitsHeading: fetchedData.bodyHairSuitableSection.benefitsHeading || bodyHairSuitableDefaults.benefitsHeading,
+              benefitsIntro: fetchedData.bodyHairSuitableSection.benefitsIntro || bodyHairSuitableDefaults.benefitsIntro,
+              benefits: fetchedData.bodyHairSuitableSection.benefits?.length ? fetchedData.bodyHairSuitableSection.benefits : bodyHairSuitableDefaults.benefits,
+              concernsHeading: fetchedData.bodyHairSuitableSection.concernsHeading || bodyHairSuitableDefaults.concernsHeading,
+              concernsContent: fetchedData.bodyHairSuitableSection.concernsContent || bodyHairSuitableDefaults.concernsContent,
+              isVisible: fetchedData.bodyHairSuitableSection.isVisible !== false
+            };
+          }
+          if (isFueDetailSlug(selectedSlug) && typeof fetchedData.notCandidatesSection?.isVisible !== "boolean") {
+            fetchedData.notCandidatesSection = { ...(fetchedData.notCandidatesSection || {}), isVisible: false };
           }
           if (!fetchedData.googleReviewCta) {
             fetchedData.googleReviewCta = { title: "Google Review", buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", backgroundColor: "", isVisible: true };
@@ -427,14 +912,44 @@ export default function ServiceDetailCMS() {
             fetchedData.resultsSection.cards = [];
           }
           if (!fetchedData.videosSection) {
-            fetchedData.videosSection = { title: "VIDEOS", videos: [], buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", isVisible: true };
+            fetchedData.videosSection = { title: "VIDEOS", videos: [], buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", showOnCostPage: false, isVisible: true };
           } else if (!fetchedData.videosSection.videos) {
             fetchedData.videosSection.videos = [];
+          }
+          if (isHairCostDelhiSlug(selectedSlug) && typeof fetchedData.videosSection.showOnCostPage !== "boolean") {
+            fetchedData.videosSection.showOnCostPage = false;
           }
           if (!fetchedData.enquirySection) {
             fetchedData.enquirySection = { title: "Enquire About This Treatment", description: "Schedule your visit for this specialized treatment.", serviceOptions: ["Laser Hair Removal", "Hair Transplant", "Hair Fall Treatment", "Skin Rejuvenation", "Other"], submitButtonText: "Schedule Your Visit", backgroundColor: "", isVisible: true };
           } else if (!fetchedData.enquirySection.serviceOptions) {
             fetchedData.enquirySection.serviceOptions = [];
+          }
+          if (!fetchedData.faqEnquiry) {
+            fetchedData.faqEnquiry = { faqTitle: "Common Concerns Addressed", faqSubtitle: "", faqItems: [], serviceOptions: [], formTitle: "Enquire About This Treatment", buttonText: "Schedule Your Visit" };
+          } else if (!fetchedData.faqEnquiry.faqItems) {
+            fetchedData.faqEnquiry.faqItems = [];
+          }
+          if (isHairCostDelhiSlug(selectedSlug)) {
+            if (!fetchedData.faqEnquiry.faqTitle || fetchedData.faqEnquiry.faqTitle === "Common Concerns Addressed") {
+              fetchedData.faqEnquiry.faqTitle = consultationHeading;
+            }
+            if (!fetchedData.faqEnquiry.faqSubtitle || fetchedData.faqEnquiry.faqSubtitle === "Common questions about our treatments.") {
+              fetchedData.faqEnquiry.faqSubtitle = consultationDescription;
+            }
+            if (!fetchedData.enquirySection.title || fetchedData.enquirySection.title === "Enquire About This Treatment") {
+              fetchedData.enquirySection.title = consultationHeading;
+            }
+            if (!fetchedData.enquirySection.description || fetchedData.enquirySection.description === "Schedule your visit for this specialized treatment.") {
+              fetchedData.enquirySection.description = consultationDescription;
+            }
+          }
+          if (!fetchedData.editorialFaqSection) {
+            fetchedData.editorialFaqSection = { sectionSubtitle: "EXPERT ANSWERS", sectionTitle: "EDITORIAL FAQ", sectionDescription: "", faqs: [] };
+          } else if (!fetchedData.editorialFaqSection.faqs) {
+            fetchedData.editorialFaqSection.faqs = [];
+          }
+          if (isHairCostDelhiSlug(selectedSlug) && !fetchedData.editorialFaqSection.sectionDescription) {
+            fetchedData.editorialFaqSection.sectionDescription = hairCostEditorialFaqDescription;
           }
           setData(fetchedData);
         }
@@ -442,20 +957,52 @@ export default function ServiceDetailCMS() {
       .catch(err => {
         if (err.response?.status === 404) {
           const serviceInfo = services.find(s => s.slug === selectedSlug) || {};
+          const serviceTemplate = getServiceDetailTemplate(selectedSlug);
+
+          if (serviceTemplate) {
+            setData(applyTemplateToData({
+              slug: selectedSlug,
+              title: serviceInfo.title || serviceTemplate.title || "",
+              category: serviceInfo.category || serviceTemplate.category || "",
+              seo: { metaTitle: "", metaDescription: "", canonicalUrl: "", ogImage: "", schemaScript: "" }
+            }, serviceTemplate, selectedSlug, serviceInfo));
+            return;
+          }
+
+          const isCostFallback = isHairCostDelhiSlug(selectedSlug);
+
           setData({
             slug: selectedSlug,
             title: serviceInfo.title || "",
             category: serviceInfo.category || "",
             banner: { badgeText: "PREMIUM TREATMENT", title: serviceInfo.title || "", subtitle: "", duration: "45 mins", rating: "4.9", buttonText: "Book Consultation", backgroundImage: "" },
             intro: { badgeText: "ABOUT THE TREATMENT", title: serviceInfo.title || "", rating: "4.9", duration: "45 mins", shortDescription: "", longDescription: "", benefits: [], closingText: "", introMedia: [] },
-            process: { sectionTitle: "How it works?", processSteps: [] },
+            process: { sectionTitle: "How it works?", processSteps: [], isVisible: true },
             idealFrequency: { frequencyTitle: "Treatment Frequency & Suitability", frequencyDescription: "", idealForPoints: [], notIdealForPoints: [], ctaTitle: "", ctaDescription: "", ctaButtonText: "", ctaButtonLink: "", ctaImage: "" },
             beforeAfter: { beforeTitle: "Before Treatment Checklist", afterTitle: "Aftercare Instructions", beforePoints: [], afterPoints: [], sectionBackground: "#f9f7f2" },
-            faqEnquiry: { faqTitle: "Common Concerns Addressed", faqSubtitle: "", faqItems: [], serviceOptions: [], formTitle: "Enquire About This Treatment", buttonText: "Schedule Your Visit", namePlaceholder: "Name*", emailPlaceholder: "E-Mail Address*", servicePlaceholder: "Type Of Service Enquiry*", datePlaceholder: "Select Date & Time*" },
+            faqEnquiry: {
+              faqTitle: isCostFallback ? consultationHeading : "Common Concerns Addressed",
+              faqSubtitle: isCostFallback ? consultationDescription : "",
+              faqItems: [],
+              serviceOptions: [],
+              formTitle: isCostFallback ? consultationHeading : "Enquire About This Treatment",
+              buttonText: "Schedule Your Visit",
+              namePlaceholder: "Name*",
+              emailPlaceholder: "E-Mail Address*",
+              servicePlaceholder: "Type Of Service Enquiry*",
+              datePlaceholder: "Select Date & Time*"
+            },
             googleReviewCta: { title: "Google Review", buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", backgroundColor: "", isVisible: true },
             resultsSection: { subtitle: "BEFORE AND AFTER", title: "RESULTS THAT SPEAK FOR THEMSELVES", cards: [], buttonText: "VIEW ALL", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", isVisible: true },
-            videosSection: { title: "VIDEOS", videos: [], buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", isVisible: true },
-            enquirySection: { title: "Enquire About This Treatment", description: "Schedule your visit for this specialized treatment.", serviceOptions: ["Laser Hair Removal", "Hair Transplant", "Hair Fall Treatment", "Skin Rejuvenation", "Other"], submitButtonText: "Schedule Your Visit", backgroundColor: "", isVisible: true },
+            videosSection: { title: "VIDEOS", videos: [], buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", showOnCostPage: false, isVisible: true },
+            enquirySection: {
+              title: isCostFallback ? consultationHeading : "Enquire About This Treatment",
+              description: isCostFallback ? consultationDescription : "Schedule your visit for this specialized treatment.",
+              serviceOptions: ["Laser Hair Removal", "Hair Transplant", "Hair Fall Treatment", "Skin Rejuvenation", "Other"],
+              submitButtonText: "Schedule Your Visit",
+              backgroundColor: "",
+              isVisible: true
+            },
             footerCta: { heading: "", description: "", emailPlaceholder: "", buttonText: "" },
             seo: { metaTitle: "", metaDescription: "", canonicalUrl: "", ogImage: "", schemaScript: "" },
             contentBlocks: [
@@ -476,6 +1023,11 @@ export default function ServiceDetailCMS() {
                 { benefitText: "Minimal post-treatment recovery and zero scarring", sortOrder: 3, isVisible: true }
               ]
             },
+            fueProcedureSection: isFueDetailSlug(selectedSlug) ? { ...fueProcedureDefaults } : { heading: "", content: "", image: "", altText: "", isVisible: true },
+            fueCostSection: isFueDetailSlug(selectedSlug) ? { ...fueCostSectionDefaults } : { heading: "", introText: "", points: [], noteText: "", image: "", altText: "", tableHeaders: [], tableRows: [], isVisible: true },
+            fueOptingBenefitsSection: isFueDetailSlug(selectedSlug) ? { ...fueOptingBenefitsDefaults } : { heading: "", introText: "", leadText: "", benefits: [], isVisible: true },
+            bodyHairIntroSection: isBodyHairDetailSlug(selectedSlug) ? { ...bodyHairIntroDefaults } : { heading: "", content: "", isVisible: true },
+            bodyHairSuitableSection: isBodyHairDetailSlug(selectedSlug) ? { ...bodyHairSuitableDefaults } : { heading: "", procedureHeading: "", procedureContent: "", candidates: [], benefitsHeading: "", benefitsIntro: "", benefits: [], concernsHeading: "", concernsContent: "", isVisible: true },
             idealCandidates: {
               sectionHeading: "Ideal Candidates",
               introText: "This treatment is highly effective and suitable for individuals experiencing initial to moderate stages of hair thinning. Here is a breakdown of who will benefit the most:",
@@ -500,6 +1052,111 @@ export default function ServiceDetailCMS() {
     setData(prev => ({
       ...prev,
       [section]: { ...prev[section], [field]: val }
+    }));
+  };
+
+  const renderSectionVisibilityToggle = (section, label = "Visible") => (
+    <label className="flex items-center gap-2 cursor-pointer bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
+      <input
+        type="checkbox"
+        checked={data?.[section]?.isVisible !== false}
+        onChange={e => updateSectionField(section, "isVisible", e.target.checked)}
+        className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+      />
+      <span className="text-xs font-black uppercase tracking-widest text-slate-600">{label}</span>
+    </label>
+  );
+
+  const updateFueCostPoint = (idx, field, val) => {
+    setData(prev => {
+      const points = [...(prev.fueCostSection?.points || [])];
+      points[idx] = { ...points[idx], [field]: val };
+      return { ...prev, fueCostSection: { ...prev.fueCostSection, points } };
+    });
+  };
+
+  const addFueCostPoint = () => {
+    setData(prev => ({
+      ...prev,
+      fueCostSection: {
+        ...prev.fueCostSection,
+        points: [
+          ...(prev.fueCostSection?.points || []),
+          { pointText: "", sortOrder: (prev.fueCostSection?.points?.length || 0) + 1, isVisible: true }
+        ]
+      }
+    }));
+  };
+
+  const removeFueCostPoint = (idx) => {
+    setData(prev => ({
+      ...prev,
+      fueCostSection: {
+        ...prev.fueCostSection,
+        points: (prev.fueCostSection?.points || []).filter((_, i) => i !== idx)
+      }
+    }));
+  };
+
+  const updateFueCostRow = (idx, field, val) => {
+    setData(prev => {
+      const tableRows = [...(prev.fueCostSection?.tableRows || [])];
+      tableRows[idx] = { ...tableRows[idx], [field]: val };
+      return { ...prev, fueCostSection: { ...prev.fueCostSection, tableRows } };
+    });
+  };
+
+  const addFueCostRow = () => {
+    setData(prev => ({
+      ...prev,
+      fueCostSection: {
+        ...prev.fueCostSection,
+        tableRows: [
+          ...(prev.fueCostSection?.tableRows || []),
+          { grafts: "", cost: "", sortOrder: (prev.fueCostSection?.tableRows?.length || 0) + 1, isVisible: true }
+        ]
+      }
+    }));
+  };
+
+  const removeFueCostRow = (idx) => {
+    setData(prev => ({
+      ...prev,
+      fueCostSection: {
+        ...prev.fueCostSection,
+        tableRows: (prev.fueCostSection?.tableRows || []).filter((_, i) => i !== idx)
+      }
+    }));
+  };
+
+  const updateFueOptingBenefit = (idx, field, val) => {
+    setData(prev => {
+      const benefits = [...(prev.fueOptingBenefitsSection?.benefits || [])];
+      benefits[idx] = { ...benefits[idx], [field]: val };
+      return { ...prev, fueOptingBenefitsSection: { ...prev.fueOptingBenefitsSection, benefits } };
+    });
+  };
+
+  const addFueOptingBenefit = () => {
+    setData(prev => ({
+      ...prev,
+      fueOptingBenefitsSection: {
+        ...prev.fueOptingBenefitsSection,
+        benefits: [
+          ...(prev.fueOptingBenefitsSection?.benefits || []),
+          { title: "", description: "", sortOrder: (prev.fueOptingBenefitsSection?.benefits?.length || 0) + 1, isVisible: true }
+        ]
+      }
+    }));
+  };
+
+  const removeFueOptingBenefit = (idx) => {
+    setData(prev => ({
+      ...prev,
+      fueOptingBenefitsSection: {
+        ...prev.fueOptingBenefitsSection,
+        benefits: (prev.fueOptingBenefitsSection?.benefits || []).filter((_, i) => i !== idx)
+      }
     }));
   };
 
@@ -573,6 +1230,97 @@ export default function ServiceDetailCMS() {
       videosSection: {
         ...prev.videosSection,
         videos: (prev.videosSection?.videos || []).filter((_, i) => i !== idx)
+      }
+    }));
+  };
+
+  const addHairTransplantInfoCard = () => {
+    setData(prev => ({
+      ...prev,
+      hairTransplantInfoSection: {
+        ...(prev.hairTransplantInfoSection || { isVisible: true }),
+        cards: [
+          ...(prev.hairTransplantInfoSection?.cards || []),
+          { title: "", content: "", sortOrder: (prev.hairTransplantInfoSection?.cards?.length || 0) + 1, isVisible: true }
+        ]
+      }
+    }));
+  };
+
+  const updateHairTransplantInfoCard = (idx, field, val) => {
+    setData(prev => {
+      const cards = [...(prev.hairTransplantInfoSection?.cards || [])];
+      cards[idx] = { ...cards[idx], [field]: val };
+      return {
+        ...prev,
+        hairTransplantInfoSection: {
+          ...(prev.hairTransplantInfoSection || { isVisible: true }),
+          cards
+        }
+      };
+    });
+  };
+
+  const removeHairTransplantInfoCard = (idx) => {
+    setData(prev => ({
+      ...prev,
+      hairTransplantInfoSection: {
+        ...(prev.hairTransplantInfoSection || { isVisible: true }),
+        cards: (prev.hairTransplantInfoSection?.cards || []).filter((_, i) => i !== idx)
+      }
+    }));
+  };
+
+  const reorderHairTransplantInfoCard = (idx, direction) => {
+    setData(prev => ({
+      ...prev,
+      hairTransplantInfoSection: {
+        ...(prev.hairTransplantInfoSection || { isVisible: true }),
+        cards: moveArrayItem(prev.hairTransplantInfoSection?.cards || [], idx, direction)
+      }
+    }));
+  };
+
+  const addHairTransplantWhyPoint = () => {
+    setData(prev => ({
+      ...prev,
+      hairTransplantWhyChooseSection: {
+        ...(prev.hairTransplantWhyChooseSection || {}),
+        points: [...(prev.hairTransplantWhyChooseSection?.points || []), ""]
+      }
+    }));
+  };
+
+  const updateHairTransplantWhyPoint = (idx, val) => {
+    setData(prev => {
+      const points = [...(prev.hairTransplantWhyChooseSection?.points || [])];
+      points[idx] = val;
+      return {
+        ...prev,
+        hairTransplantWhyChooseSection: {
+          ...(prev.hairTransplantWhyChooseSection || {}),
+          points
+        }
+      };
+    });
+  };
+
+  const removeHairTransplantWhyPoint = (idx) => {
+    setData(prev => ({
+      ...prev,
+      hairTransplantWhyChooseSection: {
+        ...(prev.hairTransplantWhyChooseSection || {}),
+        points: (prev.hairTransplantWhyChooseSection?.points || []).filter((_, i) => i !== idx)
+      }
+    }));
+  };
+
+  const reorderHairTransplantWhyPoint = (idx, direction) => {
+    setData(prev => ({
+      ...prev,
+      hairTransplantWhyChooseSection: {
+        ...(prev.hairTransplantWhyChooseSection || {}),
+        points: moveArrayItem(prev.hairTransplantWhyChooseSection?.points || [], idx, direction)
       }
     }));
   };
@@ -1041,11 +1789,21 @@ export default function ServiceDetailCMS() {
     try {
       await axios.put(`/service-details/${selectedSlug}`, data);
       toast.success("Service details saved successfully");
-    } catch {
-      toast.error("Save failed");
+    } catch (err) {
+      const message = err.response?.data?.error || err.response?.data?.message || err.message || "Save failed";
+      toast.error(message);
+      console.error("Service details save failed:", err.response?.data || err);
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleApplyTemplate = () => {
+    if (!activeTemplate) return;
+
+    const serviceInfo = services.find(s => s.slug === selectedSlug) || {};
+    setData(prev => applyTemplateToData(prev, activeTemplate, selectedSlug, serviceInfo));
+    toast.success("Best Hair Transplant template applied locally");
   };
 
   const handleCreateService = async (e) => {
@@ -1071,23 +1829,36 @@ export default function ServiceDetailCMS() {
 
   if (loading) return <div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="animate-spin h-8 w-8 text-blue-600" /></div>;
 
+  const selectedServiceInfo = services.find(s => s.slug === selectedSlug) || {};
+  const isHairCostEditor = isHairCostDelhiSlug(selectedSlug);
+
   return (
-    <div className="p-8 max-w-6xl mx-auto bg-slate-50 min-h-screen">
+    <div className="service-detail-direct-editor p-4 lg:p-5 max-w-[1540px] mx-auto bg-slate-50 min-h-screen">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 mb-5 bg-white border border-slate-200 rounded-[24px] px-5 py-4 shadow-sm">
         <div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight">Enterprise Service CMS</h1>
           <p className="text-sm text-slate-500 font-medium italic">Manage individual service page content</p>
+          {selectedServiceInfo?.title && (
+            <p className="mt-2 text-xs font-black uppercase tracking-widest text-blue-600">
+              Editing Page: {selectedServiceInfo.title}
+            </p>
+          )}
         </div>
-        <div className="flex gap-3">
-           <button onClick={() => navigate(`/cms/visual-builder/details?service=${selectedSlug}`)} disabled={fetchingDetails || !data} className="flex items-center gap-2 bg-indigo-50 text-indigo-600 border border-indigo-200 px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-100 transition-all">
+        <div className="flex flex-wrap gap-3">
+           {activeTemplate && (
+             <button onClick={handleApplyTemplate} disabled={fetchingDetails || !data} className="flex items-center gap-2 bg-blue-50 text-blue-700 border border-blue-200 px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-100 transition-all disabled:opacity-50">
+               <Star size={16} /> Apply Template
+             </button>
+           )}
+           <button onClick={() => navigate(`/cms/visual-builder/details?service=${selectedSlug}`)} disabled={fetchingDetails || !data} className="flex items-center gap-2 bg-indigo-50 text-indigo-600 border border-indigo-200 px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-100 transition-all">
              <Layout size={16} /> Visual Builder
            </button>
-           <button onClick={() => setIsCreateModalOpen(true)} className="flex items-center gap-2 bg-white text-blue-600 border border-blue-200 px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-50 transition-all">
+           <button onClick={() => setIsCreateModalOpen(true)} className="flex items-center gap-2 bg-white text-blue-600 border border-blue-200 px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-50 transition-all">
              <Plus size={16} /> New Service
            </button>
            <button onClick={handleSave} disabled={saving || fetchingDetails || !data}
-             className="flex items-center gap-2 bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 disabled:opacity-50 transition-all shadow-xl shadow-slate-200">
+             className="flex items-center gap-2 bg-slate-900 text-white px-7 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 disabled:opacity-50 transition-all shadow-xl shadow-slate-200">
              {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
              {saving ? "Saving..." : "Publish Updates"}
            </button>
@@ -1095,13 +1866,13 @@ export default function ServiceDetailCMS() {
       </div>
 
       {/* Service Selector */}
-      <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-8 mb-8 flex flex-col md:flex-row gap-4 items-center">
+      <div className="hidden">
         <label className="text-[12px] font-black uppercase text-slate-500 tracking-widest min-w-max">Select Service to Edit:</label>
         <div className="flex-1 w-full">
           <ServiceSearchSelector 
             services={services} 
             selectedSlug={selectedSlug} 
-            onChange={setSelectedSlug} 
+            onChange={selectServiceForEditing} 
           />
         </div>
       </div>
@@ -1113,11 +1884,16 @@ export default function ServiceDetailCMS() {
          </div>
       ) : (
         <>
-          <div className="flex flex-wrap gap-2 bg-slate-200/50 p-1.5 rounded-[20px] mb-8 w-fit">
+          <div className="hidden">
             {[
               { id: "banner", label: "Hero & Intro", icon: Layout },
               { id: "contentBlocks", label: "Content Blocks", icon: Type },
               { id: "benefitsSection", label: "Benefits Section", icon: CheckCircle },
+              { id: "fueProcedureSection", label: "FUE Procedure", icon: ImageIcon },
+              { id: "fueCostSection", label: "FUE Cost", icon: CheckCircle },
+              { id: "fueOptingBenefitsSection", label: "FUE Benefits", icon: CheckCircle },
+              { id: "bodyHairIntroSection", label: "BHT Intro", icon: Type },
+              { id: "bodyHairSuitableSection", label: "BHT Suitable", icon: CheckCircle },
               { id: "idealCandidates", label: "Ideal Candidates", icon: Star },
               { id: "notCandidates", label: "Not Candidates", icon: HelpCircle },
               { id: "techniques", label: "Techniques", icon: List },
@@ -1133,9 +1909,21 @@ export default function ServiceDetailCMS() {
               { id: "idealFrequency", label: "Suitability & CTA", icon: CheckCircle },
               { id: "beforeAfter", label: "Before/After", icon: RefreshCw },
               { id: "faqEnquiry", label: "FAQs & Options", icon: HelpCircle },
+              { id: "hairTransplantInfo", label: "Transplant Info", icon: Type },
+              { id: "hairTransplantWhy", label: "Transplant Why", icon: Star },
               { id: "footerCta", label: "Footer CTA", icon: Layout },
               { id: "seo", label: "SEO Settings", icon: Globe }
-            ].map(tab => (
+            ].filter(tab => !isHairCostEditor || ![
+              "idealCandidates",
+              "notCandidates",
+              "whyChooseUs",
+              "hairTransplantInfo",
+              "hairTransplantWhy",
+              "process",
+              "aftercare",
+              "techniques",
+              "infoBlocks"
+            ].includes(tab.id)).map(tab => (
               <button 
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)} 
@@ -1146,8 +1934,8 @@ export default function ServiceDetailCMS() {
             ))}
           </div>
 
-          <div className="space-y-8">
-            {activeTab === 'banner' && (
+          <div className="service-editor-sections">
+            {(true || activeTab === 'banner') && (
               <>
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <h3 className="text-lg font-bold mb-6 text-slate-800 flex items-center gap-2"><Layout size={18} className="text-blue-500"/> Hero Banner Section</h3>
@@ -1201,6 +1989,16 @@ export default function ServiceDetailCMS() {
                   <div>
                     <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Long Description</label>
                     <textarea value={data.intro.longDescription || ""} onChange={e => updateSectionField("intro", "longDescription", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold min-h-[120px]" />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Closing Text</label>
+                    <textarea
+                      value={data.intro.closingText || ""}
+                      onChange={e => updateSectionField("intro", "closingText", e.target.value)}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold min-h-[90px]"
+                      placeholder="Optional final line below the intro content..."
+                    />
                   </div>
 
                   {/* RESTORED GRID FOR BENEFITS AND MEDIA */}
@@ -1260,7 +2058,7 @@ export default function ServiceDetailCMS() {
               </>
             )}
 
-            {activeTab === 'contentBlocks' && (
+            {(true || activeTab === 'contentBlocks') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                  <div className="flex justify-between items-center mb-6">
                     <div>
@@ -1345,12 +2143,12 @@ export default function ServiceDetailCMS() {
                                 </div>
                              </div>
                              <div className="md:col-span-3">
-                                <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Description Content (Preserves spacing & paragraph line breaks)</label>
+                                <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Description Content (Use "- " at line start for tick points)</label>
                                 <textarea 
                                   value={block.description || ""} 
                                   onChange={e => updateContentBlock(i, "description", e.target.value)} 
                                   className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all min-h-[160px]" 
-                                  placeholder="Write informational details... Spacing and paragraph line breaks will be preserved." 
+                                  placeholder={'Write paragraphs normally.\n\n- Add tick point like this\n- Add another tick point'}
                                 />
                              </div>
                           </div>
@@ -1367,18 +2165,195 @@ export default function ServiceDetailCMS() {
               </div>
             )}
 
-            {activeTab === 'benefitsSection' && (
+            {isBodyHairDetailSlug(selectedSlug) && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
-                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><CheckCircle size={18} className="text-blue-500"/> Benefits Section</h3>
-                    <p className="text-xs text-slate-400 mt-1">Manage the premium dynamic benefits list and left-side graphic image</p>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                      <Type size={18} className="text-blue-500"/> Body Hair Intro Section
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1">Edit the light blue overview section shown below the BHT hero.</p>
                   </div>
+                  {renderSectionVisibilityToggle("bodyHairIntroSection")}
+                </div>
+
+                <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Section Heading</label>
+                    <input
+                      type="text"
+                      value={data.bodyHairIntroSection?.heading || ""}
+                      onChange={e => updateSectionField("bodyHairIntroSection", "heading", e.target.value)}
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Content (blank line creates paragraph)</label>
+                    <textarea
+                      value={data.bodyHairIntroSection?.content || ""}
+                      onChange={e => updateSectionField("bodyHairIntroSection", "content", e.target.value)}
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all min-h-[220px]"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {isBodyHairDetailSlug(selectedSlug) && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                      <CheckCircle size={18} className="text-blue-500"/> BHT Suitable Candidates Section
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1">Dark-blue content section below the BHT benefits list.</p>
+                  </div>
+                  {renderSectionVisibilityToggle("bodyHairSuitableSection")}
+                </div>
+
+                <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Section Heading</label>
+                      <input
+                        type="text"
+                        value={data.bodyHairSuitableSection?.heading || ""}
+                        onChange={e => updateSectionField("bodyHairSuitableSection", "heading", e.target.value)}
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Procedure Label</label>
+                      <input
+                        type="text"
+                        value={data.bodyHairSuitableSection?.procedureHeading || ""}
+                        onChange={e => updateSectionField("bodyHairSuitableSection", "procedureHeading", e.target.value)}
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Procedure Content</label>
+                    <textarea
+                      value={data.bodyHairSuitableSection?.procedureContent || ""}
+                      onChange={e => updateSectionField("bodyHairSuitableSection", "procedureContent", e.target.value)}
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all min-h-[160px]"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="bg-white border border-slate-200 rounded-2xl p-5">
+                      <div className="flex justify-between items-center mb-4">
+                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-500">Candidate Points</h4>
+                        <button
+                          type="button"
+                          onClick={() => addArrayItem("bodyHairSuitableSection", "candidates", "")}
+                          className="px-3 py-2 rounded-xl bg-blue-50 text-blue-700 text-xs font-black uppercase tracking-widest"
+                        >
+                          + Add
+                        </button>
+                      </div>
+                      <div className="space-y-3">
+                        {(data.bodyHairSuitableSection?.candidates || []).map((point, i) => (
+                          <div key={i} className="flex gap-2">
+                            <input
+                              type="text"
+                              value={point || ""}
+                              onChange={e => updateArrayItem("bodyHairSuitableSection", "candidates", i, null, e.target.value)}
+                              className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            <button type="button" onClick={() => removeArrayItem("bodyHairSuitableSection", "candidates", i)} className="px-3 rounded-xl bg-red-50 text-red-500">
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-white border border-slate-200 rounded-2xl p-5">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Benefits Heading</label>
+                          <input
+                            type="text"
+                            value={data.bodyHairSuitableSection?.benefitsHeading || ""}
+                            onChange={e => updateSectionField("bodyHairSuitableSection", "benefitsHeading", e.target.value)}
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Benefits Intro</label>
+                          <input
+                            type="text"
+                            value={data.bodyHairSuitableSection?.benefitsIntro || ""}
+                            onChange={e => updateSectionField("bodyHairSuitableSection", "benefitsIntro", e.target.value)}
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center mb-4">
+                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-500">Benefit Points</h4>
+                        <button
+                          type="button"
+                          onClick={() => addArrayItem("bodyHairSuitableSection", "benefits", "")}
+                          className="px-3 py-2 rounded-xl bg-blue-50 text-blue-700 text-xs font-black uppercase tracking-widest"
+                        >
+                          + Add
+                        </button>
+                      </div>
+                      <div className="space-y-3">
+                        {(data.bodyHairSuitableSection?.benefits || []).map((point, i) => (
+                          <div key={i} className="flex gap-2">
+                            <input
+                              type="text"
+                              value={point || ""}
+                              onChange={e => updateArrayItem("bodyHairSuitableSection", "benefits", i, null, e.target.value)}
+                              className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            <button type="button" onClick={() => removeArrayItem("bodyHairSuitableSection", "benefits", i)} className="px-3 rounded-xl bg-red-50 text-red-500">
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Concerns Heading</label>
+                    <input
+                      type="text"
+                      value={data.bodyHairSuitableSection?.concernsHeading || ""}
+                      onChange={e => updateSectionField("bodyHairSuitableSection", "concernsHeading", e.target.value)}
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Concerns Content</label>
+                    <textarea
+                      value={data.bodyHairSuitableSection?.concernsContent || ""}
+                      onChange={e => updateSectionField("bodyHairSuitableSection", "concernsContent", e.target.value)}
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all min-h-[160px]"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {(true || activeTab === 'benefitsSection') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><CheckCircle size={18} className="text-blue-500"/> {isHairCostEditor ? "Hair Transplant Benefits Strip" : "Benefits Section"}</h3>
+                    <p className="text-xs text-slate-400 mt-1">{isHairCostEditor ? "Manage the benefits strip heading, icons, and items shown on this service page" : "Manage the premium dynamic benefits list and left-side graphic image"}</p>
+                  </div>
+                  {renderSectionVisibilityToggle("benefitsSection")}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {/* Left Column: Image and Alt Text */}
-                  <div className="space-y-6">
+                  {!isHairCostEditor && <div className="space-y-6">
                     <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Section Graphic & SEO</h4>
                     
                     <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
@@ -1405,39 +2380,116 @@ export default function ServiceDetailCMS() {
                         />
                       </div>
                     </div>
-                  </div>
+                  </div>}
 
                   {/* Right Column: Heading & Repeater List */}
-                  <div className="md:col-span-2 space-y-6">
-                    <div className="flex justify-between items-center">
-                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Benefits & Heading</h4>
-                      <button 
-                        onClick={addBenefitPoint}
-                        className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-md shadow-blue-200"
-                      >
-                        <Plus size={13}/> Add Benefit
-                      </button>
-                    </div>
-
-                    <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
-                      <div>
-                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Section Heading Title</label>
-                        <input 
-                          type="text" 
-                          value={data.benefitsSection?.heading || ""} 
-                          onChange={e => setData(prev => ({
-                            ...prev,
-                            benefitsSection: { ...prev.benefitsSection, heading: e.target.value }
-                          }))}
-                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all" 
-                          placeholder="e.g. Key Benefits of the Treatment" 
-                        />
+                  <div className={`${isHairCostEditor ? 'md:col-span-3' : 'md:col-span-2'} space-y-6`}>
+                    {isHairCostEditor ? (
+                      <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
+                        <div>
+                          <div className="flex justify-between items-center gap-3 mb-4">
+                            <div>
+                              <h4 className="text-xs font-black uppercase tracking-widest text-slate-500">Dark Benefits Strip</h4>
+                              <p className="text-[11px] text-slate-400 mt-1">This section appears below the cost information on the frontend.</p>
+                            </div>
+                            <button
+                              onClick={addBenefitPoint}
+                              className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-md shadow-blue-200"
+                            >
+                              <Plus size={13}/> Add Item
+                            </button>
+                          </div>
+                          <div className="mb-4">
+                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Strip Heading</label>
+                            <input
+                              type="text"
+                              value={data.benefitsSection?.benefitStripHeading || ""}
+                              onChange={e => setData(prev => ({
+                                ...prev,
+                                benefitsSection: { ...prev.benefitsSection, benefitStripHeading: e.target.value }
+                              }))}
+                              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                              placeholder="BENEFITS OF HAIR TRANSPLANT AT DMC TRICHOLOGY"
+                            />
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {(data.benefitsSection?.points || []).map((pt, i) => (
+                              <div key={i} className="bg-white p-4 rounded-xl border border-slate-200 space-y-3 shadow-sm">
+                                <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Benefit Item {i + 1}</span>
+                                  <button
+                                    onClick={() => removeBenefitPoint(i)}
+                                    className="p-1 bg-red-50 text-red-500 rounded hover:bg-red-100 border border-red-100"
+                                  >
+                                    <Trash2 size={12} />
+                                  </button>
+                                </div>
+                                <input
+                                  type="text"
+                                  value={pt.benefitText || ""}
+                                  onChange={e => updateBenefitPoint(i, "benefitText", e.target.value)}
+                                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold outline-none focus:ring-1 focus:ring-blue-500"
+                                  placeholder="e.g. Natural regrowth of hair"
+                                />
+                                <MediaUploader
+                                  label="Icon Image"
+                                  value={pt.icon || ""}
+                                  onChange={val => updateBenefitPoint(i, "icon", val)}
+                                />
+                                <div className="flex items-center justify-between gap-3">
+                                  <label className="flex items-center gap-1 cursor-pointer">
+                                    <input
+                                      type="checkbox"
+                                      checked={pt.isVisible !== false}
+                                      onChange={e => updateBenefitPoint(i, "isVisible", e.target.checked)}
+                                      className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5"
+                                    />
+                                    <span className="text-[10px] font-black uppercase text-slate-500">Visible</span>
+                                  </label>
+                                  <input
+                                    type="number"
+                                    value={pt.sortOrder ?? (i + 1)}
+                                    onChange={e => updateBenefitPoint(i, "sortOrder", parseInt(e.target.value, 10) || 0)}
+                                    className="w-14 px-1 py-1 bg-slate-50 border border-slate-200 rounded text-[10px] font-bold text-center"
+                                    min="0"
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       </div>
+                    ) : (
+                      <>
+                        <div className="flex justify-between items-center">
+                          <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Benefits & Heading</h4>
+                          <button 
+                            onClick={addBenefitPoint}
+                            className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-md shadow-blue-200"
+                          >
+                            <Plus size={13}/> Add Benefit
+                          </button>
+                        </div>
 
-                      <div className="space-y-4">
-                        <label className="block text-[10px] font-black uppercase text-slate-500 tracking-widest">Benefits List</label>
-                        
-                        {(data.benefitsSection?.points || []).map((pt, i) => (
+                        <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
+                          <div>
+                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Section Heading Title</label>
+                            <input 
+                              type="text" 
+                              value={data.benefitsSection?.heading || ""} 
+                              onChange={e => setData(prev => ({
+                                ...prev,
+                                benefitsSection: { ...prev.benefitsSection, heading: e.target.value }
+                              }))}
+                              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all" 
+                              placeholder="e.g. Key Benefits of the Treatment" 
+                            />
+                          </div>
+
+                          <div className="space-y-4">
+                            <label className="block text-[10px] font-black uppercase text-slate-500 tracking-widest">Benefits List</label>
+                            
+                            {(data.benefitsSection?.points || []).map((pt, i) => (
                           <div key={i} className="bg-white p-4 rounded-xl border border-slate-200 flex flex-col gap-3 shadow-sm">
                             <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                               <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Benefit Point {i + 1}</span>
@@ -1506,18 +2558,346 @@ export default function ServiceDetailCMS() {
                         )}
                       </div>
                     </div>
+                    </>
+                    )}
                   </div>
                 </div>
               </div>
             )}
 
-            {activeTab === 'idealCandidates' && (
+            {isFueDetailSlug(selectedSlug) && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                      <ImageIcon size={18} className="text-blue-500"/> FUE Procedure Section
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1">This section appears below the benefits section on the FUE service page.</p>
+                  </div>
+                  <label className="flex items-center gap-2 cursor-pointer bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
+                    <input
+                      type="checkbox"
+                      checked={data.fueProcedureSection?.isVisible !== false}
+                      onChange={e => updateSectionField("fueProcedureSection", "isVisible", e.target.checked)}
+                      className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                    />
+                    <span className="text-xs font-black uppercase tracking-widest text-slate-600">Visible</span>
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="space-y-6">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Section Image & SEO</h4>
+                    <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
+                      <MediaUploader
+                        label="Procedure Image"
+                        value={data.fueProcedureSection?.image || ""}
+                        onChange={val => updateSectionField("fueProcedureSection", "image", val)}
+                      />
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Image Alt Text</label>
+                        <input
+                          type="text"
+                          value={data.fueProcedureSection?.altText || ""}
+                          onChange={e => updateSectionField("fueProcedureSection", "altText", e.target.value)}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                          placeholder="FUE hair transplant procedure"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="md:col-span-2 space-y-6">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Heading & Content</h4>
+                    <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Section Heading</label>
+                        <input
+                          type="text"
+                          value={data.fueProcedureSection?.heading || ""}
+                          onChange={e => updateSectionField("fueProcedureSection", "heading", e.target.value)}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                          placeholder="FUE HAIR TRANSPLANT PROCEDURE"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Content (blank line for paragraphs, **bold** supported)</label>
+                        <textarea
+                          value={data.fueProcedureSection?.content || ""}
+                          onChange={e => updateSectionField("fueProcedureSection", "content", e.target.value)}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all min-h-[260px]"
+                          placeholder="Write procedure content..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {isFueDetailSlug(selectedSlug) && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                      <CheckCircle size={18} className="text-blue-500"/> FUE Cost Section
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1">Manage the FUE cost factors, chart image, and pricing table.</p>
+                  </div>
+                  <label className="flex items-center gap-2 cursor-pointer bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
+                    <input
+                      type="checkbox"
+                      checked={data.fueCostSection?.isVisible !== false}
+                      onChange={e => updateSectionField("fueCostSection", "isVisible", e.target.checked)}
+                      className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                    />
+                    <span className="text-xs font-black uppercase tracking-widest text-slate-600">Visible</span>
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="space-y-6">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Cost Chart Image</h4>
+                    <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
+                      <MediaUploader
+                        label="Chart Image"
+                        value={data.fueCostSection?.image || ""}
+                        onChange={val => updateSectionField("fueCostSection", "image", val)}
+                      />
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Image Alt Text</label>
+                        <input
+                          type="text"
+                          value={data.fueCostSection?.altText || ""}
+                          onChange={e => updateSectionField("fueCostSection", "altText", e.target.value)}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="md:col-span-2 space-y-6">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Content & Table</h4>
+                    <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Section Heading</label>
+                          <input
+                            type="text"
+                            value={data.fueCostSection?.heading || ""}
+                            onChange={e => updateSectionField("fueCostSection", "heading", e.target.value)}
+                            className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Intro Text</label>
+                          <input
+                            type="text"
+                            value={data.fueCostSection?.introText || ""}
+                            onChange={e => updateSectionField("fueCostSection", "introText", e.target.value)}
+                            className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <label className="block text-[10px] font-black uppercase text-slate-500 tracking-widest">Cost Factor Points</label>
+                          <button onClick={addFueCostPoint} className="flex items-center gap-1.5 bg-blue-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-all">
+                            <Plus size={12}/> Add Point
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          {(data.fueCostSection?.points || []).map((point, i) => (
+                            <div key={i} className="grid grid-cols-1 md:grid-cols-12 gap-3 bg-white p-3 rounded-xl border border-slate-200">
+                              <input
+                                type="text"
+                                value={point.pointText || ""}
+                                onChange={e => updateFueCostPoint(i, "pointText", e.target.value)}
+                                className="md:col-span-8 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold outline-none focus:ring-1 focus:ring-blue-500"
+                              />
+                              <input
+                                type="number"
+                                value={point.sortOrder ?? (i + 1)}
+                                onChange={e => updateFueCostPoint(i, "sortOrder", parseInt(e.target.value, 10) || 0)}
+                                className="md:col-span-2 px-2 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-center"
+                              />
+                              <label className="md:col-span-1 flex items-center justify-center">
+                                <input type="checkbox" checked={point.isVisible !== false} onChange={e => updateFueCostPoint(i, "isVisible", e.target.checked)} className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4" />
+                              </label>
+                              <button onClick={() => removeFueCostPoint(i)} className="md:col-span-1 p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100">
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Note Text</label>
+                        <input
+                          type="text"
+                          value={data.fueCostSection?.noteText || ""}
+                          onChange={e => updateSectionField("fueCostSection", "noteText", e.target.value)}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                      </div>
+
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <label className="block text-[10px] font-black uppercase text-slate-500 tracking-widest">Pricing Table Rows</label>
+                          <button onClick={addFueCostRow} className="flex items-center gap-1.5 bg-blue-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-all">
+                            <Plus size={12}/> Add Row
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                          <input
+                            type="text"
+                            value={data.fueCostSection?.tableHeaders?.[0] || ""}
+                            onChange={e => setData(prev => {
+                              const headers = [...(prev.fueCostSection?.tableHeaders || [])];
+                              headers[0] = e.target.value;
+                              return { ...prev, fueCostSection: { ...prev.fueCostSection, tableHeaders: headers } };
+                            })}
+                            className="px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="No. of Grafts"
+                          />
+                          <input
+                            type="text"
+                            value={data.fueCostSection?.tableHeaders?.[1] || ""}
+                            onChange={e => setData(prev => {
+                              const headers = [...(prev.fueCostSection?.tableHeaders || [])];
+                              headers[1] = e.target.value;
+                              return { ...prev, fueCostSection: { ...prev.fueCostSection, tableHeaders: headers } };
+                            })}
+                            className="px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="FUE Hair Transplant Cost in Delhi"
+                          />
+                        </div>
+                        <div className="space-y-3">
+                          {(data.fueCostSection?.tableRows || []).map((row, i) => (
+                            <div key={i} className="grid grid-cols-1 md:grid-cols-12 gap-3 bg-white p-3 rounded-xl border border-slate-200">
+                              <input type="text" value={row.grafts || ""} onChange={e => updateFueCostRow(i, "grafts", e.target.value)} className="md:col-span-4 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold outline-none focus:ring-1 focus:ring-blue-500" placeholder="< 2000" />
+                              <input type="text" value={row.cost || ""} onChange={e => updateFueCostRow(i, "cost", e.target.value)} className="md:col-span-4 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold outline-none focus:ring-1 focus:ring-blue-500" placeholder="50K" />
+                              <input type="number" value={row.sortOrder ?? (i + 1)} onChange={e => updateFueCostRow(i, "sortOrder", parseInt(e.target.value, 10) || 0)} className="md:col-span-2 px-2 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-center" />
+                              <label className="md:col-span-1 flex items-center justify-center">
+                                <input type="checkbox" checked={row.isVisible !== false} onChange={e => updateFueCostRow(i, "isVisible", e.target.checked)} className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4" />
+                              </label>
+                              <button onClick={() => removeFueCostRow(i)} className="md:col-span-1 p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100">
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {isFueDetailSlug(selectedSlug) && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                      <CheckCircle size={18} className="text-blue-500"/> FUE Opting Benefits
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1">Manage the dark blue FUE benefits section shown below the cost guide.</p>
+                  </div>
+                  <label className="flex items-center gap-2 cursor-pointer bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
+                    <input
+                      type="checkbox"
+                      checked={data.fueOptingBenefitsSection?.isVisible !== false}
+                      onChange={e => updateSectionField("fueOptingBenefitsSection", "isVisible", e.target.checked)}
+                      className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                    />
+                    <span className="text-xs font-black uppercase tracking-widest text-slate-600">Visible</span>
+                  </label>
+                </div>
+
+                <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Section Heading</label>
+                      <input
+                        type="text"
+                        value={data.fueOptingBenefitsSection?.heading || ""}
+                        onChange={e => updateSectionField("fueOptingBenefitsSection", "heading", e.target.value)}
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Lead Text</label>
+                      <input
+                        type="text"
+                        value={data.fueOptingBenefitsSection?.leadText || ""}
+                        onChange={e => updateSectionField("fueOptingBenefitsSection", "leadText", e.target.value)}
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Intro Paragraph</label>
+                    <textarea
+                      value={data.fueOptingBenefitsSection?.introText || ""}
+                      onChange={e => updateSectionField("fueOptingBenefitsSection", "introText", e.target.value)}
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all min-h-[120px]"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="block text-[10px] font-black uppercase text-slate-500 tracking-widest">Benefit Items</label>
+                      <button onClick={addFueOptingBenefit} className="flex items-center gap-1.5 bg-blue-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-all">
+                        <Plus size={12}/> Add Benefit
+                      </button>
+                    </div>
+                    <div className="space-y-3">
+                      {(data.fueOptingBenefitsSection?.benefits || []).map((benefit, i) => (
+                        <div key={i} className="grid grid-cols-1 md:grid-cols-12 gap-3 bg-white p-3 rounded-xl border border-slate-200">
+                          <input
+                            type="text"
+                            value={benefit.title || ""}
+                            onChange={e => updateFueOptingBenefit(i, "title", e.target.value)}
+                            className="md:col-span-3 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold outline-none focus:ring-1 focus:ring-blue-500"
+                            placeholder="Benefit title"
+                          />
+                          <textarea
+                            value={benefit.description || ""}
+                            onChange={e => updateFueOptingBenefit(i, "description", e.target.value)}
+                            className="md:col-span-5 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold outline-none focus:ring-1 focus:ring-blue-500 min-h-[70px]"
+                            placeholder="Benefit description"
+                          />
+                          <input
+                            type="number"
+                            value={benefit.sortOrder ?? (i + 1)}
+                            onChange={e => updateFueOptingBenefit(i, "sortOrder", parseInt(e.target.value, 10) || 0)}
+                            className="md:col-span-2 px-2 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-center"
+                          />
+                          <label className="md:col-span-1 flex items-center justify-center">
+                            <input type="checkbox" checked={benefit.isVisible !== false} onChange={e => updateFueOptingBenefit(i, "isVisible", e.target.checked)} className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4" />
+                          </label>
+                          <button onClick={() => removeFueOptingBenefit(i)} className="md:col-span-1 p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100">
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {!isHairCostEditor && (true || activeTab === 'idealCandidates') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
                     <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><Star size={18} className="text-blue-500"/> Ideal Candidates Section</h3>
                     <p className="text-xs text-slate-400 mt-1">Manage the premium ideal candidates breakdown, lists, and right-side graphics</p>
                   </div>
+                  {renderSectionVisibilityToggle("idealCandidates")}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -1679,13 +3059,25 @@ export default function ServiceDetailCMS() {
               </div>
             )}
 
-            {activeTab === 'notCandidates' && (
+            {!isHairCostEditor && (true || activeTab === 'notCandidates') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
                     <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><HelpCircle size={18} className="text-blue-500"/> Not Candidates Section</h3>
                     <p className="text-xs text-slate-400 mt-1">Manage who is NOT a candidate for this treatment (exclusion criteria list)</p>
                   </div>
+                  <label className="flex items-center gap-2 cursor-pointer bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
+                    <input
+                      type="checkbox"
+                      checked={data.notCandidatesSection?.isVisible !== false}
+                      onChange={e => setData(prev => ({
+                        ...prev,
+                        notCandidatesSection: { ...(prev.notCandidatesSection || {}), isVisible: e.target.checked }
+                      }))}
+                      className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                    />
+                    <span className="text-xs font-black uppercase tracking-widest text-slate-600">Visible</span>
+                  </label>
                 </div>
 
                 <div className="space-y-6">
@@ -1788,13 +3180,14 @@ export default function ServiceDetailCMS() {
               </div>
             )}
 
-            {activeTab === 'techniques' && (
+            {!isHairCostEditor && (true || activeTab === 'techniques') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
                     <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><List size={18} className="text-blue-500"/> Treatment Techniques</h3>
                     <p className="text-xs text-slate-400 mt-1">Manage premium numbered techniques, procedures, and methods</p>
                   </div>
+                  {renderSectionVisibilityToggle("techniquesSection")}
                 </div>
 
                 <div className="space-y-6">
@@ -1910,13 +3303,14 @@ export default function ServiceDetailCMS() {
               </div>
             )}
 
-            {activeTab === 'infoBlocks' && (
+            {!isHairCostEditor && (true || activeTab === 'infoBlocks') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
                     <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><Type size={18} className="text-blue-500"/> Editorial Info Blocks</h3>
                     <p className="text-xs text-slate-400 mt-1">Manage highly reusable editorial sections with alternating cream/white backgrounds</p>
                   </div>
+                  {renderSectionVisibilityToggle("infoBlocksSection")}
                 </div>
 
                 <div className="space-y-6">
@@ -2029,13 +3423,14 @@ export default function ServiceDetailCMS() {
               </div>
             )}
 
-            {activeTab === 'aftercare' && (
+            {!isHairCostEditor && (true || activeTab === 'aftercare') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
                     <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><CheckCircle size={18} className="text-blue-500"/> Aftercare Instructions</h3>
                     <p className="text-xs text-slate-400 mt-1">Manage guidelines, tips, and recovery protocols post-treatment</p>
                   </div>
+                  {renderSectionVisibilityToggle("aftercareSection")}
                 </div>
 
                 <div className="space-y-6">
@@ -2165,13 +3560,14 @@ export default function ServiceDetailCMS() {
               </div>
             )}
 
-            {activeTab === 'whyChooseUs' && (
+            {!isHairCostEditor && (true || activeTab === 'whyChooseUs') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
                     <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><Star size={18} className="text-blue-500"/> Why Choose Us</h3>
                     <p className="text-xs text-slate-400 mt-1">Manage unique credentials, values, and USPs grid</p>
                   </div>
+                  {renderSectionVisibilityToggle("whyChooseUsSection")}
                 </div>
 
                 <div className="space-y-6">
@@ -2288,13 +3684,171 @@ export default function ServiceDetailCMS() {
               </div>
             )}
 
-            {activeTab === 'editorialFaq' && (
+            {!isHairCostEditor && (true || activeTab === 'hairTransplantInfo') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><Type size={18} className="text-blue-500"/> Hair Transplant Info Cards</h3>
+                    <p className="text-xs text-slate-400 mt-1">Edit the extra hair transplant question cards without changing the page layout.</p>
+                  </div>
+                  <button
+                    onClick={addHairTransplantInfoCard}
+                    className="flex items-center gap-1.5 bg-blue-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-sm"
+                  >
+                    <Plus size={12}/> Add Card
+                  </button>
+                </div>
+
+                <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Section Heading</label>
+                      <input
+                        type="text"
+                        value={data.hairTransplantInfoSection?.sectionHeading || ""}
+                        onChange={e => setData(prev => ({
+                          ...prev,
+                          hairTransplantInfoSection: {
+                            ...(prev.hairTransplantInfoSection || { isVisible: true, cards: [] }),
+                            sectionHeading: e.target.value
+                          }
+                        }))}
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        placeholder="Optional heading"
+                      />
+                    </div>
+                    <label className="flex items-center gap-2 mt-7 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={data.hairTransplantInfoSection?.isVisible !== false}
+                        onChange={e => setData(prev => ({
+                          ...prev,
+                          hairTransplantInfoSection: {
+                            ...(prev.hairTransplantInfoSection || { cards: [] }),
+                            isVisible: e.target.checked
+                          }
+                        }))}
+                        className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                      />
+                      <span className="text-xs font-black uppercase text-slate-500">Show Section</span>
+                    </label>
+                  </div>
+
+                  {(data.hairTransplantInfoSection?.cards || []).map((card, i) => (
+                    <div key={i} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                      <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Info Card {i + 1}</span>
+                        <div className="flex items-center gap-2">
+                          <button onClick={() => reorderHairTransplantInfoCard(i, 'up')} disabled={i === 0} className="p-1 bg-slate-50 text-slate-500 rounded hover:bg-slate-200 disabled:opacity-30 border border-slate-200"><ArrowUp size={12} /></button>
+                          <button onClick={() => reorderHairTransplantInfoCard(i, 'down')} disabled={i === (data.hairTransplantInfoSection?.cards?.length || 0) - 1} className="p-1 bg-slate-50 text-slate-500 rounded hover:bg-slate-200 disabled:opacity-30 border border-slate-200"><ArrowDown size={12} /></button>
+                          <button onClick={() => removeHairTransplantInfoCard(i)} className="p-1 bg-red-50 text-red-500 rounded hover:bg-red-100 border border-red-100"><Trash2 size={12} /></button>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                        <div className="md:col-span-3">
+                          <label className="block text-[8px] font-black uppercase text-slate-400 mb-1 tracking-widest">Card Title</label>
+                          <input
+                            type="text"
+                            value={card.title || ""}
+                            onChange={e => updateHairTransplantInfoCard(i, "title", e.target.value)}
+                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold outline-none focus:ring-1 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div className="flex justify-between items-center gap-2 pt-4">
+                          <label className="flex items-center gap-1 cursor-pointer">
+                            <input type="checkbox" checked={card.isVisible !== false} onChange={e => updateHairTransplantInfoCard(i, "isVisible", e.target.checked)} className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5" />
+                            <span className="text-[10px] font-black uppercase text-slate-500">Visible</span>
+                          </label>
+                          <input type="number" value={card.sortOrder ?? (i + 1)} onChange={e => updateHairTransplantInfoCard(i, "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-12 px-1 py-1 bg-slate-50 border border-slate-200 rounded text-[10px] font-bold text-center" min="0" />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[8px] font-black uppercase text-slate-400 mb-1 tracking-widest">Card Content</label>
+                        <textarea
+                          value={card.content || ""}
+                          onChange={e => updateHairTransplantInfoCard(i, "content", e.target.value)}
+                          className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold outline-none focus:ring-1 focus:ring-blue-500 min-h-[140px]"
+                          placeholder="Use blank lines for separate paragraphs."
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {!isHairCostEditor && (true || activeTab === 'hairTransplantWhy') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><Star size={18} className="text-blue-500"/> Hair Transplant Why Choose</h3>
+                    <p className="text-xs text-slate-400 mt-1">Edit the left content and bullet points for the transplant-specific why choose section.</p>
+                  </div>
+                  {renderSectionVisibilityToggle("hairTransplantWhyChooseSection")}
+                  <button
+                    onClick={addHairTransplantWhyPoint}
+                    className="flex items-center gap-1.5 bg-blue-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-sm"
+                  >
+                    <Plus size={12}/> Add Point
+                  </button>
+                </div>
+
+                <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Section Heading</label>
+                    <input
+                      type="text"
+                      value={data.hairTransplantWhyChooseSection?.sectionHeading || ""}
+                      onChange={e => setData(prev => ({
+                        ...prev,
+                        hairTransplantWhyChooseSection: {
+                          ...(prev.hairTransplantWhyChooseSection || {}),
+                          sectionHeading: e.target.value
+                        }
+                      }))}
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Intro Text</label>
+                    <textarea
+                      value={data.hairTransplantWhyChooseSection?.introText || ""}
+                      onChange={e => setData(prev => ({
+                        ...prev,
+                        hairTransplantWhyChooseSection: {
+                          ...(prev.hairTransplantWhyChooseSection || {}),
+                          introText: e.target.value
+                        }
+                      }))}
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all min-h-[90px]"
+                    />
+                  </div>
+
+                  {(data.hairTransplantWhyChooseSection?.points || []).map((point, i) => (
+                    <div key={i} className="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-3 shadow-sm">
+                      <input
+                        type="text"
+                        value={point || ""}
+                        onChange={e => updateHairTransplantWhyPoint(i, e.target.value)}
+                        className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                      <button onClick={() => reorderHairTransplantWhyPoint(i, 'up')} disabled={i === 0} className="p-1 bg-slate-50 text-slate-500 rounded hover:bg-slate-200 disabled:opacity-30 border border-slate-200"><ArrowUp size={12} /></button>
+                      <button onClick={() => reorderHairTransplantWhyPoint(i, 'down')} disabled={i === (data.hairTransplantWhyChooseSection?.points?.length || 0) - 1} className="p-1 bg-slate-50 text-slate-500 rounded hover:bg-slate-200 disabled:opacity-30 border border-slate-200"><ArrowDown size={12} /></button>
+                      <button onClick={() => removeHairTransplantWhyPoint(i)} className="p-1 bg-red-50 text-red-500 rounded hover:bg-red-100 border border-red-100"><Trash2 size={12} /></button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {(true || activeTab === 'editorialFaq') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
                     <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><HelpCircle size={18} className="text-blue-500"/> Editorial FAQ Section</h3>
                     <p className="text-xs text-slate-400 mt-1">Manage luxury editorial faq accordions with full spacing-retention and multi-paragraph layout</p>
                   </div>
+                  {renderSectionVisibilityToggle("editorialFaqSection")}
                 </div>
 
                 <div className="space-y-6">
@@ -2331,6 +3885,22 @@ export default function ServiceDetailCMS() {
                         placeholder="EDITORIAL FAQ"
                       />
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Heading Description</label>
+                    <textarea
+                      value={data.editorialFaqSection?.sectionDescription ?? ""}
+                      onChange={e => setData(prev => ({
+                        ...prev,
+                        editorialFaqSection: {
+                          ...(prev.editorialFaqSection || {}),
+                          sectionDescription: e.target.value
+                        }
+                      }))}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-semibold min-h-[130px]"
+                      placeholder="Description shown below the FAQ heading"
+                    />
                   </div>
 
                   <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-6">
@@ -2431,7 +4001,7 @@ export default function ServiceDetailCMS() {
               </div>
             )}
 
-            {activeTab === 'googleReviewCta' && (
+            {(true || activeTab === 'googleReviewCta') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
@@ -2512,7 +4082,7 @@ export default function ServiceDetailCMS() {
               </div>
             )}
 
-            {activeTab === 'resultsSection' && (
+            {(true || activeTab === 'resultsSection') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
@@ -2659,7 +4229,7 @@ export default function ServiceDetailCMS() {
               </div>
             )}
 
-            {activeTab === 'videosSection' && (
+            {(true || activeTab === 'videosSection') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
@@ -2673,14 +4243,19 @@ export default function ServiceDetailCMS() {
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input 
                         type="checkbox" 
-                        checked={data.videosSection?.isVisible !== false} 
+                        checked={isHairCostEditor ? data.videosSection?.showOnCostPage === true : data.videosSection?.isVisible !== false} 
                         onChange={e => setData(prev => ({
                           ...prev,
-                          videosSection: { ...prev.videosSection, isVisible: e.target.checked }
+                          videosSection: {
+                            ...prev.videosSection,
+                            ...(isHairCostEditor
+                              ? { showOnCostPage: e.target.checked, isVisible: e.target.checked }
+                              : { isVisible: e.target.checked })
+                          }
                         }))}
                         className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4" 
                       />
-                      <span className="text-sm font-bold text-slate-600">Section Visible</span>
+                      <span className="text-sm font-bold text-slate-600">{isHairCostEditor ? "Show Videos Section On Page" : "Section Visible"}</span>
                     </label>
                     <button 
                       onClick={addVideoItem}
@@ -2787,7 +4362,7 @@ export default function ServiceDetailCMS() {
               </div>
             )}
 
-            {activeTab === 'enquirySection' && (
+            {(true || activeTab === 'enquirySection') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
@@ -2881,11 +4456,14 @@ export default function ServiceDetailCMS() {
                 </div>
               </div>
             )}
-            {activeTab === 'process' && (
+            {!isHairCostEditor && (true || activeTab === 'process') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
-                 <div className="mb-8">
-                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Section Title</label>
-                    <input type="text" value={data.process.sectionTitle || ""} onChange={e => updateSectionField("process", "sectionTitle", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
+                 <div className="flex justify-between items-start gap-4 mb-8">
+                    <div className="flex-1">
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Section Title</label>
+                      <input type="text" value={data.process.sectionTitle || ""} onChange={e => updateSectionField("process", "sectionTitle", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
+                    </div>
+                    {renderSectionVisibilityToggle("process")}
                  </div>
                  <div className="flex justify-between items-center mb-6 border-t border-slate-100 pt-8">
                     <label className="block text-[12px] font-black uppercase text-slate-900 tracking-widest">Process Step Cards</label>
@@ -2910,7 +4488,7 @@ export default function ServiceDetailCMS() {
             )}
 
             {/* Ideal Frequency / Suitability */}
-            {activeTab === 'idealFrequency' && (
+            {(true || activeTab === 'idealFrequency') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                   <div className="md:col-span-2">
@@ -2946,9 +4524,60 @@ export default function ServiceDetailCMS() {
                 </div>
               </div>
             )}
+
+            {(true || activeTab === 'faqEnquiry') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><HelpCircle size={18} className="text-blue-500"/> FAQ & Consultation Left Content</h3>
+                    <p className="text-xs text-slate-400 mt-1">Edit the left-side heading and timing text shown beside the enquiry form.</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Left Heading</label>
+                    <input
+                      type="text"
+                      value={data.faqEnquiry?.faqTitle || ""}
+                      onChange={e => setData(prev => ({
+                        ...prev,
+                        faqEnquiry: { ...(prev.faqEnquiry || {}), faqTitle: e.target.value }
+                      }))}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold"
+                      placeholder="REQUEST A CONSULTATION"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Button Text</label>
+                    <input
+                      type="text"
+                      value={data.faqEnquiry?.buttonText || ""}
+                      onChange={e => setData(prev => ({
+                        ...prev,
+                        faqEnquiry: { ...(prev.faqEnquiry || {}), buttonText: e.target.value }
+                      }))}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold"
+                      placeholder="Schedule Your Visit"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Left Description / Timings</label>
+                    <textarea
+                      value={data.faqEnquiry?.faqSubtitle || ""}
+                      onChange={e => setData(prev => ({
+                        ...prev,
+                        faqEnquiry: { ...(prev.faqEnquiry || {}), faqSubtitle: e.target.value }
+                      }))}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold min-h-[120px]"
+                      placeholder={consultationDescription}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
             
             {/* SEO Settings */}
-            {activeTab === 'seo' && (
+            {(true || activeTab === 'seo') && (
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <h3 className="text-lg font-bold mb-6 text-slate-800">SEO & Meta Attributes</h3>
                 <div className="grid grid-cols-1 gap-6">

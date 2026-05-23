@@ -47,7 +47,8 @@ const ServiceDetailSchema = new mongoose.Schema({
       title: { type: String },
       description: { type: String },
       image: { type: String }
-    }]
+    }],
+    isVisible: { type: Boolean, default: true }
   },
 
   idealFrequency: {
@@ -91,13 +92,27 @@ const ServiceDetailSchema = new mongoose.Schema({
 
   benefitsSection: {
     heading: { type: String, default: "Key Benefits of the Treatment" },
+    description: { type: String, default: "" },
+    secondaryHeading: { type: String, default: "" },
+    secondaryDescription: { type: String, default: "" },
+    benefitStripHeading: { type: String, default: "" },
     image: { type: String, default: "" },
     altText: { type: String, default: "" },
     points: [{
       benefitText: { type: String, default: "" },
+      icon: { type: String, default: "" },
       sortOrder: { type: Number, default: 0 },
       isVisible: { type: Boolean, default: true }
-    }]
+    }],
+    isVisible: { type: Boolean, default: true }
+  },
+
+  fueProcedureSection: {
+    heading: { type: String, default: "" },
+    content: { type: String, default: "" },
+    image: { type: String, default: "" },
+    altText: { type: String, default: "" },
+    isVisible: { type: Boolean, default: true }
   },
 
   idealCandidates: {
@@ -115,11 +130,66 @@ const ServiceDetailSchema = new mongoose.Schema({
 
   notCandidatesSection: {
     sectionHeading: { type: String, default: "" },
+    isVisible: { type: Boolean, default: true },
     bullets: [{
       bulletText: { type: String, default: "" },
       sortOrder: { type: Number, default: 0 },
       isVisible: { type: Boolean, default: true }
-    }]
+    }],
+    isVisible: { type: Boolean, default: true }
+  },
+
+  fueCostSection: {
+    heading: { type: String, default: "" },
+    introText: { type: String, default: "" },
+    points: [{
+      pointText: { type: String, default: "" },
+      sortOrder: { type: Number, default: 0 },
+      isVisible: { type: Boolean, default: true }
+    }],
+    noteText: { type: String, default: "" },
+    image: { type: String, default: "" },
+    altText: { type: String, default: "" },
+    tableHeaders: [{ type: String }],
+    tableRows: [{
+      grafts: { type: String, default: "" },
+      cost: { type: String, default: "" },
+      sortOrder: { type: Number, default: 0 },
+      isVisible: { type: Boolean, default: true }
+    }],
+    isVisible: { type: Boolean, default: true }
+  },
+
+  fueOptingBenefitsSection: {
+    heading: { type: String, default: "" },
+    introText: { type: String, default: "" },
+    leadText: { type: String, default: "" },
+    benefits: [{
+      title: { type: String, default: "" },
+      description: { type: String, default: "" },
+      sortOrder: { type: Number, default: 0 },
+      isVisible: { type: Boolean, default: true }
+    }],
+    isVisible: { type: Boolean, default: true }
+  },
+
+  bodyHairIntroSection: {
+    heading: { type: String, default: "" },
+    content: { type: String, default: "" },
+    isVisible: { type: Boolean, default: true }
+  },
+
+  bodyHairSuitableSection: {
+    heading: { type: String, default: "" },
+    procedureHeading: { type: String, default: "" },
+    procedureContent: { type: String, default: "" },
+    candidates: [{ type: String }],
+    benefitsHeading: { type: String, default: "" },
+    benefitsIntro: { type: String, default: "" },
+    benefits: [{ type: String }],
+    concernsHeading: { type: String, default: "" },
+    concernsContent: { type: String, default: "" },
+    isVisible: { type: Boolean, default: true }
   },
 
   techniquesSection: {
@@ -129,7 +199,8 @@ const ServiceDetailSchema = new mongoose.Schema({
       description: { type: String, default: "" },
       sortOrder: { type: Number, default: 0 },
       isVisible: { type: Boolean, default: true }
-    }]
+    }],
+    isVisible: { type: Boolean, default: true }
   },
 
   infoBlocksSection: {
@@ -139,7 +210,8 @@ const ServiceDetailSchema = new mongoose.Schema({
       backgroundVariant: { type: String, default: "white", enum: ["white", "cream"] },
       sortOrder: { type: Number, default: 0 },
       isVisible: { type: Boolean, default: true }
-    }]
+    }],
+    isVisible: { type: Boolean, default: true }
   },
 
   aftercareSection: {
@@ -150,7 +222,8 @@ const ServiceDetailSchema = new mongoose.Schema({
       sortOrder: { type: Number, default: 0 },
       isVisible: { type: Boolean, default: true }
     }],
-    conclusionText: { type: String, default: "" }
+    conclusionText: { type: String, default: "" },
+    isVisible: { type: Boolean, default: true }
   },
 
   whyChooseUsSection: {
@@ -160,18 +233,42 @@ const ServiceDetailSchema = new mongoose.Schema({
       featureText: { type: String, default: "" },
       sortOrder: { type: Number, default: 0 },
       isVisible: { type: Boolean, default: true }
+    }],
+    isVisible: { type: Boolean, default: true }
+  },
+
+  hairTransplantInfoSection: {
+    sectionHeading: { type: String, default: "" },
+    isVisible: { type: Boolean, default: true },
+    cards: [{
+      title: { type: String, default: "" },
+      heading: { type: String, default: "" },
+      content: { type: String, default: "" },
+      paragraph: { type: String, default: "" },
+      sortOrder: { type: Number, default: 0 },
+      isVisible: { type: Boolean, default: true }
     }]
+  },
+
+  hairTransplantWhyChooseSection: {
+    sectionHeading: { type: String, default: "" },
+    introText: { type: String, default: "" },
+    points: [{ type: String }],
+    bullets: [{ type: String }],
+    isVisible: { type: Boolean, default: true }
   },
 
   editorialFaqSection: {
     sectionSubtitle: { type: String, default: "EXPERT ANSWERS" },
     sectionTitle: { type: String, default: "EDITORIAL FAQ" },
+    sectionDescription: { type: String, default: "" },
     faqs: [{
       question: { type: String, default: "" },
       answer: { type: String, default: "" },
       sortOrder: { type: Number, default: 0 },
       isVisible: { type: Boolean, default: true }
-    }]
+    }],
+    isVisible: { type: Boolean, default: true }
   },
 
   googleReviewCta: {
@@ -205,6 +302,7 @@ const ServiceDetailSchema = new mongoose.Schema({
     }],
     buttonText: { type: String, default: "VIEW MORE" },
     buttonLink: { type: String, default: "" },
+    showOnCostPage: { type: Boolean, default: false },
     isVisible: { type: Boolean, default: true }
   },
 

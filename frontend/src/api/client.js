@@ -20,4 +20,24 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error.response?.status;
+    const message = error.response?.data?.message || "";
+    const isAuthFailure = status === 401 && message.toLowerCase().includes("token");
+
+    if (isAuthFailure) {
+      localStorage.removeItem("dmc_admin_token");
+      localStorage.removeItem("dmc_admin_user");
+
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export default api;
