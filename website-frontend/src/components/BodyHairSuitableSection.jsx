@@ -60,8 +60,8 @@ export default function BodyHairSuitableSection({ data, pageSlug = "" }) {
     <section className="body-hair-suitable-section">
       <div className="body-hair-suitable-container">
         <div className="body-hair-suitable-header">
-          <span className="body-hair-suitable-kicker">BHT Candidate Guide</span>
-          <h2>{section.heading || defaultBodyHairSuitableSection.heading}</h2>
+          <span className="dmc-kicker">BHT Candidate Guide</span>
+          <h2 className="dmc-heading" style={{ marginBottom: "20px" }}>{section.heading || defaultBodyHairSuitableSection.heading}</h2>
         </div>
 
         <div className="body-hair-suitable-card body-hair-suitable-procedure">

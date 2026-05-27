@@ -68,27 +68,10 @@ const scienceConsultationRoutes = require("./routes/scienceConsultationRoutes");
 const aboutDrNandaniRoutes = require("./routes/aboutDrNandaniRoutes");
 const aboutDrNiveditaRoutes = require("./routes/aboutDrNiveditaRoutes");
 
-// Database Connection
-const connectDB = require("./config/db");
-const { seedDefaultHero } = require("./controllers/heroController");
-const { seedDefaultSettings } = require("./controllers/settingsController");
-const { seedDefaultTopBar } = require("./controllers/topbarController");
-const { seedDefaultHeader } = require("./controllers/headerController");
-const { seedHomePage } = require("./controllers/pageCompositionController");
-
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const redirectMiddleware = require("./middleware/redirectMiddleware");
 
 const app = express();
-
-// Connect to MongoDB
-connectDB().then(() => {
-  seedDefaultHero();
-  seedDefaultSettings();
-  seedDefaultTopBar();
-  seedDefaultHeader();
-  seedHomePage();
-});
 
 // ========================
 // ✅ Global Middleware

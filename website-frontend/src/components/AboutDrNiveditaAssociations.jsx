@@ -99,11 +99,11 @@ export default function AboutDrNiveditaAssociations({ data = {} }) {
         }
         .dr-nivedita-assoc-heading {
           font-family: 'Marcellus', serif !important;
-          font-size: 28px;
-          font-weight: 700;
-          color: #1a1a2e;
+          font-size: 44px;
+          font-weight: 400;
+          color: #333333;
           text-align: center;
-          letter-spacing: 0.12em;
+          letter-spacing: 0.03em;
           text-transform: uppercase;
           margin: 0 0 40px 0;
           line-height: 1.2;

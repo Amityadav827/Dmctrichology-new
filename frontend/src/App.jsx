@@ -32,11 +32,13 @@ import Pages from "./pages/Pages";
 import WebsiteSettings from "./pages/WebsiteSettings";
 import TopBarCMS from "./pages/cms/TopBarCMS";
 import HeaderCMS from "./pages/cms/HeaderCMS";
+import NavigationCMS from "./pages/cms/NavigationCMS";
 import FooterCMS from "./pages/cms/FooterCMS";
 import ServiceHeroCMS from "./pages/cms/ServiceHeroCMS";
 import ServiceCategoryCMS from "./pages/cms/ServiceCategoryCMS";
 import ServiceListingCMS from "./pages/cms/ServiceListingCMS";
 import HeroCMS from "./pages/cms/HeroCMS";
+import HomepageCMS from "./pages/cms/HomepageCMS";
 import PageCompositionEditor from "./pages/cms/PageCompositionEditor";
 import AboutUsCMS from "./pages/cms/AboutUsCMS";
 import AboutUsVisualBuilder from "./pages/cms/AboutUsVisualBuilder";
@@ -404,6 +406,14 @@ function App() {
           }
         />
         <Route
+          path="cms/navigation"
+          element={
+            <ProtectedRoute permission="cms">
+              <NavigationCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="cms/footer"
           element={
             <ProtectedRoute permission="cms">
@@ -513,6 +523,14 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <HeroCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/homepage"
+          element={
+            <ProtectedRoute permission="cms">
+              <HomepageCMS />
             </ProtectedRoute>
           }
         />

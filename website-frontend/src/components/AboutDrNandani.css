@@ -1,6 +1,6 @@
 /* =========================================================
    ABOUT DR. NANDANI DADU PAGE — Premium Doctor Profile
-   Palette: #1a1a1a · #111 · #fafaf8 · #f5f1eb · #e7ded2
+   Palette: #3B5998 · #111 · #f7f9fd · #E8EAF6 · #E8EAF6
    ========================================================= */
 
 .about-dr-nandani-page {
@@ -17,7 +17,7 @@
    HERO SECTION
    ========================================================= */
 .dr-nandani-hero {
-  background: linear-gradient(135deg, #1a1a1a 0%, #111111 100%);
+  background: linear-gradient(160deg, #2a4280 0%, #3B5998 60%, #4a6aac 100%);
   color: #ffffff;
   padding: 100px 5% 80px;
   overflow: hidden;
@@ -141,7 +141,7 @@
   font-size: 16px;
   font-weight: 500;
   background: #ffffff;
-  color: #1a1a1a;
+  color: #333333;
   border: none;
   border-radius: 100px;
   cursor: pointer;
@@ -159,14 +159,14 @@
    ========================================================= */
 .dr-nandani-specialist {
   padding: 100px 5%;
-  background: #fafaf8;
+  background: #f7f9fd;
 }
 
 .dr-nandani-section-title {
   font-family: 'Marcellus', serif;
   font-size: 52px;
   font-weight: 400;
-  color: #1a1a1a;
+  color: #333333;
   text-align: center;
   margin-bottom: 48px;
   line-height: 1.2;
@@ -192,7 +192,7 @@
 .dr-nandani-treatments h4 {
   font-family: 'Marcellus', serif;
   font-size: 24px;
-  color: #1a1a1a;
+  color: #333333;
   margin-bottom: 32px;
   font-weight: 400;
 }
@@ -213,12 +213,12 @@
   font-family: 'Lato', sans-serif;
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #333333;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .dr-nandani-treatment-item:hover {
-  background: #1a1a1a;
+  background: #3B5998;
   color: #ffffff;
   border-color: transparent;
   transform: translateY(-6px);
@@ -242,14 +242,14 @@
 
 .dr-nandani-credential-card {
   padding: 48px 44px;
-  background: #fafaf8;
+  background: #f7f9fd;
   border: 1px solid rgba(0, 0, 0, 0.07);
   border-radius: 40px;
   transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .dr-nandani-credential-card:hover {
-  background: #1a1a1a;
+  background: #3B5998;
   border-color: transparent;
   transform: translateY(-6px);
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.25);
@@ -261,10 +261,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f1eb;
+  background: #E8EAF6;
   border-radius: 16px;
   margin-bottom: 24px;
-  color: #1a1a1a;
+  color: #333333;
   transition: all 0.3s ease;
 }
 
@@ -277,7 +277,7 @@
   font-family: 'Marcellus', serif;
   font-size: 28px;
   font-weight: 400;
-  color: #1a1a1a;
+  color: #333333;
   margin-bottom: 20px;
   transition: color 0.4s ease;
 }
@@ -314,7 +314,7 @@
    ========================================================= */
 .dr-nandani-trust {
   padding: 100px 5%;
-  background: #FFFAF1;
+  background: #ffffff;
 }
 
 .dr-nandani-trust-grid {
@@ -334,7 +334,7 @@
 }
 
 .dr-nandani-trust-card:hover {
-  background: #1a1a1a;
+  background: #3B5998;
   border-color: transparent;
   transform: translateY(-8px);
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.25);
@@ -346,10 +346,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f1eb;
+  background: #E8EAF6;
   border-radius: 18px;
   margin: 0 auto 20px;
-  color: #1a1a1a;
+  color: #333333;
   transition: all 0.35s ease;
 }
 
@@ -363,7 +363,7 @@
   font-family: 'Marcellus', serif;
   font-size: 22px;
   font-weight: 400;
-  color: #1a1a1a;
+  color: #333333;
   margin-bottom: 16px;
   transition: color 0.4s ease;
 }
@@ -402,14 +402,14 @@
 
 .dr-nandani-testimonial-card {
   padding: 40px;
-  background: #fafaf8;
+  background: #f7f9fd;
   border: 1px solid rgba(0, 0, 0, 0.07);
   border-radius: 32px;
   transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .dr-nandani-testimonial-card:hover {
-  background: #1a1a1a;
+  background: #3B5998;
   border-color: transparent;
   transform: translateY(-8px);
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.25);
@@ -438,7 +438,7 @@
   font-family: 'Marcellus', serif;
   font-size: 18px;
   font-weight: 400;
-  color: #1a1a1a;
+  color: #333333;
   margin-bottom: 8px;
   transition: color 0.4s ease;
 }
@@ -463,7 +463,7 @@
    ========================================================= */
 .dr-nandani-faqs {
   padding: 100px 5%;
-  background: #FFFAF1;
+  background: #ffffff;
 }
 
 .dr-nandani-faq-list {
@@ -487,7 +487,7 @@
   font-family: 'Marcellus', serif;
   font-size: 17px;
   font-weight: 400;
-  color: #1a1a1a;
+  color: #333333;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -496,7 +496,7 @@
 }
 
 .dr-nandani-faq-question:hover {
-  background: #1a1a1a;
+  background: #3B5998;
   color: #ffffff;
   border-color: transparent;
 }
@@ -512,7 +512,7 @@
 
 .dr-nandani-faq-answer {
   padding: 28px 36px;
-  background: #f5f1eb;
+  background: #E8EAF6;
   font-family: 'Lato', sans-serif;
   font-size: 16px;
   line-height: 1.85;
@@ -538,7 +538,7 @@
 
 .dr-nandani-clinic-info {
   padding: 48px 44px;
-  background: #fafaf8;
+  background: #f7f9fd;
   border-radius: 40px;
   border: 1px solid rgba(0, 0, 0, 0.07);
 }
@@ -547,7 +547,7 @@
   font-family: 'Marcellus', serif;
   font-size: 24px;
   font-weight: 400;
-  color: #1a1a1a;
+  color: #333333;
   margin-bottom: 24px;
 }
 
@@ -587,8 +587,8 @@
   font-size: 14px;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 12px;
-  background: #fafaf8;
-  color: #1a1a1a;
+  background: #f7f9fd;
+  color: #333333;
   transition: all 0.3s ease;
 }
 
@@ -602,7 +602,7 @@
 .dr-nandani-consultation-form textarea:focus {
   outline: none;
   background: #ffffff;
-  border-color: #1a1a1a;
+  border-color: #3B5998;
   box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.05);
 }
 
@@ -614,12 +614,12 @@
 
 .dr-nandani-consultation-form .dr-nandani-cta-btn {
   grid-column: 1 / -1;
-  background: #1a1a1a;
+  background: #3B5998;
   color: #ffffff;
 }
 
 .dr-nandani-consultation-form .dr-nandani-cta-btn:hover {
-  background: #111111;
+  background: #3B5998;
   box-shadow: 0 12px 32px rgba(26, 26, 26, 0.3);
 }
 

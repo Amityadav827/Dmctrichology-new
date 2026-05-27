@@ -84,10 +84,12 @@ export default function AboutDrNiveditaCredentials({ data = {} }) {
           }
 
           .nivedita-credentials-heading {
-            font-size: 48px;
-            font-weight: 500;
+            font-family: 'Marcellus', serif;
+            font-size: 44px;
+            font-weight: 400;
             text-align: center;
-            color: #000000;
+            color: #333333;
+            text-transform: uppercase;
             margin: 0 0 24px 0;
             letter-spacing: 0.02em;
           }
@@ -117,7 +119,7 @@ export default function AboutDrNiveditaCredentials({ data = {} }) {
           .nivedita-badge-text {
             font-size: 16px;
             font-weight: 500;
-            color: #000000;
+            color: #333333;
             letter-spacing: 0.01em;
           }
 
@@ -144,7 +146,7 @@ export default function AboutDrNiveditaCredentials({ data = {} }) {
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #000000;
+            color: #333333;
             margin-bottom: 24px;
             line-height: 1.4;
           }
@@ -152,7 +154,7 @@ export default function AboutDrNiveditaCredentials({ data = {} }) {
           .nivedita-column-body-text {
             font-size: 17px;
             line-height: 2;
-            color: #000000;
+            color: #333333;
             text-align: justify;
           }
 
@@ -183,7 +185,7 @@ export default function AboutDrNiveditaCredentials({ data = {} }) {
               {credentialsList.map((cred, idx) => (
                 <div key={idx} className="nivedita-badge-item">
                   <div style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4B753" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </div>

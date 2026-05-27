@@ -43,7 +43,7 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
     viewMoreText = "VIEW MORE",
     viewMoreUrl = "https://dmctrichology-mkm4.vercel.app/clients-feedback",
     backgroundColor = "#ffffff",
-    cardBackgroundColor = "#000000",
+    cardBackgroundColor = "#3B5998",
     contentMaxWidth = "1400px",
     paddingTop = "100px",
     paddingBottom = "100px",
@@ -81,7 +81,7 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
               style={{
                 fontSize: "42px",
                 fontWeight: "400",
-                color: "#000000",
+                color: "#333333",
                 fontFamily: "'Marcellus', serif",
                 letterSpacing: "0.04em",
                 lineHeight: "1.2",
@@ -276,7 +276,7 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
           transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
         }
         .dmc-testimonials-btn:hover {
-          background: #000000 !important;
+          background: #2a4280 !important;
           color: #ffffff !important;
           transform: translateY(-2px);
         }

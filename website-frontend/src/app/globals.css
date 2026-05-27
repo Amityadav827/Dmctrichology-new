@@ -1,15 +1,99 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Marcellus&display=swap&font-display=swap');
 
+/* ============================================================
+   DMC TRICHOLOGY — GLOBAL DESIGN SYSTEM
+   Single source of truth for ALL pages. Every component must
+   use these variables instead of hardcoded hex values.
+   ============================================================ */
 :root {
-  --text-primary: #333333;
-  --form-bg: #FFFAF1;
-  --input-border: #B8B8B8;
-  --input-text: #8C8C8C;
-  --button-gradient: linear-gradient(253.42deg, #F09819 0%, #E4B753 47%, #EDDB5A 100%);
-  --white: #ffffff;
-  --black: #000000;
-  --bg-primary: #ffffff;
-  --header-bg: #ffffff;
+
+  /* ── PRIMARY BRAND ─────────────────────────────────────── */
+  --clr-blue:          #3B5998;   /* main brand blue          */
+  --clr-blue-dark:     #2a4280;   /* darker blue (hover/hero) */
+  --clr-blue-deep:     #162c57;   /* deepest blue             */
+  --clr-blue-light:    #4a6aac;   /* lighter blue             */
+  --clr-blue-tint:     #E8EAF6;   /* light blue section bg    */
+  --clr-blue-mist:     #f7f9fd;   /* very light section bg    */
+  --clr-blue-border:   #dde5f5;   /* border/divider color     */
+
+  /* ── GOLD ACCENT ──────────────────────────────────────── */
+  --clr-gold:          #E4B753;   /* main gold accent         */
+  --clr-gold-start:    #F09819;   /* gradient start           */
+  --clr-gold-end:      #EDDB5A;   /* gradient end             */
+
+  /* ── NEUTRALS ─────────────────────────────────────────── */
+  --clr-white:         #ffffff;
+  --clr-black:         #000000;
+  --clr-text:          #333333;   /* primary text             */
+  --clr-text-muted:    #555555;   /* secondary text           */
+  --clr-text-light:    #888888;   /* captions / meta text     */
+  --clr-text-xlight:   #cccccc;   /* disabled / placeholder   */
+
+  /* ── BACKGROUNDS ──────────────────────────────────────── */
+  --bg-white:          #ffffff;
+  --bg-light:          #f7f9fd;   /* light section            */
+  --bg-tint:           #E8EAF6;   /* blue tint cards/section  */
+  --bg-blue:           #3B5998;   /* solid blue section/card  */
+  --bg-hero:           linear-gradient(160deg, #2a4280 0%, #3B5998 60%, #4a6aac 100%);
+
+  /* ── GRADIENTS ────────────────────────────────────────── */
+  --gradient-gold:     linear-gradient(253.42deg, #F09819 0%, #E4B753 47%, #EDDB5A 100%);
+  --gradient-blue:     linear-gradient(160deg, #2a4280 0%, #3B5998 60%, #4a6aac 100%);
+
+  /* ── SHADOWS ──────────────────────────────────────────── */
+  --shadow-sm:         0 4px 16px rgba(59, 89, 152, 0.10);
+  --shadow-md:         0 12px 36px rgba(59, 89, 152, 0.15);
+  --shadow-lg:         0 20px 60px rgba(59, 89, 152, 0.20);
+  --shadow-gold:       0 8px 28px rgba(228, 183, 83, 0.30);
+
+  /* ── TYPOGRAPHY ───────────────────────────────────────── */
+  --font-display:      'Marcellus', serif;
+  --font-body:         'Lato', sans-serif;
+
+  --text-xs:           11px;
+  --text-sm:           13px;
+  --text-base:         15px;
+  --text-md:           16px;
+  --text-lg:           18px;
+  --text-xl:           22px;
+  --text-2xl:          28px;
+  --text-3xl:          36px;
+  --text-4xl:          44px;   /* section headings         */
+  --text-5xl:          56px;   /* hero headings            */
+
+  /* ── SPACING ──────────────────────────────────────────── */
+  --section-py:        80px;
+  --section-px:        5%;
+  --container-max:     1300px;
+
+  /* ── BORDER RADIUS ────────────────────────────────────── */
+  --radius-sm:         8px;
+  --radius-md:         16px;
+  --radius-lg:         24px;
+  --radius-xl:         40px;
+  --radius-pill:       999px;
+
+  /* ── TRANSITIONS ──────────────────────────────────────── */
+  --transition:        all 0.3s ease;
+  --transition-fast:   all 0.2s ease;
+  --transition-slow:   all 0.5s ease;
+
+  /* ── LEGACY ALIASES (keep for backwards compat) ───────── */
+  --text-primary:      #333333;
+  --form-bg:           #f7f9fd;
+  --input-border:      #B8B8B8;
+  --input-text:        #8C8C8C;
+  --button-gradient:   linear-gradient(253.42deg, #F09819 0%, #E4B753 47%, #EDDB5A 100%);
+  --white:             #ffffff;
+  --black:             #000000;
+  --bg-primary:        #ffffff;
+  --header-bg:         #ffffff;
+  --color-blue:        #3B5998;
+  --color-blue-dark:   #162c57;
+  --color-blue-hover:  #486A91;
+  --color-gold:        #E4B753;
+  --color-gold-start:  #F09819;
+  --color-gold-end:    #EDDB5A;
 }
 
 * {
@@ -23,7 +107,7 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   font-family: 'Marcellus', serif;
-  color: #1a1a1a;
+  color: #333333;
   background-color: #ffffff;
 }
 
@@ -1009,5 +1093,449 @@ a {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* ================================================================
+   DMC TRICHOLOGY — GLOBAL DESIGN SYSTEM CLASSES
+   Based on homepage patterns. Use these on ALL pages for
+   consistent look and feel across the entire website.
+   ================================================================ */
+
+/* ── 1. SECTION WRAPPERS ───────────────────────────────────────── */
+.dmc-section {
+  padding: 80px 5%;
+}
+.dmc-section-white  { background: #ffffff; }
+.dmc-section-tint   { background: #E8EAF6; }
+.dmc-section-blue   { background: #3B5998; }
+
+.dmc-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── 2. SECTION HEADER (kicker + heading) ──────────────────────── */
+/* Usage: <div class="dmc-section-header"> or "dmc-section-header centered" */
+.dmc-section-header {
+  margin-bottom: 60px;
+}
+.dmc-section-header.centered {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Eyebrow line + dot (homepage blog/results style) */
+.dmc-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.dmc-eyebrow-line {
+  width: 48px;
+  height: 1px;
+  background: #3B5998;
+  position: relative;
+  display: inline-block;
+}
+.dmc-eyebrow-line::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3B5998;
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Kicker (line + text, left-aligned — service pages style) */
+.dmc-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #3B5998;
+  margin-bottom: 14px;
+}
+.dmc-kicker::before {
+  content: "";
+  width: 36px;
+  height: 1.5px;
+  background: #3B5998;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.dmc-kicker.on-blue             { color: rgba(255,255,255,0.85); }
+.dmc-kicker.on-blue::before     { background: rgba(255,255,255,0.85); }
+
+/* Section heading */
+.dmc-heading {
+  font-family: 'Marcellus', serif;
+  font-size: 44px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #333333;
+  text-transform: uppercase;
+  margin: 0;
+}
+.dmc-heading.on-blue { color: #ffffff; }
+
+/* Section subtext */
+.dmc-subtext {
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  color: #555555;
+  line-height: 1.7;
+  max-width: 700px;
+  margin-top: 16px;
+}
+.dmc-subtext.on-blue { color: rgba(255,255,255,0.8); }
+
+/* Divider bar below heading */
+.dmc-divider {
+  width: 56px;
+  height: 3px;
+  background: #3B5998;
+  border-radius: 2px;
+  margin-top: 20px;
+}
+.dmc-divider.on-blue { background: rgba(255,255,255,0.5); }
+
+/* ── 3. CARDS ───────────────────────────────────────────────────── */
+
+/* Light card — starts #E8EAF6, hover turns #3B5998 (homepage pattern) */
+.dmc-card {
+  background: #E8EAF6;
+  border-radius: 40px;
+  padding: 25px;
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: background 0.3s ease;
+  cursor: pointer;
+}
+.dmc-card:hover { background: #3B5998; }
+.dmc-card:hover .dmc-card-title,
+.dmc-card:hover .dmc-card-text,
+.dmc-card:hover .dmc-card-meta,
+.dmc-card:hover h3,
+.dmc-card:hover p,
+.dmc-card:hover span:not(.dmc-card-pill) { color: #ffffff; }
+
+/* Date/category pill on card image */
+.dmc-card-pill {
+  background: #3B5998;
+  color: #ffffff;
+  padding: 6px 20px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-family: 'Marcellus', serif;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.dmc-card:hover .dmc-card-pill { background: #ffffff; color: #000000; }
+
+/* Author icon circle */
+.dmc-author-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #3B5998;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #ffffff;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.dmc-card:hover .dmc-author-icon { background: #ffffff; color: #3B5998; }
+
+/* Solid blue card — starts #3B5998, hover slightly darker */
+.dmc-card-solid {
+  background: #3B5998;
+  border-radius: 24px;
+  padding: 32px;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #ffffff;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.dmc-card-solid:hover {
+  background: #2a4280;
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(59,89,152,0.3);
+}
+.dmc-card-solid .dmc-icon-wrap {
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 14px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+/* ── 4. FAQ CARD (homepage FaqSection style) ────────────────────── */
+.dmc-faq-card {
+  background: #E8EAF6;
+  border-radius: 40px;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  border: 1px solid #dde5f5;
+  min-height: 120px;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.dmc-faq-card:hover {
+  background: #3B5998;
+  box-shadow: 0 15px 30px rgba(59,89,152,0.18);
+}
+.dmc-faq-icon-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #3B5998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+.dmc-faq-card:hover .dmc-faq-icon-circle { background: #ffffff; }
+.dmc-faq-card-question {
+  font-family: 'Marcellus', serif;
+  font-size: 20px;
+  color: #000000;
+  font-weight: 400;
+  margin-bottom: 8px;
+  transition: color 0.3s ease;
+}
+.dmc-faq-card-answer {
+  font-family: 'Marcellus', serif;
+  font-size: 14px;
+  color: #333333;
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
+.dmc-faq-card:hover .dmc-faq-card-question,
+.dmc-faq-card:hover .dmc-faq-card-answer { color: #ffffff; }
+
+/* ── 5. ACCORDION (service/blog pages) ─────────────────────────── */
+.dmc-accordion-item {
+  border: 1px solid #dde5f5;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 12px;
+}
+.dmc-accordion-item:hover { border-color: rgba(59,89,152,0.3); }
+.dmc-accordion-item.open {
+  border-color: #3B5998;
+  box-shadow: 0 8px 24px rgba(59,89,152,0.12);
+}
+.dmc-accordion-btn {
+  width: 100%;
+  padding: 22px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Marcellus', serif;
+  font-size: 17px;
+  color: #333333;
+  line-height: 1.4;
+}
+.dmc-accordion-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #E8EAF6;
+  color: #3B5998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.dmc-accordion-item.open .dmc-accordion-icon {
+  background: #3B5998;
+  color: #ffffff;
+}
+.dmc-accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  color: #555555;
+  line-height: 1.7;
+}
+.dmc-accordion-item.open .dmc-accordion-body { max-height: 500px; }
+.dmc-accordion-body-inner { padding: 0 28px 24px; }
+
+/* ── 6. BUTTONS ─────────────────────────────────────────────────── */
+
+/* View All pill button (homepage style) */
+.dmc-btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px 10px 28px;
+  border-radius: 50px;
+  border: 1px solid #E5E5E5;
+  background: #ffffff;
+  color: #000000;
+  font-family: 'Marcellus', serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.dmc-btn-pill:hover {
+  background: #3B5998;
+  color: #ffffff;
+  border-color: #3B5998;
+  box-shadow: 0 12px 24px rgba(59,89,152,0.2);
+}
+.dmc-btn-arrow-wrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #3B5998;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-45deg);
+  transition: transform 0.3s ease, background 0.3s ease;
+  flex-shrink: 0;
+}
+.dmc-btn-pill:hover .dmc-btn-arrow-wrap {
+  background: #ffffff;
+  transform: rotate(0deg);
+}
+
+/* Solid blue CTA button */
+.dmc-btn-blue {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  border-radius: 50px;
+  background: #3B5998;
+  color: #ffffff;
+  font-family: 'Marcellus', serif;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.dmc-btn-blue:hover {
+  background: #2a4280;
+  box-shadow: 0 10px 28px rgba(59,89,152,0.3);
+}
+
+/* ── 7. TABS (homepage FAQ category tabs) ───────────────────────── */
+.dmc-tabs {
+  display: flex;
+  background: #ffffff;
+  border: 1px solid #E5E5E5;
+  border-radius: 50px;
+  padding: 5px;
+  gap: 4px;
+}
+.dmc-tab {
+  padding: 12px 24px;
+  border-radius: 50px;
+  border: none;
+  background: transparent;
+  color: #000000;
+  font-family: 'Marcellus', serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.dmc-tab.active, .dmc-tab:hover {
+  background: #3B5998;
+  color: #ffffff;
+}
+
+/* ── 8. CHECK LIST (service section bullets) ────────────────────── */
+.dmc-checklist { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.dmc-checklist-item { display: flex; align-items: flex-start; gap: 14px; }
+.dmc-check-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #3B5998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #ffffff;
+  margin-top: 2px;
+}
+.dmc-check-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  color: #333333;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* ── 9. RESPONSIVE ──────────────────────────────────────────────── */
+@media (max-width: 992px) {
+  .dmc-section { padding: 60px 5%; }
+  .dmc-heading { font-size: 36px; }
+}
+@media (max-width: 768px) {
+  .dmc-section { padding: 50px 5%; }
+  .dmc-heading { font-size: 28px; }
+  .dmc-section-header { margin-bottom: 40px; }
+  .dmc-card { border-radius: 24px; }
+  .dmc-faq-card { border-radius: 24px; flex-direction: column; }
+}
+
+/* ================================================================
+   SCROLL REVEAL ANIMATIONS
+   Applied dynamically via IntersectionObserver in GlobalLayoutWrapper.
+   Elements get .sr (+ optional direction modifier) when below fold.
+   .in-view is added when element enters viewport.
+   ================================================================ */
+
+.sr {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.sr.sr-left  { transform: translateX(-36px); }
+.sr.sr-right { transform: translateX(36px); }
+.sr.sr-scale { transform: translateY(20px) scale(0.95); }
+
+.sr.in-view {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .sr { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
 

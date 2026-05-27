@@ -210,9 +210,9 @@ export default async function BlogDetailPage({ params }) {
       {/* Blog Hero */}
       <BlogHero data={{
         ...(pageSettings?.hero || {}),
-        title: "Blog Detail",
-        breadcrumbText: "Blog Detail",
-        titleTag: "h2"
+        title: String(blog.title || "Blog"),
+        breadcrumbText: String(blog.title || "Blog"),
+        titleTag: "h1"
       }} />
 
       {/* Main Content */}
@@ -243,7 +243,7 @@ export default async function BlogDetailPage({ params }) {
               </div>
             </div>
 
-            <h1 className="blog-detail-title">{String(blog.title || "")}</h1>
+            <h2 className="blog-detail-title">{String(blog.title || "")}</h2>
 
             <div 
               className="blog-content-body" 

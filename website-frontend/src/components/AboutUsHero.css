@@ -1,6 +1,6 @@
 /* =========================================================
    ABOUT US HERO — LUXURY CINEMATIC REDESIGN
-   Colors: #1a1a1a text, accent gold ONLY for dividers/borders
+   Colors: #3B5998 text, accent gold ONLY for dividers/borders
    ========================================================= */
 
 /* ---------- Google Fonts Import ---------- */
@@ -9,7 +9,7 @@
 /* ---------- Section Wrapper ---------- */
 .about-hero-section {
   position: relative;
-  background: #fafaf8;
+  background: #f7f9fd;
   overflow: hidden;
 
   isolation: isolate;
@@ -78,7 +78,7 @@
   display: block;
   width: 36px;
   height: 1px;
-  background: #c19a5b;
+  background: #E4B753;
   flex-shrink: 0;
   opacity: 0.7;
 }
@@ -89,7 +89,7 @@
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 3.5px;
-  color: #1a1a1a;
+  color: #333333;
   text-transform: uppercase;
 }
 
@@ -98,7 +98,7 @@
   font-family: 'Marcellus', serif;
   font-size: 68px;
   line-height: 1.08;
-  color: #1a1a1a;
+  color: #333333;
   margin-bottom: 28px;
   font-weight: 400;
   letter-spacing: -1.5px;
@@ -121,7 +121,7 @@
   display: block;
   width: 48px;
   height: 1px;
-  background: linear-gradient(to right, #c19a5b, transparent);
+  background: linear-gradient(to right, #E4B753, transparent);
   margin-bottom: 40px;
   opacity: 0.6;
 }
@@ -159,7 +159,7 @@
   gap: 2px;
   font-family: 'Marcellus', serif;
   font-size: 46px;
-  color: #1a1a1a;
+  color: #333333;
   line-height: 1;
   margin-bottom: 8px;
   letter-spacing: -1px;
@@ -207,7 +207,7 @@
     0 30px 80px rgba(0, 0, 0, 0.10),
     0 80px 140px rgba(0, 0, 0, 0.06);
   aspect-ratio: 4 / 4.2;
-  background: #f0ede8;
+  background: #E8EAF6;
   cursor: pointer;
   transition: box-shadow 0.5s ease, transform 0.5s ease;
 }
@@ -258,7 +258,7 @@
   top: 0;
   right: 0;
   width: 100%;
-  background: #fafaf8;
+  background: #f7f9fd;
   z-index: 5;
   pointer-events: none;
 }
@@ -322,7 +322,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #c19a5b;
+  background: #E4B753;
   flex-shrink: 0;
   box-shadow: 0 0 0 3px rgba(193, 154, 91, 0.2);
 }
@@ -382,7 +382,7 @@
   .about-hero-divider {
     margin-left: auto;
     margin-right: auto;
-    background: linear-gradient(to right, transparent, #c19a5b, transparent);
+    background: linear-gradient(to right, transparent, #E4B753, transparent);
   }
 
   .about-hero-stats {

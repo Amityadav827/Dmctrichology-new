@@ -1,41 +1,13 @@
-const ScienceDmc = require('../models/ScienceDmc');
+const supabase = require('../config/supabase');
 
-const defaultBulletsLeft = [
-  'Microscopic Scalp Analysis',
-  'Genetic Profiling',
-  'Comprehensive Blood Panels'
-];
-
-const defaultBulletsRight = [
-  'Custom Formulated Serums',
-  'Targeted Laser Therapy',
-  'Stem Cell Innovations'
-];
+const CMS_KEY = 'science_dmc';
 
 exports.getScienceDmc = async (req, res) => {
   try {
-    let data = await ScienceDmc.findOne();
-    if (!data) {
-      data = new ScienceDmc({
-        dualFeatureSection: {
-          isEnabled: true,
-          leftCard: {
-            title: 'Advanced Diagnostics',
-            description: 'We utilize state-of-the-art diagnostic tools to understand the root cause of your hair loss.',
-            bullets: defaultBulletsLeft,
-            image: ''
-          },
-          rightCard: {
-            title: 'Precision Treatment',
-            description: 'Our treatments are tailored to your unique genetic and physiological profile for optimal results.',
-            bullets: defaultBulletsRight,
-            image: ''
-          }
-        }
-      });
-      await data.save();
-    }
-    res.json({ success: true, data });
+    const { data: row, error } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    res.json({ success: true, data: row?.data || {} });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -43,24 +15,40 @@ exports.getScienceDmc = async (req, res) => {
 
 exports.updateScienceDmc = async (req, res) => {
   try {
-    let data = await ScienceDmc.findOne();
-    if (!data) data = new ScienceDmc();
+    const { data: existing } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    const current = existing?.data || {};
 
     const u = req.body;
+    const merged = { ...current };
 
-    if (u.hero !== undefined) data.hero = { ...data.hero.toObject?.() ?? data.hero, ...u.hero };
-    if (u.introSection !== undefined) data.introSection = { ...data.introSection.toObject?.() ?? data.introSection, ...u.introSection };
+    if (u.hero !== undefined) merged.hero = { ...(current.hero || {}), ...u.hero };
+    if (u.introSection !== undefined) merged.introSection = { ...(current.introSection || {}), ...u.introSection };
+
     if (u.dualFeatureSection !== undefined) {
-      data.dualFeatureSection = {
-        isEnabled: u.dualFeatureSection.isEnabled !== undefined ? u.dualFeatureSection.isEnabled : data.dualFeatureSection.isEnabled,
-        leftCard: u.dualFeatureSection.leftCard !== undefined ? { ...data.dualFeatureSection.leftCard.toObject?.() ?? data.dualFeatureSection.leftCard, ...u.dualFeatureSection.leftCard } : data.dualFeatureSection.leftCard,
-        rightCard: u.dualFeatureSection.rightCard !== undefined ? { ...data.dualFeatureSection.rightCard.toObject?.() ?? data.dualFeatureSection.rightCard, ...u.dualFeatureSection.rightCard } : data.dualFeatureSection.rightCard,
+      const existingDual = current.dualFeatureSection || {};
+      merged.dualFeatureSection = {
+        isEnabled: u.dualFeatureSection.isEnabled !== undefined
+          ? u.dualFeatureSection.isEnabled
+          : existingDual.isEnabled,
+        leftCard: u.dualFeatureSection.leftCard !== undefined
+          ? { ...(existingDual.leftCard || {}), ...u.dualFeatureSection.leftCard }
+          : existingDual.leftCard,
+        rightCard: u.dualFeatureSection.rightCard !== undefined
+          ? { ...(existingDual.rightCard || {}), ...u.dualFeatureSection.rightCard }
+          : existingDual.rightCard
       };
     }
-    if (u.consultationSection !== undefined) data.consultationSection = { ...data.consultationSection.toObject?.() ?? data.consultationSection, ...u.consultationSection };
 
-    await data.save();
-    res.json({ success: true, data });
+    if (u.consultationSection !== undefined) {
+      merged.consultationSection = { ...(current.consultationSection || {}), ...u.consultationSection };
+    }
+
+    const { error } = await supabase.from('cms_sections')
+      .upsert({ key: CMS_KEY, data: merged, updated_at: new Date() }, { onConflict: 'key' });
+    if (error) throw error;
+
+    res.json({ success: true, data: merged });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

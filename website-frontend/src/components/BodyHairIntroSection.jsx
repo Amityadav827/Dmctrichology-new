@@ -29,8 +29,8 @@ export default function BodyHairIntroSection({ data, pageSlug = '' }) {
   return (
     <section className="body-hair-intro-section">
       <div className="body-hair-intro-container">
-        <span className="body-hair-intro-kicker">Treatment Overview</span>
-        <h2>{section.heading || defaultBodyHairIntroSection.heading}</h2>
+        <span className="dmc-kicker">Treatment Overview</span>
+        <h2 className="dmc-heading" style={{ marginBottom: "20px" }}>{section.heading || defaultBodyHairIntroSection.heading}</h2>
         <div className="body-hair-intro-content">
           {paragraphs.map((paragraph, index) => (
             <p key={index}>{paragraph}</p>

@@ -50,8 +50,8 @@ export default function FueCostSection({ data, pageSlug = '' }) {
       <div className="fue-cost-container">
         <div className="fue-cost-header">
           <div>
-            <span className="fue-cost-kicker">Cost Guide</span>
-            <h2>{section.heading || defaultFueCostSection.heading}</h2>
+            <span className="dmc-kicker">Cost Guide</span>
+            <h2 className="dmc-heading" style={{ marginBottom: "20px" }}>{section.heading || defaultFueCostSection.heading}</h2>
             <p>{section.introText || defaultFueCostSection.introText}</p>
           </div>
           <div className="fue-cost-image-wrap">

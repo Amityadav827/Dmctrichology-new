@@ -6,85 +6,59 @@ export default function ServiceIdealCandidates({ data, pageSlug = "" }) {
 
   const { sectionHeading, introText, bottomConclusionText, sectionImage, altText, bullets } = data;
 
-  // Filter visible bullets and sort by sortOrder ascending
   const activeBullets = (bullets || [])
     .filter(b => b.isVisible !== false && b.bulletText?.trim() !== "")
-    .sort((a, b) => {
-      const orderA = a.sortOrder ?? 0;
-      const orderB = b.sortOrder ?? 0;
-      return orderA - orderB;
-    });
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 
-  if (activeBullets.length === 0) {
-    return null;
-  }
+  if (activeBullets.length === 0) return null;
 
   return (
-    <>
-      <section className="service-candidates-section">
-        <div className="service-candidates-container">
-        {/* Left Side: Content Column */}
+    <section className="service-candidates-section">
+      <div className="service-candidates-container">
+
+        {/* Left: Content */}
         <div className="service-candidates-content-col">
-          {sectionHeading && (
-            <h2 className="service-candidates-heading">
-              {sectionHeading}
-            </h2>
-          )}
+          <span className="sic-kicker">Ideal Candidates</span>
+          {sectionHeading && <h2 className="sic-heading">{sectionHeading}</h2>}
+          {introText && <p className="sic-intro">{introText}</p>}
 
-          {introText && (
-            <p className="service-candidates-intro">
-              {introText}
-            </p>
-          )}
-
-          <ul className="service-candidates-list">
+          <ul className="sic-list">
             {activeBullets.map((bullet, idx) => (
-              <li key={bullet._id || idx} className="service-candidates-list-item">
-                <span className="service-ideal-check-icon-wrapper">
-                  <svg 
-                    className="service-ideal-check-icon" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24" 
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth="3" 
-                      d="M5 13l4 4L19 7"
-                    />
+              <li key={bullet._id || idx} className="sic-item">
+                <span className="sic-icon-wrap" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/>
                   </svg>
                 </span>
-                <span className="service-candidates-text">
-                  {bullet.bulletText}
-                </span>
+                <span className="sic-text">{bullet.bulletText}</span>
               </li>
             ))}
           </ul>
 
           {bottomConclusionText && (
-            <p className="service-candidates-conclusion">
-              {bottomConclusionText}
-            </p>
+            <p className="sic-conclusion">{bottomConclusionText}</p>
           )}
         </div>
 
-        {/* Right Side: Image Column */}
+        {/* Right: Image */}
         {sectionImage && (
           <div className="service-candidates-image-col">
             <div className="service-candidates-image-wrapper">
-              <img 
-                src={sectionImage} 
-                alt={altText || sectionHeading || "Ideal Candidates graphic"} 
-                className="service-candidates-img" 
+              <img
+                src={sectionImage}
+                alt={altText || sectionHeading || "Ideal Candidates graphic"}
+                className="service-candidates-img"
                 loading="lazy"
               />
+              <div className="sic-img-badge">
+                <span className="sic-img-badge-num">{activeBullets.length}+</span>
+                <span className="sic-img-badge-label">Qualifying Criteria</span>
+              </div>
             </div>
           </div>
         )}
-        </div>
-      </section>
-    </>
+
+      </div>
+    </section>
   );
 }

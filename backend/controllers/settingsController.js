@@ -1,43 +1,14 @@
-const SiteSettings = require('../models/SiteSettings');
+const supabase = require('../config/supabase');
 const uploadToSupabase = require('../utils/uploadToSupabase');
 
-const seedDefaultSettings = async () => {
-  try {
-    const count = await SiteSettings.countDocuments();
-    if (count === 0) {
-      await SiteSettings.create({
-        websiteName: "DMC Trichology",
-        logo: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530477/dmc-trichology/pntwhlftziotd6k0kdkg.png",
-        favicon: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png",
-        phone1: "+91-8527830194",
-        phone2: "+91-9810939319",
-        email: "info@dadumedicalcentre.com",
-        address: "",
-        primaryColor: "#C19A5B",
-        secondaryColor: "#000000",
-        appointmentButtonText: "Book Appointment",
-        socialLinks: {
-          facebook: "",
-          instagram: "",
-          youtube: "",
-          linkedin: ""
-        },
-        footerCopyright: "",
-        patientCount: "225+ Patients",
-        ratingStars: 5,
-        ratingText: "★★★★★"
-      });
-      console.log("✅ Site settings default data seeded.");
-    }
-  } catch (err) {
-    console.error("❌ Error seeding site settings:", err.message);
-  }
-};
+const CMS_KEY = 'site_settings';
 
 const getSettings = async (req, res, next) => {
   try {
-    const settings = await SiteSettings.findOne();
-    res.status(200).json({ success: true, data: settings });
+    const { data: row, error } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    res.status(200).json({ success: true, data: row?.data || {} });
   } catch (error) {
     next(error);
   }
@@ -45,19 +16,14 @@ const getSettings = async (req, res, next) => {
 
 const updateSettings = async (req, res, next) => {
   try {
-    let settings = await SiteSettings.findOne();
-    if (!settings) {
-      settings = new SiteSettings();
-    }
-
     const updates = { ...req.body };
-    
+
     if (updates.socialLinks && typeof updates.socialLinks === 'string') {
-        try {
-            updates.socialLinks = JSON.parse(updates.socialLinks);
-        } catch(e) {
-            console.error("Failed to parse social links");
-        }
+      try {
+        updates.socialLinks = JSON.parse(updates.socialLinks);
+      } catch (e) {
+        console.error('Failed to parse social links');
+      }
     }
 
     if (req.files) {
@@ -69,13 +35,19 @@ const updateSettings = async (req, res, next) => {
       }
     }
 
-    Object.assign(settings, updates);
-    await settings.save();
+    // Merge with existing data
+    const { data: existing } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    const merged = { ...(existing?.data || {}), ...updates };
 
-    res.status(200).json({ success: true, data: settings });
+    const { error } = await supabase.from('cms_sections')
+      .upsert({ key: CMS_KEY, data: merged, updated_at: new Date() }, { onConflict: 'key' });
+    if (error) throw error;
+
+    res.status(200).json({ success: true, data: merged });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { getSettings, updateSettings, seedDefaultSettings };
+module.exports = { getSettings, updateSettings };

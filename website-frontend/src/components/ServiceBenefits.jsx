@@ -101,49 +101,6 @@ function CostBenefitsStrip({ data }) {
   );
 }
 
-function CostInfoSection({ data }) {
-  const isGenericBenefitsHeading = String(data?.heading || '').toLowerCase().includes('key benefits');
-  const heading = !data?.heading || isGenericBenefitsHeading ? costInfoDefaults.heading : data.heading;
-  const description = data?.description || costInfoDefaults.description;
-  const secondaryHeading = data?.secondaryHeading || costInfoDefaults.secondaryHeading;
-  const secondaryDescription = data?.secondaryDescription || costInfoDefaults.secondaryDescription;
-  const image = data?.image || '';
-
-  return (
-    <>
-      <section className="hair-cost-info-section">
-        <div className="hair-cost-info-container">
-          <div className="hair-cost-info-content">
-            <div className="hair-cost-info-card hair-cost-info-card-primary">
-              <span className="hair-cost-info-eyebrow">Cost Guide</span>
-              <h2>{heading}</h2>
-              <p>{description}</p>
-            </div>
-
-            <div className="hair-cost-info-card hair-cost-info-card-secondary">
-              <span className="hair-cost-info-eyebrow">Technique Cost</span>
-              <h2>{secondaryHeading}</h2>
-              <p>{secondaryDescription}</p>
-            </div>
-          </div>
-
-          {image && (
-            <div className="hair-cost-info-image-wrap">
-              <img
-                src={image}
-                alt={data?.altText || heading}
-                className="hair-cost-info-image"
-                loading="lazy"
-              />
-            </div>
-          )}
-        </div>
-      </section>
-
-      <CostBenefitsStrip data={data} />
-    </>
-  );
-}
 
 export default function ServiceBenefits({ data, pageSlug = '' }) {
   if (!data) return null;
@@ -171,54 +128,35 @@ export default function ServiceBenefits({ data, pageSlug = '' }) {
 
   return (
     <section className="service-benefits-section">
+      <div className="sbn-header">
+        <span className="dmc-kicker">Treatment Benefits</span>
+        {heading && <h2 className="dmc-heading" style={{ marginBottom: 0 }}>{heading}</h2>}
+      </div>
       <div className="service-benefits-container">
         {/* Left Side: Image Column */}
         {image && (
           <div className="service-benefits-image-col">
             <div className="service-benefits-image-wrapper">
-              <img 
-                src={image} 
-                alt={altText || heading || "Treatment benefits"} 
-                className="service-benefits-img" 
+              <img
+                src={image}
+                alt={altText || heading || "Treatment benefits"}
+                className="service-benefits-img"
                 loading="lazy"
               />
             </div>
           </div>
         )}
 
-        {/* Right Side: Content Column */}
+        {/* Right Side: Benefit Cards Grid */}
         <div className="service-benefits-content-col">
-          {heading && (
-            <h2 className="service-benefits-heading">
-              {heading}
-            </h2>
-          )}
-          
-          <ul className="service-benefits-list">
+          <div className="sbn-grid">
             {activePoints.map((pt, idx) => (
-              <li key={pt._id || idx} className="service-benefits-list-item">
-                <span className="service-benefits-check-icon-wrapper">
-                  <svg 
-                    className="service-benefits-check-icon" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24" 
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth="2.5" 
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </span>
-                <span className="service-benefits-text">
-                  {pt.benefitText}
-                </span>
-              </li>
+              <div key={pt._id || idx} className="sbn-card">
+                <span className="sbn-num">{String(idx + 1).padStart(2, '0')}</span>
+                <span className="sbn-text">{pt.benefitText}</span>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
     </section>

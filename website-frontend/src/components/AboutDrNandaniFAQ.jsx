@@ -161,17 +161,17 @@ export default function AboutDrNandaniFAQ({ data = {} }) {
                   key={idx}
                   className="dmc-faq-item"
                   style={{
-                    backgroundColor: isOpen ? (accordionActiveBg || "#f5f5f5") : (accordionBg || "#ffffff"),
+                    backgroundColor: isOpen ? "#E8EAF6" : "#ffffff",
                     border: isOpen
-                      ? "1px solid rgba(0,0,0,0.15)"
-                      : "1px solid rgba(0,0,0,0.08)",
-                    borderRadius: "0px",
-                    marginBottom: "18px",
+                      ? "1px solid rgba(59, 89, 152, 0.3)"
+                      : "1px solid rgba(255,255,255,0.2)",
+                    borderRadius: "16px",
+                    marginBottom: "16px",
                     overflow: "hidden",
-                    transition: "background 0.3s ease, border-color 0.3s ease",
+                    transition: "background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
                     boxShadow: isOpen
-                      ? "0 6px 24px rgba(0,0,0,0.10)"
-                      : "0 1px 6px rgba(0,0,0,0.06)"
+                      ? "0 8px 28px rgba(59, 89, 152, 0.15)"
+                      : "0 2px 8px rgba(0,0,0,0.08)"
                   }}
                 >
                   {/* Question Row */}

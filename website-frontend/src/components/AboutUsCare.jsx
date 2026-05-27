@@ -100,7 +100,7 @@ const AboutUsCare = () => {
               borderRadius: '20px', 
               overflow: 'hidden', 
               boxShadow: '0 15px 30px rgba(0,0,0,0.08)',
-              backgroundColor: '#1a1a1a',
+              backgroundColor: '#3B5998',
               height: 'auto',
               minHeight: '180px'
             }}>

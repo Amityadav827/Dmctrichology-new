@@ -1,13 +1,13 @@
 /* =========================================================
    VISION & VALUES — LUXURY MONOCHROME REDESIGN
-   Palette: #1a1a1a · #111 · #fafaf8 · #f5f1eb · #e7ded2
+   Palette: #3B5998 · #111 · #f7f9fd · #E8EAF6 · #E8EAF6
    Zero gold. Depth through shadows, spacing, layers.
    ========================================================= */
 
 /* ---------- Section ---------- */
 .about-vision-section {
   position: relative;
-  background: #fafaf8;
+  background: #f7f9fd;
   overflow: hidden;
   isolation: isolate;
 }
@@ -54,7 +54,7 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 4px;
-  color: #1a1a1a;
+  color: #333333;
   text-transform: uppercase;
   margin-bottom: 28px;
 }
@@ -73,7 +73,7 @@
   font-family: 'Marcellus', serif;
   font-size: 58px;
   line-height: 1.1;
-  color: #111111;
+  color: #333333;
   letter-spacing: -1.2px;
   font-weight: 400;
 }
@@ -116,7 +116,7 @@
 
 .about-vision-card:hover {
   transform: translateY(-6px);
-  background: #1a1a1a;
+  background: #3B5998;
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.15),
     0 40px 80px rgba(0, 0, 0, 0.25);
@@ -158,10 +158,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f1eb;
+  background: #E8EAF6;
   border-radius: 16px;
   margin-bottom: 24px;
-  color: #1a1a1a;
+  color: #333333;
   transition: background 0.3s ease;
 }
 
@@ -171,7 +171,7 @@
   font-size: 34px;
   margin-bottom: 20px;
   font-weight: 400;
-  color: #111111;
+  color: #333333;
   line-height: 1.2;
 }
 
@@ -185,7 +185,7 @@
 
 /* ---- Mission Card — Deep Black ---- */
 .about-vision-card.mission {
-  background: #111111;
+  background: #3B5998;
   border-color: transparent;
   box-shadow:
     0 4px 20px rgba(0, 0, 0, 0.15),
@@ -216,7 +216,7 @@
 }
 
 .about-vision-card.mission:hover .about-vision-card-title {
-  color: #111111;
+  color: #333333;
 }
 
 .about-vision-card.mission:hover .about-vision-card-text {
@@ -233,8 +233,8 @@
 }
 
 .about-vision-card.mission:hover .card-icon {
-  background: #f5f1eb;
-  color: #1a1a1a;
+  background: #E8EAF6;
+  color: #333333;
 }
 
 .about-vision-card.mission .about-vision-card-title {
@@ -275,14 +275,14 @@
   left: 40px;
   right: 40px;
   height: 2px;
-  background: #e7ded2;
+  background: #E8EAF6;
   border-radius: 0 0 2px 2px;
   transition: background 0.4s ease;
 }
 
 .about-value-item:hover {
   transform: translateY(-8px);
-  background: #1a1a1a;
+  background: #3B5998;
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.15),
     0 30px 60px rgba(0, 0, 0, 0.25);
@@ -321,18 +321,18 @@
 .about-value-icon-box {
   width: 60px;
   height: 60px;
-  background: #f5f1eb;
+  background: #E8EAF6;
   border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 18px;
-  color: #1a1a1a;
+  color: #333333;
   transition: background 0.35s ease, transform 0.35s ease;
 }
 
 .about-value-item:hover .about-value-icon-box {
-  background: #1a1a1a;
+  background: #3B5998;
   color: #fff;
   transform: scale(1.05);
 }
@@ -345,7 +345,7 @@
 .about-value-title {
   font-family: 'Marcellus', serif;
   font-size: 22px;
-  color: #111111;
+  color: #333333;
   margin-bottom: 14px;
   font-weight: 400;
   line-height: 1.3;

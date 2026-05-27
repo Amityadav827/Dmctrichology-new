@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { fetchServices } from '../services/api';
+import { fetchServiceListingCards } from '../services/serviceApi';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 
@@ -21,43 +21,49 @@ const defaultServices = [
 ];
 
 export default function ServiceSlider() {
-  const [data, setData] = useState(null);
+  const [headingData, setHeadingData] = useState(null);
+  const [cards, setCards] = useState(null);
 
   useEffect(() => {
     fetchServices().then(res => {
-      if (res && res.success && res.data) {
-        setData(res.data);
+      if (res?.success && res?.data) setHeadingData(res.data);
+    });
+    fetchServiceListingCards({ featured: true }).then(res => {
+      if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
+        setCards(res.data);
       }
     });
   }, []);
 
-  // Only use fallbacks when data === null (not yet loaded)
-  // Once DB data loads, always render DB values — no hardcoded override
-  const title = data ? (data.title || '') : 'Our Hair Transplant Services';
-  const subtitle = data ? (data.subtitle || '') : 'SERVICES';
-  const viewAllText = data ? (data.viewAllText || 'View All') : 'View All';
-  const viewAllLink = data ? (data.viewAllLink || '#') : '#';
-  // Always ensure services is an array — defend against undefined/null from API
-  const safeServices = Array.isArray(data?.services) ? data.services : null;
-  const services = (safeServices && safeServices.length > 0)
-    ? safeServices
-    : defaultServices;
+  const title = headingData ? (headingData.title || '') : 'Our Hair Transplant Services';
+  const subtitle = headingData ? (headingData.subtitle || '') : 'SERVICES';
+  const viewAllText = headingData ? (headingData.viewAllText || 'View All') : 'View All';
+  const viewAllLink = headingData ? (headingData.viewAllLink || '/service') : '/service';
 
-  // Duplicate for infinite loop effect — only when enough items exist
-  const duplicatedServices = services.length >= 2 ? [...services, ...services] : [...services];
+  // Map service_cards to the shape the slider needs
+  const mappedCards = cards
+    ? cards.map((c, i) => ({
+        title: c.title,
+        image: c.image || defaultServices[i % defaultServices.length].image,
+        link: c.slug ? `/details/${c.slug}` : '#',
+      }))
+    : null;
+
+  const rawServices = (mappedCards && mappedCards.length > 0) ? mappedCards : defaultServices;
+  const duplicatedServices = rawServices.length >= 2 ? [...rawServices, ...rawServices] : [...rawServices];
 
   return (
     <EditableSection sectionId="services" label="Services Slider">
       <section className="service-slider-section" style={{ backgroundColor: '#E8EAF6', padding: '80px 5%' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          
+
           {/* Top Area - Centered */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '60px', position: 'relative' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '15px' }}>
-              <img 
-                src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" 
-                alt="icon" 
-                style={{ width: '40px', height: 'auto', filter: blueIconFilter }} 
+              <img
+                src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png"
+                alt="icon"
+                style={{ width: '40px', height: 'auto', filter: blueIconFilter }}
               />
               <EditableText sectionId="services" fieldPath="subtitle" tag="span" className="section-subtitle">
                 {subtitle}
@@ -68,14 +74,14 @@ export default function ServiceSlider() {
                 {title}
               </EditableText>
             </h2>
-            <a href="https://dmctrichology-mkm4.vercel.app/service" style={{ position: 'absolute', right: 0, bottom: '10px', color: '#888', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <a href={viewAllLink} style={{ position: 'absolute', right: 0, bottom: '10px', color: '#888', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <EditableText sectionId="services" fieldPath="viewAllText" tag="span">
                 {viewAllText}
               </EditableText>
-              <img 
-                src="https://res.cloudinary.com/dseixl6px/image/upload/v1777623764/dmc-trichology/qcrzwotm1zyqsdbu6ttb.png" 
-                alt="arrow" 
-                style={{ width: '10px', height: 'auto', transform: 'rotate(-90deg)' }} 
+              <img
+                src="https://res.cloudinary.com/dseixl6px/image/upload/v1777623764/dmc-trichology/qcrzwotm1zyqsdbu6ttb.png"
+                alt="arrow"
+                style={{ width: '10px', height: 'auto', transform: 'rotate(-90deg)' }}
               />
             </a>
           </div>
@@ -100,40 +106,43 @@ export default function ServiceSlider() {
             >
               {duplicatedServices.map((service, index) => (
                 <SwiperSlide key={index}>
-                  <div 
+                  <a
+                    href={service.link}
                     className="service-card-item"
-                    style={{ 
+                    style={{
+                      display: 'block',
                       backgroundColor: 'transparent',
                       cursor: 'pointer',
-                      transition: 'transform 0.3s ease'
+                      transition: 'transform 0.3s ease',
+                      textDecoration: 'none',
                     }}
                   >
-                    <div style={{ 
-                      width: '100%', 
-                      height: '300px', 
-                      borderRadius: '24px', 
-                      overflow: 'hidden', 
+                    <div style={{
+                      width: '100%',
+                      height: '300px',
+                      borderRadius: '24px',
+                      overflow: 'hidden',
                       marginBottom: '20px'
                     }}>
-                      <img 
-                        src={service.image} 
-                        alt={service.title} 
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
                     </div>
-                    <h3 style={{ 
-                      fontSize: '18px', 
-                      color: '#1C1C1C', 
-                      textAlign: 'center', 
+                    <h3 style={{
+                      fontSize: '18px',
+                      color: '#1C1C1C',
+                      textAlign: 'center',
                       lineHeight: '1.4',
                       fontWeight: '500',
                       padding: '0 10px'
                     }}>
-                      <EditableText sectionId="services" fieldPath={`services.${index % services.length}.title`} tag="span">
+                      <EditableText sectionId="services" fieldPath={`services.${index % rawServices.length}.title`} tag="span">
                         {service.title}
                       </EditableText>
                     </h3>
-                  </div>
+                  </a>
                 </SwiperSlide>
               ))}
             </Swiper>

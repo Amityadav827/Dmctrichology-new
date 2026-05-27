@@ -330,9 +330,19 @@ function Pages() {
     }
   };
 
+  // System slugs — these are managed by dedicated CMS editors (Homepage, About, Contact, etc.)
+  // and should NOT show in the Custom Pages list to avoid confusion
+  const SYSTEM_SLUGS = [
+    "home", "header", "footer", "service", "details",
+    "contact-us", "blog", "about-us", "press-media",
+    "virtual-tour", "influencers", "science-at-dmc",
+    "science-at-dmc-trichology",
+  ];
+
   // Table filtering and pagination
   const filteredItems = useMemo(() => {
     return items.filter(item => {
+      if (SYSTEM_SLUGS.includes(item.slug)) return false;
       const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesStatus = statusFilter === "All" || item.status === statusFilter;
       return matchesSearch && matchesStatus;
@@ -394,13 +404,6 @@ function Pages() {
             </h2>
           </div>
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-            <button 
-              type="button" 
-              onClick={() => window.open(`/cms/visual-builder/${formData.slug === 'home' ? 'home' : formData.slug}`, '_blank')} 
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-all text-sm shadow-md"
-            >
-              <Eye size={16} /> Edit With Visual Builder
-            </button>
             <button type="button" onClick={() => setShowPreviewModal(true)} className="btn-secondary">
               <Eye size={15} /> Preview
             </button>
@@ -490,9 +493,14 @@ function Pages() {
 
             {/* Content */}
             <div className="card-glass" style={{ padding: "1.5rem" }}>
-              <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 600, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "0.75rem" }}>
-                Page Content <span style={{ color: "#EF4444" }}>*</span>
-              </label>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+                <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 600, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  Page Content <span style={{ color: "#EF4444" }}>*</span>
+                </label>
+                <span style={{ fontSize: "0.7rem", color: "#10B981", fontWeight: 600, background: "#D1FAE5", padding: "0.15rem 0.5rem", borderRadius: "999px" }}>
+                  ✓ Edit here — type directly
+                </span>
+              </div>
               <div style={{ background: "#FFFFFF", borderRadius: "10px", overflow: "hidden", border: "1px solid #E2E8F0" }}>
                 <ReactQuill theme="snow" modules={modules} value={formData.content} onChange={(val) => handleQuillChange('content', val)} style={{ minHeight: "400px" }} />
               </div>
@@ -520,6 +528,21 @@ function Pages() {
                 Last saved: {editingId ? "Just now" : "Not saved yet"}
               </div>
             </div>
+
+            {/* Visual Builder */}
+            {editingId && formData.slug && (
+              <div className="card-glass" style={{ padding: "1.25rem" }}>
+                <h3 style={{ fontSize: "0.8rem", fontWeight: 700, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 0.75rem 0" }}>Advanced</h3>
+                <button
+                  type="button"
+                  onClick={() => window.open(`/cms/visual-builder/${formData.slug}`, '_blank')}
+                  style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", padding: "0.6rem 1rem", borderRadius: "8px", background: "#F5F3FF", border: "1px solid #DDD6FE", color: "#6D28D9", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer" }}
+                >
+                  <Eye size={14} /> Open Visual Builder
+                </button>
+                <p style={{ fontSize: "0.7rem", color: "#94A3B8", marginTop: "0.5rem", textAlign: "center" }}>Add component sections (Hero, Cards etc.)</p>
+              </div>
+            )}
 
             {/* SEO Settings */}
             <div className="card-glass" style={{ padding: "1.25rem" }}>
@@ -554,11 +577,17 @@ function Pages() {
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {/* Page header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#0F172A", margin: 0 }}>Pages</h2>
+        <div>
+          <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "#0F172A", margin: 0 }}>Custom Pages</h2>
+          <p style={{ fontSize: "0.85rem", color: "#64748B", margin: "0.25rem 0 0 0" }}>
+            Simple text-only pages like Privacy Policy, Terms, Disclaimer etc.
+          </p>
+        </div>
         <button onClick={handleAddNew} className="btn-primary">
           <Plus size={18} /> Create New Page
         </button>
       </div>
+
 
       {/* Filters + Table card */}
       <div className="card" style={{ padding: "1.25rem" }}>

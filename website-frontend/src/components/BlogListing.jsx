@@ -4,7 +4,7 @@ import Link from 'next/link';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import { useBuilder } from '../context/BuilderContext';
-import { Search, Calendar, User } from 'lucide-react';
+import { Search, User } from 'lucide-react';
 import { formatDate } from '../utils/dateFormatter';
 import { fetchBlogCategories } from '../services/api';
 
@@ -144,32 +144,33 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             <div className="blog-grid">
               {filteredBlogs.length > 0 ? (
                 filteredBlogs.map((blog, idx) => (
-                  <div key={idx} className={`blog-card ${idx === 0 ? 'active-card' : ''}`}>
+                  <div key={idx} className="blog-card">
+                    {/* Image with date pill overlay — same as homepage */}
                     <div className="blog-card-image">
                       <Link href={`/blog/${blog.slug}`}>
                         <img src={blog.blogImage || 'https://via.placeholder.com/600x400'} alt={blog.title} />
                       </Link>
-                    </div>
-                    <div className="blog-card-info">
-                      <div className="blog-card-meta">
-                        <div className="meta-item">
-                          <Calendar size={14} />
-                          <span>{formatDate(blog.blogDate || blog.date)}</span>
-                        </div>
-                        <div className="meta-item">
-                          <User size={14} />
-                          <span>{blog.author}</span>
-                        </div>
+                      <div className="blog-card-date-pill">
+                        {formatDate(blog.blogDate || blog.date)}
                       </div>
-                      <h3 className="blog-card-title">
-                        <Link href={`/blog/${blog.slug}`} className="blog-title-link">
-                          {blog.title}
-                        </Link>
-                      </h3>
-                      <Link href={`/blog/${blog.slug}`} className="explore-link">
-                        Explore More
-                      </Link>
                     </div>
+                    {/* Author row — blue circle icon + name */}
+                    <div className="blog-card-author-row">
+                      <div className="blog-card-author-icon">
+                        <User size={14} />
+                      </div>
+                      <span className="blog-card-author-name">{blog.author}</span>
+                    </div>
+                    {/* Title */}
+                    <h3 className="blog-card-title">
+                      <Link href={`/blog/${blog.slug}`} className="blog-title-link">
+                        {blog.title}
+                      </Link>
+                    </h3>
+                    {/* Explore link */}
+                    <Link href={`/blog/${blog.slug}`} className="explore-link">
+                      Explore More
+                    </Link>
                   </div>
                 ))
               ) : (
@@ -307,75 +308,118 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             gap: 30px;
           }
 
-          /* Blog Card */
+          /* ── Blog Card — matches homepage .home-blog-card exactly ── */
           .blog-card {
-            background: #F4F5FB;
+            background: #E8EAF6;
             border-radius: 40px;
-            padding: 30px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: background 0.3s ease;
+            cursor: pointer;
           }
-          .blog-card.active-card {
-            background: #2D4A8A;
-            color: #ffffff;
+          /* Hover: card turns solid blue — exactly like homepage */
+          .blog-card:hover {
+            background: #3B5998;
           }
+
+          /* Image wrapper */
           .blog-card-image {
             width: 100%;
             height: 280px;
             border-radius: 30px;
             overflow: hidden;
             margin-bottom: 25px;
+            position: relative;
           }
           .blog-card-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
           }
-          .blog-card-info {
-            text-align: center;
-          }
-          .blog-card-meta {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
+
+          /* Date pill — overlaid top-left on image */
+          .blog-card-date-pill {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #3B5998;
+            color: #ffffff;
+            padding: 6px 20px;
+            border-radius: 30px;
             font-size: 13px;
-            margin-bottom: 20px;
-            opacity: 0.8;
+            font-family: 'Marcellus', serif;
+            transition: background 0.3s ease, color 0.3s ease;
           }
-          .meta-item {
+          /* Hover: pill inverts to white */
+          .blog-card:hover .blog-card-date-pill {
+            background: #ffffff;
+            color: #000000;
+          }
+
+          /* Author row */
+          .blog-card-author-row {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
+            margin-bottom: 15px;
           }
+          .blog-card-author-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3B5998;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #ffffff;
+            transition: background 0.3s ease, color 0.3s ease;
+          }
+          /* Hover: author icon inverts */
+          .blog-card:hover .blog-card-author-icon {
+            background: #ffffff;
+            color: #3B5998;
+          }
+          .blog-card-author-name {
+            font-size: 16px;
+            color: #000000;
+            font-family: 'Marcellus', serif;
+            transition: color 0.3s ease;
+          }
+
+          /* Blog title */
           .blog-card-title {
             font-family: 'Marcellus', serif;
             font-size: 22px;
             line-height: 1.4;
             margin-bottom: 20px;
             font-weight: 400;
+            flex-grow: 1;
+            color: #000000;
           }
-          .explore-link {
-            font-size: 14px;
-            color: inherit;
-            font-weight: 600;
-            text-decoration: underline !important;
-            display: inline-block;
-            padding-bottom: 2px;
-            transition: all 0.3s ease;
+
+          /* Hover: all text turns white */
+          .blog-card:hover .blog-card-author-name,
+          .blog-card:hover .blog-card-title,
+          .blog-card:hover .blog-title-link,
+          .blog-card:hover .explore-link {
+            color: #ffffff;
           }
-          .explore-link:hover {
-            opacity: 0.8;
-            text-decoration: none !important;
-          }
+
           .blog-title-link {
             color: inherit;
             text-decoration: none !important;
-            transition: opacity 0.3s ease;
           }
-          .blog-title-link:hover {
-            opacity: 0.8;
-            text-decoration: none !important;
+          .explore-link {
+            font-size: 14px;
+            color: #000000;
+            font-weight: 600;
+            font-family: 'Marcellus', serif;
+            text-decoration: underline !important;
+            display: inline-block;
+            transition: color 0.3s ease;
           }
 
           /* Sidebar */
@@ -385,7 +429,7 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
           .sidebar-inner {
             position: sticky;
             top: 100px;
-            background: #2D4A8A;
+            background: #3B5998;
             border-radius: 40px;
             padding: 40px 30px;
             color: #ffffff;

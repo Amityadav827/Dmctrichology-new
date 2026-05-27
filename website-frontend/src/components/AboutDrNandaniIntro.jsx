@@ -40,8 +40,8 @@ export default function AboutDrNandaniIntro({ data = {} }) {
       <style dangerouslySetInnerHTML={{ __html: `
         .luxury-intro-container {
           background-color: #ffffff;
-          color: #0D0D1A;
-          font-family: 'Epilogue', sans-serif;
+          color: #333333;
+          font-family: 'Marcellus', serif;
           position: relative;
           overflow: hidden;
           padding: 100px 24px;
@@ -51,10 +51,10 @@ export default function AboutDrNandaniIntro({ data = {} }) {
           max-width: 1200px;
           margin: 0 auto;
           background: #ffffff;
-          border: 1px solid rgba(139,92,246,0.12);
+          border: 1px solid rgba(59,89,152,0.12);
           border-radius: 36px;
           padding: 64px;
-          box-shadow: 0 20px 40px rgba(13,13,26,0.03), 0 1px 3px rgba(13,13,26,0.02);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02);
           position: relative;
           transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -82,16 +82,14 @@ export default function AboutDrNandaniIntro({ data = {} }) {
         }
 
         .luxury-intro-heading {
-          font-family: 'Syne', sans-serif;
-          font-size: 2.8rem;
-          font-weight: 800;
+          font-family: 'Marcellus', serif;
+          font-size: 2.6rem;
+          font-weight: 400;
           line-height: 1.2;
-          letter-spacing: -0.01em;
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
           margin-bottom: 32px;
-          color: #0D0D1A;
-          background: linear-gradient(135deg, #0D0D1A 30%, #5B21B6 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+          color: #333333;
         }
 
         @media (max-width: 640px) {
@@ -135,8 +133,8 @@ export default function AboutDrNandaniIntro({ data = {} }) {
         }
 
         .intro-bullet-item {
-          background: #fafafc;
-          border: 1px solid rgba(13,13,26,0.03);
+          background: #f7f9fd;
+          border: 1px solid rgba(59,89,152,0.08);
           border-radius: 18px;
           padding: 20px 24px;
           display: flex;
@@ -146,21 +144,21 @@ export default function AboutDrNandaniIntro({ data = {} }) {
         }
 
         .intro-bullet-item:hover {
-          background: #ffffff;
-          border-color: rgba(0,229,255,0.4);
+          background: #E8EAF6;
+          border-color: rgba(59,89,152,0.2);
           transform: translateX(4px);
-          box-shadow: 0 10px 20px rgba(0,229,255,0.04);
+          box-shadow: 0 10px 20px rgba(59,89,152,0.06);
         }
 
         .intro-bullet-icon {
-          color: #8B5CF6;
+          color: #3B5998;
           margin-top: 2px;
           transition: color 0.3s;
           flex-shrink: 0;
         }
 
         .intro-bullet-item:hover .intro-bullet-icon {
-          color: #00E5FF;
+          color: #E4B753;
         }
 
         .intro-bullet-text {
@@ -174,9 +172,9 @@ export default function AboutDrNandaniIntro({ data = {} }) {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background-color: #0D0D1A;
+          background-color: #3B5998;
           color: #ffffff;
-          font-family: 'Syne', sans-serif;
+          font-family: 'Lato', sans-serif;
           font-weight: 700;
           font-size: 13px;
           text-transform: uppercase;
@@ -187,12 +185,12 @@ export default function AboutDrNandaniIntro({ data = {} }) {
           margin-top: 12px;
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-          box-shadow: 0 10px 20px rgba(13,13,26,0.12);
+          box-shadow: 0 10px 20px rgba(59,89,152,0.2);
         }
 
         .intro-cta-button:hover {
-          background: linear-gradient(135deg, #8B5CF6 0%, #00E5FF 100%);
-          color: #0D0D1A;
+          background: #2a4280;
+          color: #ffffff;
           transform: translateY(-2px);
           box-shadow: 0 15px 30px rgba(139,92,246,0.2);
         }

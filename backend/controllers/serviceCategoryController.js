@@ -1,60 +1,72 @@
-const ServiceCategory = require("../models/ServiceCategory");
+const supabase = require('../config/supabase');
 
 exports.getCategories = async (req, res) => {
   try {
-    const categories = await ServiceCategory.find().sort({ sortOrder: 1 });
-    res.status(200).json({ success: true, data: categories });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
+    const { data, error } = await supabase
+      .from('service_categories').select('*').order('order', { ascending: true });
+    if (error) throw error;
+    // Normalize: expose categoryName so both old and new consumers work
+    const normalized = (data || []).map(c => ({
+      ...c,
+      categoryName: c.categoryName || c.name,
+    }));
+    res.status(200).json({ success: true, data: normalized });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 };
 
 exports.createCategory = async (req, res) => {
   try {
-    const category = await ServiceCategory.create(req.body);
-    res.status(201).json({ success: true, data: category });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
+    // Accept either `name` or `categoryName` from the request body
+    const name = req.body.name || req.body.categoryName;
+    const { slug, status, order, sortOrder } = req.body;
+    const { data, error } = await supabase
+      .from('service_categories').insert({ name, slug, status: status || 'active', order: order || sortOrder || 0 }).select().single();
+    if (error) throw error;
+    res.status(201).json({ success: true, data: { ...data, categoryName: data.name } });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 };
 
 exports.updateCategory = async (req, res) => {
   try {
-    const category = await ServiceCategory.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.status(200).json({ success: true, data: category });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
+    // Accept either `name` or `categoryName` from the request body
+    const name = req.body.name || req.body.categoryName;
+    const updates = { ...req.body, updated_at: new Date() };
+    if (name) updates.name = name;
+    delete updates.categoryName; // remove frontend-only alias
+    const { data, error } = await supabase
+      .from('service_categories').update(updates).eq('id', req.params.id).select().single();
+    if (error) throw error;
+    res.status(200).json({ success: true, data: { ...data, categoryName: data.name } });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 };
 
 exports.deleteCategory = async (req, res) => {
   try {
-    await ServiceCategory.findByIdAndDelete(req.params.id);
-    res.status(200).json({ success: true, message: "Category deleted" });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
+    const { error } = await supabase.from('service_categories').delete().eq('id', req.params.id);
+    if (error) throw error;
+    res.status(200).json({ success: true, message: 'Category deleted' });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 };
 
 exports.toggleCategoryStatus = async (req, res) => {
   try {
-    const category = await ServiceCategory.findById(req.params.id);
-    category.isActive = !category.isActive;
-    await category.save();
-    res.status(200).json({ success: true, data: category });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
+    const { data: existing, error: fetchErr } = await supabase
+      .from('service_categories').select('status').eq('id', req.params.id).single();
+    if (fetchErr) throw fetchErr;
+    const newStatus = existing.status === 'active' ? 'inactive' : 'active';
+    const { data, error } = await supabase
+      .from('service_categories').update({ status: newStatus, updated_at: new Date() }).eq('id', req.params.id).select().single();
+    if (error) throw error;
+    res.status(200).json({ success: true, data });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 };
 
 exports.updateCategoryOrder = async (req, res) => {
   try {
     const { order } = req.body;
-    await Promise.all(order.map((id, index) => 
-      ServiceCategory.findByIdAndUpdate(id, { sortOrder: index })
+    await Promise.all(order.map((id, index) =>
+      supabase.from('service_categories').update({ order: index, updated_at: new Date() }).eq('id', id)
     ));
     res.status(200).json({ success: true });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 };

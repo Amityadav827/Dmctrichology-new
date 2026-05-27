@@ -1,30 +1,13 @@
-const Influencer = require('../models/Influencer');
+const supabase = require('../config/supabase');
 
-const defaultInfluencerCards = [
-  {
-    id: '1',
-    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    autoplay: false,
-    muted: true,
-    loop: true,
-    isVisible: true,
-    order: 0
-  }
-];
+const CMS_KEY = 'influencers';
 
 exports.getInfluencers = async (req, res) => {
   try {
-    let data = await Influencer.findOne();
-    if (!data) {
-      data = await Influencer.create({
-        influencerCards: defaultInfluencerCards
-      });
-    }
-    if (!data.influencerCards || data.influencerCards.length === 0) {
-        data.influencerCards = defaultInfluencerCards;
-        await data.save();
-    }
-    res.json({ success: true, data });
+    const { data: row, error } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    res.json({ success: true, data: row?.data || {} });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -32,16 +15,21 @@ exports.getInfluencers = async (req, res) => {
 
 exports.updateInfluencers = async (req, res) => {
   try {
-    let data = await Influencer.findOne();
-    if (!data) data = new Influencer();
+    const { data: existing } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    const current = existing?.data || {};
 
     const u = req.body;
+    const merged = { ...current };
 
-    if (u.hero !== undefined) data.hero = { ...data.hero.toObject?.() ?? data.hero, ...u.hero };
-    if (u.influencerCards !== undefined) data.influencerCards = u.influencerCards;
+    if (u.hero !== undefined) merged.hero = { ...(current.hero || {}), ...u.hero };
+    if (u.influencerCards !== undefined) merged.influencerCards = u.influencerCards;
 
-    await data.save();
-    res.json({ success: true, data });
+    const { error } = await supabase.from('cms_sections')
+      .upsert({ key: CMS_KEY, data: merged, updated_at: new Date() }, { onConflict: 'key' });
+    if (error) throw error;
+
+    res.json({ success: true, data: merged });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

@@ -99,19 +99,20 @@ export default function AboutDrNiveditaFeaturedIn({ data = {} }) {
         }
         .dr-nivedita-featured-heading {
           font-family: 'Marcellus', serif !important;
-          font-size: 38px;
+          font-size: 44px;
           font-weight: 400;
-          color: #1a1a2e;
+          color: #333333;
+          text-transform: uppercase;
           text-align: center;
           margin: 0 0 16px 0;
-          letter-spacing: 0.01em;
-          line-height: 1.25;
+          letter-spacing: 0.03em;
+          line-height: 1.2;
         }
         .dr-nivedita-featured-desc {
           font-family: 'Marcellus', serif !important;
           font-size: 14.5px;
           line-height: 1.75;
-          color: #000000;
+          color: #333333;
           text-align: center;
           max-width: 700px;
           margin: 0 auto 48px auto;
@@ -120,7 +121,7 @@ export default function AboutDrNiveditaFeaturedIn({ data = {} }) {
         .dr-nivedita-featured-divider {
           width: 60px;
           height: 2px;
-          background: #D4AF37;
+          background: #E4B753;
           margin: 0 auto 36px auto;
         }
         .dr-nivedita-pub-logo-grid {

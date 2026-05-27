@@ -16,9 +16,10 @@ export const fetchServicePageSettings = async () => {
   }
 };
 
-export const fetchServiceListingCards = async () => {
+export const fetchServiceListingCards = async ({ featured = false } = {}) => {
   try {
-    const res = await api.get(`/service-listing-cards?t=${Date.now()}`);
+    const params = `t=${Date.now()}${featured ? '&featured=true' : ''}`;
+    const res = await api.get(`/service-listing-cards?${params}`);
     return res.data;
   } catch (error) {
     console.error('Error fetching service cards', error);

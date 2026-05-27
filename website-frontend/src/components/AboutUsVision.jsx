@@ -60,13 +60,13 @@ const AboutUsVision = ({ data = {} }) => {
 
           {/* ── Editorial Header ─────────────────────────────── */}
           <div className="about-vision-header">
-            <motion.span {...fadeUp(0)} className="about-vision-tag">
+            <motion.span {...fadeUp(0)} className="dmc-kicker">
               <EditableText sectionId="about-vision" fieldPath="vision.sectionTitle" tag="span">
                 {sectionTitle}
               </EditableText>
             </motion.span>
 
-            <motion.h2 {...fadeUp(0.15)} className="about-vision-main-title">
+            <motion.h2 {...fadeUp(0.15)} className="dmc-heading">
               <EditableText sectionId="about-vision" fieldPath="vision.heading" tag="span">
                 {heading}
               </EditableText>

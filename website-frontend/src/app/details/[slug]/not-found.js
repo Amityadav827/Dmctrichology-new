@@ -8,7 +8,7 @@ export default function NotFound() {
           className="text-[120px] font-bold leading-none mb-4"
           style={{ 
             fontFamily: "'Marcellus', serif",
-            background: 'linear-gradient(135deg, #D4AF37 0%, #1a3266 100%)',
+            background: 'linear-gradient(135deg, #E4B753 0%, #3B5998 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
           }}
@@ -27,7 +27,7 @@ export default function NotFound() {
         </p>
         <Link 
           href="/service"
-          className="inline-flex items-center justify-center px-10 py-4 bg-[#1a3266] text-white rounded-full font-semibold transition-all hover:bg-[#D4AF37] hover:scale-105"
+          className="inline-flex items-center justify-center px-10 py-4 bg-[#3B5998] text-white rounded-full font-semibold transition-all hover:bg-[#E4B753] hover:scale-105"
           style={{ fontFamily: "'Marcellus', serif" }}
         >
           Back to All Services

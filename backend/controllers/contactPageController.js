@@ -1,42 +1,53 @@
-const ContactPage = require("../models/ContactPage");
+const supabase = require('../config/supabase');
 
-// GET — return entire contact page data
+const CMS_KEY = 'contact_page';
+
 exports.getContactPage = async (req, res) => {
   try {
-    let data = await ContactPage.findOne();
-    if (!data) {
-      data = await ContactPage.create({});
-    }
-    res.status(200).json({ success: true, data });
+    const { data: row, error } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    res.status(200).json({ success: true, data: row?.data || {} });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// PUT — update contact page data
 exports.updateContactPage = async (req, res) => {
   try {
-    let data = await ContactPage.findOne();
-    if (!data) {
-      data = await ContactPage.create(req.body);
-    } else {
-      // Update nested sections if they exist in request body
-      if (req.body.hero) Object.assign(data.hero, req.body.hero);
-      
-      if (req.body.consultation) {
-        const { serviceOptions, ...otherCons } = req.body.consultation;
-        Object.assign(data.consultation, otherCons);
-        if (serviceOptions) {
-          data.consultation.serviceOptions = serviceOptions;
-          data.markModified("consultation.serviceOptions");
-        }
-      }
+    const { data: existing } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    const current = existing?.data || {};
 
-      if (req.body.map) Object.assign(data.map, req.body.map);
+    // Deep merge matching original update logic
+    const merged = { ...current };
 
-      await data.save();
+    if (req.body.hero) {
+      merged.hero = { ...(current.hero || {}), ...req.body.hero };
     }
-    res.status(200).json({ success: true, data });
+
+    if (req.body.consultation) {
+      const { serviceOptions, ...otherCons } = req.body.consultation;
+      merged.consultation = { ...(current.consultation || {}), ...otherCons };
+      if (serviceOptions) {
+        merged.consultation.serviceOptions = serviceOptions;
+      }
+    }
+
+    if (req.body.map) {
+      merged.map = { ...(current.map || {}), ...req.body.map };
+    }
+
+    // If no specific sub-keys, merge entire body
+    if (!req.body.hero && !req.body.consultation && !req.body.map) {
+      Object.assign(merged, req.body);
+    }
+
+    const { error } = await supabase.from('cms_sections')
+      .upsert({ key: CMS_KEY, data: merged, updated_at: new Date() }, { onConflict: 'key' });
+    if (error) throw error;
+
+    res.status(200).json({ success: true, data: merged });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

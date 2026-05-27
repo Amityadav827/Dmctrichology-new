@@ -234,7 +234,7 @@ const ServiceListing = ({ services: initialServices = [], categories: initialCat
                   fontWeight: 700,
                   letterSpacing: '1.5px',
                   textTransform: 'uppercase',
-                  color: '#111111',
+                  color: '#333333',
                   background: 'none',
                   border: '1.5px solid #cccccc',
                   borderRadius: '6px',

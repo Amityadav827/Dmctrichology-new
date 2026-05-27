@@ -1,5 +1,13 @@
 const supabase = require("../config/supabase");
 
+const formatRedirect = (item) => ({
+  ...item,
+  _id: item.id,
+  sourceUrl: item.source_url,
+  destinationUrl: item.destination_url,
+  type: String(item.type),
+});
+
 const createRedirect = async (req, res, next) => {
   try {
     const { sourceUrl, destinationUrl, type, status } = req.body;
@@ -10,14 +18,14 @@ const createRedirect = async (req, res, next) => {
       .insert([{
         source_url: sourceUrl,
         destination_url: destinationUrl,
-        type: type || 301,
+        type: String(type || '301'),
         status: status || 'active'
       }])
       .select()
       .single();
 
     if (error) return res.status(500).json({ success: false, message: error.message });
-    return res.status(201).json({ success: true, data: { ...data, _id: data.id } });
+    return res.status(201).json({ success: true, data: formatRedirect(data) });
   } catch (error) {
     next(error);
   }
@@ -27,7 +35,7 @@ const getRedirects = async (req, res, next) => {
   try {
     const { data, error } = await supabase.from('redirects').select('*').order('created_at', { ascending: false });
     if (error) return res.status(500).json({ success: false, message: error.message });
-    const formattedData = data.map(item => ({ ...item, _id: item.id }));
+    const formattedData = data.map(formatRedirect);
     return res.status(200).json({ success: true, count: formattedData.length, data: formattedData });
   } catch (error) {
     next(error);
@@ -46,7 +54,7 @@ const updateRedirect = async (req, res, next) => {
 
     const { data, error } = await supabase.from('redirects').update(updates).eq('id', req.params.id).select().single();
     if (error || !data) return res.status(404).json({ success: false, message: "Redirect not found" });
-    return res.status(200).json({ success: true, data: { ...data, _id: data.id } });
+    return res.status(200).json({ success: true, data: formatRedirect(data) });
   } catch (error) {
     next(error);
   }
@@ -69,9 +77,9 @@ const toggleRedirectStatus = async (req, res, next) => {
 
     const newStatus = current.status === "active" ? "inactive" : "active";
     const { data, error } = await supabase.from('redirects').update({ status: newStatus }).eq('id', req.params.id).select().single();
-    
+
     if (error) return res.status(500).json({ success: false, message: error.message });
-    return res.status(200).json({ success: true, data: { ...data, _id: data.id } });
+    return res.status(200).json({ success: true, data: formatRedirect(data) });
   } catch (error) {
     next(error);
   }

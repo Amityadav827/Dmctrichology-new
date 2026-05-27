@@ -70,7 +70,7 @@ export default function VisualLiveBuilder() {
     if (currentSlug === 'service') {
       return [
         { id: 'service-hero', label: 'Service Banner' },
-        { id: 'service-listing', label: 'Services Grid' }
+        { id: 'service-listing', label: 'Services List' }
       ];
     }
     if (currentSlug === 'details') {
@@ -505,7 +505,7 @@ export default function VisualLiveBuilder() {
                             'Press & Media Section': '/cms/press-media',
                             'Footer Section': '/cms/footer',
                             'Service Banner': '/cms/service-hero',
-                            'Services Grid': '/cms/service-listing',
+                            'Services List': '/cms/service-listing',
                             'Service Categories': '/cms/service-categories',
                             'Details Banner': '/cms/details-banner',
                             'Service Intro': '/cms/service-intro',
@@ -554,11 +554,11 @@ export default function VisualLiveBuilder() {
                         }}
                         className="w-full py-3 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-200"
                       >
-                        <Plus size={14} /> {activeSection.label === 'Services Grid' ? 'Add / Manage Services' : 'Open Full Form Editor'}
+                        <Plus size={14} /> {activeSection.label === 'Services List' ? 'Add / Manage Services' : 'Open Full Form Editor'}
                       </button>
                     </div>
 
-                    {activeSection.label === 'Services Grid' && (
+                    {activeSection.label === 'Services List' && (
                         <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
                              <h5 className="text-[10px] font-black text-slate-400 uppercase mb-3">Quick Actions</h5>
                              <div className="space-y-2">

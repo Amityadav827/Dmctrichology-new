@@ -9,7 +9,6 @@ const BeforeAfterTreatment = ({ data = {} }) => {
   const [sectionData, setSectionData] = useState(data);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (data) setSectionData(data);
   }, [data]);
 
@@ -25,7 +24,6 @@ const BeforeAfterTreatment = ({ data = {} }) => {
         }
       });
       if (hasUpdates) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSectionData(nextData);
       }
     }
@@ -34,16 +32,21 @@ const BeforeAfterTreatment = ({ data = {} }) => {
   const beforePoints = sectionData.beforePoints || [];
   const afterPoints = sectionData.afterPoints || [];
   const bgColor = sectionData.sectionBackground || '#EAEAF2';
+  const beforeImage = sectionData.beforeImage || '';
+  const afterImage = sectionData.afterImage || '';
+  const patientName = sectionData.patientName || '';
+  const monthsAfter = sectionData.monthsAfter || '';
+  const hasImages = beforeImage || afterImage;
 
   return (
     <EditableSection sectionId="before-after-section" label="Before / After Treatment">
-      <section 
-        className="details-before-after-section" 
+      <section
+        className={`details-before-after-section ${hasImages ? 'has-images' : ''}`}
         data-section-id="before-after-section"
         style={{ backgroundColor: bgColor }}
       >
         <div className="details-ba-container">
-          
+
           {/* Before Card */}
           <div className="details-ba-column">
             <h3 className="details-ba-title">
@@ -52,6 +55,11 @@ const BeforeAfterTreatment = ({ data = {} }) => {
               </EditableText>
             </h3>
             <div className="details-ba-card">
+              {beforeImage && (
+                <div className="details-ba-imgwrap">
+                  <img src={beforeImage} alt={`Before — ${patientName || 'patient'}`} loading="lazy" />
+                </div>
+              )}
               {beforePoints.length > 0 ? (
                 <ul className="details-ba-list">
                   {beforePoints.map((point, i) => (
@@ -59,7 +67,7 @@ const BeforeAfterTreatment = ({ data = {} }) => {
                   ))}
                 </ul>
               ) : (
-                <p className="details-ba-empty">No points added yet.</p>
+                !beforeImage && <p className="details-ba-empty">No points added yet.</p>
               )}
             </div>
           </div>
@@ -72,6 +80,17 @@ const BeforeAfterTreatment = ({ data = {} }) => {
               </EditableText>
             </h3>
             <div className="details-ba-card">
+              {afterImage && (
+                <div className="details-ba-imgwrap">
+                  <img src={afterImage} alt={`After — ${patientName || 'patient'}`} loading="lazy" />
+                  {(patientName || monthsAfter) && (
+                    <div className="details-ba-caption">
+                      {patientName && <span className="details-ba-patient">{patientName}</span>}
+                      {monthsAfter && <span className="details-ba-months">{monthsAfter}</span>}
+                    </div>
+                  )}
+                </div>
+              )}
               {afterPoints.length > 0 ? (
                 <ul className="details-ba-list">
                   {afterPoints.map((point, i) => (
@@ -79,7 +98,7 @@ const BeforeAfterTreatment = ({ data = {} }) => {
                   ))}
                 </ul>
               ) : (
-                <p className="details-ba-empty">No points added yet.</p>
+                !afterImage && <p className="details-ba-empty">No points added yet.</p>
               )}
             </div>
           </div>

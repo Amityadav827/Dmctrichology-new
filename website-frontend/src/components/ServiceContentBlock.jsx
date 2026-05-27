@@ -174,7 +174,6 @@ export default function ServiceContentBlock({ data, pageSlug = '' }) {
     return null;
   }
 
-  // Filter visible blocks and sort them by sortOrder ascending
   const activeBlocks = data
     .filter(block => block.isVisible !== false)
     .sort((a, b) => {
@@ -201,16 +200,16 @@ export default function ServiceContentBlock({ data, pageSlug = '' }) {
           }
 
           return (
-          <div key={block._id || idx} className="service-content-block-item">
-            {block.heading && (
-              <h2 className="service-content-block-heading">
-                {block.heading}
-              </h2>
-            )}
-            {block.description && (
-              <ContentDescription description={block.description} />
-            )}
-          </div>
+            <div key={block._id || idx} className="service-content-block-item">
+              {block.heading && (
+                <h2 className="service-content-block-heading">
+                  {block.heading}
+                </h2>
+              )}
+              {block.description && (
+                <ContentDescription description={block.description} />
+              )}
+            </div>
           );
         })}
       </div>

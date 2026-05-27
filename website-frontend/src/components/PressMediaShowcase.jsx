@@ -186,7 +186,7 @@ const ShowcaseStyles = () => (
       font-family: 'Marcellus', serif !important;
       font-size: 48px !important;
       font-weight: 400 !important;
-      color: #111111 !important;
+      color: #333333 !important;
       margin: 0 !important;
       line-height: 1.2 !important;
       letter-spacing: 1px !important;

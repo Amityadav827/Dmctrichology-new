@@ -1,6 +1,7 @@
-const AboutDrNivedita = require('../models/AboutDrNivedita');
-const AboutDrNiveditaLead = require('../models/AboutDrNiveditaLead');
+const supabase = require('../config/supabase');
 const uploadToSupabase = require('../utils/uploadToSupabase');
+
+const CMS_KEY = 'about_dr_nivedita';
 
 // Standard fallback data for absolute SSR safety
 const fallbackData = {
@@ -20,144 +21,6 @@ const fallbackData = {
     submitButtonText: 'Schedule Your Visit',
     backgroundColor: '#3b5998',
     overlayOpacity: 0.45
-  },
-  breadcrumb: {
-    parentLabel: 'Home',
-    parentUrl: '/',
-    currentPageText: 'About Dr Nivedita Dadu',
-    backgroundColor: '#f8f9fa'
-  },
-  specialist: {
-    heading: 'Best Dermatologist & Hair Specialist in Delhi',
-    description1: 'Dr. Nivedita Dadu is a distinguished dermatologist and trichologist recognized for her exceptional patient outcomes and research contributions. A fellow of prestigious dermatological societies, she brings unparalleled clinical depth to every patient interaction at DMC Trichology.',
-    description2: 'Combining her mastery in dermatology with advanced trichological sciences, Dr. Nivedita delivers comprehensive scalp health solutions — from non-surgical hair restoration therapies to advanced diagnostic protocols — ensuring each patient receives the most effective, evidence-based care.',
-    highlightedText: 'She specializes in cutting-edge treatments including:',
-    bullets: [
-      'Advanced PRP & GFC Therapy',
-      'FUE Hair Transplant Surgery',
-      'Scalp Micropigmentation',
-      'LLLT (Laser Hair Therapy)',
-      'Custom Trichological Protocols'
-    ],
-    sectionBgColor: '#ffffff',
-    cardBgColor: '#3b5998'
-  },
-  membership: {
-    sectionHeading: 'MEMBERSHIP',
-    sectionBgColor: '#ffffff',
-    paddingTop: '60px',
-    paddingBottom: '60px',
-    logos: [
-      { id: 1, title: 'EADV', imageUrl: '', link: '', enabled: true },
-      { id: 2, title: 'IAM', imageUrl: '', link: '', enabled: true },
-      { id: 3, title: 'IADVL', imageUrl: '', link: '', enabled: true },
-      { id: 4, title: 'Trichology Society', imageUrl: '', link: '', enabled: true },
-      { id: 5, title: 'ISOINEL', imageUrl: '', link: '', enabled: true }
-    ]
-  },
-  educationExperience: {
-    sectionBgColor: '#FFFFFF',
-    educationTitle: 'EDUCATION',
-    experienceTitle: 'EXPERIENCE',
-    educationItems: [
-      { degree: 'MBBS', institution: 'Himalayan Institute of Medical Sciences (HIMS), Dehradun', year: '2000' },
-      { degree: 'MD (Dermatology)', institution: 'Himalayan Institute of Medical Sciences (HIMS), Dehradun', year: '2004' }
-    ],
-    experienceItems: [
-      { role: 'Senior Dermatologist', hospital: 'Dr. Ram Manohar Lohia Hospital, New Delhi', duration: '2004 - 2008' },
-      { role: 'Fellowship In Hair Science & Trichology', hospital: 'King Edward Memorial Hospital, Mumbai', duration: '2008 - 2010' },
-      { role: 'Consultant Dermatologist', hospital: 'Primus Hospital, New Delhi', duration: '2010 - 2012' },
-      { role: 'Co-Founder & Senior Dermatologist', hospital: 'DMC Trichology, New Delhi', duration: '2012 - Present' }
-    ]
-  },
-  credentialsSection: {
-    bannerImage: '',
-    overlayOpacity: 0.35,
-    heading: 'Credentials',
-    credentialsList: [
-      { text: 'Fellowship In Aesthetic Dermatology' },
-      { text: 'Fellowship In Hair Science' },
-      { text: 'Member — IADVL (Indian Association of Dermatologists)' }
-    ],
-    leftHeading: 'EXPERTISE IN DERMATOLOGY & HAIR TREATMENT',
-    leftText: '<p>Dr. Nivedita Dadu\'s cutting-edge Hair Loss Treatment techniques have made a significant difference. She is recognized as a <strong>leading dermatologist and trichologist in Delhi</strong> available at DMC Trichology.</p>',
-    rightHeading: 'COMMITMENT TO PATIENT CARE',
-    rightText: '<p>Dr. Nivedita Dadu places a high value on the doctor-patient relationship, ensuring individualized care at every step of the treatment journey.</p>',
-    paddingBottom: '80px'
-  },
-  otherSpecialitiesSection: {
-    heading: 'Other Specialities',
-    introParagraph: 'Apart from being a leading expert in Trichological Sciences, Dr. Nivedita Dadu is also a diligent specialist in advanced dermatology, performing a number of cosmetic procedures such as:',
-    specialitiesList: [
-      { title: 'Laser Skin Resurfacing & Rejuvenation,' },
-      { title: 'Chemical Peels & Advanced Facials,' },
-      { title: 'Botox, Fillers & Anti-Ageing Treatments,' },
-      { title: 'Pigmentation & Melasma Management,' },
-      { title: 'Acne & Scar Treatment Protocols.' }
-    ],
-    conclusionParagraph: 'For more information, contact the **best dermatologist in Delhi** at DMC Trichology. We have our centres located at Vasant Vihar (South Delhi) & Rajouri Garden (West Delhi).',
-    image: '',
-    imageAlt: 'Dr. Nivedita Other Specialities',
-    backgroundColor: '#ffffff',
-    cardBackgroundColor: '#3b5998',
-    contentMaxWidth: '1200px',
-    paddingTop: '100px',
-    paddingBottom: '100px',
-    gridGap: '70px'
-  },
-  featuredInSection: {
-    sectionHeading: 'As Featured In',
-    descriptionText: 'For her strong focus on the doctor-patient relationship, Dr. Nivedita Dadu has become the most sought-after Dermatology expert and also featured in various national and regional publications including:',
-    sectionBgColor: '#ffffff',
-    paddingTop: '72px',
-    paddingBottom: '72px',
-    publications: [
-      { id: 1, title: 'Dainik Bhaskar', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Dainik_Bhaskar_logo.svg/320px-Dainik_Bhaskar_logo.svg.png', link: '', enabled: true },
-      { id: 2, title: 'NDTV', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/NDTV_logo.svg/320px-NDTV_logo.svg.png', link: '', enabled: true },
-      { id: 3, title: 'Femina', imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cb/Femina_magazine_logo.svg/320px-Femina_magazine_logo.svg.png', link: '', enabled: true },
-      { id: 4, title: 'Deccan Herald', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Deccan_Herald_logo.svg/320px-Deccan_Herald_logo.svg.png', link: '', enabled: true },
-      { id: 5, title: "Woman's Era", imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/16/Woman%27s_Era_magazine_logo.svg/320px-Woman%27s_Era_magazine_logo.svg.png', link: '', enabled: true },
-      { id: 6, title: 'Hindustan Times', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Hindustan_times_logo.svg/320px-hindustan_times_logo.svg.png', link: '', enabled: true },
-      { id: 7, title: 'Stayfit', imageUrl: '', link: '', enabled: true },
-      { id: 8, title: 'Practo', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Practo_Logo.svg/320px-Practo_Logo.svg.png', link: '', enabled: true },
-      { id: 9, title: 'Mail Today', imageUrl: '', link: '', enabled: true }
-    ]
-  },
-  patientCareSection: {
-    sectionBgColor: '#f8f9fa',
-    paddingTop: '80px',
-    paddingBottom: '80px',
-    maxWidth: '1200px',
-    cardBorderRadius: '0px',
-    cardShadowIntensity: '0 6px 32px rgba(0,0,0,0.07)',
-    gridGap: '32px',
-    leftCardTitle: 'Patient Centred Care',
-    leftCardBgColor: '#ffffff',
-    leftCardContent: '<p>Dr. Nivedita Dadu offers professional-grade, most personalised skin & hair care treatments to each individual patient. She, along with her team of dermatologists & aestheticians, has treated over 100 thousands critical cases throughout her career with optimal results. She is always available to her patients, offering compassionate care and utmost respect to ensure healthy skin & hair for all.</p><p>Dr. Nivedita takes the practice of skin & hair care seriously and will make sure you receive the care you deserve.</p>',
-    rightCardTitle: 'Professionalism',
-    rightCardBgColor: '#ffffff',
-    rightCardContent: '<p>Dr. Nivedita Dadu maintains a highly professional environment to offer quality clinical care. She is one of the most recognised and respected skin & hair specialist professionals making her the best dermatologist giving customised treatment solutions that work- not just today, but for life.</p>'
-  },
-  associationsSection: {
-    sectionHeading:  'ASSOCIATIONS',
-    sectionBgColor:  '#ffffff',
-    paddingTop:      '72px',
-    paddingBottom:   '72px',
-    logoSpacing:     '24px',
-    logoHeight:      '90px',
-    logoCardPadding: '20px 28px',
-    associations: [
-      { id: 1, title: 'IADVL',                          imageUrl: '', link: '', enabled: true },
-      { id: 2, title: 'World Trichology Society',        imageUrl: '', link: '', enabled: true },
-      { id: 3, title: 'AAM MMI',                         imageUrl: '', link: '', enabled: true },
-      { id: 4, title: 'EADV',                            imageUrl: '', link: '', enabled: true },
-      { id: 5, title: 'Association of Cutaneous Surgeons', imageUrl: '', link: '', enabled: true }
-    ]
-  },
-  seo: {
-    metaTitle: 'Dr. Nivedita Dadu | Expert Dermatologist & Trichologist in Delhi',
-    metaDescription: 'Consult Dr. Nivedita Dadu, renowned Dermatologist and Trichologist at DMC Trichology Delhi. Expert in advanced hair restoration, scalp treatments, and dermatological care.',
-    ogImage: ''
   }
 };
 
@@ -167,11 +30,13 @@ const fallbackData = {
 
 exports.getSettings = async (req, res) => {
   try {
-    const settings = await AboutDrNivedita.findOne();
-    if (!settings) {
+    const { data: row, error } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    if (!row) {
       return res.status(200).json({ success: true, data: fallbackData, isFallback: true });
     }
-    return res.status(200).json({ success: true, data: settings });
+    return res.status(200).json({ success: true, data: row.data || {} });
   } catch (error) {
     console.error('Error fetching Dr. Nivedita page settings:', error);
     return res.status(500).json({ success: false, message: 'Server error fetching settings' });
@@ -180,13 +45,10 @@ exports.getSettings = async (req, res) => {
 
 exports.updateSettings = async (req, res) => {
   try {
-    const updateData = req.body;
-    const settings = await AboutDrNivedita.findOneAndUpdate(
-      {},
-      updateData,
-      { new: true, upsert: true, setDefaultsOnInsert: true }
-    );
-    return res.status(200).json({ success: true, data: settings, message: 'Settings updated successfully' });
+    const { error } = await supabase.from('cms_sections')
+      .upsert({ key: CMS_KEY, data: req.body, updated_at: new Date() }, { onConflict: 'key' });
+    if (error) throw error;
+    return res.status(200).json({ success: true, data: req.body, message: 'Settings updated successfully' });
   } catch (error) {
     console.error('Error updating Dr. Nivedita page settings:', error);
     return res.status(500).json({ success: false, message: 'Server error updating settings' });
@@ -207,7 +69,7 @@ exports.uploadImage = async (req, res) => {
 };
 
 // ==========================================
-// 2. ISOLATED LEADS API
+// 2. ISOLATED LEADS API (science_consultation_leads table)
 // ==========================================
 
 exports.createLead = async (req, res, next) => {
@@ -235,29 +97,36 @@ exports.createLead = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Please select a preferred appointment date.' });
     }
 
-    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
-    const existing = await AboutDrNiveditaLead.findOne({
-      mobile: trimmedMobile,
-      createdAt: { $gte: twoMinutesAgo }
-    });
+    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+    const { data: existing } = await supabase
+      .from('science_consultation_leads')
+      .select('id')
+      .eq('mobile', trimmedMobile)
+      .gte('created_at', twoMinutesAgo)
+      .limit(1);
 
-    if (existing) {
+    if (existing && existing.length > 0) {
       return res.status(400).json({
         success: false,
         message: 'You have already submitted a consultation request. Please wait a moment.'
       });
     }
 
-    const lead = await AboutDrNiveditaLead.create({
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      mobile: trimmedMobile,
-      service: service ? service.trim() : 'Dr. Nivedita Dadu Consultation',
-      appointmentDate: new Date(appointmentDate),
-      message: message ? message.trim() : '',
-      status: 'new',
-      notes: ''
-    });
+    const { data: lead, error } = await supabase
+      .from('science_consultation_leads')
+      .insert({
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        mobile: trimmedMobile,
+        service: service ? service.trim() : 'Dr. Nivedita Dadu Consultation',
+        appointment_date: new Date(appointmentDate).toISOString(),
+        message: message ? message.trim() : '',
+        status: 'new'
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
 
     return res.status(201).json({
       success: true,
@@ -274,32 +143,36 @@ exports.getLeads = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const queryObj = {};
+    const offset = (page - 1) * limit;
+
+    let query = supabase.from('science_consultation_leads').select('*', { count: 'exact' });
 
     if (req.query.search) {
-      const searchRegex = new RegExp(req.query.search.trim(), 'i');
-      queryObj.$or = [
-        { name: searchRegex }, { email: searchRegex },
-        { mobile: searchRegex }, { service: searchRegex }
-      ];
+      const s = req.query.search.trim();
+      query = query.or(`name.ilike.%${s}%,email.ilike.%${s}%,mobile.ilike.%${s}%,service.ilike.%${s}%`);
     }
-    if (req.query.status) queryObj.status = req.query.status.trim();
-    if (req.query.startDate || req.query.endDate) {
-      queryObj.createdAt = {};
-      if (req.query.startDate) queryObj.createdAt.$gte = new Date(req.query.startDate);
-      if (req.query.endDate) queryObj.createdAt.$lte = new Date(`${req.query.endDate}T23:59:59.999Z`);
+    if (req.query.status) {
+      query = query.eq('status', req.query.status.trim());
+    }
+    if (req.query.startDate) {
+      query = query.gte('created_at', new Date(req.query.startDate).toISOString());
+    }
+    if (req.query.endDate) {
+      query = query.lte('created_at', new Date(`${req.query.endDate}T23:59:59.999Z`).toISOString());
     }
 
-    const sortObj = {};
-    sortObj[req.query.sortBy || 'createdAt'] = req.query.sortOrder === 'asc' ? 1 : -1;
+    const sortBy = req.query.sortBy === 'appointmentDate' ? 'appointment_date' : 'created_at';
+    const ascending = req.query.sortOrder === 'asc';
+    query = query.order(sortBy, { ascending }).range(offset, offset + limit - 1);
 
-    const total = await AboutDrNiveditaLead.countDocuments(queryObj);
-    const leads = await AboutDrNiveditaLead.find(queryObj).sort(sortObj).skip(skip).limit(limit);
+    const { data: leads, error, count } = await query;
+    if (error) throw error;
 
     return res.status(200).json({
-      success: true, count: leads.length, data: leads,
-      pagination: { page, limit, total, totalPages: Math.ceil(total / limit) }
+      success: true,
+      count: leads.length,
+      data: leads,
+      pagination: { page, limit, total: count, totalPages: Math.ceil(count / limit) }
     });
   } catch (error) {
     console.error('Error fetching Dr. Nivedita leads:', error);
@@ -309,7 +182,12 @@ exports.getLeads = async (req, res, next) => {
 
 exports.getLeadById = async (req, res, next) => {
   try {
-    const lead = await AboutDrNiveditaLead.findById(req.params.id);
+    const { data: lead, error } = await supabase
+      .from('science_consultation_leads')
+      .select('*')
+      .eq('id', req.params.id)
+      .single();
+    if (error && error.code !== 'PGRST116') throw error;
     if (!lead) return res.status(404).json({ success: false, message: 'Lead not found' });
     return res.status(200).json({ success: true, data: lead });
   } catch (error) {
@@ -326,9 +204,14 @@ exports.updateLeadStatus = async (req, res, next) => {
     if (notes !== undefined) updates.notes = notes;
     if (service) updates.service = service;
 
-    const lead = await AboutDrNiveditaLead.findByIdAndUpdate(
-      req.params.id, { $set: updates }, { new: true, runValidators: true }
-    );
+    const { data: lead, error } = await supabase
+      .from('science_consultation_leads')
+      .update(updates)
+      .eq('id', req.params.id)
+      .select()
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error;
     if (!lead) return res.status(404).json({ success: false, message: 'Lead not found' });
     return res.status(200).json({ success: true, data: lead, message: 'Lead updated successfully' });
   } catch (error) {
@@ -339,7 +222,14 @@ exports.updateLeadStatus = async (req, res, next) => {
 
 exports.deleteLead = async (req, res, next) => {
   try {
-    const lead = await AboutDrNiveditaLead.findByIdAndDelete(req.params.id);
+    const { data: lead, error } = await supabase
+      .from('science_consultation_leads')
+      .delete()
+      .eq('id', req.params.id)
+      .select()
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error;
     if (!lead) return res.status(404).json({ success: false, message: 'Lead not found' });
     return res.status(200).json({ success: true, message: 'Lead deleted successfully' });
   } catch (error) {
@@ -354,7 +244,11 @@ exports.bulkDeleteLeads = async (req, res, next) => {
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
       return res.status(400).json({ success: false, message: 'Please provide valid lead IDs to delete' });
     }
-    await AboutDrNiveditaLead.deleteMany({ _id: { $in: ids } });
+    const { error } = await supabase
+      .from('science_consultation_leads')
+      .delete()
+      .in('id', ids);
+    if (error) throw error;
     return res.status(200).json({ success: true, message: 'Selected leads deleted successfully' });
   } catch (error) {
     console.error('Error in bulk delete:', error);
@@ -364,27 +258,30 @@ exports.bulkDeleteLeads = async (req, res, next) => {
 
 exports.exportCsv = async (req, res, next) => {
   try {
-    const queryObj = {};
+    let query = supabase.from('science_consultation_leads').select('*').order('created_at', { ascending: false });
+
     if (req.query.search) {
-      const searchRegex = new RegExp(req.query.search.trim(), 'i');
-      queryObj.$or = [
-        { name: searchRegex }, { email: searchRegex },
-        { mobile: searchRegex }, { service: searchRegex }
-      ];
+      const s = req.query.search.trim();
+      query = query.or(`name.ilike.%${s}%,email.ilike.%${s}%,mobile.ilike.%${s}%,service.ilike.%${s}%`);
     }
-    if (req.query.status) queryObj.status = req.query.status.trim();
-    if (req.query.startDate || req.query.endDate) {
-      queryObj.createdAt = {};
-      if (req.query.startDate) queryObj.createdAt.$gte = new Date(req.query.startDate);
-      if (req.query.endDate) queryObj.createdAt.$lte = new Date(`${req.query.endDate}T23:59:59.999Z`);
+    if (req.query.status) {
+      query = query.eq('status', req.query.status.trim());
+    }
+    if (req.query.startDate) {
+      query = query.gte('created_at', new Date(req.query.startDate).toISOString());
+    }
+    if (req.query.endDate) {
+      query = query.lte('created_at', new Date(`${req.query.endDate}T23:59:59.999Z`).toISOString());
     }
 
-    const leads = await AboutDrNiveditaLead.find(queryObj).sort({ createdAt: -1 });
+    const { data: leads, error } = await query;
+    if (error) throw error;
+
     let csv = 'ID,Name,Email,Mobile,Service,AppointmentDate,Status,Notes,CreatedAt\n';
     leads.forEach(row => {
-      const apptDateStr = row.appointmentDate ? new Date(row.appointmentDate).toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
-      const createdStr = row.createdAt ? new Date(row.createdAt).toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
-      csv += `"${row._id}","${(row.name||'').replace(/"/g,'""')}","${row.email}","${row.mobile}","${(row.service||'').replace(/"/g,'""')}","${apptDateStr}","${row.status}","${(row.notes||'').replace(/"/g,'""')}","${createdStr}"\n`;
+      const apptDateStr = row.appointment_date ? new Date(row.appointment_date).toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
+      const createdStr = row.created_at ? new Date(row.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
+      csv += `"${row.id}","${(row.name || '').replace(/"/g, '""')}","${row.email}","${row.mobile}","${(row.service || '').replace(/"/g, '""')}","${apptDateStr}","${row.status}","${(row.notes || '').replace(/"/g, '""')}","${createdStr}"\n`;
     });
 
     res.setHeader('Content-Type', 'text/csv');

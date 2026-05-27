@@ -63,7 +63,7 @@
 }
 
 .blog-quote {
-  background-color: #F4F5FB;
+  background-color: #E8EAF6;
   border-radius: 20px;
   padding: 40px;
   margin-bottom: 40px;
@@ -73,7 +73,7 @@
 }
 
 .quote-icon {
-  color: #2D4A8A;
+  color: #3B5998;
   flex-shrink: 0;
   margin-top: 5px;
 }
@@ -132,7 +132,7 @@
 .share-icons a {
   width: 36px;
   height: 36px;
-  background-color: #2D4A8A;
+  background-color: #3B5998;
   color: #FFF;
   border-radius: 50%;
   display: flex;
@@ -257,7 +257,7 @@
 .form-group textarea {
   width: 100%;
   padding: 15px 20px;
-  background-color: #F4F5FB;
+  background-color: #E8EAF6;
   border: none;
   border-radius: 10px;
   font-family: 'Lato', sans-serif;
@@ -275,7 +275,7 @@
 
 .submit-btn {
   width: fit-content;
-  background-color: #2D4A8A;
+  background-color: #3B5998;
   color: #FFF;
   padding: 15px 35px;
   border-radius: 50px;
@@ -290,7 +290,7 @@
 }
 
 .submit-btn:hover {
-  background-color: #1a3266;
+  background-color: #3B5998;
 }
 
 /* Sidebar Styles (Reused from Listing) */
@@ -301,7 +301,7 @@
 .sidebar-inner {
   position: sticky;
   top: 100px;
-  background: #2D4A8A;
+  background: #3B5998;
   border-radius: 40px;
   padding: 40px 30px;
   color: #ffffff;
@@ -621,7 +621,7 @@
 }
 /* 1. Highlight Text Links on Frontend */
 .blog-content-body a {
-  color: #2D4A8A; /* Visible brand highlight color */
+  color: #3B5998; /* Visible brand highlight color */
   text-decoration: underline; /* Default underlined for visibility */
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;

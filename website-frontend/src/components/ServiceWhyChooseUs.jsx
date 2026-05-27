@@ -49,8 +49,8 @@ export default function ServiceWhyChooseUs({ data, pageSlug = "" }) {
       <div className="service-whychoose-container">
         <div className="service-whychoose-header">
           <div>
-            <span className="service-whychoose-label">The Gold Standard</span>
-            <h2 className="service-whychoose-heading">
+            <span className="dmc-kicker">Why Choose DMC</span>
+            <h2 className="dmc-heading" style={{ marginBottom: '20px' }}>
               {sectionHeading || "Why Choose DMC?"}
             </h2>
             <div className="service-whychoose-divider"></div>

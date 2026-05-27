@@ -45,18 +45,21 @@ export default function PressMediaSection() {
     return () => window.removeEventListener("cms-update", handleCmsUpdate);
   }, []);
 
-  if (!data?.enabled && data !== null) return null;
+  if (data !== null && data?.enabled === false) return null;
 
   const heading = data?.heading || "What The Press And Media Are Saying About Our Clinic";
   const ratingText = data?.ratingText || "225+ Satisfied Patients";
   const patientCountText = data?.patientCountText || "5000+ Satisfied Patients";
   const button = data?.button || { text: "Get Free Consulting", link: "/media" };
-  const avatars = (data?.avatars || []).length > 0 ? data.avatars : [
-    { image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/qytwlafbixtw14egkncm.png" },
-    { image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/qytwlafbixtw14egkncm.png" },
-    { image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/qytwlafbixtw14egkncm.png" },
-    { image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/qytwlafbixtw14egkncm.png" }
+  const generatedAvatars = [
+    { image: "https://d8j0ntlcm91z4.cloudfront.net/user_3DhqmopiNve9pSuyMJA0Ki49qEA/hf_20260525_081533_e6490b2d-e5d7-41c2-95d8-96f3067b0f1e.png" },
+    { image: "https://d8j0ntlcm91z4.cloudfront.net/user_3DhqmopiNve9pSuyMJA0Ki49qEA/hf_20260525_081539_746b3b54-ef32-4750-bbdd-f16e0347e0aa.png" },
+    { image: "https://d8j0ntlcm91z4.cloudfront.net/user_3DhqmopiNve9pSuyMJA0Ki49qEA/hf_20260525_081544_1ed8500d-e5f3-41f7-bb92-174bbdbbbbf0.png" },
+    { image: "https://d8j0ntlcm91z4.cloudfront.net/user_3DhqmopiNve9pSuyMJA0Ki49qEA/hf_20260525_081548_0203dc40-c362-4848-9f49-1bb4c51954a4.png" }
   ];
+  const dbAvatars = data?.avatars || [];
+  const allSame = dbAvatars.length > 0 && dbAvatars.every(a => a.image === dbAvatars[0].image);
+  const avatars = (dbAvatars.length > 0 && !allSame) ? dbAvatars : generatedAvatars;
 
   const logos = (data?.mediaLogos || []).length > 0 ? data.mediaLogos.map(l => l.image) : [
     "https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/rervxi6jq1fl20lu2fps.png",

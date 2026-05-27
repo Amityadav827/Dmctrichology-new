@@ -228,39 +228,68 @@ export default function AboutUsCMS() {
                 </div>
 
                 <div className="mt-12 pt-12 border-t border-slate-100">
-                  <h4 className="text-sm font-black text-slate-800 mb-6 uppercase tracking-widest">Performance Stats</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {data.hero.stats.map((stat, idx) => (
-                      <div key={idx} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 relative group">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2">Value</label>
-                            <input type="text" value={stat.value} onChange={e => {
-                              const newStats = [...data.hero.stats];
-                              newStats[idx].value = e.target.value;
+                  <div className="flex justify-between items-center mb-6">
+                    <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest">Performance Stats</h4>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newStats = [...(data.hero?.stats || []), { label: "", value: "", suffix: "+" }];
+                        updateSectionField("hero", "stats", newStats);
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-xl text-xs font-black hover:bg-blue-100"
+                    >
+                      <Plus size={14} /> ADD STAT
+                    </button>
+                  </div>
+                  {(!data.hero?.stats || data.hero.stats.length === 0) ? (
+                    <div className="p-8 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-center text-slate-400 text-sm font-bold">
+                      No stats yet. Click "Add Stat" to create your first performance stat.
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      {data.hero.stats.map((stat, idx) => (
+                        <div key={idx} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 relative group">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newStats = data.hero.stats.filter((_, i) => i !== idx);
                               updateSectionField("hero", "stats", newStats);
-                            }} className="w-full px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-xs font-bold" />
-                          </div>
-                          <div>
-                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2">Suffix</label>
-                            <input type="text" value={stat.suffix} onChange={e => {
-                              const newStats = [...data.hero.stats];
-                              newStats[idx].suffix = e.target.value;
-                              updateSectionField("hero", "stats", newStats);
-                            }} className="w-full px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-xs font-bold" />
-                          </div>
-                          <div className="col-span-2">
-                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-2">Label</label>
-                            <input type="text" value={stat.label} onChange={e => {
-                              const newStats = [...data.hero.stats];
-                              newStats[idx].label = e.target.value;
-                              updateSectionField("hero", "stats", newStats);
-                            }} className="w-full px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-xs font-bold" />
+                            }}
+                            className="absolute top-3 right-3 p-1.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                            title="Delete stat"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-[9px] font-black uppercase text-slate-400 mb-2">Value</label>
+                              <input type="text" value={stat.value || ""} onChange={e => {
+                                const newStats = [...data.hero.stats];
+                                newStats[idx] = { ...newStats[idx], value: e.target.value };
+                                updateSectionField("hero", "stats", newStats);
+                              }} className="w-full px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-xs font-bold" />
+                            </div>
+                            <div>
+                              <label className="block text-[9px] font-black uppercase text-slate-400 mb-2">Suffix</label>
+                              <input type="text" value={stat.suffix || ""} onChange={e => {
+                                const newStats = [...data.hero.stats];
+                                newStats[idx] = { ...newStats[idx], suffix: e.target.value };
+                                updateSectionField("hero", "stats", newStats);
+                              }} className="w-full px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-xs font-bold" />
+                            </div>
+                            <div className="col-span-2">
+                              <label className="block text-[9px] font-black uppercase text-slate-400 mb-2">Label</label>
+                              <input type="text" value={stat.label || ""} onChange={e => {
+                                const newStats = [...data.hero.stats];
+                                newStats[idx] = { ...newStats[idx], label: e.target.value };
+                                updateSectionField("hero", "stats", newStats);
+                              }} className="w-full px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-xs font-bold" />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
              </div>
           </div>

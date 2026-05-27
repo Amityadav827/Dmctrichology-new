@@ -64,7 +64,7 @@ export default function AboutDrNiveditaPatientCare({ data = {} }) {
           font-family: 'Marcellus', serif !important;
           font-size: 26px;
           font-weight: 400;
-          color: #1a1a2e;
+          color: #333333;
           margin: 0 0 20px 0;
           letter-spacing: 0.01em;
           line-height: 1.25;
@@ -86,7 +86,7 @@ export default function AboutDrNiveditaPatientCare({ data = {} }) {
           margin-bottom: 0;
         }
         .dr-nivedita-care-card-body strong {
-          color: #1a1a2e;
+          color: #333333;
           font-weight: 700;
         }
         .dr-nivedita-care-card-body a {

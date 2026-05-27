@@ -9,46 +9,41 @@ export default function ServiceAftercare({ data, pageSlug = "" }) {
     .filter(pt => pt.isVisible !== false)
     .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
 
-  const resultHeading =
-    activeBullets[0]?.bulletText || "EXPECTED RECOVERY & RESULTS TIMELINE";
-
   return (
-    <section className="service-aftercare-section best-hair-transplant-aftercare">
-      <div className="best-hair-transplant-aftercare-container">
-        <article className="best-hair-transplant-aftercare-card best-hair-transplant-aftercare-primary">
-          <div className="best-hair-transplant-aftercare-mark">
-            <Check className="service-aftercare-bullet-icon" />
-          </div>
-          <div>
-            <h2 className="service-aftercare-heading">
-              {sectionHeading || "WHAT TO EXPECT AFTER THE TREATMENT?"}
-            </h2>
-            <div className="service-aftercare-divider"></div>
-            {introText && (
-              <p className="service-aftercare-intro-text">
-                {introText}
-              </p>
-            )}
-          </div>
-        </article>
+    <section className="service-aftercare-section">
+      <div className="service-aftercare-container">
+        {/* Left column: heading + intro */}
+        <div className="service-aftercare-intro-col">
+          <span className="dmc-kicker">Post Treatment</span>
+          <h2 className="dmc-heading" style={{ marginBottom: '20px' }}>
+            {sectionHeading || "WHAT TO EXPECT AFTER THE TREATMENT?"}
+          </h2>
+          <div className="service-aftercare-divider"></div>
+          {introText && (
+            <p className="service-aftercare-intro-text">{introText}</p>
+          )}
+          {conclusionText && (
+            <div className="service-aftercare-conclusion-box">
+              <span className="service-aftercare-conclusion-label">Recovery Timeline</span>
+              <p className="service-aftercare-conclusion-text">{conclusionText}</p>
+            </div>
+          )}
+        </div>
 
-        <article className="best-hair-transplant-aftercare-card best-hair-transplant-aftercare-secondary">
-          <div className="best-hair-transplant-aftercare-mark">
-            <Check className="service-aftercare-bullet-icon" />
+        {/* Right column: bullet list */}
+        {activeBullets.length > 0 && (
+          <div className="service-aftercare-list-col">
+            {activeBullets.map((pt, i) => (
+              <div key={i} className="service-aftercare-item">
+                <div className="service-aftercare-bullet-wrap">
+                  <Check className="service-aftercare-bullet-icon" />
+                </div>
+                <span className="service-aftercare-text">{pt.bulletText}</span>
+              </div>
+            ))}
           </div>
-          <div>
-            <h3 className="best-hair-transplant-aftercare-subheading">
-              {resultHeading}
-            </h3>
-            {conclusionText && (
-              <p className="service-aftercare-intro-text">
-                {conclusionText}
-              </p>
-            )}
-          </div>
-        </article>
+        )}
       </div>
     </section>
   );
 }
-

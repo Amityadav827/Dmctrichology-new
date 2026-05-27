@@ -685,9 +685,41 @@ export default function ServiceDetailCMS() {
   const [fetchingDetails, setFetchingDetails] = useState(false);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("banner");
+  const [sectionsLayout, setSectionsLayout] = useState({});
+  const [cardInfo, setCardInfo] = useState({});
+  const [savingCard, setSavingCard] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  const ALL_SECTIONS = [
+    { id: "banner", label: "Hero & Intro" },
+    { id: "contentBlocks", label: "Content Blocks" },
+    { id: "benefitsSection", label: "Benefits Section" },
+    { id: "fueProcedureSection", label: "FUE Procedure" },
+    { id: "fueCostSection", label: "FUE Cost" },
+    { id: "fueOptingBenefitsSection", label: "FUE Benefits" },
+    { id: "bodyHairIntroSection", label: "BHT Intro" },
+    { id: "bodyHairSuitableSection", label: "BHT Suitable" },
+    { id: "idealCandidates", label: "Ideal Candidates" },
+    { id: "notCandidates", label: "Not Candidates" },
+    { id: "techniques", label: "Techniques" },
+    { id: "infoBlocks", label: "Info Blocks" },
+    { id: "aftercare", label: "Aftercare" },
+    { id: "whyChooseUs", label: "Why Choose Us" },
+    { id: "editorialFaq", label: "Editorial FAQ" },
+    { id: "googleReviewCta", label: "Google Review CTA" },
+    { id: "resultsSection", label: "Before & After Results" },
+    { id: "videosSection", label: "Videos Section" },
+    { id: "enquirySection", label: "Enquiry Form" },
+    { id: "process", label: "Process Steps" },
+    { id: "idealFrequency", label: "Suitability & CTA" },
+    { id: "beforeAfter", label: "Before/After" },
+    { id: "faqEnquiry", label: "FAQs & Options" },
+    { id: "hairTransplantInfo", label: "Transplant Info" },
+    { id: "hairTransplantWhy", label: "Transplant Why" },
+  ];
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [newService, setNewService] = useState({ title: "", category: "Laser" });
+  const [newService, setNewService] = useState({ title: "", category: "", slug: "", image: "", shortDescription: "" });
   const [creating, setCreating] = useState(false);
 
   // Gallery Picker States
@@ -761,8 +793,14 @@ export default function ServiceDetailCMS() {
 
   useEffect(() => {
     fetchServices().then(list => {
+      if (!serviceSlugFromUrl) {
+        // No service in URL — open create modal directly
+        setIsCreateModalOpen(true);
+        setLoading(false);
+        return;
+      }
       if (list.length > 0) {
-        const serviceExistsInUrl = serviceSlugFromUrl && list.some(service => service.slug === serviceSlugFromUrl);
+        const serviceExistsInUrl = list.some(service => service.slug === serviceSlugFromUrl);
         selectServiceForEditing(serviceExistsInUrl ? serviceSlugFromUrl : list[0].slug, { replace: true });
       }
       setLoading(false);
@@ -770,9 +808,40 @@ export default function ServiceDetailCMS() {
   }, []);
 
   useEffect(() => {
-    if (!serviceSlugFromUrl || serviceSlugFromUrl === selectedSlug) return;
+    if (!serviceSlugFromUrl) return;
+    setIsCreateModalOpen(false);
+    if (serviceSlugFromUrl === selectedSlug) return;
     setSelectedSlug(serviceSlugFromUrl);
   }, [serviceSlugFromUrl, selectedSlug]);
+
+  // Load categories once
+  useEffect(() => {
+    axios.get("/service-listing-categories").then(res => {
+      if (res.data?.data) setCategories(res.data.data);
+    }).catch(() => {});
+  }, []);
+
+  // Sync card info whenever the selected service changes
+  useEffect(() => {
+    if (!selectedSlug || !services.length) return;
+    const card = services.find(s => s.slug === selectedSlug);
+    if (card) {
+      setCardInfo({
+        id: card.id || card._id || '',
+        title: card.title || '',
+        slug: card.slug || '',
+        image: card.image || '',
+        category: card.category || '',
+        rating: card.rating ?? 4.8,
+        duration: card.duration || '45 mins',
+        shortDescription: card.shortDescription || card.short_description || '',
+        buttonText: card.buttonText || 'View Details',
+        buttonLink: card.buttonLink || `/details/${card.slug}`,
+        featured: card.featured ?? false,
+        status: card.status || 'Published',
+      });
+    }
+  }, [selectedSlug, services]);
 
   useEffect(() => {
     if (!selectedSlug) return;
@@ -951,6 +1020,7 @@ export default function ServiceDetailCMS() {
           if (isHairCostDelhiSlug(selectedSlug) && !fetchedData.editorialFaqSection.sectionDescription) {
             fetchedData.editorialFaqSection.sectionDescription = hairCostEditorialFaqDescription;
           }
+          setSectionsLayout(fetchedData.sectionsLayout || {});
           setData(fetchedData);
         }
       })
@@ -1787,7 +1857,7 @@ export default function ServiceDetailCMS() {
     if (!data) return;
     setSaving(true);
     try {
-      await axios.put(`/service-details/${selectedSlug}`, data);
+      await axios.put(`/service-details/${selectedSlug}`, { ...data, sectionsLayout });
       toast.success("Service details saved successfully");
     } catch (err) {
       const message = err.response?.data?.error || err.response?.data?.message || err.message || "Save failed";
@@ -1811,19 +1881,40 @@ export default function ServiceDetailCMS() {
     if (!newService.title.trim()) return toast.error("Title is required");
     setCreating(true);
     try {
-      const slug = newService.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-      const res = await axios.post('/service-listing-cards', { title: newService.title, category: newService.category, slug: slug, status: "Published" });
+      const slug = (newService.slug || newService.title).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      const res = await axios.post('/service-listing-cards', {
+        title: newService.title,
+        slug,
+        category: newService.category || '',
+        image: newService.image || '',
+        short_description: newService.shortDescription || '',
+        status: "Published",
+      });
       if (res.data?.success) {
         toast.success("Service created!");
         await fetchServices();
         setIsCreateModalOpen(false);
-        setNewService({ title: "", category: "Laser" });
-        setSelectedSlug(slug);
+        setNewService({ title: "", category: "" });
+        selectServiceForEditing(slug);
       }
     } catch (err) {
       toast.error("Failed to create service");
     } finally {
       setCreating(false);
+    }
+  };
+
+  const handleSaveCard = async () => {
+    if (!cardInfo.id) return toast.error("No card selected");
+    setSavingCard(true);
+    try {
+      await axios.put(`/service-listing-cards/${cardInfo.id}`, cardInfo);
+      toast.success("Service card saved");
+      await fetchServices();
+    } catch {
+      toast.error("Failed to save service card");
+    } finally {
+      setSavingCard(false);
     }
   };
 
@@ -1854,9 +1945,15 @@ export default function ServiceDetailCMS() {
            <button onClick={() => navigate(`/cms/visual-builder/details?service=${selectedSlug}`)} disabled={fetchingDetails || !data} className="flex items-center gap-2 bg-indigo-50 text-indigo-600 border border-indigo-200 px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-100 transition-all">
              <Layout size={16} /> Visual Builder
            </button>
-           <button onClick={() => setIsCreateModalOpen(true)} className="flex items-center gap-2 bg-white text-blue-600 border border-blue-200 px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-50 transition-all">
-             <Plus size={16} /> New Service
-           </button>
+           {selectedSlug && (
+             <a
+               href={`${import.meta.env.VITE_FRONTEND_URL || 'http://localhost:3000'}/details/${selectedSlug}`}
+               target="_blank" rel="noopener noreferrer"
+               className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-700 transition-all"
+             >
+               <ExternalLink size={16} /> Preview
+             </a>
+           )}
            <button onClick={handleSave} disabled={saving || fetchingDetails || !data}
              className="flex items-center gap-2 bg-slate-900 text-white px-7 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 disabled:opacity-50 transition-all shadow-xl shadow-slate-200">
              {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
@@ -1876,6 +1973,28 @@ export default function ServiceDetailCMS() {
           />
         </div>
       </div>
+
+      {/* ── Layout Manager ── */}
+      {data && !fetchingDetails && (
+        <div className="bg-white rounded-[24px] border border-slate-200 shadow-sm p-6 mb-4">
+          <h3 className="text-xs font-black uppercase tracking-widest text-slate-500 mb-4">Page Layout — Toggle Sections</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+            {ALL_SECTIONS.map(sec => {
+              const enabled = sectionsLayout[sec.id] !== false;
+              return (
+                <button
+                  key={sec.id}
+                  onClick={() => setSectionsLayout(prev => ({ ...prev, [sec.id]: !enabled }))}
+                  className={`text-xs px-3 py-2 rounded-xl font-bold border transition-all text-left ${enabled ? 'bg-blue-50 border-blue-300 text-blue-700' : 'bg-slate-50 border-slate-200 text-slate-400 line-through'}`}
+                >
+                  {enabled ? '✓' : '✗'} {sec.label}
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-[10px] text-slate-400 mt-3">Click to toggle. Save with "Publish Updates" to apply on website.</p>
+        </div>
+      )}
 
       {!data || fetchingDetails ? (
          <div className="py-20 text-center text-slate-400 font-medium flex flex-col items-center">
@@ -1935,6 +2054,125 @@ export default function ServiceDetailCMS() {
           </div>
 
           <div className="service-editor-sections">
+            {/* ── Service Card Info Panel ── */}
+            {selectedSlug && cardInfo.id && (
+              <div className="bg-white rounded-[32px] border-2 border-blue-100 shadow-sm p-8 mb-2">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <ImageIcon size={18} className="text-blue-500" /> Service Card Info
+                  </h3>
+                  <button
+                    onClick={handleSaveCard}
+                    disabled={savingCard}
+                    className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 disabled:opacity-50 transition-all shadow-md shadow-blue-200"
+                  >
+                    {savingCard ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                    {savingCard ? "Saving..." : "Save Card"}
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Title</label>
+                    <input
+                      type="text"
+                      value={cardInfo.title || ''}
+                      onChange={e => setCardInfo(prev => ({ ...prev, title: e.target.value }))}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Slug</label>
+                    <input
+                      type="text"
+                      value={cardInfo.slug || ''}
+                      onChange={e => setCardInfo(prev => ({ ...prev, slug: e.target.value }))}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-mono outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Category</label>
+                    <select
+                      value={cardInfo.category || ''}
+                      onChange={e => setCardInfo(prev => ({ ...prev, category: e.target.value }))}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">— Select category —</option>
+                      {categories.map(c => (
+                        <option key={c.id || c._id} value={c.slug}>{c.categoryName || c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Image URL</label>
+                    <input
+                      type="text"
+                      value={cardInfo.image || ''}
+                      onChange={e => setCardInfo(prev => ({ ...prev, image: e.target.value }))}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-mono outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="/images/services/my-service.webp"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Duration</label>
+                    <input
+                      type="text"
+                      value={cardInfo.duration || ''}
+                      onChange={e => setCardInfo(prev => ({ ...prev, duration: e.target.value }))}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="45 mins"
+                    />
+                  </div>
+                  <div className="md:col-span-2 lg:col-span-3">
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Short Description</label>
+                    <textarea
+                      value={cardInfo.shortDescription || ''}
+                      onChange={e => setCardInfo(prev => ({ ...prev, shortDescription: e.target.value }))}
+                      rows={2}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Button Text</label>
+                    <input
+                      type="text"
+                      value={cardInfo.buttonText || ''}
+                      onChange={e => setCardInfo(prev => ({ ...prev, buttonText: e.target.value }))}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Button Link</label>
+                    <input
+                      type="text"
+                      value={cardInfo.buttonLink || ''}
+                      onChange={e => setCardInfo(prev => ({ ...prev, buttonLink: e.target.value }))}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-mono outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div className="flex gap-6 items-center pt-2">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={!!cardInfo.featured}
+                        onChange={e => setCardInfo(prev => ({ ...prev, featured: e.target.checked }))}
+                        className="w-4 h-4 accent-blue-600"
+                      />
+                      <span className="text-xs font-black uppercase tracking-widest text-slate-600">Featured (home slider)</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={cardInfo.status === 'Published' || cardInfo.status === 'active'}
+                        onChange={e => setCardInfo(prev => ({ ...prev, status: e.target.checked ? 'Published' : 'Draft' }))}
+                        className="w-4 h-4 accent-emerald-600"
+                      />
+                      <span className="text-xs font-black uppercase tracking-widest text-slate-600">Published</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {(true || activeTab === 'banner') && (
               <>
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
@@ -4599,15 +4837,48 @@ export default function ServiceDetailCMS() {
 
       {/* Create Modal */}
       {isCreateModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-            <h2 className="text-xl font-black text-slate-900 mb-2">Create New Service</h2>
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl">
+            <h2 className="text-xl font-black text-slate-900 mb-1">Create New Service</h2>
+            <p className="text-xs text-slate-400 mb-6">Fill in the basics — you can edit everything after.</p>
             <form onSubmit={handleCreateService} className="space-y-4">
-              <input type="text" value={newService.title} onChange={e => setNewService({...newService, title: e.target.value})} className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none font-bold text-sm" placeholder="Service Name" required />
-              <div className="pt-4 flex gap-3">
+              <div>
+                <label className="block text-[10px] font-black uppercase text-slate-400 mb-1 tracking-widest">Service Title *</label>
+                <input type="text" value={newService.title}
+                  onChange={e => setNewService({...newService, title: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')})}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none font-bold text-sm" placeholder="e.g. FUE Hair Transplant" required />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase text-slate-400 mb-1 tracking-widest">Slug (URL)</label>
+                <input type="text" value={newService.slug || ''}
+                  onChange={e => setNewService({...newService, slug: e.target.value})}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none font-mono text-sm text-slate-500" placeholder="auto-generated from title" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase text-slate-400 mb-1 tracking-widest">Category</label>
+                <select value={newService.category || ''} onChange={e => setNewService({...newService, category: e.target.value})}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none text-sm font-bold">
+                  <option value="">— Select Category —</option>
+                  {categories.map(c => <option key={c.id || c._id} value={c.slug}>{c.categoryName || c.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase text-slate-400 mb-1 tracking-widest">Card Image URL</label>
+                <input type="text" value={newService.image || ''}
+                  onChange={e => setNewService({...newService, image: e.target.value})}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none text-sm" placeholder="Paste Cloudinary/Supabase URL" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase text-slate-400 mb-1 tracking-widest">Short Description</label>
+                <textarea value={newService.shortDescription || ''}
+                  onChange={e => setNewService({...newService, shortDescription: e.target.value})}
+                  rows={2} className="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none text-sm resize-none" placeholder="Brief overview shown on the services listing page" />
+              </div>
+              <div className="pt-2 flex gap-3">
                 <button type="button" onClick={() => setIsCreateModalOpen(false)} className="flex-1 bg-slate-100 text-slate-600 px-4 py-3 rounded-xl font-bold text-sm">Cancel</button>
-                <button type="submit" disabled={creating} className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-xl font-bold text-sm">
-                  {creating ? <Loader2 size={16} className="animate-spin" /> : "Create & Edit"}
+                <button type="submit" disabled={creating} className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+                  {creating ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
+                  {creating ? "Creating..." : "Create & Edit"}
                 </button>
               </div>
             </form>

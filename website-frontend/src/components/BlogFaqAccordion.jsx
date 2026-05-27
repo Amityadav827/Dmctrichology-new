@@ -85,7 +85,7 @@ export default function BlogFaqAccordion({ faqs }) {
         .faq-title-main {
           font-family: 'Marcellus', serif;
           font-size: clamp(28px, 4vw, 36px);
-          color: #1a1a1a;
+          color: #333333;
           line-height: 1.2;
           margin-bottom: 0;
         }
@@ -94,32 +94,31 @@ export default function BlogFaqAccordion({ faqs }) {
         .faq-items-list {
           display: flex;
           flex-direction: column;
-          gap: 24px;
+          gap: 16px;
         }
 
         .faq-card-item {
           background: #ffffff;
-          border: 1px solid #0000000d;
-          border-radius: 24px;
+          border: 1px solid #dde5f5;
+          border-radius: 16px;
           overflow: hidden;
           cursor: pointer;
-          transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-          box-shadow: 0 4px 12px #00000005;
+          transition: all 0.3s ease;
+          box-shadow: 0 2px 8px rgba(59, 89, 152, 0.05);
         }
 
         .faq-card-item:hover {
-          transform: translateY(-5px);
-          border-color: #0000001a;
-          box-shadow: 0 20px 40px #00000008;
+          border-color: rgba(59, 89, 152, 0.3);
+          box-shadow: 0 8px 24px rgba(59, 89, 152, 0.10);
         }
 
         .faq-active {
-          border-color: #bfa37c40;
-          box-shadow: 0 30px 60px #0000000a;
+          border-color: #3B5998;
+          box-shadow: 0 12px 32px rgba(59, 89, 152, 0.15);
         }
 
         .faq-card-trigger {
-          padding: 16px 40px;
+          padding: 20px 32px;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -128,9 +127,9 @@ export default function BlogFaqAccordion({ faqs }) {
 
         .faq-question-label {
           font-family: 'Marcellus', serif;
-          font-size: 20px;
-          color: #1a1a1a;
-          font-weight: 600;
+          font-size: 18px;
+          color: #333333;
+          font-weight: 400;
           transition: color 0.3s;
           display: flex;
           align-items: flex-start;
@@ -138,40 +137,37 @@ export default function BlogFaqAccordion({ faqs }) {
         }
 
         .faq-q-number {
-          color: #1a1a1a;
+          color: #3B5998;
           font-weight: 700;
           flex-shrink: 0;
           transition: color 0.3s;
         }
 
-        .faq-active .faq-q-number {
-          color: #bfa37c;
-        }
-
         .faq-ans-label {
-          color: #1a1a1a;
+          color: #3B5998;
           font-weight: 700;
           margin-right: 5px;
         }
 
         .faq-active .faq-question-label {
-          color: #bfa37c;
+          color: #3B5998;
         }
 
         .faq-chevron-wrapper {
-          width: 40px;
-          height: 40px;
+          width: 36px;
+          height: 36px;
           border-radius: 50%;
-          background-color: #f8f8f6;
+          background-color: #E8EAF6;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #1a1a1a;
-          transition: all 0.4s;
+          color: #3B5998;
+          flex-shrink: 0;
+          transition: all 0.3s ease;
         }
 
         .faq-active .faq-chevron-wrapper {
-          background-color: #1a1a1a;
+          background-color: #3B5998;
           color: #ffffff;
         }
 

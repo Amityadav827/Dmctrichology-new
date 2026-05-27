@@ -48,8 +48,9 @@ export default function ServiceCategoryCMS() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (currentCategory._id) {
-        await axios.put(`/service-listing-categories/${currentCategory._id}`, currentCategory);
+      const id = currentCategory.id || currentCategory._id;
+      if (id) {
+        await axios.put(`/service-listing-categories/${id}`, currentCategory);
         toast.success("Category updated");
       } else {
         await axios.post("/service-listing-categories", currentCategory);
@@ -79,7 +80,7 @@ export default function ServiceCategoryCMS() {
 
       {isEditing && (
         <div className="mb-8 bg-white p-6 rounded-xl border border-blue-100 shadow-sm">
-          <h2 className="text-lg font-bold mb-4">{currentCategory._id ? "Edit Category" : "Add New Category"}</h2>
+          <h2 className="text-lg font-bold mb-4">{(currentCategory.id || currentCategory._id) ? "Edit Category" : "Add New Category"}</h2>
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold uppercase text-gray-400 mb-1">Name</label>
@@ -120,13 +121,13 @@ export default function ServiceCategoryCMS() {
           </thead>
           <tbody className="divide-y">
             {categories.map((cat) => (
-              <tr key={cat._id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 font-bold text-gray-800">{cat.categoryName}</td>
+              <tr key={cat.id || cat._id} className="hover:bg-gray-50">
+                <td className="px-6 py-4 font-bold text-gray-800">{cat.categoryName || cat.name}</td>
                 <td className="px-6 py-4 text-gray-500">{cat.slug}</td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex justify-end gap-2">
                     <button onClick={() => handleEdit(cat)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"><Edit2 size={16} /></button>
-                    <button onClick={() => handleDelete(cat._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={16} /></button>
+                    <button onClick={() => handleDelete(cat.id || cat._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={16} /></button>
                   </div>
                 </td>
               </tr>

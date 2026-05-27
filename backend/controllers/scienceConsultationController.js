@@ -1,4 +1,4 @@
-const ScienceConsultationLead = require("../models/ScienceConsultationLead");
+const supabase = require('../config/supabase');
 
 const createLead = async (req, res, next) => {
   try {
@@ -26,38 +26,40 @@ const createLead = async (req, res, next) => {
     }
 
     // Duplicate prevention (spam filter: duplicate mobile in last 2 minutes)
-    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
-    const existing = await ScienceConsultationLead.findOne({
-      mobile: trimmedMobile,
-      createdAt: { $gte: twoMinutesAgo }
-    });
+    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+    const { data: existing } = await supabase
+      .from('science_consultation_leads')
+      .select('id')
+      .eq('mobile', trimmedMobile)
+      .gte('created_at', twoMinutesAgo)
+      .limit(1);
 
-    if (existing) {
+    if (existing && existing.length > 0) {
       return res.status(400).json({
         success: false,
         message: "You have already submitted a request. Please wait a moment."
       });
     }
 
-    const lead = await ScienceConsultationLead.create({
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      mobile: trimmedMobile,
-      service: service ? service.trim() : "Hair Restoration",
-      appointmentDate: new Date(appointmentDate),
-      message: message ? message.trim() : "",
-      status: "new",
-      notes: ""
-    });
+    const { data: lead, error } = await supabase
+      .from('science_consultation_leads')
+      .insert({
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        mobile: trimmedMobile,
+        service: service ? service.trim() : "Hair Restoration",
+        appointment_date: new Date(appointmentDate).toISOString(),
+        message: message ? message.trim() : "",
+        status: "new"
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
 
     return res.status(201).json({
       success: true,
-      data: {
-        ...lead.toObject(),
-        _id: lead._id,
-        createdAt: lead.createdAt,
-        updatedAt: lead.updatedAt
-      }
+      data: lead
     });
   } catch (error) {
     console.error("Error in createLead:", error);
@@ -69,68 +71,44 @@ const getLeads = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
+    const offset = (page - 1) * limit;
 
-    const queryObj = {};
+    let query = supabase
+      .from('science_consultation_leads')
+      .select('*', { count: 'exact' });
 
-    // 1. Live search filter
     if (req.query.search) {
-      const searchVal = req.query.search.trim();
-      const searchRegex = new RegExp(searchVal, 'i');
-      queryObj.$or = [
-        { name: searchRegex },
-        { email: searchRegex },
-        { mobile: searchRegex },
-        { service: searchRegex }
-      ];
+      const s = req.query.search.trim();
+      query = query.or(`name.ilike.%${s}%,email.ilike.%${s}%,mobile.ilike.%${s}%,service.ilike.%${s}%`);
     }
 
-    // 2. Status filter
     if (req.query.status) {
-      queryObj.status = req.query.status.trim();
+      query = query.eq('status', req.query.status.trim());
     }
 
-    // 3. Date range filter
-    if (req.query.startDate || req.query.endDate) {
-      queryObj.createdAt = {};
-      if (req.query.startDate) {
-        queryObj.createdAt.$gte = new Date(req.query.startDate);
-      }
-      if (req.query.endDate) {
-        queryObj.createdAt.$lte = new Date(`${req.query.endDate}T23:59:59.999Z`);
-      }
+    if (req.query.startDate) {
+      query = query.gte('created_at', new Date(req.query.startDate).toISOString());
+    }
+    if (req.query.endDate) {
+      query = query.lte('created_at', new Date(`${req.query.endDate}T23:59:59.999Z`).toISOString());
     }
 
-    // 4. Sorting logic
-    const sortBy = req.query.sortBy || "createdAt";
-    const sortOrder = req.query.sortOrder || "desc";
-    const sortByField = sortBy === "appointmentDate" ? "appointmentDate" : "createdAt";
-    const sortObj = {};
-    sortObj[sortByField] = sortOrder === "asc" ? 1 : -1;
+    const sortBy = req.query.sortBy === 'appointmentDate' ? 'appointment_date' : 'created_at';
+    const ascending = req.query.sortOrder === 'asc';
+    query = query.order(sortBy, { ascending }).range(offset, offset + limit - 1);
 
-    // Get count and data
-    const total = await ScienceConsultationLead.countDocuments(queryObj);
-    const leads = await ScienceConsultationLead.find(queryObj)
-      .sort(sortObj)
-      .skip(skip)
-      .limit(limit);
-
-    const formattedData = leads.map(lead => ({
-      ...lead.toObject(),
-      _id: lead._id,
-      createdAt: lead.createdAt,
-      updatedAt: lead.updatedAt
-    }));
+    const { data: leads, error, count } = await query;
+    if (error) throw error;
 
     return res.status(200).json({
       success: true,
-      count: formattedData.length,
-      data: formattedData,
+      count: leads.length,
+      data: leads,
       pagination: {
         page,
         limit,
-        total,
-        totalPages: Math.ceil(total / limit)
+        total: count,
+        totalPages: Math.ceil(count / limit)
       }
     });
   } catch (error) {
@@ -141,14 +119,17 @@ const getLeads = async (req, res, next) => {
 
 const getLeadById = async (req, res, next) => {
   try {
-    const lead = await ScienceConsultationLead.findById(req.params.id);
+    const { data: lead, error } = await supabase
+      .from('science_consultation_leads')
+      .select('*')
+      .eq('id', req.params.id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error;
     if (!lead) {
       return res.status(404).json({ success: false, message: "Science lead not found" });
     }
-    return res.status(200).json({
-      success: true,
-      data: lead
-    });
+    return res.status(200).json({ success: true, data: lead });
   } catch (error) {
     console.error("Error in getLeadById:", error);
     next(error);
@@ -163,20 +144,19 @@ const updateLeadStatus = async (req, res, next) => {
     if (notes !== undefined) updates.notes = notes;
     if (service) updates.service = service;
 
-    const lead = await ScienceConsultationLead.findByIdAndUpdate(
-      req.params.id,
-      { $set: updates },
-      { new: true, runValidators: true }
-    );
+    const { data: lead, error } = await supabase
+      .from('science_consultation_leads')
+      .update(updates)
+      .eq('id', req.params.id)
+      .select()
+      .single();
 
+    if (error && error.code !== 'PGRST116') throw error;
     if (!lead) {
       return res.status(404).json({ success: false, message: "Science lead not found" });
     }
 
-    return res.status(200).json({
-      success: true,
-      data: lead
-    });
+    return res.status(200).json({ success: true, data: lead });
   } catch (error) {
     console.error("Error in updateLeadStatus:", error);
     next(error);
@@ -185,14 +165,18 @@ const updateLeadStatus = async (req, res, next) => {
 
 const deleteLead = async (req, res, next) => {
   try {
-    const lead = await ScienceConsultationLead.findByIdAndDelete(req.params.id);
+    const { data: lead, error } = await supabase
+      .from('science_consultation_leads')
+      .delete()
+      .eq('id', req.params.id)
+      .select()
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error;
     if (!lead) {
       return res.status(404).json({ success: false, message: "Science lead not found" });
     }
-    return res.status(200).json({
-      success: true,
-      message: "Science lead deleted successfully"
-    });
+    return res.status(200).json({ success: true, message: "Science lead deleted successfully" });
   } catch (error) {
     console.error("Error in deleteLead:", error);
     next(error);
@@ -209,7 +193,12 @@ const bulkDeleteLeads = async (req, res, next) => {
       });
     }
 
-    await ScienceConsultationLead.deleteMany({ _id: { $in: ids } });
+    const { error } = await supabase
+      .from('science_consultation_leads')
+      .delete()
+      .in('id', ids);
+
+    if (error) throw error;
 
     return res.status(200).json({
       success: true,
@@ -223,48 +212,33 @@ const bulkDeleteLeads = async (req, res, next) => {
 
 const exportCsv = async (req, res, next) => {
   try {
-    const queryObj = {};
+    let query = supabase
+      .from('science_consultation_leads')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-    // Apply exact same filters as getLeads
     if (req.query.search) {
-      const searchVal = req.query.search.trim();
-      const searchRegex = new RegExp(searchVal, 'i');
-      queryObj.$or = [
-        { name: searchRegex },
-        { email: searchRegex },
-        { mobile: searchRegex },
-        { service: searchRegex }
-      ];
+      const s = req.query.search.trim();
+      query = query.or(`name.ilike.%${s}%,email.ilike.%${s}%,mobile.ilike.%${s}%,service.ilike.%${s}%`);
     }
-
     if (req.query.status) {
-      queryObj.status = req.query.status.trim();
+      query = query.eq('status', req.query.status.trim());
+    }
+    if (req.query.startDate) {
+      query = query.gte('created_at', new Date(req.query.startDate).toISOString());
+    }
+    if (req.query.endDate) {
+      query = query.lte('created_at', new Date(`${req.query.endDate}T23:59:59.999Z`).toISOString());
     }
 
-    if (req.query.startDate || req.query.endDate) {
-      queryObj.createdAt = {};
-      if (req.query.startDate) {
-        queryObj.createdAt.$gte = new Date(req.query.startDate);
-      }
-      if (req.query.endDate) {
-        queryObj.createdAt.$lte = new Date(`${req.query.endDate}T23:59:59.999Z`);
-      }
-    }
-
-    const leads = await ScienceConsultationLead.find(queryObj).sort({ createdAt: -1 });
+    const { data: leads, error } = await query;
+    if (error) throw error;
 
     let csv = "ID,Name,Email,Mobile,Service,AppointmentDate,Status,Notes,CreatedAt\n";
     leads.forEach(row => {
-      const idStr = row._id.toString();
-      const nameStr = row.name.replace(/"/g, '""');
-      const emailStr = row.email.replace(/"/g, '""');
-      const serviceStr = (row.service || "").replace(/"/g, '""');
-      const notesStr = (row.notes || "").replace(/"/g, '""');
-      
-      const apptDateStr = row.appointmentDate ? new Date(row.appointmentDate).toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
-      const createdStr = row.createdAt ? new Date(row.createdAt).toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
-      
-      csv += `"${idStr}","${nameStr}","${emailStr}","${row.mobile}","${serviceStr}","${apptDateStr}","${row.status}","${notesStr}","${createdStr}"\n`;
+      const apptDateStr = row.appointment_date ? new Date(row.appointment_date).toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
+      const createdStr = row.created_at ? new Date(row.created_at).toISOString().replace(/T/, ' ').replace(/\..+/, '') : '';
+      csv += `"${row.id}","${(row.name || '').replace(/"/g, '""')}","${row.email}","${row.mobile}","${(row.service || '').replace(/"/g, '""')}","${apptDateStr}","${row.status}","${(row.notes || '').replace(/"/g, '""')}","${createdStr}"\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");

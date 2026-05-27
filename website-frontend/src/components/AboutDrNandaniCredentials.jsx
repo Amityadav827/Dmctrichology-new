@@ -92,10 +92,12 @@ export default function AboutDrNandaniCredentials({ data = {} }) {
 
           /* Title credentials */
           .nandani-credentials-heading {
-            font-size: 48px;
-            font-weight: 500;
+            font-family: 'Marcellus', serif;
+            font-size: 44px;
+            font-weight: 400;
             text-align: center;
-            color: #000000;
+            color: #333333;
+            text-transform: uppercase;
             margin: 0 0 24px 0;
             letter-spacing: 0.02em;
           }
@@ -126,7 +128,7 @@ export default function AboutDrNandaniCredentials({ data = {} }) {
           .nandani-badge-text {
             font-size: 16px;
             font-weight: 500;
-            color: #000000;
+            color: #333333;
             letter-spacing: 0.01em;
           }
 
@@ -154,7 +156,7 @@ export default function AboutDrNandaniCredentials({ data = {} }) {
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #000000;
+            color: #333333;
             margin-bottom: 24px;
             line-height: 1.4;
           }
@@ -162,7 +164,7 @@ export default function AboutDrNandaniCredentials({ data = {} }) {
           .nandani-column-body-text {
             font-size: 17px;
             line-height: 2;
-            color: #000000;
+            color: #333333;
             text-align: justify;
           }
 
@@ -208,7 +210,7 @@ export default function AboutDrNandaniCredentials({ data = {} }) {
                       height="18"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="#D4AF37"
+                      stroke="#E4B753"
                       strokeWidth="3.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"

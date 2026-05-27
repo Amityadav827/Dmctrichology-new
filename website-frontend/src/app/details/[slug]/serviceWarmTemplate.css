@@ -1,0 +1,673 @@
+/* ============================================================
+   Warm Service Template — Scoped stylesheet for warm-v2 pages.
+   All rules namespaced .dmc-service-warm-* to avoid collisions
+   with classic-template details.css.
+   Brand: #3B5998 primary, #E4B753 gold, #061A3A ink,
+          #FFFBF4 warm cream, #F4EFE5 soft beige, #2A1C0B deep
+   ============================================================ */
+
+.dmc-service-warm {
+  background: #FFFBF4;
+  color: #2A1C0B;
+  font-family: 'Lato', sans-serif;
+}
+
+.dmc-service-warm * {
+  box-sizing: border-box;
+}
+
+.dmc-warm-eyebrow-line {
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: #E4B753;
+  vertical-align: middle;
+  margin-right: 12px;
+}
+
+/* ------------------------------------------------------------
+   Scene 1 — Cinematic Hero (full-bleed, 100vh)
+   ------------------------------------------------------------ */
+.dmc-service-warm-hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: #ffffff;
+  isolation: isolate;
+}
+
+.dmc-warm-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: #1c1410;
+  z-index: -2;
+}
+
+.dmc-warm-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(28,20,16,0.65) 0%, rgba(28,20,16,0.35) 60%, rgba(28,20,16,0.75) 100%);
+  z-index: -1;
+}
+
+.dmc-warm-hero-content {
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 140px 5% 80px;
+  position: relative;
+}
+
+.dmc-warm-hero-eyebrow {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: #E4B753;
+  margin-bottom: 28px;
+}
+
+.dmc-warm-hero-eyebrow .dmc-warm-eyebrow-line {
+  background: #E4B753;
+  width: 36px;
+}
+
+.dmc-warm-hero-title {
+  font-family: 'Marcellus', serif;
+  font-size: clamp(38px, 6vw, 76px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+  margin: 0 0 28px;
+  max-width: 14ch;
+}
+
+.dmc-warm-hero-subtitle {
+  font-family: 'Lato', sans-serif;
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.7;
+  color: rgba(255,255,255,0.88);
+  max-width: 56ch;
+  margin: 0 0 40px;
+}
+
+.dmc-warm-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 28px;
+  margin-bottom: 56px;
+}
+
+.dmc-warm-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  background: #E4B753;
+  color: #2A1C0B;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 18px 36px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  box-shadow: 0 12px 32px rgba(228,183,83,0.30);
+}
+
+.dmc-warm-cta-primary:hover {
+  background: #f0c66a;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(228,183,83,0.42);
+}
+
+.dmc-warm-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.4px;
+  padding: 14px 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.35);
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.dmc-warm-cta-secondary:hover {
+  color: #E4B753;
+  border-bottom-color: #E4B753;
+}
+
+.dmc-warm-hero-trust {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: rgba(255,255,255,0.85);
+  font-size: 14px;
+}
+
+.dmc-warm-hero-stars {
+  display: inline-flex;
+  gap: 3px;
+  color: #E4B753;
+}
+
+.dmc-warm-hero-stars svg {
+  width: 16px;
+  height: 16px;
+}
+
+.dmc-warm-hero-trust-text strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.dmc-warm-hero-breadcrumb {
+  position: absolute;
+  top: 110px;
+  left: 5%;
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+}
+
+.dmc-warm-hero-breadcrumb a {
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.dmc-warm-hero-breadcrumb a:hover { color: #E4B753; }
+.dmc-warm-hero-breadcrumb .sep { color: rgba(255,255,255,0.4); }
+.dmc-warm-hero-breadcrumb .current { color: #E4B753; }
+
+@media (max-width: 768px) {
+  .dmc-warm-hero-content { padding: 120px 6% 60px; }
+  .dmc-warm-hero-breadcrumb { top: 90px; }
+  .dmc-warm-hero-actions { gap: 14px; }
+  .dmc-warm-cta-primary { padding: 16px 28px; font-size: 14px; }
+}
+
+/* ------------------------------------------------------------
+   Trust band wrapper (scene 2)
+   ------------------------------------------------------------ */
+.dmc-service-warm-trust-band {
+  background: #ffffff;
+  padding: 12px 0 0;
+  border-bottom: 1px solid rgba(42,28,11,0.06);
+}
+
+/* ------------------------------------------------------------
+   Scene 3 — Story Opener (empathy)
+   ------------------------------------------------------------ */
+.dmc-service-warm-story {
+  background: #FFFBF4;
+  padding: 110px 5%;
+}
+
+.dmc-warm-story-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.dmc-warm-story-image-frame {
+  position: relative;
+  aspect-ratio: 4/5;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(42,28,11,0.16);
+}
+
+.dmc-warm-story-image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dmc-warm-story-image-fallback {
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(135deg, #F4EFE5 0%, #E8DFCE 60%, #FFFBF4 100%);
+}
+
+.dmc-warm-story-content {
+  padding: 8px 0;
+}
+
+.dmc-warm-story-eyebrow {
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #8a6a2e;
+  margin-bottom: 28px;
+}
+
+.dmc-warm-story-headline {
+  font-family: 'Marcellus', serif;
+  font-size: clamp(30px, 3.4vw, 48px);
+  line-height: 1.18;
+  color: #2A1C0B;
+  letter-spacing: -0.3px;
+  margin: 0 0 28px;
+  max-width: 16ch;
+}
+
+.dmc-warm-story-body {
+  font-family: 'Lato', sans-serif;
+  font-size: 18px;
+  line-height: 1.85;
+  color: #4a3c2a;
+  max-width: 52ch;
+  margin: 0;
+}
+
+.dmc-warm-story-attribution {
+  margin-top: 32px;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  color: #8a6a2e;
+}
+
+.dmc-warm-attribution-mark { margin-right: 8px; }
+
+@media (max-width: 968px) {
+  .dmc-warm-story-inner { grid-template-columns: 1fr; gap: 40px; }
+  .dmc-service-warm-story { padding: 70px 6%; }
+  .dmc-warm-story-image-frame { aspect-ratio: 4/3; }
+}
+
+/* ------------------------------------------------------------
+   Scene 4 — Editorial Explainer (absorbed SEO body)
+   ------------------------------------------------------------ */
+.dmc-service-warm-explainer {
+  background: #ffffff;
+  padding: 0 0 100px;
+  position: relative;
+}
+
+.dmc-warm-explainer-banner {
+  width: 100%;
+  height: 360px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.dmc-warm-explainer-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(42,28,11,0.35);
+}
+
+.dmc-warm-explainer-container {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+}
+
+.dmc-warm-explainer-card {
+  background: #ffffff;
+  padding: 80px 70px;
+  margin-top: 80px;
+}
+
+.dmc-warm-explainer-card.is-floating {
+  transform: translateY(-160px);
+  margin-bottom: -160px;
+  margin-top: 0;
+  box-shadow: 0 30px 80px rgba(42,28,11,0.12);
+}
+
+.dmc-warm-explainer-heading {
+  font-family: 'Marcellus', serif;
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.2;
+  color: #2A1C0B;
+  text-align: center;
+  margin: 0 0 50px;
+  letter-spacing: -0.2px;
+}
+
+.dmc-warm-explainer-body {
+  font-family: 'Lato', sans-serif;
+  font-size: 18px;
+  line-height: 1.95;
+  color: #3a2f1f;
+}
+
+.dmc-warm-explainer-body p {
+  margin: 0 0 24px;
+}
+
+.dmc-warm-explainer-body p:last-child { margin-bottom: 0; }
+
+.dmc-warm-explainer-rule {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: rgba(228,183,83,0.5);
+  margin: 8px auto 32px;
+}
+
+.dmc-warm-explainer-pullquote {
+  margin: 40px -10px;
+  padding: 32px 36px 32px 56px;
+  position: relative;
+  font-family: 'Marcellus', serif;
+  font-size: clamp(22px, 2.3vw, 28px);
+  line-height: 1.4;
+  color: #2A1C0B;
+  border-left: 3px solid #E4B753;
+  background: #FFFBF4;
+}
+
+.dmc-warm-pullquote-mark {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  font-size: 56px;
+  line-height: 1;
+  color: rgba(228,183,83,0.6);
+  font-family: 'Marcellus', serif;
+}
+
+@media (max-width: 768px) {
+  .dmc-warm-explainer-banner { height: 240px; }
+  .dmc-warm-explainer-card { padding: 40px 22px; }
+  .dmc-warm-explainer-card.is-floating {
+    transform: translateY(-80px);
+    margin-bottom: -80px;
+  }
+  .dmc-warm-explainer-body { font-size: 16px; line-height: 1.85; }
+}
+
+/* ------------------------------------------------------------
+   Scene 5 — Doctor's Voice (pull quote)
+   ------------------------------------------------------------ */
+.dmc-service-warm-quote {
+  background:
+    linear-gradient(180deg, #FFFBF4 0%, #F8F0DE 100%);
+  padding: 110px 5%;
+}
+
+.dmc-warm-quote-container {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.dmc-warm-quote-portrait {
+  position: relative;
+  aspect-ratio: 4/5;
+  border-radius: 999px 999px 4px 4px;
+  overflow: hidden;
+  background: #F4EFE5;
+}
+
+.dmc-warm-quote-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dmc-warm-portrait-frame {
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(228,183,83,0.7);
+  border-radius: 999px 999px 4px 4px;
+  pointer-events: none;
+}
+
+.dmc-warm-quote-body {
+  position: relative;
+}
+
+.dmc-warm-quote-mark {
+  font-family: 'Marcellus', serif;
+  font-size: 110px;
+  line-height: 0.6;
+  color: #E4B753;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.dmc-warm-quote-text {
+  font-family: 'Marcellus', serif;
+  font-size: clamp(22px, 2.6vw, 34px);
+  line-height: 1.45;
+  color: #2A1C0B;
+  margin: 0 0 36px;
+  letter-spacing: -0.2px;
+  font-style: italic;
+}
+
+.dmc-warm-quote-signature {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.dmc-warm-signature-rule {
+  display: inline-block;
+  width: 48px;
+  height: 1px;
+  background: #2A1C0B;
+}
+
+.dmc-warm-doctor-name {
+  font-family: 'Marcellus', serif;
+  font-size: 18px;
+  color: #2A1C0B;
+  line-height: 1.3;
+}
+
+.dmc-warm-doctor-title {
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #8a6a2e;
+  margin-top: 4px;
+}
+
+@media (max-width: 868px) {
+  .dmc-warm-quote-container { grid-template-columns: 1fr; gap: 40px; }
+  .dmc-warm-quote-portrait { max-width: 280px; }
+  .dmc-service-warm-quote { padding: 70px 6%; }
+}
+
+/* ------------------------------------------------------------
+   Scene 6 — Candidacy (Is this you?)
+   ------------------------------------------------------------ */
+.dmc-service-warm-candidacy {
+  background: #ffffff;
+  padding: 110px 5%;
+}
+
+.dmc-warm-candidacy-container {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.dmc-warm-candidacy-intro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: #8a6a2e;
+  margin-bottom: 52px;
+}
+
+.dmc-warm-candidacy-eyebrow { color: #8a6a2e; }
+
+.dmc-warm-candidacy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.dmc-warm-candidacy-col {
+  padding: 50px 44px;
+  border-radius: 4px;
+  background: #FFFBF4;
+  border: 1px solid rgba(228,183,83,0.25);
+  position: relative;
+}
+
+.dmc-warm-candidacy-col.is-no {
+  background: #ffffff;
+  border-color: rgba(42,28,11,0.08);
+}
+
+.dmc-warm-candidacy-heading {
+  font-family: 'Marcellus', serif;
+  font-size: clamp(22px, 2.2vw, 28px);
+  color: #2A1C0B;
+  margin: 0 0 24px;
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+}
+
+.dmc-warm-candidacy-intro-text {
+  font-size: 15px;
+  color: #6a5638;
+  line-height: 1.7;
+  margin: 0 0 24px;
+}
+
+.dmc-warm-candidacy-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.dmc-warm-candidacy-list li {
+  display: flex;
+  gap: 14px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #3a2f1f;
+}
+
+.dmc-warm-candidacy-icon {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.dmc-warm-candidacy-icon.is-yes {
+  background: #E4B753;
+  color: #2A1C0B;
+}
+
+.dmc-warm-candidacy-icon.is-no {
+  background: rgba(42,28,11,0.08);
+  color: #8a6a2e;
+}
+
+.dmc-warm-candidacy-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.dmc-warm-candidacy-footnote {
+  margin: 28px 0 0;
+  font-size: 14px;
+  color: #8a6a2e;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+@media (max-width: 868px) {
+  .dmc-warm-candidacy-grid { grid-template-columns: 1fr; gap: 22px; }
+  .dmc-warm-candidacy-col { padding: 34px 26px; }
+  .dmc-service-warm-candidacy { padding: 70px 6%; }
+}
+
+/* ------------------------------------------------------------
+   Before/After image extension (used in both templates if images present)
+   ------------------------------------------------------------ */
+.details-ba-imgwrap {
+  position: relative;
+  aspect-ratio: 4/5;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 0 18px;
+  background: #f0eadd;
+}
+
+.details-ba-imgwrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.details-ba-caption {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  font-size: 13px;
+  letter-spacing: 0.8px;
+}
+
+.details-ba-patient {
+  font-family: 'Marcellus', serif;
+  font-size: 16px;
+  letter-spacing: 0.4px;
+}
+
+.details-ba-months {
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  background: rgba(228,183,83,0.95);
+  color: #2A1C0B;
+  padding: 6px 12px;
+  border-radius: 999px;
+  text-shadow: none;
+}

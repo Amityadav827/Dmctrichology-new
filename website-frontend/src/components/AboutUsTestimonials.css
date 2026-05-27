@@ -1,12 +1,12 @@
 /* =========================================================
    PATIENT TESTIMONIALS — LUXURY MONOCHROME REDESIGN
-   Palette: #000 · #1a1a1a · #111 · #fafaf8 · #f5f1eb
+   Palette: #000 · #3B5998 · #111 · #f7f9fd · #E8EAF6
    Zero gold. Premium editorial storytelling layout.
    ========================================================= */
 
 .about-testi-section {
   position: relative;
-  background-color: #fafaf8;
+  background-color: #f7f9fd;
   overflow: hidden;
   isolation: isolate;
 }
@@ -52,7 +52,7 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 4px;
-  color: #1a1a1a;
+  color: #333333;
   text-transform: uppercase;
   margin-bottom: 24px;
 }
@@ -70,7 +70,7 @@
 .about-testi-main-title {
   font-family: 'Marcellus', serif;
   font-size: 52px;
-  color: #111111;
+  color: #333333;
   letter-spacing: -1px;
   font-weight: 400;
   line-height: 1.1;
@@ -145,7 +145,7 @@
 .about-testi-text {
   font-family: 'Marcellus', serif;
   font-size: 22px;
-  color: #1a1a1a;
+  color: #333333;
   line-height: 1.6;
   margin-bottom: 48px;
   font-weight: 400;
@@ -173,7 +173,7 @@
   height: 64px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #f5f1eb;
+  border: 2px solid #E8EAF6;
   padding: 2px;
   background: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -217,7 +217,7 @@
   border-radius: 50%;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: transparent;
-  color: #111111;
+  color: #333333;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -226,9 +226,9 @@
 }
 
 .testi-nav-btn:hover:not(:disabled) {
-  background: #111111;
+  background: #3B5998;
   color: #ffffff;
-  border-color: #111111;
+  border-color: #333333;
   transform: scale(1.05);
 }
 

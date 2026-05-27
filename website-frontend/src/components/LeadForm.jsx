@@ -130,17 +130,22 @@ export default function LeadForm() {
         <h2 className="section-title" style={{ fontSize: '2.2rem', whiteSpace: 'nowrap', textTransform: 'none' }}>Request A Call</h2>
         <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ display: 'flex', height: '30px' }}>
-            {[1,2,3,4].map(i => (
-              <div key={i} style={{ 
-                width: '30px', 
-                height: '30px', 
-                borderRadius: '50%', 
-                border: '2px solid #fff', 
-                overflow: 'hidden', 
-                marginLeft: i > 1 ? '-10px' : '0',
+            {[
+              "https://d8j0ntlcm91z4.cloudfront.net/user_3DhqmopiNve9pSuyMJA0Ki49qEA/hf_20260525_081533_e6490b2d-e5d7-41c2-95d8-96f3067b0f1e.png",
+              "https://d8j0ntlcm91z4.cloudfront.net/user_3DhqmopiNve9pSuyMJA0Ki49qEA/hf_20260525_081539_746b3b54-ef32-4750-bbdd-f16e0347e0aa.png",
+              "https://d8j0ntlcm91z4.cloudfront.net/user_3DhqmopiNve9pSuyMJA0Ki49qEA/hf_20260525_081544_1ed8500d-e5f3-41f7-bb92-174bbdbbbbf0.png",
+              "https://d8j0ntlcm91z4.cloudfront.net/user_3DhqmopiNve9pSuyMJA0Ki49qEA/hf_20260525_081548_0203dc40-c362-4848-9f49-1bb4c51954a4.png"
+            ].map((src, i) => (
+              <div key={i} style={{
+                width: '30px',
+                height: '30px',
+                borderRadius: '50%',
+                border: '2px solid #fff',
+                overflow: 'hidden',
+                marginLeft: i > 0 ? '-10px' : '0',
                 backgroundColor: '#ddd'
               }}>
-                <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/qytwlafbixtw14egkncm.png" alt="Patients" style={{ width: '30px', height: '30px', objectFit: 'cover' }} />
+                <img src={src} alt="Patient" style={{ width: '30px', height: '30px', objectFit: 'cover' }} />
               </div>
             ))}
           </div>

@@ -53,7 +53,7 @@ const AboutUsTestimonials = ({ data = {} }) => {
           
           {/* ── Header ────────────────────────────────────────── */}
           <div className="about-testi-header">
-            <motion.span {...fadeUp(0)} className="about-testi-tag">
+            <motion.span {...fadeUp(0)} className="dmc-kicker">
               <EditableText sectionId="about-testimonials" fieldPath="testimonials.sectionTitle" tag="span">
                 {sectionTitle}
               </EditableText>
@@ -94,7 +94,7 @@ const AboutUsTestimonials = ({ data = {} }) => {
                     {/* Monochrome Stars */}
                     <div className="about-testi-stars">
                       {[...Array(review.rating || 5)].map((_, i) => (
-                        <Star key={i} size={15} fill="#111111" color="#111111" />
+                        <Star key={i} size={15} fill="#E4B753" color="#E4B753" />
                       ))}
                     </div>
 

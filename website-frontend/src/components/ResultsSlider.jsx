@@ -42,12 +42,13 @@ export default function ResultsSlider() {
     ? safeResults.filter(r => r.enabled !== false)
     : defaultResults;
 
-  // For seamless loop with few items
-  const displayItems = activeResults.length > 0 ? activeResults : [];
+  // Duplicate slides so Swiper loop has enough for both nav directions (needs slidesPerView*2 minimum)
+  const baseItems = activeResults.length > 0 ? activeResults : defaultResults;
+  const displayItems = baseItems.length < 8 ? [...baseItems, ...baseItems] : baseItems;
 
   return (
     <EditableSection sectionId="results-slider" label="Before & After Results">
-      <section className="results-section" style={{ backgroundColor: bgColor, padding: '100px 5%', position: 'relative', overflow: 'hidden' }}>
+      <section className="results-section" style={{ backgroundColor: bgColor, padding: '60px 5% 40px', position: 'relative', overflow: 'hidden' }}>
         <div className="results-container" style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <div className="section-header" style={{ marginBottom: '50px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
@@ -91,7 +92,7 @@ export default function ResultsSlider() {
               style={{ padding: '20px 0 60px' }}
             >
               {displayItems.map((result, index) => {
-                const realIndex = safeResults ? data.results.indexOf(result) : index;
+                const realIndex = index % baseItems.length;
                 return (
                   <SwiperSlide key={index}>
                     <div className="result-card" style={{ 

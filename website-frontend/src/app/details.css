@@ -104,7 +104,7 @@
   cursor: pointer;
   box-shadow: 0 2px 16px rgba(0,0,0,0.15);
   transition: all 0.22s ease;
-  color: #1a1a1a;
+  color: #333333;
   outline: none;
   /* float slightly outside the viewer */
 }
@@ -158,7 +158,7 @@
 }
 
 .si-thumb-active {
-  border-color: #3d5a99 !important;
+  border-color: #3B5998 !important;
   transform: translateY(-2px);
 }
 
@@ -229,7 +229,7 @@
 .details-title {
   font-family: 'Marcellus', serif;
   font-size: 30px;
-  color: #111111;
+  color: #333333;
   line-height: 1.25;
   font-weight: 400;
   margin-bottom: 14px;
@@ -301,7 +301,7 @@
 .details-subtitle {
   font-family: 'Marcellus', serif;
   font-size: 24px;
-  color: #111111;
+  color: #333333;
   line-height: 1.4;
   margin-bottom: 8px;
   font-weight: 400;
@@ -362,7 +362,7 @@
 
 /* ─── PROCESS SLIDER SECTION ─────────────────────────────────────── */
 .process-slider-section {
-  background: #3d5a99;
+  background: #3B5998;
   padding: 70px 5%;
 }
 
@@ -484,7 +484,7 @@
   font-weight: 900;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #3d5a99;
+  color: #3B5998;
   padding: 16px 16px 4px;
 }
 
@@ -601,7 +601,7 @@
   content: "•";
   position: absolute;
   left: 0;
-  color: #888;
+  color: #3B5998;
   font-size: 18px;
   top: -2px;
 }
@@ -717,7 +717,7 @@
 
 /* Enquiry Form Card */
 .details-enquiry-card {
-  background: #3d5a99;
+  background: #3B5998;
   border-radius: 20px;
   padding: 40px 30px;
   box-shadow: 0 10px 40px rgba(61, 90, 153, 0.2);
@@ -808,7 +808,7 @@
   font-family: 'Lato', sans-serif;
   font-size: 14px;
   font-weight: 700;
-  color: #3d5a99;
+  color: #3B5998;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -823,7 +823,7 @@
 }
 
 .details-btn-icon {
-  background: #3d5a99;
+  background: #3B5998;
   color: #fff;
   width: 24px;
   height: 24px;
@@ -870,7 +870,7 @@
 }
 
 .details-freq-title {
-  background: #3d5a99;
+  background: #3B5998;
   color: #fff;
   font-family: 'Lato', sans-serif;
   font-size: 16px;
@@ -899,8 +899,8 @@
 }
 
 .details-suit-header {
-  background: #a3b1c6;
-  color: #333;
+  background: #3B5998;
+  color: #ffffff;
   font-family: 'Lato', sans-serif;
   font-size: 15px;
   padding: 10px;
@@ -910,7 +910,7 @@
 }
 
 .details-suit-card-alt .details-suit-header {
-  background: #b0b8c4;
+  background: #486A91;
 }
 
 .details-suit-list {
@@ -933,7 +933,7 @@
   content: "•";
   position: absolute;
   left: 0;
-  color: #3d5a99;
+  color: #3B5998;
 }
 
 .details-cta-title {
@@ -1132,12 +1132,12 @@
 }
 
 .service-thumbnail.active {
-  border-color: #1a1a1a;
-  box-shadow: 0 4px 16px rgba(26, 26, 26, 0.15);
+  border-color: #3B5998;
+  box-shadow: 0 4px 16px rgba(59, 89, 152, 0.25);
 }
 
 .service-thumbnail:hover {
-  border-color: #1a1a1a;
+  border-color: #3B5998;
   opacity: 0.8;
 }
 
@@ -1167,14 +1167,14 @@
   position: relative;
   width: 40px;
   height: 40px;
-  background: #1a1a1a;
-  border: 1px solid #1a1a1a;
+  background: #3B5998;
+  border: 1px solid #3B5998;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(26, 26, 26, 0.2);
+  box-shadow: 0 4px 16px rgba(59, 89, 152, 0.2);
   transition: all 0.3s ease;
   color: #ffffff;
   flex-shrink: 0;
@@ -1183,8 +1183,8 @@
 }
 
 .thumbnail-nav-btn:hover {
-  background: #111111;
-  box-shadow: 0 6px 24px rgba(26, 26, 26, 0.3);
+  background: #162c57;
+  box-shadow: 0 6px 24px rgba(59, 89, 152, 0.3);
   transform: scale(1.05);
 }
 
@@ -1464,7 +1464,7 @@
 }
 
 .custom-swiper-pagination .swiper-pagination-bullet-active {
-  background: #3d5a99;
+  background: #3B5998;
   width: 24px;
   border-radius: 4px;
 }
@@ -1591,7 +1591,7 @@
 .check-dot-inner {
   width: 6px;
   height: 6px;
-  background: #3d5a99;
+  background: #3B5998;
   border-radius: 50%;
 }
 
@@ -1680,7 +1680,7 @@
 .service-content-block-heading {
   font-family: 'Marcellus', serif;
   font-size: 24px;
-  color: #111111;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 20px;
@@ -1717,7 +1717,7 @@
   font-family: 'Lato', sans-serif;
   font-size: 15px;
   line-height: 1.45;
-  color: #111111;
+  color: #333333;
 }
 
 .service-content-tick-icon {
@@ -1725,7 +1725,7 @@
   height: 18px;
   min-width: 18px;
   border-radius: 50%;
-  background: #111111;
+  background: #3B5998;
   color: #ffffff;
   display: inline-flex;
   align-items: center;
@@ -1823,12 +1823,12 @@
   .service-content-block-section {
     padding: 30px 5% 40px 5%;
   }
-  
+
   .service-content-block-heading {
     font-size: 20px;
     margin-bottom: 16px;
   }
-  
+
   .service-content-block-description {
     font-size: 14px;
     line-height: 1.7;
@@ -2081,8 +2081,8 @@
 
 .service-benefits-heading {
   font-family: 'Marcellus', serif;
-  font-size: 32px;
-  color: #111111;
+  font-size: 38px;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 30px;
@@ -2106,14 +2106,14 @@
 }
 
 .service-benefits-check-icon {
-    color: #3d5a99;
+    color: #3B5998;
     width: 11px;
     height: 11px;
 }
 
 .service-benefits-check-icon-wrapper {
     background: #ffffff;
-    border: 1px solid #3d5a99;
+    border: 1px solid #3B5998;
     border-radius: 50%;
     flex-shrink: 0;
     justify-content: center;
@@ -2298,7 +2298,7 @@
   height: 20px;
   min-width: 20px;
   border-radius: 50%;
-  background: #111111;
+  background: #3B5998;
   color: #ffffff;
   display: inline-flex;
   align-items: center;
@@ -2860,18 +2860,33 @@
 }
 
 /* ─── DYNAMIC IDEAL CANDIDATES SECTION ─────────────────────────── */
+/* ── Ideal Candidates Section ─────────────────────────────────── */
 .service-candidates-section {
-  background: #3d5a99;
+  background: linear-gradient(135deg, #1e3560 0%, #3B5998 60%, #2d4577 100%);
   padding: 100px 5% 110px;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-candidates-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 0% 50%, rgba(255,255,255,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 100% 20%, rgba(255,255,255,0.03) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 .service-candidates-container {
   max-width: 1300px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-columns: 1.1fr 0.9fr;
   gap: 80px;
-  align-items: stretch;
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .service-candidates-content-col {
@@ -2879,94 +2894,120 @@
   flex-direction: column;
 }
 
-.service-candidates-heading {
-  color: #ffffff;
+/* Kicker */
+.sic-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Lato, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  margin-bottom: 24px;
-  font-family: Marcellus, serif;
-  font-size: 32px;
-  font-weight: 400;
-  line-height: 1.25;
+  color: #F5B63F;
+  margin-bottom: 18px;
 }
 
-.service-candidates-intro {
+.sic-kicker::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 2px;
+  background: #F5B63F;
+  border-radius: 2px;
+}
+
+/* Heading */
+.sic-heading {
+  font-family: Marcellus, serif;
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.2;
   color: #ffffff;
-  white-space: pre-line;
-  margin-bottom: 36px;
+  margin: 0 0 20px 0;
+}
+
+/* Intro */
+.sic-intro {
   font-family: Lato, sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.8;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 32px 0;
 }
 
-.service-candidates-list {
+/* Checklist */
+.sic-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 36px 0;
+  margin: 0 0 28px 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 0;
 }
 
-.service-candidates-list-item {
+.sic-item {
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.service-ideal-check-icon-wrapper {
-  background: #3d5a99;
-  border: 1px solid #ffffff;
-  border-radius: 50%;
-  flex-shrink: 0;
-  justify-content: center;
   align-items: center;
-  width: 22px;
-  height: 22px;
-  margin-top: 2px;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sic-item:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sic-icon-wrap {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #F5B63F;
+  color: #1e3560;
   display: flex;
-  box-shadow: 0 2px 6px #c8a45d14;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(245, 182, 63, 0.35);
 }
 
-.service-ideal-check-icon {
-  color: #ffffff;
-  width: 10px;
-  height: 10px;
-}
-
-.service-candidates-text {
-  color: #ffffff;
+.sic-text {
   font-family: Lato, sans-serif;
   font-size: 15px;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
 }
 
-.service-candidates-conclusion {
-  color: #ffffff;
-  white-space: pre-line;
+/* Conclusion */
+.sic-conclusion {
   font-family: Lato, sans-serif;
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 1.7;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  padding-top: 4px;
+  font-style: italic;
 }
 
+/* Image column */
 .service-candidates-image-col {
   width: 100%;
   display: flex;
 }
 
 .service-candidates-image-wrapper {
-  background: #ffffff;
-  border: 1px solid #e8e1d3;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 28px;
-  padding: 12px;
+  padding: 0;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 30px 70px #0d1b2a14;
+  box-shadow: 0 40px 80px rgba(13, 27, 54, 0.55), 0 8px 24px rgba(13, 27, 54, 0.3);
   width: 100%;
-  min-height: 100%;
+  min-height: 480px;
 }
 
 .service-candidates-img {
@@ -2974,12 +3015,47 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 16px;
+  border-radius: 28px;
   transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .service-candidates-img:hover {
-  transform: scale(1.05);
+  transform: scale(1.04);
+}
+
+/* Floating badge on image */
+.sic-img-badge {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 14px 20px;
+  pointer-events: none;
+}
+
+.sic-img-badge-num {
+  font-family: Marcellus, serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.sic-img-badge-label {
+  font-family: Lato, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .best-hair-transplant-not-candidate-strip {
@@ -2994,7 +3070,7 @@
 
 .best-hair-transplant-not-candidate-heading {
   margin: 0 0 24px;
-  color: #111111;
+  color: #333333;
   font-family: 'Marcellus', serif;
   font-size: 30px;
   font-weight: 400;
@@ -3014,7 +3090,7 @@
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  color: #111111;
+  color: #333333;
   font-family: 'Lato', sans-serif;
   font-size: 17px;
   line-height: 1.5;
@@ -3033,7 +3109,7 @@
   justify-content: center;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #111111;
+  background: #3B5998;
   color: #ffffff;
   margin-top: 4px;
 }
@@ -3045,9 +3121,9 @@
 
 @media (max-width: 1024px) {
   .service-candidates-container {
-    gap: 40px;
+    gap: 48px;
   }
-  .service-candidates-heading {
+  .sic-heading {
     font-size: 28px;
   }
 }
@@ -3061,19 +3137,16 @@
     gap: 40px;
   }
   .service-candidates-image-wrapper {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 4 / 3;
     min-height: auto;
   }
-  .service-candidates-heading {
+  .sic-heading {
     font-size: 24px;
-    margin-bottom: 24px;
   }
-  .service-candidates-list {
-    gap: 16px;
+  .sic-intro {
+    font-size: 14px;
   }
-  .service-candidates-text,
-  .service-candidates-intro,
-  .service-candidates-conclusion {
+  .sic-text {
     font-size: 14px;
   }
   .best-hair-transplant-not-candidate-strip {
@@ -3115,7 +3188,7 @@
 .service-not-candidates-heading {
   font-family: 'Marcellus', serif;
   font-size: 32px;
-  color: #111111;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 20px;
@@ -3124,7 +3197,7 @@
 }
 
 .service-not-candidates-divider {
-  background: #3d5a99;
+  background: #3B5998;
   width: 60px;
   height: 1px;
   margin: 0 auto;
@@ -3133,7 +3206,7 @@
 .service-not-candidates-box {
   max-width: 900px;
   margin: 0 auto;
-  background: #3d5a99;
+  background: #3B5998;
   border-radius: 24px;
   padding: 50px;
 }
@@ -3151,7 +3224,7 @@
 }
 
 .service-not-candidates-icon-wrap {
-  background: #3d5a99;
+  background: #3B5998;
   border: 1px solid #ffffff;
   border-radius: 50%;
   flex-shrink: 0;
@@ -3196,8 +3269,8 @@
 
 .service-techniques-heading {
   font-family: 'Marcellus', serif;
-  font-size: 32px;
-  color: #111111;
+  font-size: 38px;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 20px;
@@ -3206,7 +3279,7 @@
 }
 
 .service-techniques-divider {
-  background: #3d5a99;
+  background: #3B5998;
   width: 60px;
   height: 1px;
   margin: 0 auto;
@@ -3219,7 +3292,7 @@
 }
 
 .service-techniques-card {
-  background: #3d5a99;
+  background: #3B5998;
   border: 1px solid #ffffff;
   border-radius: 24px;
   flex-direction: column;
@@ -3260,14 +3333,177 @@
   line-height: 1.7;
 }
 
+/* ─── TECHNIQUES REDESIGN — Tab Panel Layout ─────────────────── */
+.stq-section {
+  background: #E8EAF6;
+  padding: 80px 5% 90px;
+}
+.stq-container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.stq-header {
+  text-align: center;
+  margin-bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Tab pills row */
+.stq-tabs {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.stq-tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 100px;
+  border: 1.5px solid rgba(59,89,152,0.25);
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: 'Lato', sans-serif;
+}
+.stq-tab:hover {
+  border-color: #3B5998;
+  background: rgba(59,89,152,0.06);
+}
+.stq-tab.active {
+  background: #3B5998;
+  border-color: #3B5998;
+  box-shadow: 0 8px 24px rgba(59,89,152,0.3);
+}
+.stq-tab-num {
+  font-family: 'Marcellus', serif;
+  font-size: 13px;
+  color: #3B5998;
+  opacity: 0.6;
+  transition: color 0.25s, opacity 0.25s;
+}
+.stq-tab.active .stq-tab-num {
+  color: rgba(255,255,255,0.7);
+  opacity: 1;
+}
+.stq-tab-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #333333;
+  transition: color 0.25s;
+}
+.stq-tab.active .stq-tab-label {
+  color: #ffffff;
+}
+
+/* Panel */
+.stq-panel {
+  display: none;
+}
+.stq-panel.active {
+  display: block;
+  animation: stqFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes stqFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+.stq-panel-inner {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid rgba(59,89,152,0.12);
+  box-shadow: 0 16px 60px rgba(59,89,152,0.12);
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  overflow: hidden;
+  min-height: 280px;
+}
+.stq-panel-left {
+  background: linear-gradient(160deg, #3B5998 0%, #2d4577 100%);
+  padding: 44px 36px;
+  display: flex;
+  flex-direction: column;
+}
+.stq-panel-num {
+  font-family: 'Marcellus', serif;
+  font-size: 64px;
+  line-height: 1;
+  color: rgba(255,255,255,0.12);
+  margin-bottom: 12px;
+  letter-spacing: -2px;
+}
+.stq-panel-title {
+  font-family: 'Marcellus', serif;
+  font-size: 20px;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  line-height: 1.3;
+  margin: 0 0 20px;
+}
+.stq-panel-divider {
+  width: 40px;
+  height: 2px;
+  background: rgba(255,255,255,0.3);
+  margin-bottom: 16px;
+}
+.stq-panel-badge {
+  display: inline-block;
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin: 0;
+}
+.stq-panel-right {
+  padding: 44px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  justify-content: center;
+}
+.stq-panel-para {
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  color: #444;
+  line-height: 1.8;
+  margin: 0;
+}
+.stq-panel-para:first-child {
+  font-size: 16px;
+  color: #1a2b5f;
+  line-height: 1.75;
+}
+
+@media (max-width: 900px) {
+  .stq-panel-inner { grid-template-columns: 1fr; }
+  .stq-panel-left { padding: 32px 28px; }
+  .stq-panel-num { font-size: 48px; }
+}
+@media (max-width: 640px) {
+  .stq-tabs { gap: 8px; }
+  .stq-tab { padding: 10px 16px; }
+  .stq-tab-label { font-size: 11px; }
+  .stq-section { padding: 50px 5% 60px; }
+}
+
 /* ─── DYNAMIC INFO BLOCKS SECTION ────────────────────────────── */
 .service-infoblocks-item {
   padding: 100px 5%;
-  border-bottom: 1px solid #f2ede2;
+  border-bottom: 1px solid #dde5f5;
 }
 
 .service-infoblocks-item.bg-cream {
-  background: #fcfbf7;
+  background: #f7f9fd;
 }
 
 .service-infoblocks-item.bg-white {
@@ -3281,8 +3517,8 @@
 
 .service-infoblocks-heading {
   font-family: 'Marcellus', serif;
-  font-size: 32px;
-  color: #111111;
+  font-size: 38px;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 24px;
@@ -3293,7 +3529,7 @@
 .service-infoblocks-divider {
   width: 40px;
   height: 1px;
-  background: #c5a880;
+  background: #3B5998;
   margin-bottom: 30px;
 }
 
@@ -3332,7 +3568,7 @@
   left: 0;
   width: 6px;
   height: 100%;
-  background: linear-gradient(180deg, #3d5a99, #162c57);
+  background: linear-gradient(180deg, #3B5998, #162c57);
 }
 
 .best-hair-transplant-procedure-eyebrow {
@@ -3352,7 +3588,7 @@
   content: "";
   width: 22px;
   height: 1px;
-  background: #3d5a99;
+  background: #3B5998;
 }
 
 .best-hair-transplant-procedure-grid {
@@ -3415,7 +3651,7 @@
 .service-aftercare-section {
   background: #ffffff;
   padding: 80px 5% 90px 5%;
-  border-top: 1px solid #f2ede2;
+  border-top: 1px solid #dde5f5;
 }
 
 .service-aftercare-container {
@@ -3438,14 +3674,14 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #c5a880;
+  color: #3B5998;
   margin-bottom: 12px;
 }
 
 .service-aftercare-heading {
   font-family: 'Marcellus', serif;
-  font-size: 32px;
-  color: #111111;
+  font-size: 38px;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 24px;
@@ -3456,7 +3692,7 @@
 .service-aftercare-divider {
   width: 60px;
   height: 1px;
-  background: #c5a880;
+  background: #3B5998;
   margin-bottom: 24px;
 }
 
@@ -3470,9 +3706,9 @@
 }
 
 .service-aftercare-conclusion-box {
-  background: #fcfbf7;
-  border: 1px solid #f2ede2;
-  border-left: 3px solid #d4af37;
+  background: #f7f9fd;
+  border: 1px solid #dde5f5;
+  border-left: 3px solid #E4B753;
   border-radius: 16px;
   padding: 24px;
 }
@@ -3483,7 +3719,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: #d4af37;
+  color: #E4B753;
   margin-bottom: 8px;
 }
 
@@ -3505,23 +3741,23 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  background: #fcfbf7;
+  background: #f7f9fd;
   padding: 20px 24px;
   border-radius: 16px;
-  border: 1px solid #f2ede2;
+  border: 1px solid #dde5f5;
   transition: background 0.3s ease;
 }
 
 .service-aftercare-item:hover {
-  background: #fdfaf4;
+  background: #eef4ff;
 }
 
 .service-aftercare-bullet-wrap {
   flex-shrink: 0;
   width: 22px;
   height: 22px;
-  background: #ffffff;
-  border: 1px solid #d4af37;
+  background: #3B5998;
+  border: 1px solid #3B5998;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -3532,7 +3768,7 @@
 .service-aftercare-bullet-icon {
   width: 11px;
   height: 11px;
-  color: #d4af37;
+  color: #ffffff;
 }
 
 .service-aftercare-text {
@@ -3583,7 +3819,7 @@
   left: 0;
   width: 6px;
   height: 100%;
-  background: linear-gradient(180deg, #3d5a99, #162c57);
+  background: linear-gradient(180deg, #3B5998, #162c57);
 }
 
 .best-hair-transplant-aftercare-primary {
@@ -3612,12 +3848,12 @@
 .best-hair-transplant-aftercare-mark .service-aftercare-bullet-icon {
   width: 18px;
   height: 18px;
-  color: #3d5a99;
+  color: #3B5998;
 }
 
 .best-hair-transplant-aftercare .service-aftercare-heading {
   margin-bottom: 20px;
-  color: #111111;
+  color: #333333;
   font-size: 34px;
   line-height: 1.18;
   letter-spacing: 1.3px;
@@ -3626,7 +3862,7 @@
 .best-hair-transplant-aftercare .service-aftercare-divider {
   width: 86px;
   height: 2px;
-  background: #3d5a99;
+  background: #3B5998;
   margin-bottom: 24px;
 }
 
@@ -3645,7 +3881,7 @@
   line-height: 1.25;
   letter-spacing: 1.1px;
   text-transform: uppercase;
-  color: #111111;
+  color: #333333;
   font-weight: 400;
 }
 
@@ -3655,7 +3891,7 @@
 }
 
 .best-hair-transplant-aftercare-secondary .service-aftercare-bullet-icon {
-  color: #3d5a99;
+  color: #3B5998;
 }
 
 .best-hair-transplant-aftercare-secondary .service-aftercare-intro-text {
@@ -3667,7 +3903,7 @@
   border-color: rgba(61, 90, 153, 0.36);
   background:
     linear-gradient(135deg, rgba(30, 58, 114, 0.98), rgba(61, 90, 153, 0.96)),
-    #3d5a99;
+    #3B5998;
   box-shadow: 0 30px 90px rgba(61, 90, 153, 0.24);
 }
 
@@ -3694,10 +3930,10 @@
 }
 
 .service-whychoose-section {
-  background: #fcfbf7;
+  background: #f7f9fd;
   padding: 80px 5% 90px 5%;
-  border-top: 1px solid #f2ede2;
-  border-bottom: 1px solid #f2ede2;
+  border-top: 1px solid #dde5f5;
+  border-bottom: 1px solid #dde5f5;
 }
 
 .service-whychoose-container {
@@ -3719,15 +3955,15 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #c5a880;
+  color: #3B5998;
   margin-bottom: 12px;
   display: block;
 }
 
 .service-whychoose-heading {
   font-family: 'Marcellus', serif;
-  font-size: 32px;
-  color: #111111;
+  font-size: 38px;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 2px;
   line-height: 1.3;
@@ -3737,7 +3973,7 @@
 .service-whychoose-divider {
   width: 60px;
   height: 1px;
-  background: #c5a880;
+  background: #3B5998;
   margin-top: 20px;
 }
 
@@ -3756,44 +3992,45 @@
 }
 
 .service-whychoose-card {
-  background: #ffffff;
-  border: 1px solid #f2ede2;
+  background: #3B5998;
+  border: 1px solid rgba(255,255,255,0.15);
   border-radius: 24px;
   padding: 40px;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .service-whychoose-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 45px rgba(0,0,0,0.03);
+  transform: translateY(-6px);
+  background: #3B5998;
+  box-shadow: 0 20px 55px rgba(59, 89, 152, 0.35);
 }
 
 .service-whychoose-icon-wrap {
   flex-shrink: 0;
   width: 44px;
   height: 44px;
-  background: #fdfaf4;
-  border: 1px solid #d4af37;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.28);
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #d4af37;
+  color: #ffffff;
 }
 
 .service-whychoose-icon {
   width: 20px;
   height: 20px;
-  color: #d4af37;
+  color: #ffffff;
 }
 
 .service-whychoose-card-text {
   font-family: 'Lato', sans-serif;
   font-size: 15px;
-  color: #333333;
+  color: #ffffff;
   line-height: 1.6;
   font-weight: 600;
 }
@@ -3808,6 +4045,37 @@
   text-align: center;
 }
 
+/* ─── SECTION KICKER / EYEBROW LABEL ─────────────────────────── */
+.svc-section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #3B5998;
+  margin-bottom: 14px;
+}
+
+.svc-section-kicker::before {
+  content: "";
+  width: 36px;
+  height: 1.5px;
+  background: #3B5998;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.svc-section-kicker.on-blue {
+  color: rgba(255,255,255,0.8);
+}
+
+.svc-section-kicker.on-blue::before {
+  background: rgba(255,255,255,0.8);
+}
+
 .best-hair-transplant-scalp-care {
   background: #ffffff;
   border-top-color: rgba(61, 90, 153, 0.12);
@@ -3815,33 +4083,34 @@
 }
 
 .best-hair-transplant-scalp-care .service-whychoose-label {
-  color: #3d5a99;
+  color: #3B5998;
 }
 
 .best-hair-transplant-scalp-care .service-whychoose-divider {
-  background: #3d5a99;
+  background: #3B5998;
 }
 
 .best-hair-transplant-scalp-care .service-whychoose-card {
-  background: #f7f9fd;
-  border-color: rgba(61, 90, 153, 0.14);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  background: linear-gradient(145deg, #3B5998 0%, #2d4577 100%);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 8px 28px rgba(59, 89, 152, 0.18);
 }
 
 .best-hair-transplant-scalp-care .service-whychoose-card:hover {
-  background: #3d5a99;
-  border-color: #3d5a99;
-  box-shadow: 0 22px 70px rgba(61, 90, 153, 0.22);
+  background: linear-gradient(145deg, #4a6ab8 0%, #3B5998 100%);
+  border-color: rgba(255,255,255,0.2);
+  box-shadow: 0 24px 60px rgba(59, 89, 152, 0.4);
+  transform: translateY(-8px);
 }
 
 .best-hair-transplant-scalp-care .service-whychoose-icon-wrap {
-  background: #eef4ff;
-  border-color: rgba(61, 90, 153, 0.28);
-  color: #3d5a99;
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.28);
+  color: #ffffff;
 }
 
 .best-hair-transplant-scalp-care .service-whychoose-icon {
-  color: #3d5a99;
+  color: #ffffff;
 }
 
 .best-hair-transplant-scalp-care .service-whychoose-card:hover .service-whychoose-card-text {
@@ -3849,8 +4118,8 @@
 }
 
 .best-hair-transplant-scalp-care .service-whychoose-card:hover .service-whychoose-icon-wrap {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.36);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .best-hair-transplant-scalp-care .service-whychoose-card:hover .service-whychoose-icon {
@@ -3858,7 +4127,7 @@
 }
 
 .hair-transplant-section {
-  background-color: #3d5a99;
+  background-color: #3B5998;
   padding: 80px 5% 90px;
   border-radius: 0;
 }
@@ -3916,7 +4185,7 @@
 
 .hair-transplant-why-heading {
   margin: 0 0 20px;
-  color: #111111;
+  color: #333333;
   font-family: 'Marcellus', serif;
   font-size: 32px;
   font-weight: 400;
@@ -3945,7 +4214,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #111111;
+  color: #333333;
   font-family: 'Lato', sans-serif;
   font-size: 16px;
   line-height: 1.5;
@@ -3959,7 +4228,7 @@
   justify-content: center;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #111111;
+  background: #3B5998;
   color: #ffffff;
 }
 
@@ -4007,15 +4276,15 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #3d5a99;
+  color: #3B5998;
   margin-bottom: 12px;
   display: block;
 }
 
 .service-edfaq-heading {
   font-family: 'Marcellus', serif;
-  font-size: 32px;
-  color: #111111;
+  font-size: 38px;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 2px;
   line-height: 1.3;
@@ -4025,7 +4294,7 @@
 .service-edfaq-divider {
   width: 60px;
   height: 2px;
-  background: #3d5a99;
+  background: #3B5998;
   margin: 20px auto 0 auto;
 }
 
@@ -4083,7 +4352,7 @@
 .service-edfaq-title {
   font-family: 'Marcellus', serif;
   font-size: 15px;
-  color: #111111;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: 600;
@@ -4099,14 +4368,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #3d5a99;
+  color: #3B5998;
   transition: transform 0.3s ease;
 }
 
 .service-edfaq-icon {
   width: 12px;
   height: 12px;
-  color: #3d5a99;
+  color: #3B5998;
 }
 
 .service-edfaq-content {
@@ -4139,7 +4408,7 @@
   border-radius: 0;
   background:
     radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 42%),
-    #3d5a99;
+    #3B5998;
   border: none;
   box-shadow: none;
 }
@@ -4205,13 +4474,47 @@
 
 .hair-transplant-results-section {
   background: #f7f9fd;
-  padding: 90px 5% 100px;
+  padding: 60px 5% 40px;
   overflow: hidden;
 }
+
+.htr-nav-btn {
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(59, 89, 152, 0.25);
+  background: #fff;
+  color: #3B5998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 4px 16px rgba(59, 89, 152, 0.12);
+}
+
+.htr-nav-btn:hover {
+  background: #3B5998;
+  color: #fff;
+  border-color: #3B5998;
+}
+
+.htr-nav-btn.swiper-button-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.htr-prev { left: -24px; }
+.htr-next { right: -24px; }
 
 .hair-transplant-results-container {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0;
 }
 
 .hair-transplant-results-kicker {
@@ -4219,7 +4522,7 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 22px;
-  color: #111111;
+  color: #333333;
   font-family: 'Marcellus', serif;
   font-size: 14px;
   letter-spacing: 3px;
@@ -4229,7 +4532,7 @@
 .hair-transplant-results-kicker span {
   width: 52px;
   height: 1px;
-  background: #3d5a99;
+  background: #3B5998;
   position: relative;
 }
 
@@ -4241,7 +4544,7 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #3d5a99;
+  background: #3B5998;
 }
 
 .hair-transplant-results-heading {
@@ -4341,9 +4644,9 @@
   min-width: 160px;
   min-height: 52px;
   padding: 10px 10px 10px 24px;
-  border: 1px solid #3d5a99;
+  border: 1px solid #3B5998;
   border-radius: 50px;
-  background: #3d5a99;
+  background: #3B5998;
   color: #ffffff;
   font-family: 'Lato', sans-serif;
   font-size: 14px;
@@ -4387,7 +4690,7 @@
 }
 
 .hair-transplant-videos-section {
-  background: #3d5a99;
+  background: #3B5998;
   padding: 80px 5% 90px;
 }
 
@@ -4434,7 +4737,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 4px;
-  background: #111111;
+  background: #3B5998;
   aspect-ratio: 16 / 9;
 }
 
@@ -4455,7 +4758,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #3d5a99;
+  background: #3B5998;
   color: #ffffff;
   border: 2px solid rgba(255, 255, 255, 0.85);
   transform: translate(-50%, -50%);
@@ -4464,7 +4767,7 @@
 
 .hair-transplant-video-card h3 {
   margin: 18px 6px 0;
-  color: #111111;
+  color: #333333;
   font-family: 'Lato', sans-serif;
   font-size: 16px;
   font-weight: 800;
@@ -4560,7 +4863,7 @@
   align-items: center;
   justify-content: center;
   background: #ffffff;
-  color: #111111;
+  color: #333333;
   cursor: pointer;
 }
 
@@ -4649,7 +4952,7 @@
   }
 
   .hair-transplant-results-section {
-    padding: 58px 5% 68px;
+    padding: 40px 5% 40px;
   }
 
   .hair-transplant-results-heading {
@@ -4786,8 +5089,456 @@
   }
 }
 
+/* ================================================================
+   ADDITIONAL DESIGN POLISH — Service Details Page
+   ================================================================ */
 
+/* WhyChooseSection: blue tint background + accent left border on items */
+.hair-transplant-why-section {
+  background: linear-gradient(135deg, #f0f3fb 0%, #ffffff 60%);
+  border-top: 1px solid rgba(59, 89, 152, 0.1);
+  border-bottom: 1px solid rgba(59, 89, 152, 0.1);
+}
 
+.hair-transplant-why-item {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid rgba(59, 89, 152, 0.1);
+  box-shadow: 0 2px 8px rgba(59, 89, 152, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.hair-transplant-why-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(59, 89, 152, 0.12);
+}
 
+.hair-transplant-why-check {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #3B5998, #5a7fc7);
+  box-shadow: 0 4px 12px rgba(59, 89, 152, 0.3);
+  flex-shrink: 0;
+}
+
+.hair-transplant-why-image-wrap {
+  border-radius: 20px;
+  box-shadow: 0 32px 80px rgba(59, 89, 152, 0.18);
+  transform: perspective(1000px) rotateY(-3deg);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.hair-transplant-why-image-wrap:hover {
+  transform: perspective(1000px) rotateY(0deg) translateY(-4px);
+  box-shadow: 0 40px 100px rgba(59, 89, 152, 0.22);
+}
+
+/* Technique cards: large ghost number + glow on hover */
+.service-techniques-card {
+  background: linear-gradient(135deg, #3B5998 0%, #2d4577 100%);
+  box-shadow: 0 8px 32px rgba(59, 89, 152, 0.2);
+}
+.service-techniques-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 60px rgba(59, 89, 152, 0.4);
+}
+.service-techniques-num {
+  font-size: 56px;
+  color: rgba(255, 255, 255, 0.12);
+  letter-spacing: -2px;
+}
+
+/* WhyChoose cards: brighter on hover */
+.service-whychoose-card {
+  background: linear-gradient(145deg, #3B5998 0%, #2d4577 100%);
+  box-shadow: 0 8px 28px rgba(59, 89, 152, 0.18);
+}
+.service-whychoose-card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 24px 60px rgba(59, 89, 152, 0.38) !important;
+}
+.service-whychoose-icon-wrap {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+}
+
+/* InfoBlocks procedure card: accent bar + better depth */
+.best-hair-transplant-procedure-card {
+  box-shadow: 0 32px 100px rgba(59, 89, 152, 0.16);
+  border-radius: 16px;
+}
+
+/* Hair transplant Q&A cards: cleaner left accent */
+.hair-transplant-card {
+  border-radius: 16px;
+  border-left: 4px solid #3B5998;
+  padding: 40px 50px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.hair-transplant-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 64px rgba(59, 89, 152, 0.16);
+}
+.hair-transplant-heading {
+  font-size: 21px;
+  color: #3B5998;
+}
+
+/* Aftercare items: card-style with number */
+.service-aftercare-item {
+  background: #f7f9fd;
+  border: 1px solid rgba(59, 89, 152, 0.1);
+  border-radius: 12px;
+  padding: 14px 18px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+.service-aftercare-item:hover {
+  background: #fff;
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(59, 89, 152, 0.1);
+}
+.service-aftercare-bullet-wrap {
+  background: linear-gradient(135deg, #3B5998, #5a7fc7);
+  box-shadow: 0 4px 12px rgba(59, 89, 152, 0.25);
+}
+
+/* Results section kicker + heading alignment */
+.hair-transplant-results-section .dmc-kicker {
+  margin-bottom: 8px;
+}
+
+/* Video cards: hover lift + overlay brightness */
+.hair-transplant-video-card:hover .hair-transplant-video-thumb img {
+  transform: scale(1.04);
+}
+.hair-transplant-video-thumb img {
+  transition: transform 0.4s ease;
+}
+.hair-transplant-video-play {
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.hair-transplant-video-card:hover .hair-transplant-video-play {
+  transform: translate(-50%, -50%) scale(1.15);
+  background: #3B5998;
+}
+
+/* Section background rhythm for plain white sections between blue ones */
+.service-infoblocks-item.bg-white {
+  background: linear-gradient(180deg, #f7f9fd 0%, #ffffff 30%);
+}
+
+/* Aftercare section: soft blue-tint background */
+.service-aftercare-section {
+  background: linear-gradient(135deg, #f0f3fb 0%, #ffffff 70%);
+}
+
+/* Process slider: darker blue background */
+.process-slider-section {
+  background: linear-gradient(135deg, #2d4577 0%, #3B5998 60%, #4a6ab8 100%);
+}
+
+/* ================================================================
+   SERVICE NOT CANDIDATES — Dark contrasting redesign
+   ================================================================ */
+.snc-section {
+  background: linear-gradient(135deg, #0d1b36 0%, #162c57 100%);
+  padding: 80px 5% 90px;
+}
+.snc-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.snc-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.snc-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #ef4444;
+  margin-bottom: 16px;
+}
+.snc-kicker::before {
+  content: "";
+  width: 32px;
+  height: 1.5px;
+  background: #ef4444;
+  display: inline-block;
+}
+.snc-heading {
+  font-family: 'Marcellus', serif;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0 0 16px;
+}
+.snc-subtext {
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  color: rgba(255,255,255,0.5);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+.snc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.snc-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 14px;
+  padding: 18px 22px;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.snc-card:hover {
+  background: rgba(239,68,68,0.08);
+  border-color: rgba(239,68,68,0.25);
+  transform: translateY(-2px);
+}
+.snc-icon-wrap {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(239,68,68,0.15);
+  border: 1px solid rgba(239,68,68,0.35);
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+.snc-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.55;
+}
+@media (max-width: 768px) {
+  .snc-section { padding: 50px 5% 60px; }
+  .snc-heading { font-size: 24px; }
+  .snc-grid { grid-template-columns: 1fr; gap: 12px; }
+}
+
+/* ================================================================
+   SERVICE BENEFITS — Numbered card grid redesign
+   ================================================================ */
+.service-benefits-section {
+  background: #E8EAF6;
+  padding: 80px 5% 90px;
+}
+.sbn-header {
+  max-width: 1300px;
+  margin: 0 auto 50px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.service-benefits-container {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 60px;
+  align-items: start;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.sbn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.sbn-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  border: 1px solid rgba(59,89,152,0.1);
+  box-shadow: 0 4px 16px rgba(59,89,152,0.07);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.sbn-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(59,89,152,0.14);
+  border-color: rgba(59,89,152,0.25);
+}
+.sbn-num {
+  font-family: 'Marcellus', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #3B5998;
+  line-height: 1;
+  flex-shrink: 0;
+  padding-top: 2px;
+  opacity: 0.5;
+}
+.sbn-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  color: #333333;
+  line-height: 1.55;
+  font-weight: 500;
+}
+@media (max-width: 1024px) {
+  .service-benefits-container { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 768px) {
+  .sbn-grid { grid-template-columns: 1fr; }
+  .service-benefits-section { padding: 50px 5% 60px; }
+}
+
+/* ================================================================
+   SERVICE CONTENT BLOCK — Editorial left-accent redesign
+   ================================================================ */
+.service-content-block-section {
+  background: linear-gradient(180deg, #f0f3fb 0%, #ffffff 30%);
+  padding: 60px 5% 80px;
+  border-top: 1px solid rgba(59,89,152,0.1);
+}
+.service-content-block-container {
+  max-width: 920px;
+  margin: 0 auto;
+}
+.service-content-block-item {
+  padding-left: 28px;
+  border-left: 4px solid #3B5998;
+  margin-bottom: 60px;
+}
+.service-content-block-item:last-child { margin-bottom: 0; }
+.service-content-block-heading {
+  font-family: 'Marcellus', serif;
+  font-size: 22px;
+  color: #3B5998;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+.service-content-block-description p:first-child {
+  font-size: 17px;
+  color: #162c57;
+  line-height: 1.75;
+  font-weight: 400;
+}
+.service-content-block-description p {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.8;
+  margin-bottom: 18px;
+}
+
+/* ================================================================
+   SERVICE AFTERCARE — Numbered step cards
+   ================================================================ */
+.service-aftercare-section {
+  background: linear-gradient(135deg, #f0f3fb 0%, #ffffff 70%);
+  padding: 80px 5% 90px;
+}
+.service-aftercare-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 80px;
+  align-items: start;
+}
+.service-aftercare-conclusion-box {
+  background: linear-gradient(135deg, #3B5998, #2d4577);
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin-top: 28px;
+}
+.service-aftercare-conclusion-label {
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  display: block;
+  margin-bottom: 8px;
+}
+.service-aftercare-conclusion-text {
+  font-family: 'Marcellus', serif;
+  font-size: 16px;
+  color: #ffffff;
+  line-height: 1.5;
+  margin: 0;
+}
+.service-aftercare-list-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  counter-reset: aftercare-counter;
+}
+.service-aftercare-item {
+  counter-increment: aftercare-counter;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #ffffff;
+  border: 1px solid rgba(59,89,152,0.1);
+  border-radius: 14px;
+  padding: 16px 20px;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.service-aftercare-item:hover {
+  transform: translateX(6px);
+  box-shadow: 0 6px 20px rgba(59,89,152,0.12);
+  border-color: rgba(59,89,152,0.25);
+}
+.service-aftercare-bullet-wrap {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #3B5998, #2d4577);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(59,89,152,0.3);
+  font-family: 'Marcellus', serif;
+  font-size: 13px;
+  color: #ffffff;
+}
+.service-aftercare-bullet-wrap::after {
+  content: counter(aftercare-counter, decimal-leading-zero);
+  display: block;
+}
+.service-aftercare-bullet-icon { display: none; }
+.service-aftercare-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.55;
+  font-weight: 500;
+  padding-top: 7px;
+}
+@media (max-width: 1024px) {
+  .service-aftercare-container { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 768px) {
+  .service-aftercare-section { padding: 50px 5% 60px; }
+}
 
 

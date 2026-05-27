@@ -41,7 +41,7 @@ const ContactHero = ({ data: initialData }) => {
 
         <div className="max-w-[1400px] mx-auto w-full relative" style={{ zIndex: 2 }}>
           {/* Heading on Top */}
-          <h1 className="service-hero-title" style={{ color: overlayOpacity > 0.4 ? '#ffffff' : '#111111' }}>
+          <h1 className="service-hero-title" style={{ color: overlayOpacity > 0.4 ? '#ffffff' : '#333333' }}>
             <EditableText sectionId="contact-hero" fieldPath="hero.title">
               {title}
             </EditableText>
@@ -49,9 +49,9 @@ const ContactHero = ({ data: initialData }) => {
 
           {/* Breadcrumb Below */}
           <div className="service-hero-breadcrumb" style={{ color: overlayOpacity > 0.4 ? 'rgba(255,255,255,0.8)' : '#555555' }}>
-            <span className="current" style={{ color: overlayOpacity > 0.4 ? '#ffffff' : '#111111' }}>Home</span>
+            <span className="current" style={{ color: overlayOpacity > 0.4 ? '#ffffff' : '#333333' }}>Home</span>
             <span className="sep" style={{ color: overlayOpacity > 0.4 ? 'rgba(255,255,255,0.4)' : '#cccccc' }}>/</span>
-            <span className="current" style={{ color: overlayOpacity > 0.4 ? '#ffffff' : '#111111' }}>
+            <span className="current" style={{ color: overlayOpacity > 0.4 ? '#ffffff' : '#333333' }}>
                <EditableText sectionId="contact-hero" fieldPath="hero.breadcrumbText">
                   {breadcrumbText}
                </EditableText>

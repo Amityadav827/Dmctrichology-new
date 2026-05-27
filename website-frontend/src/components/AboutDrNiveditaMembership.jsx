@@ -31,11 +31,11 @@ export default function AboutDrNiveditaMembership({ data = {} }) {
         }
         .dr-nivedita-membership-heading {
           font-family: 'Marcellus', serif !important;
-          font-size: 20px;
-          font-weight: 700;
-          letter-spacing: 0.12em;
+          font-size: 44px;
+          font-weight: 400;
+          letter-spacing: 0.03em;
           text-transform: uppercase;
-          color: #1a1a2e;
+          color: #333333;
           text-align: center;
           margin-bottom: 36px;
         }

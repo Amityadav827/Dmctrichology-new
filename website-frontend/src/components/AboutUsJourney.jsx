@@ -29,7 +29,7 @@ const AboutUsJourney = ({ data = {} }) => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="about-journey-tag"
+              className="dmc-kicker"
             >
               <EditableText sectionId="about-journey" fieldPath="journey.sectionTitle" tag="span">{sectionTitle}</EditableText>
             </motion.span>
@@ -38,7 +38,7 @@ const AboutUsJourney = ({ data = {} }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="about-journey-main-title"
+              className="dmc-heading"
             >
               <EditableText sectionId="about-journey" fieldPath="journey.heading" tag="span">{heading}</EditableText>
             </motion.h2>

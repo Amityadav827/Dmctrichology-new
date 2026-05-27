@@ -447,7 +447,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                    {showCalendar && (
                      <div className="luxury-datepicker-overlay" style={{ position: 'absolute', top: '110%', right: '0', width: '330px', backgroundColor: '#fff', borderRadius: '24px', boxShadow: '0 20px 50px rgba(0,0,0,0.12)', padding: '24px', zIndex: 1000, border: '1px solid #f2f2f2', animation: 'fadeInUp 0.3s ease' }}>
                        <div style={{ marginBottom: '15px', borderBottom: '1px solid #f2f2f2', paddingBottom: '10px', display: 'flex', justifyContent: 'between', alignItems: 'center' }}>
-                          <p style={{ margin: 0, fontSize: '15px', fontWeight: 'bold', fontFamily: "'Marcellus', serif", color: '#1a1a1a' }}>Appointment Details</p>
+                          <p style={{ margin: 0, fontSize: '15px', fontWeight: 'bold', fontFamily: "'Marcellus', serif", color: '#333333' }}>Appointment Details</p>
                        </div>
                        
                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>

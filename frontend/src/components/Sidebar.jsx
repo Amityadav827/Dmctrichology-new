@@ -3,11 +3,11 @@ import { NavLink, useLocation } from "react-router-dom";
 import { hasPermission } from "../utils/auth";
 import api from "../api/client";
 import {
-  LayoutDashboard, Search, Star, PhoneCall, Mail, CalendarCheck,
-  FileText, Scissors, Layers, HelpCircle, Activity, List,
+  LayoutDashboard, Star, PhoneCall, Mail, CalendarCheck,
+  FileText, Tag, Layers, HelpCircle, Activity, List,
   Video, PlayCircle, Image as ImageIcon, Users, Shield,
-  Key, Menu as MenuIcon, Settings, Wrench, Globe, Link as LinkIcon, Bot,
-  ChevronDown, ChevronRight, Home, Eye, FlaskConical, User
+  Key, Menu as MenuIcon, Settings, Globe, Link as LinkIcon, Bot,
+  ChevronDown, ChevronRight, Home, Eye, FlaskConical, User, Scissors, PlusCircle, Navigation
 } from "lucide-react";
 
 const getNavClass = ({ isActive }) =>
@@ -30,8 +30,13 @@ const SectionLabel = ({ children }) => (
 
 function Sidebar() {
   const [isHomeOpen, setIsHomeOpen] = React.useState(true);
-  const [isAboutUsOpen, setIsAboutUsOpen] = React.useState(() => 
-    window.location.pathname.startsWith("/cms/about-dr-nandani")
+  const [isPagesOpen, setIsPagesOpen] = React.useState(() =>
+    window.location.pathname.startsWith("/pages") ||
+    window.location.pathname.startsWith("/cms/about-dr")
+  );
+  const [isAboutUsOpen, setIsAboutUsOpen] = React.useState(() =>
+    window.location.pathname.startsWith("/cms/about-dr-nandani") ||
+    window.location.pathname.startsWith("/cms/about-dr-nivedita")
   );
   const [isServiceDetailsOpen, setIsServiceDetailsOpen] = React.useState(true);
   const [serviceDetailsItems, setServiceDetailsItems] = React.useState([]);
@@ -132,57 +137,68 @@ function Sidebar() {
           </>
         )}
 
+        {/* PAGES — all editable pages in one section */}
+        {hasPermission("cms") && (
+          <>
+            <SectionLabel>Pages</SectionLabel>
+            <NavLink to="/cms/homepage" className={getNavClass}>
+              <Home size={16} /> Homepage
+            </NavLink>
+            <NavLink to="/cms/about-us" className={getNavClass}>
+              <Users size={16} /> About Page
+            </NavLink>
+            <NavLink to="/cms/contact-page" className={getNavClass}>
+              <Mail size={16} /> Contact Page
+            </NavLink>
+            <NavLink to="/cms/blog-page" className={getNavClass}>
+              <FileText size={16} /> Blog Page
+            </NavLink>
+            <NavLink to="/cms/science-at-dmc" className={getNavClass}>
+              <FlaskConical size={16} /> Science at DMC
+            </NavLink>
+            <NavLink to="/cms/press-media" className={getNavClass}>
+              <Globe size={16} /> Press & Media
+            </NavLink>
+            <NavLink to="/cms/virtual-tour" className={getNavClass}>
+              <PlayCircle size={16} /> Virtual Tour
+            </NavLink>
+            <NavLink to="/cms/influencers" className={getNavClass}>
+              <Star size={16} /> Influencers
+            </NavLink>
+            {/* Doctor profile pages — nested collapsible */}
+            <div className="service-details-parent-row">
+              <span className="nav-item" style={{ pointerEvents: "none", flex: 1 }}>
+                <User size={16} /> Doctor Pages
+              </span>
+              <button
+                type="button"
+                className={`service-details-toggle${isAboutUsOpen ? " open" : ""}`}
+                onClick={() => setIsAboutUsOpen(p => !p)}
+                aria-label={isAboutUsOpen ? "Collapse" : "Expand"}
+              >
+                <ChevronRight size={15} />
+              </button>
+            </div>
+            {isAboutUsOpen && (
+              <div className="service-details-subnav">
+                <NavLink to="/cms/about-dr-nandani" className={getNavClass}>
+                  <User size={14} /> Dr Nandani
+                </NavLink>
+                <NavLink to="/cms/about-dr-nivedita" className={getNavClass}>
+                  <User size={14} /> Dr Nivedita
+                </NavLink>
+              </div>
+            )}
+            <NavLink to="/pages" className={getNavClass}>
+              <Layers size={16} /> Custom Pages
+            </NavLink>
+          </>
+        )}
+
         {/* 2. CONTENT */}
-        {(hasPermission("blog") || hasPermission("cms") || hasPermission("gallery") || hasPermission("video") || hasPermission("users")) && (
+        {(hasPermission("blog") || hasPermission("gallery") || hasPermission("video") || hasPermission("users")) && (
           <>
             <SectionLabel>Content</SectionLabel>
-            {hasPermission("cms") && (
-              <>
-                <NavLink to="/pages" className={getNavClass}>
-                  <Layers size={16} /> Pages
-                </NavLink>
-                
-                {/* Collapsible Dropdown for ABOUT US PAGE CMS */}
-                <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                  <button
-                    onClick={() => setIsAboutUsOpen(!isAboutUsOpen)}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      width: "100%",
-                      padding: "0.5rem 0.75rem",
-                      borderRadius: "8px",
-                      fontSize: "0.875rem",
-                      fontWeight: 600,
-                      color: "#475569",
-                      background: "none",
-                      border: "1px solid transparent",
-                      cursor: "pointer",
-                      transition: "all 0.15s ease",
-                      textAlign: "left"
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#F1F5F9"; e.currentTarget.style.color = "#0F172A"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#475569"; }}
-                  >
-                    <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <Users size={16} /> ABOUT US PAGE CMS
-                    </span>
-                    {isAboutUsOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                  </button>
-                  {isAboutUsOpen && (
-                    <div style={{ paddingLeft: "1.25rem", display: "flex", flexDirection: "column", gap: "0.25rem", marginTop: "0.25rem" }}>
-                      <NavLink to="/cms/about-dr-nandani" className={getNavClass}>
-                        <User size={16} /> About Dr Nandani
-                      </NavLink>
-                      <NavLink to="/cms/about-dr-nivedita" className={getNavClass}>
-                        <User size={16} /> About Dr Nivedita
-                      </NavLink>
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
             {hasPermission("blog") && (
               <>
                 <NavLink to="/blogs" className={getNavClass}>
@@ -254,33 +270,21 @@ function Sidebar() {
         {hasPermission("services") && (
           <>
             <SectionLabel>Services</SectionLabel>
-            <NavLink to="/services/categories" className={getNavClass}>
-              <Scissors size={16} /> View Category
-            </NavLink>
-            <NavLink to="/services/second-categories" className={getNavClass}>
-              <Layers size={16} /> Second Category
-            </NavLink>
-            <NavLink to="/services/faqs" className={getNavClass}>
-              <HelpCircle size={16} /> Service FAQ
-            </NavLink>
-            
-            {/* New Service Page CMS Links */}
-            <SectionLabel>Service Page CMS</SectionLabel>
-            <NavLink to="/cms/service-hero" className={getNavClass}>
-              <Home size={16} /> Hero Banner
-            </NavLink>
+
+            {/* All Services */}
             <NavLink to="/cms/service-listing" className={getNavClass}>
-              <List size={16} /> Service Grid
+              <List size={16} /> All Services
             </NavLink>
+
+            {/* Categories — single authoritative source */}
             <NavLink to="/cms/service-categories" className={getNavClass}>
-              <Layers size={16} /> Categories
+              <Tag size={16} /> Categories
             </NavLink>
-            <NavLink to="/cms/visual-builder/service" className={getNavClass}>
-              <Eye size={16} /> Visual Builder
-            </NavLink>
+
+            {/* Per-service edit pages (like WordPress post list) */}
             <div className="service-details-parent-row">
               <NavLink to="/cms/service-details" className={getNavClass}>
-                <Layers size={16} /> Service Details CMS
+                <FileText size={16} /> Service Pages
               </NavLink>
               <button
                 type="button"
@@ -290,13 +294,13 @@ function Sidebar() {
                   e.stopPropagation();
                   setIsServiceDetailsOpen((prev) => !prev);
                 }}
-                aria-label={isServiceDetailsOpen ? "Collapse service details menu" : "Expand service details menu"}
+                aria-label={isServiceDetailsOpen ? "Collapse" : "Expand"}
                 aria-expanded={isServiceDetailsOpen}
               >
                 <ChevronRight size={15} />
               </button>
             </div>
-            {isServiceDetailsOpen && (isServiceDetailsCms || serviceDetailsItems.length > 0) && (
+            {isServiceDetailsOpen && (
               <div className="service-details-subnav">
                 {serviceDetailsItems.length > 0 ? (
                   serviceDetailsItems.map((service) => (
@@ -317,39 +321,50 @@ function Sidebar() {
                 ) : (
                   <div className="service-detail-subitem muted">
                     <span className="service-detail-subdot" />
-                    Loading services...
+                    No services yet
                   </div>
                 )}
               </div>
             )}
 
-            {/* Details Page CMS */}
-            <SectionLabel>Details Page CMS</SectionLabel>
-            <NavLink to="/cms/details-banner" className={getNavClass}>
-              <Home size={16} /> Details Banner
+            {/* Services page settings */}
+            <SectionLabel>Services Page</SectionLabel>
+            <NavLink to="/cms/service-hero" className={getNavClass}>
+              <ImageIcon size={16} /> Hero Banner
             </NavLink>
-            <NavLink to="/cms/service-intro" className={getNavClass}>
-              <List size={16} /> Service Intro
-            </NavLink>
-            <NavLink to="/cms/process-slider" className={getNavClass}>
-              <Activity size={16} /> Process Slider
-            </NavLink>
-            <NavLink to="/cms/before-after" className={getNavClass}>
-              <Layers size={16} /> Before / After
-            </NavLink>
-            <NavLink to="/cms/faq-enquiry" className={getNavClass}>
-              <HelpCircle size={16} /> FAQ & Enquiry
-            </NavLink>
-            <NavLink to="/cms/ideal-frequency" className={getNavClass}>
-              <List size={16} /> Ideal Frequency
-            </NavLink>
-            <NavLink to="/cms/visual-builder/details" className={getNavClass}>
+            <NavLink to="/cms/visual-builder/service" className={getNavClass}>
               <Eye size={16} /> Visual Builder
             </NavLink>
           </>
         )}
 
-        {/* 4. RESULTS */}
+        {/* GLOBAL LAYOUT — header, topbar, footer */}
+        {hasPermission("cms") && (
+          <>
+            <SectionLabel>Global Layout</SectionLabel>
+            <NavLink to="/cms/header" className={getNavClass}>
+              <MenuIcon size={16} /> Header
+            </NavLink>
+            <NavLink to="/cms/topbar" className={getNavClass}>
+              <Activity size={16} /> Topbar
+            </NavLink>
+            <NavLink to="/cms/footer" className={getNavClass}>
+              <Layers size={16} /> Footer
+            </NavLink>
+          </>
+        )}
+
+        {/* 4. NAVIGATION */}
+        {hasPermission("cms") && (
+          <>
+            <SectionLabel>Navigation</SectionLabel>
+            <NavLink to="/cms/navigation" className={getNavClass}>
+              <Navigation size={16} /> Menu Builder
+            </NavLink>
+          </>
+        )}
+
+        {/* RESULTS */}
         {hasPermission("result") && (
           <>
             <SectionLabel>Results</SectionLabel>
@@ -390,7 +405,17 @@ function Sidebar() {
           </>
         )}
 
-        {/* 6. SYSTEM & USERS */}
+        {/* 6. SETTINGS */}
+        {hasPermission("cms") && (
+          <>
+            <SectionLabel>Settings</SectionLabel>
+            <NavLink to="/settings/website" className={getNavClass}>
+              <Settings size={16} /> Website Settings
+            </NavLink>
+          </>
+        )}
+
+        {/* 7. SYSTEM & USERS */}
         {hasPermission("users") && (
           <>
             <SectionLabel>System & Users</SectionLabel>
@@ -402,15 +427,6 @@ function Sidebar() {
             </NavLink>
             <NavLink to="/users/permissions" className={getNavClass}>
               <Key size={16} /> Permissions
-            </NavLink>
-            <NavLink to="/users/menus" className={getNavClass}>
-              <MenuIcon size={16} /> Menu List
-            </NavLink>
-            <NavLink to="/users/operations" className={getNavClass}>
-              <Wrench size={16} /> Operations
-            </NavLink>
-            <NavLink to="/users/menu-operations" className={getNavClass}>
-              <Settings size={16} /> Menu Operations
             </NavLink>
           </>
         )}

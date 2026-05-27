@@ -167,10 +167,10 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '' }) => {
         <style dangerouslySetInnerHTML={{ __html: `
           .luxury-select-item:hover {
             background-color: rgba(61, 90, 153, 0.08) !important;
-            color: #3d5a99 !important;
+            color: #3B5998 !important;
           }
           .luxury-select-item.selected:hover {
-            background-color: #3d5a99 !important;
+            background-color: #3B5998 !important;
             color: #ffffff !important;
           }
           .luxury-select-menu::-webkit-scrollbar {
@@ -194,7 +194,7 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '' }) => {
           
           {/* LEFT: FAQ */}
           <div className="details-fe-left" style={!showEnquiry ? { width: '100%', maxWidth: 'none', flex: '0 0 100%' } : undefined}>
-            <h2 className="details-fe-title">
+            <h2 className="dmc-heading details-fe-title" style={{ marginBottom: '16px' }}>
               <EditableText sectionId="faq-enquiry-section" fieldPath="faqEnquiry.faqTitle">
                 {leftTitle}
               </EditableText>
@@ -213,17 +213,17 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '' }) => {
               {faqs.map((faq, index) => {
                 if (!faq) return null;
                 return (
-                  <div 
-                    key={index} 
-                    className={`details-faq-item ${openFaqIndex === index ? 'open' : ''}`}
+                  <div
+                    key={index}
+                    className={`details-faq-item dmc-accordion-item${openFaqIndex === index ? ' open' : ''}`}
                   >
-                    <button 
-                      className="details-faq-question" 
+                    <button
+                      className="details-faq-question"
                       onClick={() => toggleFaq(index)}
                       type="button"
                     >
                       <span>{faq?.question || ''}</span>
-                      <div className="details-faq-icon">
+                      <div className={`details-faq-icon dmc-accordion-icon${openFaqIndex === index ? ' active' : ''}`}>
                         {openFaqIndex === index ? <Minus size={18} /> : <Plus size={18} />}
                       </div>
                     </button>
@@ -364,7 +364,7 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '' }) => {
                                 border: 'none',
                                 borderRadius: '12px',
                                 textAlign: 'left',
-                                backgroundColor: isSelected ? '#3d5a99' : 'transparent',
+                                backgroundColor: isSelected ? '#3B5998' : 'transparent',
                                 color: isSelected ? '#ffffff' : '#333333',
                                 fontSize: '13px',
                                 fontFamily: "'Lato', sans-serif",

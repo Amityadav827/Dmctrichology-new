@@ -23,7 +23,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
     gridGap = "70px"
   } = data;
 
-  // Helper function to format bold/strong text as luxury Gold (#D4AF37)
+  // Helper function to format bold/strong text as luxury Gold (#E4B753)
   const renderFormattedText = (text) => {
     if (!text) return "";
     let processed = text;
@@ -134,7 +134,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
                       height="16"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="#D4AF37"
+                      stroke="#E4B753"
                       strokeWidth="3.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -182,7 +182,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
             <div
               className="editorial-image-frame"
               style={{
-                border: "2px solid #D4AF37",
+                border: "2px solid #E4B753",
                 padding: "0",
                 boxSizing: "border-box",
                 overflow: "hidden",
@@ -213,7 +213,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
           font-family: 'Marcellus', serif !important;
         }
         .dr-nandani-other-specialities-wrapper .gold-accent {
-          color: #D4AF37 !important;
+          color: #E4B753 !important;
           font-weight: 600 !important;
         }
         @media (max-width: 991px) {

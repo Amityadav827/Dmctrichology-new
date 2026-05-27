@@ -1,29 +1,13 @@
-const MarqueeFeature = require('../models/MarqueeFeature');
+const supabase = require('../config/supabase');
 
-const defaultItems = [
-  { title: 'At-Home Sessions', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/dujziywmelzwixisgvyb.png', link: '', enabled: true },
-  { title: 'Dermatologist Monitored', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/rhqehubr894icsuzfcew.png', link: '', enabled: true },
-  { title: 'Shark Tank Approved', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/gqnszoyafmildmq6l9mm.png', link: '', enabled: true },
-  { title: 'US FDA Approved', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/eqmyy5zthf9zi92xyvxm.png', link: '', enabled: true },
-  { title: 'Quick & Lasting Results', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/oihmmdhj7lbltqp9qgrj.png', link: '', enabled: true },
-  { title: '100% Safe', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/pdc64p00mfiv0080ippb.png', link: '', enabled: true }
-];
+const CMS_KEY = 'marquee_features';
 
 exports.getMarqueeFeatures = async (req, res) => {
   try {
-    let data = await MarqueeFeature.findOne();
-    if (!data) {
-      data = await MarqueeFeature.create({
-        enabled: true,
-        backgroundColor: 'transparent',
-        paddingTop: '60px',
-        paddingBottom: '60px',
-        marqueeSpeed: 30,
-        pauseOnHover: true,
-        items: defaultItems
-      });
-    }
-    res.json({ success: true, data });
+    const { data: row, error } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    res.json({ success: true, data: row?.data || {} });
   } catch (error) {
     console.error('MarqueeFeature GET error:', error.message);
     res.status(500).json({ success: false, message: error.message });
@@ -32,19 +16,19 @@ exports.getMarqueeFeatures = async (req, res) => {
 
 exports.updateMarqueeFeatures = async (req, res) => {
   try {
-    let data = await MarqueeFeature.findOne();
-    if (!data) {
-      data = new MarqueeFeature();
-    }
+    const { data: existing } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    const current = existing?.data || {};
 
     const updates = req.body;
+    const merged = { ...current };
 
-    if (updates.enabled !== undefined) data.enabled = updates.enabled;
-    if (updates.backgroundColor !== undefined) data.backgroundColor = updates.backgroundColor;
-    if (updates.paddingTop !== undefined) data.paddingTop = updates.paddingTop;
-    if (updates.paddingBottom !== undefined) data.paddingBottom = updates.paddingBottom;
-    if (updates.marqueeSpeed !== undefined) data.marqueeSpeed = Number(updates.marqueeSpeed);
-    if (updates.pauseOnHover !== undefined) data.pauseOnHover = updates.pauseOnHover;
+    if (updates.enabled !== undefined) merged.enabled = updates.enabled;
+    if (updates.backgroundColor !== undefined) merged.backgroundColor = updates.backgroundColor;
+    if (updates.paddingTop !== undefined) merged.paddingTop = updates.paddingTop;
+    if (updates.paddingBottom !== undefined) merged.paddingBottom = updates.paddingBottom;
+    if (updates.marqueeSpeed !== undefined) merged.marqueeSpeed = Number(updates.marqueeSpeed);
+    if (updates.pauseOnHover !== undefined) merged.pauseOnHover = updates.pauseOnHover;
 
     if (updates.items !== undefined) {
       try {
@@ -52,16 +36,18 @@ exports.updateMarqueeFeatures = async (req, res) => {
           ? JSON.parse(updates.items)
           : updates.items;
         if (Array.isArray(parsed)) {
-          data.items = parsed;
-          data.markModified('items');
+          merged.items = parsed;
         }
       } catch (e) {
         console.error('Failed to parse items array:', e.message);
       }
     }
 
-    await data.save();
-    res.json({ success: true, data });
+    const { error } = await supabase.from('cms_sections')
+      .upsert({ key: CMS_KEY, data: merged, updated_at: new Date() }, { onConflict: 'key' });
+    if (error) throw error;
+
+    res.json({ success: true, data: merged });
   } catch (error) {
     console.error('MarqueeFeature PUT error:', error.message);
     res.status(500).json({ success: false, message: error.message });

@@ -1,43 +1,13 @@
-const Header = require('../models/Header');
+const supabase = require('../config/supabase');
 
-const seedDefaultHeader = async () => {
-  try {
-    const count = await Header.countDocuments();
-    if (count === 0) {
-      await Header.create({
-        logoUrl: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530477/dmc-trichology/pntwhlftziotd6k0kdkg.png",
-        isSticky: true,
-        appointmentButtonText: "Book Appointment",
-        appointmentButtonLink: "/book-appointment",
-        menuItems: [
-          { label: "Home", link: "/" },
-          { label: "About Us", link: "/about-us" },
-          { 
-            label: "Services", 
-            link: "#", 
-            hasDropdown: true,
-            submenu: [
-              { label: "Hair Transplant", link: "/services/hair-transplant" },
-              { label: "Hair Treatments", link: "/services/hair-treatments" }
-            ]
-          },
-          { label: "Results", link: "/results" },
-          { label: "Testimonials", link: "/testimonials" },
-          { label: "Blog", link: "/blog" },
-          { label: "Contact Us", link: "/contact" }
-        ]
-      });
-      console.log("✅ Header default data seeded.");
-    }
-  } catch (err) {
-    console.error("❌ Error seeding header settings:", err.message);
-  }
-};
+const CMS_KEY = 'header';
 
 const getHeader = async (req, res, next) => {
   try {
-    const header = await Header.findOne();
-    res.status(200).json({ success: true, data: header });
+    const { data: row, error } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    res.status(200).json({ success: true, data: row?.data || {} });
   } catch (error) {
     next(error);
   }
@@ -45,22 +15,19 @@ const getHeader = async (req, res, next) => {
 
 const updateHeader = async (req, res, next) => {
   try {
-    let header = await Header.findOne();
-    if (!header) header = new Header();
+    const { data: existing } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    const current = existing?.data || {};
+    const merged = { ...current, ...req.body };
 
-    const updates = req.body;
-    
-    if (updates.logoUrl !== undefined) header.logoUrl = updates.logoUrl;
-    if (updates.isSticky !== undefined) header.isSticky = updates.isSticky;
-    if (updates.appointmentButtonText !== undefined) header.appointmentButtonText = updates.appointmentButtonText;
-    if (updates.appointmentButtonLink !== undefined) header.appointmentButtonLink = updates.appointmentButtonLink;
-    if (updates.menuItems !== undefined) header.menuItems = updates.menuItems;
+    const { error } = await supabase.from('cms_sections')
+      .upsert({ key: CMS_KEY, data: merged, updated_at: new Date() }, { onConflict: 'key' });
+    if (error) throw error;
 
-    await header.save();
-    res.status(200).json({ success: true, data: header });
+    res.status(200).json({ success: true, data: merged });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { getHeader, updateHeader, seedDefaultHeader };
+module.exports = { getHeader, updateHeader };

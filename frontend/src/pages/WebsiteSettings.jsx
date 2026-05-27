@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../api/client";
 import toast from "react-hot-toast";
-import { Upload, Save, Loader2 } from "lucide-react";
+import { Upload, Save, Loader2, BarChart2, Code2, Search } from "lucide-react";
 
 export default function WebsiteSettings() {
   const [settings, setSettings] = useState({
@@ -20,6 +20,14 @@ export default function WebsiteSettings() {
     patientCount: "",
     ratingStars: 5,
     ratingText: "",
+    siteTitle: "",
+    defaultMetaDescription: "",
+    defaultOgImage: "",
+    ga4Id: "",
+    gtmId: "",
+    metaPixelId: "",
+    headScripts: "",
+    bodyStartScripts: "",
   });
 
   const [files, setFiles] = useState({ logo: null, favicon: null });
@@ -296,6 +304,132 @@ export default function WebsiteSettings() {
                 placeholder="e.g. ★★★★★"
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               />
+            </div>
+          </div>
+        </div>
+
+        {/* SEO Defaults */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <h2 className="text-lg font-semibold text-gray-800 mb-1 flex items-center gap-2">
+            <Search className="h-5 w-5 text-blue-500" /> 7. SEO Defaults
+          </h2>
+          <p className="text-xs text-gray-400 mb-4 pb-2 border-b">Used as fallback on pages that don't have custom meta tags.</p>
+          <div className="grid grid-cols-1 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Default Site Title</label>
+              <input
+                type="text"
+                name="siteTitle"
+                value={settings.siteTitle}
+                onChange={handleChange}
+                placeholder="DMC Trichology | Best Hair Transplant Clinic In Delhi"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              <p className="text-xs text-gray-400 mt-1">Shown in browser tab and Google search results.</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Default Meta Description</label>
+              <textarea
+                name="defaultMetaDescription"
+                value={settings.defaultMetaDescription}
+                onChange={handleChange}
+                rows="2"
+                placeholder="Experience The Art Of Natural Hair Restoration at DMC Trichology."
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+              />
+              <p className="text-xs text-gray-400 mt-1">Shown below the title in Google results. Keep under 160 characters.</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Default OG Image URL</label>
+              <input
+                type="url"
+                name="defaultOgImage"
+                value={settings.defaultOgImage}
+                onChange={handleChange}
+                placeholder="https://yoursite.com/og-default.jpg"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              <p className="text-xs text-gray-400 mt-1">Image shown when the site is shared on WhatsApp, Facebook, Twitter etc.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Tracking & Analytics */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <h2 className="text-lg font-semibold text-gray-800 mb-1 flex items-center gap-2">
+            <BarChart2 className="h-5 w-5 text-green-500" /> 8. Tracking & Analytics
+          </h2>
+          <p className="text-xs text-gray-400 mb-4 pb-2 border-b">Enter your IDs — scripts will be auto-injected on every page of the website.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Google Analytics 4 (GA4)</label>
+              <input
+                type="text"
+                name="ga4Id"
+                value={settings.ga4Id}
+                onChange={handleChange}
+                placeholder="G-XXXXXXXXXX"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm"
+              />
+              <p className="text-xs text-gray-400 mt-1">Measurement ID from Google Analytics.</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Google Tag Manager (GTM)</label>
+              <input
+                type="text"
+                name="gtmId"
+                value={settings.gtmId}
+                onChange={handleChange}
+                placeholder="GTM-XXXXXXX"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm"
+              />
+              <p className="text-xs text-gray-400 mt-1">Container ID from GTM workspace.</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Meta Pixel (Facebook)</label>
+              <input
+                type="text"
+                name="metaPixelId"
+                value={settings.metaPixelId}
+                onChange={handleChange}
+                placeholder="123456789012345"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm"
+              />
+              <p className="text-xs text-gray-400 mt-1">Pixel ID from Meta Events Manager.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Custom Scripts */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <h2 className="text-lg font-semibold text-gray-800 mb-1 flex items-center gap-2">
+            <Code2 className="h-5 w-5 text-purple-500" /> 9. Custom Scripts
+          </h2>
+          <p className="text-xs text-gray-400 mb-4 pb-2 border-b">Paste raw HTML/script tags. These are injected as-is — handle with care.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Head Scripts</label>
+              <textarea
+                name="headScripts"
+                value={settings.headScripts}
+                onChange={handleChange}
+                rows="6"
+                placeholder={'<!-- Paste <script> or <link> tags here -->\n<!-- Injected inside <head> on every page -->'}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-mono text-xs resize-none bg-gray-50"
+              />
+              <p className="text-xs text-gray-400 mt-1">e.g. Hotjar, Clarity, Tawk.to, custom fonts.</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Body Scripts</label>
+              <textarea
+                name="bodyStartScripts"
+                value={settings.bodyStartScripts}
+                onChange={handleChange}
+                rows="6"
+                placeholder={'<!-- Paste scripts here -->\n<!-- Injected right after <body> opens -->'}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-mono text-xs resize-none bg-gray-50"
+              />
+              <p className="text-xs text-gray-400 mt-1">e.g. GTM noscript fallback, live chat widgets.</p>
             </div>
           </div>
         </div>

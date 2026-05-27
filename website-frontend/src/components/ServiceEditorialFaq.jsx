@@ -42,8 +42,8 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
         {showFaqs && (
           <>
             <div className="service-edfaq-header">
-              <span className="service-edfaq-label">{data?.sectionSubtitle || "EXPERT ANSWERS"}</span>
-              <h2 className="service-edfaq-heading">
+              <span className="dmc-kicker">{data?.sectionSubtitle || "EXPERT ANSWERS"}</span>
+              <h2 className="dmc-heading service-edfaq-heading" style={{ marginBottom: '20px' }}>
                 {data?.sectionTitle || "EDITORIAL FAQ"}
               </h2>
               <div className="service-edfaq-divider"></div>
@@ -61,7 +61,7 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
                 if (!faq) return null;
                 const isOpen = activeIndex === i;
                 return (
-                  <div key={i} className="service-edfaq-item">
+                  <div key={i} className={`service-edfaq-item dmc-accordion-item${isOpen ? " open" : ""}`}>
                     <button
                       onClick={() => toggleFaq(i)}
                       className="service-edfaq-btn"
@@ -69,7 +69,7 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
                       <span className="service-edfaq-title">
                         {faq.question || ""}
                       </span>
-                      <div className="service-edfaq-icon-wrap">
+                      <div className={`service-edfaq-icon-wrap dmc-accordion-icon${isOpen ? " active" : ""}`}>
                         {isOpen ? (
                           <Minus className="service-edfaq-icon" />
                         ) : (
@@ -77,7 +77,7 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
                         )}
                       </div>
                     </button>
-                    
+
                     <div className={`service-edfaq-content ${isOpen ? "open" : ""}`}>
                       <div className="service-edfaq-content-inner">
                         {faq.answer || ""}

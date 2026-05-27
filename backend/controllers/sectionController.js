@@ -1,44 +1,30 @@
-const Section = require('../models/Section');
+const supabase = require('../config/supabase');
 
 exports.getSectionData = async (req, res) => {
   try {
     const { sectionId } = req.params;
-    let section = await Section.findOne({ sectionId });
-    
-    // If not found, return empty data or handle via specific seeders
-    if (!section) {
-      return res.json({ success: true, data: {}, isNew: true });
-    }
-    
-    res.json({ success: true, data: section.data });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
+    const { data: row, error } = await supabase
+      .from('cms_sections').select('data').eq('key', `section_${sectionId}`).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    res.json({ success: true, data: row?.data || {}, isNew: !row });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 };
 
 exports.updateSectionData = async (req, res) => {
   try {
     const { sectionId } = req.params;
-    const section = await Section.findOneAndUpdate(
-      { sectionId },
-      { 
-        sectionId, 
-        name: sectionId.charAt(0).toUpperCase() + sectionId.slice(1).replace(/-/g, ' '),
-        data: req.body 
-      },
-      { new: true, upsert: true }
-    );
-    res.json({ success: true, data: section.data });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
+    const { error } = await supabase.from('cms_sections')
+      .upsert({ key: `section_${sectionId}`, data: req.body, updated_at: new Date() }, { onConflict: 'key' });
+    if (error) throw error;
+    res.json({ success: true, data: req.body });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 };
 
 exports.getAllSections = async (req, res) => {
   try {
-    const sections = await Section.find();
-    res.json({ success: true, data: sections });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
+    const { data, error } = await supabase
+      .from('cms_sections').select('key, data, updated_at').like('key', 'section_%');
+    if (error) throw error;
+    res.json({ success: true, data: data || [] });
+  } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 };

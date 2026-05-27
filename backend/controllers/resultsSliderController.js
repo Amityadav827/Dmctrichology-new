@@ -1,25 +1,13 @@
-const ResultsSlider = require('../models/ResultsSlider');
+const supabase = require('../config/supabase');
 
-const defaultResults = [
-  { title: 'Korean Facial Illumination', beforeImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612758/dmc-trichology/dvy3knew0pzq1gg8fr8q.png', afterImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/uttbdof06l4xbpvexlv9.png', sessions: 'After 6 sessions' },
-  { title: 'Acne Arrestor Facial With Salicylic Peel', beforeImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/g7fs5kfpckmmcjwg5sk0.png', afterImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612758/dmc-trichology/zxyvkmr0uf8pf5qxgfvf.png', sessions: 'After 4 sessions' },
-  { title: 'Elastin Boost Facial', beforeImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/meeed3zg8w5j3xhkcfxc.png', afterImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/w6qder12vvhxrbhzskgw.png', sessions: 'After 5 sessions' },
-  { title: 'Derma Revive Facial', beforeImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/dh6webh6x4l7qfrlzxtl.png', afterImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/bif89jyygbycclg8qa92.png', sessions: 'After 4 sessions' }
-];
+const CMS_KEY = 'results_slider';
 
 exports.getResultsSlider = async (req, res) => {
   try {
-    let data = await ResultsSlider.findOne();
-    if (!data) {
-      data = await ResultsSlider.create({
-        enabled: true,
-        badgeText: 'BEFORE AND AFTER',
-        heading: 'Results that speak for themselves',
-        backgroundColor: '#FFFAF1',
-        results: defaultResults
-      });
-    }
-    res.json({ success: true, data });
+    const { data: row, error } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    res.json({ success: true, data: row?.data || {} });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -27,22 +15,24 @@ exports.getResultsSlider = async (req, res) => {
 
 exports.updateResultsSlider = async (req, res) => {
   try {
-    let data = await ResultsSlider.findOne();
-    if (!data) data = new ResultsSlider();
+    const { data: existing } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    const current = existing?.data || {};
 
     const u = req.body;
-    if (u.enabled !== undefined) data.enabled = u.enabled;
-    if (u.badgeText !== undefined) data.badgeText = u.badgeText;
-    if (u.heading !== undefined) data.heading = u.heading;
-    if (u.backgroundColor !== undefined) data.backgroundColor = u.backgroundColor;
+    const merged = { ...current };
 
-    if (u.results !== undefined) {
-      data.results = u.results;
-      data.markModified('results');
-    }
+    if (u.enabled !== undefined) merged.enabled = u.enabled;
+    if (u.badgeText !== undefined) merged.badgeText = u.badgeText;
+    if (u.heading !== undefined) merged.heading = u.heading;
+    if (u.backgroundColor !== undefined) merged.backgroundColor = u.backgroundColor;
+    if (u.results !== undefined) merged.results = u.results;
 
-    await data.save();
-    res.json({ success: true, data });
+    const { error } = await supabase.from('cms_sections')
+      .upsert({ key: CMS_KEY, data: merged, updated_at: new Date() }, { onConflict: 'key' });
+    if (error) throw error;
+
+    res.json({ success: true, data: merged });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

@@ -1,94 +1,71 @@
-const DetailsPage = require("../models/DetailsPage");
+const supabase = require('../config/supabase');
 
-// GET — return entire details page data
+const CMS_KEY = 'details_page';
+
 exports.getDetailsPage = async (req, res) => {
   try {
-    let data = await DetailsPage.findOne();
-    if (!data) {
-      data = await DetailsPage.create({});
-    }
-    res.status(200).json({ success: true, data });
+    const { data: row, error } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    res.status(200).json({ success: true, data: row?.data || {} });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// PUT — update entire details page data
 exports.updateDetailsPage = async (req, res) => {
   try {
-    let data = await DetailsPage.findOne();
-    if (!data) {
-      data = await DetailsPage.create(req.body);
-    } else {
-      // Deep merge: only update sent fields
-      if (req.body.banner) Object.assign(data.banner, req.body.banner);
-      if (req.body.intro) {
-        // Deep merge top-level intro fields
-        const { introImages, benefits, ...introFields } = req.body.intro;
-        Object.assign(data.intro, introFields);
+    const { data: existing } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    const current = existing?.data || {};
 
-        if (introImages !== undefined) {
-          data.intro.introImages = introImages;
-          data.markModified("intro.introImages");
-        }
-        if (benefits !== undefined) {
-          data.intro.benefits = benefits;
-          data.markModified("intro.benefits");
-        }
+    const merged = { ...current };
 
-        // Keep legacy sync for now if needed, or remove if confident
-        if (req.body.intro.videoGallery !== undefined) {
-          data.intro.videoGallery = req.body.intro.videoGallery;
-          data.markModified("intro.videoGallery");
-        }
-        if (req.body.intro.bulletPoints !== undefined) {
-          data.intro.bulletPoints = req.body.intro.bulletPoints;
-          data.markModified("intro.bulletPoints");
-        }
-      }
-      if (req.body.process) {
-        Object.assign(data.process, req.body.process);
-        if (req.body.process.processSteps !== undefined) {
-          data.process.processSteps = req.body.process.processSteps;
-          data.markModified("process.processSteps");
-        }
-      }
-      if (req.body.beforeAfter) {
-        Object.assign(data.beforeAfter, req.body.beforeAfter);
-        if (req.body.beforeAfter.beforePoints !== undefined) {
-          data.beforeAfter.beforePoints = req.body.beforeAfter.beforePoints;
-          data.markModified("beforeAfter.beforePoints");
-        }
-        if (req.body.beforeAfter.afterPoints !== undefined) {
-          data.beforeAfter.afterPoints = req.body.beforeAfter.afterPoints;
-          data.markModified("beforeAfter.afterPoints");
-        }
-      }
-      if (req.body.faqEnquiry) {
-        Object.assign(data.faqEnquiry, req.body.faqEnquiry);
-        if (req.body.faqEnquiry.faqItems !== undefined) {
-          data.faqEnquiry.faqItems = req.body.faqEnquiry.faqItems;
-          data.markModified("faqEnquiry.faqItems");
-        }
-        if (req.body.faqEnquiry.serviceOptions !== undefined) {
-          data.faqEnquiry.serviceOptions = req.body.faqEnquiry.serviceOptions;
-          data.markModified("faqEnquiry.serviceOptions");
-        }
-      }
-      if (req.body.idealFrequency) {
-        Object.assign(data.idealFrequency, req.body.idealFrequency);
-        if (req.body.idealFrequency.idealForPoints !== undefined) {
-          data.idealFrequency.idealForPoints = req.body.idealFrequency.idealForPoints;
-          data.markModified("idealFrequency.idealForPoints");
-        }
-        if (req.body.idealFrequency.notIdealForPoints !== undefined) {
-          data.idealFrequency.notIdealForPoints = req.body.idealFrequency.notIdealForPoints;
-          data.markModified("idealFrequency.notIdealForPoints");
-        }
-      }
-      await data.save();
+    if (req.body.banner) {
+      merged.banner = { ...(current.banner || {}), ...req.body.banner };
     }
-    res.status(200).json({ success: true, data });
+
+    if (req.body.intro) {
+      const { introImages, benefits, videoGallery, bulletPoints, ...introFields } = req.body.intro;
+      merged.intro = { ...(current.intro || {}), ...introFields };
+      if (introImages !== undefined) merged.intro.introImages = introImages;
+      if (benefits !== undefined) merged.intro.benefits = benefits;
+      if (videoGallery !== undefined) merged.intro.videoGallery = videoGallery;
+      if (bulletPoints !== undefined) merged.intro.bulletPoints = bulletPoints;
+    }
+
+    if (req.body.process) {
+      const { processSteps, ...processFields } = req.body.process;
+      merged.process = { ...(current.process || {}), ...processFields };
+      if (processSteps !== undefined) merged.process.processSteps = processSteps;
+    }
+
+    if (req.body.beforeAfter) {
+      const { beforePoints, afterPoints, ...baFields } = req.body.beforeAfter;
+      merged.beforeAfter = { ...(current.beforeAfter || {}), ...baFields };
+      if (beforePoints !== undefined) merged.beforeAfter.beforePoints = beforePoints;
+      if (afterPoints !== undefined) merged.beforeAfter.afterPoints = afterPoints;
+    }
+
+    if (req.body.faqEnquiry) {
+      const { faqItems, serviceOptions, ...faqFields } = req.body.faqEnquiry;
+      merged.faqEnquiry = { ...(current.faqEnquiry || {}), ...faqFields };
+      if (faqItems !== undefined) merged.faqEnquiry.faqItems = faqItems;
+      if (serviceOptions !== undefined) merged.faqEnquiry.serviceOptions = serviceOptions;
+    }
+
+    if (req.body.idealFrequency) {
+      const { idealForPoints, notIdealForPoints, ...ifFields } = req.body.idealFrequency;
+      merged.idealFrequency = { ...(current.idealFrequency || {}), ...ifFields };
+      if (idealForPoints !== undefined) merged.idealFrequency.idealForPoints = idealForPoints;
+      if (notIdealForPoints !== undefined) merged.idealFrequency.notIdealForPoints = notIdealForPoints;
+    }
+
+    const { error } = await supabase.from('cms_sections')
+      .upsert({ key: CMS_KEY, data: merged, updated_at: new Date() }, { onConflict: 'key' });
+    if (error) throw error;
+
+    res.status(200).json({ success: true, data: merged });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

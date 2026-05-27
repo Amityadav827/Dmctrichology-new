@@ -35,8 +35,8 @@ export default function FueOptingBenefitsSection({ data, pageSlug = '' }) {
     <section className="fue-opting-benefits-section">
       <div className="fue-opting-benefits-container">
         <div className="fue-opting-benefits-header">
-          <span className="fue-opting-benefits-kicker">FUE Advantages</span>
-          <h2>{section.heading || defaultFueOptingBenefitsSection.heading}</h2>
+          <span className="dmc-kicker">FUE Advantages</span>
+          <h2 className="dmc-heading" style={{ marginBottom: "20px" }}>{section.heading || defaultFueOptingBenefitsSection.heading}</h2>
           {section.introText && <p>{section.introText}</p>}
           {section.leadText && <strong>{section.leadText}</strong>}
         </div>

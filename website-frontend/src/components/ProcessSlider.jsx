@@ -61,6 +61,7 @@ const ProcessSlider = ({ data = {} }) => {
         <div className="process-slider-inner">
 
           {/* Section Title */}
+          <span className="dmc-kicker on-blue" style={{ justifyContent: 'center', display: 'flex' }}>Step By Step</span>
           <h2 className="process-slider-title">
             <EditableText sectionId="process-slider" fieldPath="process.sectionTitle">
               {processData.sectionTitle || 'How Full Body Laser Hair Reduction works?'}

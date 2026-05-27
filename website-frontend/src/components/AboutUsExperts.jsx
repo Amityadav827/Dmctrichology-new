@@ -46,12 +46,12 @@ const AboutUsExperts = ({ data = {} }) => {
 
           {/* ── Editorial Header ─────────────────────────── */}
           <div className="about-experts-header">
-            <motion.span {...fadeUp(0)} className="about-experts-tag">
+            <motion.span {...fadeUp(0)} className="dmc-kicker">
               <EditableText sectionId="about-experts" fieldPath="experts.sectionTitle" tag="span">
                 {sectionTitle}
               </EditableText>
             </motion.span>
-            <motion.h2 {...fadeUp(0.15)} className="about-experts-main-title">
+            <motion.h2 {...fadeUp(0.15)} className="dmc-heading">
               <EditableText sectionId="about-experts" fieldPath="experts.heading" tag="span">
                 {heading}
               </EditableText>

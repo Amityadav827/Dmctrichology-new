@@ -1,12 +1,13 @@
-const BlogPage = require("../models/BlogPage");
+const supabase = require('../config/supabase');
+
+const CMS_KEY = 'blog_page';
 
 const getBlogPage = async (req, res) => {
   try {
-    let page = await BlogPage.findOne();
-    if (!page) {
-      page = await BlogPage.create({});
-    }
-    res.status(200).json({ success: true, data: page });
+    const { data: row, error } = await supabase
+      .from('cms_sections').select('data').eq('key', CMS_KEY).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    res.status(200).json({ success: true, data: row?.data || {} });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -14,11 +15,10 @@ const getBlogPage = async (req, res) => {
 
 const updateBlogPage = async (req, res) => {
   try {
-    const page = await BlogPage.findOneAndUpdate({}, req.body, {
-      new: true,
-      upsert: true,
-    });
-    res.status(200).json({ success: true, data: page });
+    const { error } = await supabase.from('cms_sections')
+      .upsert({ key: CMS_KEY, data: req.body, updated_at: new Date() }, { onConflict: 'key' });
+    if (error) throw error;
+    res.status(200).json({ success: true, data: req.body });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
