@@ -237,7 +237,7 @@ export default function Footer({ siteSettings }) {
     : (settingSocials.length > 0 ? settingSocials : socials);
   const resolvedBottomFooter = {
     ...bottomFooter,
-    copyright: siteSettings?.footerCopyright || bottomFooter.copyright,
+    copyright: hasValue(bottomFooter.copyright) ? bottomFooter.copyright : (siteSettings?.footerCopyright || bottomFooter.copyright),
   };
 
   return (
