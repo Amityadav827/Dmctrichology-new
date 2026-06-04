@@ -41,6 +41,119 @@ const fallbackData = {
       { title: "Personalized Treatment Plans" }
     ],
     sectionBgColor: "#FFFFFF"
+  },
+  timeline: {
+    eyebrow: "TRUSTED CARE SERVICES",
+    heading: "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?",
+    sectionBgColor: "#FFFFFF",
+    steps: [
+      {
+        title: "Compassionate Approach",
+        description: "Empathy towards patients makes them feel comfortable and informed.",
+        icon: ""
+      },
+      {
+        title: "Artistic Skills",
+        description: "Expert knowledge and artistic approach ensure the latest and most effective treatments.",
+        icon: ""
+      },
+      {
+        title: "Customized Treatment Plan",
+        description: "Provide tailored treatments for every unique individual and their needs.",
+        icon: ""
+      },
+      {
+        title: "Advanced Technologies",
+        description: "Uses specialized techniques and equipment to achieve maximum results.",
+        icon: ""
+      }
+    ]
+  },
+  trustSection: {
+    eyebrow: "TRUSTED CARE SERVICES",
+    heading: "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?",
+    image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png",
+    imageAlt: "Hair transplant treatment planning",
+    trustPoints: [
+      {
+        title: "Unparalleled Expertise",
+        description: "Dr. Nandani Dadu performs the best hair loss, thinning, and baldness procedures. She has continuously contributed to improving many lives by providing excellent hair transplant results. Through her honesty, hard work, and passionate service, she aims to change every frown into a smile."
+      },
+      {
+        title: "Vast Hair Restoration Procedures",
+        description: "Her expertise lies in hair procedures, such as DMC Mesogrow, Advanced HGP, Keravive Hair, Hair Rituals, and DMC-Golden Touch for hair transplants."
+      },
+      {
+        title: "Expert In Complex Procedures",
+        description: "She also takes a keen interest in performing complex procedures, such as repair hair transplants, body hair transplants, high-density transplants, her signature approach, DMC-Golden Touch, and more."
+      },
+      {
+        title: "Expert Precision For Natural Results",
+        description: "When it comes to hair transplants, the key factor is that the results should look natural. Dr. Dadu utilises her artistic abilities to provide a natural hairline. It gives patients confidence and leaves no proof that they underwent a hair transplant."
+      }
+    ],
+    conclusionParagraph: "Dr. Nandani Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandani Dadu now!",
+    backgroundColor: "#e8eaf6",
+    contentMaxWidth: "1300px",
+    paddingTop: "92px",
+    paddingBottom: "92px"
+  },
+  educationExperience: {
+    sectionBgColor: "#FFFFFF",
+    experienceTabLabel: "Experience",
+    educationTabLabel: "Education",
+    credentialsTabLabel: "Credentials",
+    experienceTitle: "Experience",
+    educationTitle: "Education",
+    topImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
+    bottomImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png",
+    experienceItems: [
+      {
+        role: "Senior Resident Anaesthesia & Critical Care",
+        hospital: "Dr. Ram Manohar Lohia Hospital, New Delhi",
+        duration: "2014 - 2017"
+      },
+      {
+        role: "Fellowship In Pain Medicine",
+        hospital: "King Edward Memorial Hospital, Mumbai",
+        duration: "2017 - 2018"
+      },
+      {
+        role: "Attending Consultant Anaesthesia & Critical Care",
+        hospital: "Primus Hospital, New Delhi",
+        duration: "2018"
+      },
+      {
+        role: "Consultant Pain Medicine & Palliative Care",
+        hospital: "Artemis Hospital, Gurgaon",
+        duration: "2018 - 2020"
+      },
+      {
+        role: "Senior Consultant Hair Transplant Surgeon",
+        hospital: "Dadu Medical Centre, New Delhi",
+        duration: "2020 - Present"
+      }
+    ],
+    educationItems: [
+      {
+        degree: "MBBS",
+        institution: "Himalayan Institute of Medical Sciences (HIMS), Dehradun",
+        year: "2005"
+      },
+      {
+        degree: "Diploma In Anaesthesia & Critical Care",
+        institution: "Himalayan Institute of Medical Sciences (HIMS), Dehradun",
+        year: "2012"
+      }
+    ]
+  },
+  credentialsSection: {
+    heading: "Credentials",
+    credentialsList: [
+      { text: "Fellowship In Aesthetic Medicine" },
+      { text: "Fellowship In Hair Science" },
+      { text: "Fellowship In Pain Medicine" }
+    ]
   }
 };
 

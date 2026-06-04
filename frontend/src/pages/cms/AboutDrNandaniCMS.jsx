@@ -55,6 +55,33 @@ export default function AboutDrNandaniCMS() {
                   { title: "Scalp & Hair Diagnosis" },
                   { title: "Personalized Treatment Plans" }
                 ]
+          },
+          timeline: {
+            ...(res.data.timeline || {}),
+            eyebrow: res.data.timeline?.eyebrow || "TRUSTED CARE SERVICES",
+            heading: res.data.timeline?.heading || "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?",
+            steps: (res.data.timeline?.steps || []).length > 0
+              ? res.data.timeline.steps
+              : [
+                  { title: "Compassionate Approach", description: "Empathy towards patients makes them feel comfortable and informed.", icon: "" },
+                  { title: "Artistic Skills", description: "Expert knowledge and artistic approach ensure the latest and most effective treatments.", icon: "" },
+                  { title: "Customized Treatment Plan", description: "Provide tailored treatments for every unique individual and their needs.", icon: "" },
+                  { title: "Advanced Technologies", description: "Uses specialized techniques and equipment to achieve maximum results.", icon: "" }
+                ]
+          },
+          trustSection: {
+            ...(res.data.trustSection || {}),
+            eyebrow: res.data.trustSection?.eyebrow || "TRUSTED CARE SERVICES",
+            heading: res.data.trustSection?.heading || "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?",
+            image: res.data.trustSection?.image || "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png"
+          },
+          educationExperience: {
+            ...(res.data.educationExperience || {}),
+            experienceTabLabel: res.data.educationExperience?.experienceTabLabel || "Experience",
+            educationTabLabel: res.data.educationExperience?.educationTabLabel || "Education",
+            credentialsTabLabel: res.data.educationExperience?.credentialsTabLabel || "Credentials",
+            topImage: res.data.educationExperience?.topImage || "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
+            bottomImage: res.data.educationExperience?.bottomImage || "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png"
           }
         });
       }
@@ -120,6 +147,29 @@ export default function AboutDrNandaniCMS() {
       });
       if (res.success && res.url) {
         updateSectionField(section, field, res.url);
+        toast.success("Image uploaded successfully");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Image upload failed");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleNestedImageUpload = async (e, path) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    setUploadingImage(true);
+    try {
+      const { data: res } = await axios.post("/about-dr-nandani/upload-image", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      if (res.success && res.url) {
+        updateNestedField(path, res.url);
         toast.success("Image uploaded successfully");
       }
     } catch (error) {
@@ -201,10 +251,10 @@ export default function AboutDrNandaniCMS() {
           <SectionTab id="breadcrumb" label="BREADCRUMB CONFIG" icon={Sliders} />
           <SectionTab id="form" label="CONSULTATION FORM DESIGN" icon={ShieldCheck} />
           <SectionTab id="specialist" label="SPECIALIST INFO" icon={Sparkles} />
-          <SectionTab id="timeline" label="TIMELINE FLOW" icon={Sliders} />
-          <SectionTab id="education" label="EDU & EXP ITEMS" icon={Award} />
-          <SectionTab id="credentials" label="CREDENTIALS SECTION" icon={Award} />
-          <SectionTab id="trust" label="TRUST SECTION" icon={ShieldCheck} />
+          <SectionTab id="timeline" label="SECTION 4 FEATURES" icon={Sliders} />
+          <SectionTab id="trust" label="SECTION 5 TRUST" icon={ShieldCheck} />
+          <SectionTab id="education" label="SECTION 6 TABS" icon={Award} />
+          <SectionTab id="credentials" label="CREDENTIALS ITEMS" icon={Award} />
           <SectionTab id="other-specialities" label="OTHER SPECIALITIES" icon={Award} />
           <SectionTab id="testimonials" label="TESTIMONIALS" icon={ShieldCheck} />
           <SectionTab id="faq-section" label="FAQ SECTION" icon={Globe} />
@@ -739,10 +789,19 @@ export default function AboutDrNandaniCMS() {
                 <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600">
                   <Sliders size={18} />
                 </div>
-                Timeline Infographic Config
+                Section 4 Feature List Config
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Section Eyebrow</label>
+                  <input 
+                    type="text" 
+                    value={data.timeline?.eyebrow || ""} 
+                    onChange={e => updateNestedField("timeline.eyebrow", e.target.value)} 
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
+                  />
+                </div>
                 <div className="md:col-span-2">
                   <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Section Heading</label>
                   <input 
@@ -751,21 +810,6 @@ export default function AboutDrNandaniCMS() {
                     onChange={e => updateNestedField("timeline.heading", e.target.value)} 
                     className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
                   />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Section Dynamic Image (Centered Below Heading)</label>
-                  <div className="flex gap-4 items-center">
-                    <input 
-                      type="text" 
-                      value={data.timeline?.sectionImage || ""} 
-                      onChange={e => updateSectionField("timeline", "sectionImage", e.target.value)} 
-                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
-                    />
-                    <label className="flex items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl cursor-pointer transition-all aspect-square shrink-0">
-                      {uploadingImage ? <Loader2 size={20} className="animate-spin" /> : <ImageIcon size={20} />}
-                      <input type="file" className="hidden" accept="image/*" onChange={e => handleImageUpload(e, "timeline", "sectionImage")} disabled={uploadingImage} />
-                    </label>
-                  </div>
                 </div>
                 <div>
                   <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Section Background Color</label>
@@ -789,25 +833,57 @@ export default function AboutDrNandaniCMS() {
 
             {/* Steps Config List */}
             <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-black text-slate-800">Feature Rows</h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const currentSteps = data.timeline?.steps || [];
+                    updateNestedField("timeline.steps", [...currentSteps, { icon: "", title: "New Feature", description: "Feature description goes here." }]);
+                  }}
+                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm"
+                >
+                  + Add Feature
+                </button>
+              </div>
               {(data.timeline?.steps || []).map((step, idx) => (
                 <div key={idx} className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
-                  <h4 className="text-sm font-black mb-6 text-slate-700 flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold">{idx + 1}</span>
-                    Timeline Step: {step.title || `Step ${idx+1}`}
-                  </h4>
+                  <div className="flex justify-between gap-4 items-center mb-6">
+                    <h4 className="text-sm font-black text-slate-700 flex items-center gap-3">
+                      <span className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold">{idx + 1}</span>
+                      Feature Row: {step.title || `Feature ${idx+1}`}
+                    </h4>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const filtered = (data.timeline?.steps || []).filter((_, sIdx) => sIdx !== idx);
+                        updateNestedField("timeline.steps", filtered);
+                      }}
+                      className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
+                      title="Remove feature"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Step Number Label</label>
-                      <input 
-                        type="text" 
-                        value={step.numberLabel || ""} 
-                        onChange={e => updateNestedField(`timeline.steps.${idx}.numberLabel`, e.target.value)} 
-                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
-                      />
+                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Icon Upload / URL</label>
+                      <div className="flex gap-4 items-center">
+                        <input 
+                          type="text" 
+                          value={step.icon || ""} 
+                          onChange={e => updateNestedField(`timeline.steps.${idx}.icon`, e.target.value)} 
+                          className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
+                        />
+                        <label className="flex items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl cursor-pointer transition-all aspect-square shrink-0">
+                          {uploadingImage ? <Loader2 size={20} className="animate-spin" /> : <ImageIcon size={20} />}
+                          <input type="file" className="hidden" accept="image/*" onChange={e => handleNestedImageUpload(e, `timeline.steps.${idx}.icon`)} disabled={uploadingImage} />
+                        </label>
+                      </div>
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Step Title</label>
+                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Feature Title</label>
                       <input 
                         type="text" 
                         value={step.title || ""} 
@@ -816,37 +892,13 @@ export default function AboutDrNandaniCMS() {
                       />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Step Description</label>
+                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Feature Description</label>
                       <input 
                         type="text" 
                         value={step.description || ""} 
                         onChange={e => updateNestedField(`timeline.steps.${idx}.description`, e.target.value)} 
                         className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
                       />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Color Theme (alternating gold/navy)</label>
-                      <select
-                        value={step.colorMode || "gold"}
-                        onChange={e => updateNestedField(`timeline.steps.${idx}.colorMode`, e.target.value)}
-                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
-                      >
-                        <option value="gold">Gold Theme</option>
-                        <option value="navy">Navy Theme</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Icon Graphic Shape</label>
-                      <select
-                        value={step.iconName || "heart"}
-                        onChange={e => updateNestedField(`timeline.steps.${idx}.iconName`, e.target.value)}
-                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
-                      >
-                        <option value="heart">Heart (Step 1 default)</option>
-                        <option value="brain">Brain (Step 2 default)</option>
-                        <option value="kit">Medical Kit (Step 3 default)</option>
-                        <option value="tech">Technology Chip (Step 4 default)</option>
-                      </select>
                     </div>
                   </div>
                 </div>
@@ -863,25 +915,34 @@ export default function AboutDrNandaniCMS() {
                 <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600">
                   <Award size={18} />
                 </div>
-                Education & Experience General Settings
+                Section 6 Tabs, Images & General Settings
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Education Column Title</label>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Experience Tab Label</label>
                   <input 
                     type="text" 
-                    value={data.educationExperience?.educationTitle || ""} 
-                    onChange={e => updateNestedField("educationExperience.educationTitle", e.target.value)} 
+                    value={data.educationExperience?.experienceTabLabel || data.educationExperience?.experienceTitle || ""} 
+                    onChange={e => updateNestedField("educationExperience.experienceTabLabel", e.target.value)} 
                     className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Experience Column Title</label>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Education Tab Label</label>
                   <input 
                     type="text" 
-                    value={data.educationExperience?.experienceTitle || ""} 
-                    onChange={e => updateNestedField("educationExperience.experienceTitle", e.target.value)} 
+                    value={data.educationExperience?.educationTabLabel || data.educationExperience?.educationTitle || ""} 
+                    onChange={e => updateNestedField("educationExperience.educationTabLabel", e.target.value)} 
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Credentials Tab Label</label>
+                  <input 
+                    type="text" 
+                    value={data.educationExperience?.credentialsTabLabel || data.credentialsSection?.heading || ""} 
+                    onChange={e => updateNestedField("educationExperience.credentialsTabLabel", e.target.value)} 
                     className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
                   />
                 </div>
@@ -900,6 +961,36 @@ export default function AboutDrNandaniCMS() {
                       onChange={e => updateNestedField("educationExperience.sectionBgColor", e.target.value)} 
                       className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
                     />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Top Image Upload / URL</label>
+                  <div className="flex gap-4 items-center">
+                    <input 
+                      type="text" 
+                      value={data.educationExperience?.topImage || ""} 
+                      onChange={e => updateNestedField("educationExperience.topImage", e.target.value)} 
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
+                    />
+                    <label className="flex items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl cursor-pointer transition-all aspect-square shrink-0">
+                      {uploadingImage ? <Loader2 size={20} className="animate-spin" /> : <ImageIcon size={20} />}
+                      <input type="file" className="hidden" accept="image/*" onChange={e => handleNestedImageUpload(e, "educationExperience.topImage")} disabled={uploadingImage} />
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Bottom Image Upload / URL</label>
+                  <div className="flex gap-4 items-center">
+                    <input 
+                      type="text" 
+                      value={data.educationExperience?.bottomImage || ""} 
+                      onChange={e => updateNestedField("educationExperience.bottomImage", e.target.value)} 
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
+                    />
+                    <label className="flex items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl cursor-pointer transition-all aspect-square shrink-0">
+                      {uploadingImage ? <Loader2 size={20} className="animate-spin" /> : <ImageIcon size={20} />}
+                      <input type="file" className="hidden" accept="image/*" onChange={e => handleNestedImageUpload(e, "educationExperience.bottomImage")} disabled={uploadingImage} />
+                    </label>
                   </div>
                 </div>
               </div>
@@ -1268,10 +1359,19 @@ export default function AboutDrNandaniCMS() {
                 <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600">
                   <ShieldCheck size={18} />
                 </div>
-                Trust Section Heading & Left Graphic Card
+                Section 5 Heading & Image Card
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Section Eyebrow</label>
+                  <input 
+                    type="text" 
+                    value={data.trustSection?.eyebrow || ""} 
+                    onChange={e => updateNestedField("trustSection.eyebrow", e.target.value)} 
+                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
+                  />
+                </div>
                 <div className="md:col-span-2">
                   <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Section Main Title Heading</label>
                   <input 

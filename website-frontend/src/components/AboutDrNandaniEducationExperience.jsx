@@ -1,280 +1,333 @@
 "use client";
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
+import EditableImage from './Editable/EditableImage';
 
-export default function AboutDrNandaniEducationExperience({ data = {} }) {
-  const {
-    sectionBgColor = "#FFFFFF",
-    educationTitle = "EDUCATION",
-    experienceTitle = "EXPERIENCE",
-    educationItems = [
-      {
-        degree: "MBBS",
-        institution: "Himalayan Institute of Medical Sciences (HIMS), Dehradun",
-        year: "2005"
-      },
-      {
-        degree: "Diploma In Anaesthesia & Critical Care",
-        institution: "Himalayan Institute of Medical Sciences (HIMS), Dehradun",
-        year: "2012"
-      }
-    ],
-    experienceItems = [
-      {
-        role: "Senior Resident Anaesthesia & Critical Care",
-        hospital: "Dr. Ram Manohar Lohia Hospital, New Delhi",
-        duration: "2014 - 2017"
-      },
-      {
-        role: "Fellowship In Pain Medicine",
-        hospital: "King Edward Memorial Hospital, Mumbai",
-        duration: "2017 - 2018"
-      },
-      {
-        role: "Attending Consultant Anaesthesia & Critical Care",
-        hospital: "Primus Hospital, New Delhi",
-        duration: "2018"
-      },
-      {
-        role: "Consultant Pain Medicine & Palliative Care",
-        hospital: "Artemis Hospital, Gurgaon",
-        duration: "2018 - 2020"
-      },
-      {
-        role: "Senior Consultant Hair Transplant Surgeon",
-        hospital: "Dadu Medical Centre, New Delhi",
-        duration: "2020 - Present"
-      }
-    ]
-  } = data;
+const defaultExperience = [
+  {
+    role: "Senior Resident Anaesthesia & Critical Care",
+    hospital: "Dr. Ram Manohar Lohia Hospital, New Delhi",
+    duration: "2014 - 2017"
+  },
+  {
+    role: "Fellowship In Pain Medicine",
+    hospital: "King Edward Memorial Hospital, Mumbai",
+    duration: "2017 - 2018"
+  },
+  {
+    role: "Attending Consultant Anaesthesia & Critical Care",
+    hospital: "Primus Hospital, New Delhi",
+    duration: "2018"
+  },
+  {
+    role: "Consultant Pain Medicine & Palliative Care",
+    hospital: "Artemis Hospital, Gurgaon",
+    duration: "2018 - 2020"
+  },
+  {
+    role: "Senior Consultant Hair Transplant Surgeon",
+    hospital: "Dadu Medical Centre, New Delhi",
+    duration: "2020 - Present"
+  }
+];
 
-  const cardBgColor = "#3b5998";
-  const isDarkCard = true;
-  const textColor = "#FFFFFF";
-  const subtextColor = "#E5E7EB";
-  const goldColor = "#ffffff";
+const defaultEducation = [
+  {
+    degree: "MBBS",
+    institution: "Himalayan Institute of Medical Sciences (HIMS), Dehradun",
+    year: "2005"
+  },
+  {
+    degree: "Diploma In Anaesthesia & Critical Care",
+    institution: "Himalayan Institute of Medical Sciences (HIMS), Dehradun",
+    year: "2012"
+  }
+];
+
+export default function AboutDrNandaniEducationExperience({ data = {}, credentialsData = {} }) {
+  const [activeTab, setActiveTab] = useState('experience');
+
+  const tabs = useMemo(() => {
+    const credentialItems = (credentialsData.credentialsList || []).map(item => ({
+      title: item.text,
+      subtitle: "",
+      date: ""
+    }));
+
+    return [
+      {
+        id: 'experience',
+        label: data.experienceTabLabel || data.experienceTitle || "Experience",
+        items: (data.experienceItems && data.experienceItems.length > 0 ? data.experienceItems : defaultExperience).map(item => ({
+          title: item.role,
+          subtitle: item.hospital,
+          date: item.duration,
+          pathRoot: 'educationExperience.experienceItems',
+          titleKey: 'role',
+          subtitleKey: 'hospital',
+          dateKey: 'duration'
+        }))
+      },
+      {
+        id: 'education',
+        label: data.educationTabLabel || data.educationTitle || "Education",
+        items: (data.educationItems && data.educationItems.length > 0 ? data.educationItems : defaultEducation).map(item => ({
+          title: item.degree,
+          subtitle: item.institution,
+          date: item.year,
+          pathRoot: 'educationExperience.educationItems',
+          titleKey: 'degree',
+          subtitleKey: 'institution',
+          dateKey: 'year'
+        }))
+      },
+      {
+        id: 'credentials',
+        label: data.credentialsTabLabel || credentialsData.heading || "Credentials",
+        items: credentialItems.length > 0 ? credentialItems.map(item => ({
+          ...item,
+          pathRoot: 'credentialsSection.credentialsList',
+          titleKey: 'text',
+          subtitleKey: '',
+          dateKey: ''
+        })) : [
+          { title: "Fellowship In Aesthetic Medicine", subtitle: "", date: "", pathRoot: 'credentialsSection.credentialsList', titleKey: 'text' },
+          { title: "Fellowship In Hair Science", subtitle: "", date: "", pathRoot: 'credentialsSection.credentialsList', titleKey: 'text' },
+          { title: "Fellowship In Pain Medicine", subtitle: "", date: "", pathRoot: 'credentialsSection.credentialsList', titleKey: 'text' }
+        ]
+      }
+    ];
+  }, [data, credentialsData]);
+
+  const active = tabs.find(tab => tab.id === activeTab) || tabs[0];
+  const topImage = data.topImage || "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png";
+  const bottomImage = data.bottomImage || "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png";
 
   return (
-    <EditableSection sectionId="about-nandani-education" label="Dr Nandani Edu & Exp">
-      <div
-        className="dr-nandani-edu-exp-section"
-        style={{
-          backgroundColor: sectionBgColor || "#FFFFFF",
-          padding: "90px 24px",
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          boxSizing: "border-box"
-        }}
-      >
-        <div 
-          style={{ 
-            maxWidth: "1200px", 
-            width: "100%", 
-            display: "grid", 
-            gridTemplateColumns: "1fr 1fr", 
-            gap: "48px" 
-          }}
-          className="edu-exp-grid"
-        >
-          {/* LEFT COLUMN: EDUCATION */}
-          <div 
-            className="edu-exp-card"
-            style={{
-              backgroundColor: cardBgColor,
-              borderRadius: "16px",
-              boxShadow: "0 15px 45px rgba(0, 0, 0, 0.08), 0 3px 15px rgba(0, 0, 0, 0.04)",
-              padding: "56px 48px 48px 48px",
-              position: "relative",
-              boxSizing: "border-box",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center"
-            }}
-          >
-            {/* Centered circular graduation cap icon */}
-            <div 
-              style={{
-                position: "absolute",
-                top: "-36px",
-                width: "72px",
-                height: "72px",
-                borderRadius: "50%",
-                backgroundColor: "#FFFFFF",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 8px 24px rgba(0, 0, 0, 0.12)",
-                border: "1px solid rgba(0, 0, 0, 0.02)"
-              }}
-            >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3b5998" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
-              </svg>
+    <EditableSection sectionId="about-nandani-education" label="Experience Education Credentials">
+      <section className="nandani-credentials-tabs-section">
+        <div className="nandani-credentials-tabs-inner">
+          <div className="nandani-tabs-content">
+            <div className="nandani-tabs-switcher" role="tablist" aria-label="Doctor credentials tabs">
+              {tabs.map(tab => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  className={activeTab === tab.id ? 'is-active' : ''}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
 
-            {/* Title */}
-            <h3
-              style={{
-                fontSize: "20px",
-                fontWeight: "700",
-                color: textColor,
-                marginBottom: "36px",
-                fontFamily: "'Inter', sans-serif",
-                letterSpacing: "0.08em",
-                textAlign: "center"
-              }}
-            >
-              <EditableText sectionId="about-nandani-education" fieldPath="educationExperience.educationTitle">
-                {educationTitle}
-              </EditableText>
-            </h3>
+            <div className="nandani-timeline-list">
+              {active.items.map((item, idx) => {
+                const titlePath = `${item.pathRoot}.${idx}.${item.titleKey}`;
+                const subtitlePath = item.subtitleKey ? `${item.pathRoot}.${idx}.${item.subtitleKey}` : "";
+                const datePath = item.dateKey ? `${item.pathRoot}.${idx}.${item.dateKey}` : "";
 
-            {/* Education Items List */}
-            <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "24px" }}>
-              {educationItems.map((item, idx) => (
-                <div 
-                  key={idx} 
-                  style={{ 
-                    display: "flex", 
-                    alignItems: "flex-start", 
-                    gap: "12px",
-                    borderBottom: idx < educationItems.length - 1 ? "1px dashed rgba(255,255,255,0.15)" : "none",
-                    paddingBottom: idx < educationItems.length - 1 ? "20px" : "0"
-                  }}
-                >
-                  {/* Little Gold Ticks */}
-                  <span style={{ color: goldColor, fontSize: "14px", fontWeight: "bold", marginTop: "2px" }}>✔</span>
-                  
-                  <div style={{ flex: 1 }}>
-                    <p style={{ margin: "0 0 4px 0", fontSize: "14.5px", fontWeight: "700", color: textColor, fontFamily: "'Inter', sans-serif", lineHeight: "1.4" }}>
-                      <EditableText sectionId="about-nandani-education" fieldPath={`educationExperience.educationItems.${idx}.degree`}>
-                        {item.degree}
-                      </EditableText>
-                    </p>
-                    <p style={{ margin: "0", fontSize: "13px", color: subtextColor, fontFamily: "'Inter', sans-serif", lineHeight: "1.5" }}>
-                      <EditableText sectionId="about-nandani-education" fieldPath={`educationExperience.educationItems.${idx}.institution`}>
-                        {item.institution}
-                      </EditableText>
-                      {item.year && (
-                        <span style={{ fontWeight: "600", color: goldColor, marginLeft: "6px" }}>
-                          ({item.year})
-                        </span>
+                return (
+                  <article key={`${active.id}-${idx}`} className="nandani-timeline-entry">
+                    <div className="nandani-timeline-check">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3>
+                        <EditableText sectionId={active.id === 'credentials' ? 'about-nandani-credentials' : 'about-nandani-education'} fieldPath={titlePath} tag="span">
+                          {item.title}
+                        </EditableText>
+                      </h3>
+                      {(item.subtitle || item.date) && (
+                        <p>
+                          {item.subtitle && (
+                            <EditableText sectionId="about-nandani-education" fieldPath={subtitlePath} tag="span">
+                              {item.subtitle}
+                            </EditableText>
+                          )}
+                          {item.date && (
+                            <>
+                              {" "}
+                              <EditableText sectionId="about-nandani-education" fieldPath={datePath} tag="span">
+                                ({item.date})
+                              </EditableText>
+                            </>
+                          )}
+                        </p>
                       )}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </div>
 
-          {/* RIGHT COLUMN: EXPERIENCE */}
-          <div 
-            className="edu-exp-card"
-            style={{
-              backgroundColor: cardBgColor,
-              borderRadius: "16px",
-              boxShadow: "0 15px 45px rgba(0, 0, 0, 0.08), 0 3px 15px rgba(0, 0, 0, 0.04)",
-              padding: "56px 48px 48px 48px",
-              position: "relative",
-              boxSizing: "border-box",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center"
-            }}
-          >
-            {/* Centered circular briefcase icon */}
-            <div 
-              style={{
-                position: "absolute",
-                top: "-36px",
-                width: "72px",
-                height: "72px",
-                borderRadius: "50%",
-                backgroundColor: "#FFFFFF",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 8px 24px rgba(0, 0, 0, 0.12)",
-                border: "1px solid rgba(0, 0, 0, 0.02)"
-              }}
-            >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3b5998" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-              </svg>
+          <div className="nandani-tabs-images" aria-label="Doctor credentials images">
+            <div className="nandani-tabs-image-card">
+              <EditableImage
+                sectionId="about-nandani-education"
+                fieldPath="educationExperience.topImage"
+                src={topImage}
+                alt="Dr. Nandani Dadu credentials top"
+              />
             </div>
-
-            {/* Title */}
-            <h3
-              style={{
-                fontSize: "20px",
-                fontWeight: "700",
-                color: textColor,
-                marginBottom: "36px",
-                fontFamily: "'Inter', sans-serif",
-                letterSpacing: "0.08em",
-                textAlign: "center"
-              }}
-            >
-              <EditableText sectionId="about-nandani-education" fieldPath="educationExperience.experienceTitle">
-                {experienceTitle}
-              </EditableText>
-            </h3>
-
-            {/* Experience Items List */}
-            <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "24px" }}>
-              {experienceItems.map((item, idx) => (
-                <div 
-                  key={idx} 
-                  style={{ 
-                    display: "flex", 
-                    alignItems: "flex-start", 
-                    gap: "12px",
-                    borderBottom: idx < experienceItems.length - 1 ? "1px dashed rgba(255,255,255,0.15)" : "none",
-                    paddingBottom: idx < experienceItems.length - 1 ? "20px" : "0"
-                  }}
-                >
-                  {/* Little Gold Ticks */}
-                  <span style={{ color: goldColor, fontSize: "14px", fontWeight: "bold", marginTop: "2px" }}>✔</span>
-                  
-                  <div style={{ flex: 1 }}>
-                    <p style={{ margin: "0 0 4px 0", fontSize: "14.5px", fontWeight: "700", color: textColor, fontFamily: "'Inter', sans-serif", lineHeight: "1.4" }}>
-                      <EditableText sectionId="about-nandani-education" fieldPath={`educationExperience.experienceItems.${idx}.role`}>
-                        {item.role}
-                      </EditableText>
-                    </p>
-                    <p style={{ margin: "0", fontSize: "13px", color: subtextColor, fontFamily: "'Inter', sans-serif", lineHeight: "1.5" }}>
-                      <EditableText sectionId="about-nandani-education" fieldPath={`educationExperience.experienceItems.${idx}.hospital`}>
-                        {item.hospital}
-                      </EditableText>
-                      {item.duration && (
-                        <span style={{ fontWeight: "600", color: goldColor, marginLeft: "6px" }}>
-                          ({item.duration})
-                        </span>
-                      )}
-                    </p>
-                  </div>
-                </div>
-              ))}
+            <div className="nandani-tabs-image-card">
+              <EditableImage
+                sectionId="about-nandani-education"
+                fieldPath="educationExperience.bottomImage"
+                src={bottomImage}
+                alt="Dr. Nandani Dadu credentials bottom"
+              />
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <style jsx global>{`
-        @media (max-width: 991px) {
-          .edu-exp-grid {
-            grid-template-columns: 1fr !important;
-            gap: 64px !important;
+      <style jsx>{`
+        .nandani-credentials-tabs-section {
+          width: 100%;
+          background: #ffffff;
+          padding: 96px 5%;
+        }
+
+        .nandani-credentials-tabs-inner {
+          max-width: 1300px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.72fr);
+          gap: 58px;
+          align-items: start;
+        }
+
+        .nandani-tabs-switcher {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          border: 1px solid rgba(17, 17, 17, 0.18);
+          border-radius: 999px;
+          overflow: hidden;
+          margin-bottom: 34px;
+          background: #ffffff;
+        }
+
+        .nandani-tabs-switcher button {
+          min-height: 48px;
+          border: 0;
+          background: transparent;
+          color: #111111;
+          font-family: 'Marcellus', serif;
+          font-size: 22px;
+          cursor: pointer;
+          transition: all 0.25s ease;
+        }
+
+        .nandani-tabs-switcher button.is-active {
+          background: #3b5998;
+          color: #ffffff;
+          border-radius: 999px;
+        }
+
+        .nandani-timeline-list {
+          display: grid;
+          gap: 0;
+        }
+
+        .nandani-timeline-entry {
+          display: grid;
+          grid-template-columns: 28px 1fr;
+          gap: 20px;
+          padding: 26px 0;
+          border-bottom: 1px solid rgba(17, 17, 17, 0.16);
+        }
+
+        .nandani-timeline-check {
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: #3b5998;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: 4px;
+        }
+
+        .nandani-timeline-entry h3 {
+          font-family: 'Marcellus', serif;
+          font-size: 21px;
+          line-height: 1.35;
+          font-weight: 400;
+          color: #111111;
+          margin: 0 0 8px;
+        }
+
+        .nandani-timeline-entry p {
+          font-family: 'Lato', sans-serif;
+          font-size: 14px;
+          line-height: 1.7;
+          color: #333333;
+          margin: 0;
+        }
+
+        .nandani-tabs-images {
+          display: grid;
+          gap: 28px;
+          padding-top: 54px;
+        }
+
+        .nandani-tabs-image-card {
+          border-radius: 28px;
+          overflow: hidden;
+          background: #d7d7d7;
+          min-height: 240px;
+          box-shadow: 0 22px 42px rgba(17, 17, 17, 0.08);
+        }
+
+        .nandani-tabs-image-card :global(img) {
+          width: 100%;
+          height: 100%;
+          min-height: 240px;
+          object-fit: cover;
+          display: block;
+        }
+
+        @media (max-width: 980px) {
+          .nandani-credentials-tabs-inner {
+            grid-template-columns: 1fr;
+            gap: 38px;
           }
-          .edu-exp-card {
-            padding: 48px 24px 32px 24px !important;
+
+          .nandani-tabs-images {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            padding-top: 0;
           }
-          .dr-nandani-edu-exp-section {
-            padding: 70px 16px !important;
+        }
+
+        @media (max-width: 620px) {
+          .nandani-credentials-tabs-section {
+            padding: 66px 5%;
+          }
+
+          .nandani-tabs-switcher {
+            border-radius: 22px;
+            grid-template-columns: 1fr;
+          }
+
+          .nandani-tabs-switcher button {
+            font-size: 19px;
+          }
+
+          .nandani-tabs-switcher button.is-active {
+            border-radius: 18px;
+          }
+
+          .nandani-tabs-images {
+            grid-template-columns: 1fr;
+          }
+
+          .nandani-timeline-entry {
+            gap: 14px;
           }
         }
       `}</style>

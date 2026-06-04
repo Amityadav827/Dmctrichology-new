@@ -7,7 +7,6 @@ import AboutDrNandaniHero from '../../components/AboutDrNandaniHero';
 import AboutDrNandaniSpecialist from '../../components/AboutDrNandaniSpecialist';
 import AboutDrNandaniTimeline from '../../components/AboutDrNandaniTimeline';
 import AboutDrNandaniEducationExperience from '../../components/AboutDrNandaniEducationExperience';
-import AboutDrNandaniCredentials from '../../components/AboutDrNandaniCredentials';
 import AboutDrNandaniTrust from '../../components/AboutDrNandaniTrust';
 import AboutDrNandaniOtherSpecialities from '../../components/AboutDrNandaniOtherSpecialities';
 import AboutDrNandaniTestimonials from '../../components/AboutDrNandaniTestimonials';
@@ -171,9 +170,11 @@ export default function AboutDrNandaniClient({ initialData }) {
       />
       <AboutDrNandaniSpecialist data={pageData.specialist || {}} />
       <AboutDrNandaniTimeline data={pageData.timeline || {}} />
-      <AboutDrNandaniEducationExperience data={pageData.educationExperience || {}} />
-      <AboutDrNandaniCredentials data={pageData.credentialsSection || {}} />
       <AboutDrNandaniTrust data={pageData.trustSection || {}} />
+      <AboutDrNandaniEducationExperience
+        data={pageData.educationExperience || {}}
+        credentialsData={pageData.credentialsSection || {}}
+      />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection || {}} />
       <AboutDrNandaniTestimonials data={pageData.testimonialsSection || {}} />
       <AboutDrNandaniFAQ data={pageData.faqSection || {}} />

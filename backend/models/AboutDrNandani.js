@@ -86,12 +86,14 @@ const AboutDrNandaniSchema = new mongoose.Schema({
   },
 
   timeline: {
-    heading: { type: String, default: "What Makes Dr. Nandini Dadu the Best Hair Transplant Surgeon in Delhi?" },
+    eyebrow: { type: String, default: "TRUSTED CARE SERVICES" },
+    heading: { type: String, default: "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?" },
     sectionBgColor: { type: String, default: "#FFFFFF" },
     sectionImage: { type: String, default: "" },
     steps: [{
       title: { type: String },
       description: { type: String },
+      icon: { type: String },
       numberLabel: { type: String },
       colorMode: { type: String, enum: ['gold', 'navy'], default: 'gold' },
       iconName: { type: String }
@@ -100,8 +102,13 @@ const AboutDrNandaniSchema = new mongoose.Schema({
 
   educationExperience: {
     sectionBgColor: { type: String, default: "#FFFFFF" },
-    educationTitle: { type: String, default: "EDUCATION" },
-    experienceTitle: { type: String, default: "EXPERIENCE" },
+    educationTitle: { type: String, default: "Education" },
+    experienceTitle: { type: String, default: "Experience" },
+    experienceTabLabel: { type: String, default: "Experience" },
+    educationTabLabel: { type: String, default: "Education" },
+    credentialsTabLabel: { type: String, default: "Credentials" },
+    topImage: { type: String, default: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png" },
+    bottomImage: { type: String, default: "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png" },
     educationItems: [{
       degree: { type: String },
       institution: { type: String },
@@ -128,19 +135,20 @@ const AboutDrNandaniSchema = new mongoose.Schema({
   },
   
   trustSection: {
-    heading: { type: String, default: "Why Do Patients Trust Dr. Nandani Dadu As a Hair Transplant Doctor in Delhi?" },
-    image: { type: String, default: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png" },
-    imageAlt: { type: String, default: "Dr. Nandani Dadu" },
+    eyebrow: { type: String, default: "TRUSTED CARE SERVICES" },
+    heading: { type: String, default: "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?" },
+    image: { type: String, default: "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png" },
+    imageAlt: { type: String, default: "Hair transplant treatment planning" },
     imageMaxWidth: { type: String, default: "100%" },
     trustPoints: [{
       title: { type: String },
       description: { type: String }
     }],
     conclusionParagraph: { type: String, default: "Dr. Nandani Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandani Dadu now!" },
-    backgroundColor: { type: String, default: "#ffffff" },
-    contentMaxWidth: { type: String, default: "1280px" },
-    paddingTop: { type: String, default: "110px" },
-    paddingBottom: { type: String, default: "110px" }
+    backgroundColor: { type: String, default: "#e8eaf6" },
+    contentMaxWidth: { type: String, default: "1300px" },
+    paddingTop: { type: String, default: "92px" },
+    paddingBottom: { type: String, default: "92px" }
   },
   otherSpecialitiesSection: {
     heading: { type: String, default: "Other Specialities" },

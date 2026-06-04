@@ -72,44 +72,41 @@ const staticFallback = {
     cardBgColor: "#3b5998"
   },
   timeline: {
-    heading: "What Makes Dr. Nandini Dadu the Best Hair Transplant Surgeon in Delhi?",
+    eyebrow: "TRUSTED CARE SERVICES",
+    heading: "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?",
     sectionBgColor: "#FFFFFF",
-    sectionImage: "",
     steps: [
       {
         title: "Compassionate Approach",
         description: "Empathy towards patients makes them feel comfortable and informed.",
-        numberLabel: "01",
-        colorMode: "gold",
-        iconName: "heart"
+        icon: ""
       },
       {
         title: "Artistic Skills",
         description: "Expert knowledge and artistic approach ensure the latest and most effective treatments.",
-        numberLabel: "02",
-        colorMode: "navy",
-        iconName: "brain"
+        icon: ""
       },
       {
         title: "Customized Treatment Plan",
         description: "Provide tailored treatments for every unique individual and their needs.",
-        numberLabel: "03",
-        colorMode: "gold",
-        iconName: "kit"
+        icon: ""
       },
       {
         title: "Advanced Technologies",
         description: "Uses specialized techniques and equipment to achieve maximum results.",
-        numberLabel: "04",
-        colorMode: "navy",
-        iconName: "tech"
+        icon: ""
       }
     ]
   },
   educationExperience: {
     sectionBgColor: "#FFFFFF",
-    educationTitle: "EDUCATION",
-    experienceTitle: "EXPERIENCE",
+    educationTitle: "Education",
+    experienceTitle: "Experience",
+    experienceTabLabel: "Experience",
+    educationTabLabel: "Education",
+    credentialsTabLabel: "Credentials",
+    topImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
+    bottomImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png",
     educationItems: [
       {
         degree: "MBBS",
@@ -167,9 +164,10 @@ const staticFallback = {
     paddingBottom: "80px"
   },
   trustSection: {
-    heading: "Why Do Patients Trust Dr. Nandani Dadu As a Hair Transplant Doctor in Delhi?",
-    image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
-    imageAlt: "Dr. Nandani Dadu",
+    eyebrow: "TRUSTED CARE SERVICES",
+    heading: "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?",
+    image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png",
+    imageAlt: "Hair transplant treatment planning",
     imageMaxWidth: "100%",
     trustPoints: [
       {
