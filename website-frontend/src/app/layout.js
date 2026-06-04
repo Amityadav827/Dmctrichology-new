@@ -47,8 +47,6 @@ export default async function RootLayout({ children }) {
   });
 
   const s = settingsRes?.data || {};
-  const primaryColor = s.primaryColor || "#C19A5B";
-  const secondaryColor = s.secondaryColor || "#000000";
   const ga4Id = s.ga4Id || "";
   const gtmId = s.gtmId || "";
   const metaPixelId = s.metaPixelId || "";
@@ -65,17 +63,6 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Marcellus&display=swap" rel="stylesheet" />
-        <style dangerouslySetInnerHTML={{ __html: `
-          :root {
-            --primary-color: ${primaryColor};
-            --secondary-color: ${secondaryColor};
-            --clr-blue: ${primaryColor};
-            --bg-blue: ${primaryColor};
-            --color-blue: ${primaryColor};
-            --clr-blue-dark: ${secondaryColor};
-            --color-blue-dark: ${secondaryColor};
-          }
-        `}} />
       </head>
       <body>
         <CustomScriptsInjector headScripts={headScripts} bodyStartScripts={bodyStartScripts} />

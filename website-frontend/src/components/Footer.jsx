@@ -305,7 +305,7 @@ export default function Footer({ siteSettings }) {
         </div>
 
         {/* Bottom Footer Section (Black) */}
-        <div className="footer-bottom" style={{ backgroundColor: 'var(--primary-color, #3B5998)', padding: '0 5% 0 5%', position: 'relative' }}>
+        <div className="footer-bottom" style={{ backgroundColor: '#3B5998', padding: '0 5% 0 5%', position: 'relative' }}>
           <div className="footer-bottom-inner" style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '100px' }}>
 
             {/* Left Side: Logo & About */}
