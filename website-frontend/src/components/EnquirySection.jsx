@@ -592,7 +592,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
           </div>
 
           {/* Bottom Row: Full Width Image */}
-          <div style={{ width: '100%', marginTop: '-100px', position: 'relative', zIndex: 1 }}>
+          <div style={{ width: '100%', marginTop: '-110px', position: 'relative', zIndex: 1 }}>
             <img 
               src={beforeImage} 
               alt="Consultation Result" 
@@ -800,12 +800,12 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
             .enquiry-section div[style*="margin-top: -95px"] img {
               border-radius: 22px !important;
             }
-            .enquiry-section div[style*="marginTop: '-100px'"],
-            .enquiry-section div[style*="margin-top: -100px"] {
+            .enquiry-section div[style*="marginTop: '-110px'"],
+            .enquiry-section div[style*="margin-top: -110px"] {
               margin-top: 30px !important;
             }
-            .enquiry-section div[style*="marginTop: '-100px'"] img,
-            .enquiry-section div[style*="margin-top: -100px"] img {
+            .enquiry-section div[style*="marginTop: '-110px'"] img,
+            .enquiry-section div[style*="margin-top: -110px"] img {
               border-radius: 0 !important;
             }
           }
