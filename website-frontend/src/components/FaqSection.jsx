@@ -99,7 +99,7 @@ export default function FaqSection() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '25px' }}>
+          <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '25px' }}>
             {(activeCategory?.faqs || []).map((faq, index) => {
               const catIndex = categories.indexOf(activeCategory);
               const isFirstFaqCard = index === 0;
@@ -312,7 +312,9 @@ export default function FaqSection() {
             section .section-title {
               font-size: clamp(30px, 8.5vw, 40px) !important;
             }
-            div[style*="gridTemplateColumns"] { grid-template-columns: 1fr !important; }
+            .faq-grid {
+              grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)) !important;
+            }
             .faq-card {
               flex-direction: column;
               align-items: flex-start !important;

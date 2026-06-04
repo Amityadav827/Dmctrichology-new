@@ -97,13 +97,12 @@ const VideoCard = ({ name, image, height = "400px", onPlay, sectionId, index }) 
         width: '64px',
         height: '64px',
         borderRadius: '50%',
-        border: '1px solid rgba(255,255,255,0.7)',
-        background: 'rgba(255,255,255,0.92)',
+        border: '2px solid rgba(255,255,255,0.85)',
+        background: '#ffffff',
         boxShadow: '0 14px 36px rgba(0,0,0,0.22)',
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '4px',
         cursor: 'pointer',
         zIndex: 3
       }}
@@ -119,10 +118,6 @@ const VideoCard = ({ name, image, height = "400px", onPlay, sectionId, index }) 
           marginLeft: '4px'
         }}
       />
-      <span aria-hidden="true" style={{ display: 'inline-flex', gap: '4px' }}>
-        <span style={{ width: '4px', height: '18px', borderRadius: '4px', background: '#3B5998', opacity: 0.35 }} />
-        <span style={{ width: '4px', height: '18px', borderRadius: '4px', background: '#3B5998', opacity: 0.35 }} />
-      </span>
     </button>
   </div>
 );
