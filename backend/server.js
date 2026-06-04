@@ -79,19 +79,32 @@ const app = express();
 // ========================
 // ✅ Global Middleware
 // ========================
-app.use(cors({
-  origin: [
-    "https://dmctrichology.vercel.app",
-    "https://dmctrichology-mkm4.vercel.app",
-    "http://localhost:3000",
-    "http://localhost:5173" // Adding Vite default port too
-  ],
+const allowedOrigins = [
+  "https://dmctrichology.vercel.app",
+  "https://dmctrichology-mkm4.vercel.app",
+  "https://dmctrichology-dashboard.vercel.app",
+  "http://localhost:3000",
+  "http://localhost:5173" // Adding Vite default port too
+];
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
-}));
+};
 
-app.options("*", cors());
+app.use(cors(corsOptions));
+
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
