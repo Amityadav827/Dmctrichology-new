@@ -365,7 +365,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
             </div>
 
             {/* Form */}
-            <div style={{ flex: '1 1 400px', paddingTop: '55px', position: 'relative', zIndex: 2 }}>
+            <div style={{ flex: '1 1 150px', paddingTop: '0px', position: 'relative', zIndex: 2 }}>
               <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                 <div style={{ gridColumn: 'span 2' }}>
                    {success && (
@@ -592,7 +592,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
           </div>
 
           {/* Bottom Row: Full Width Image */}
-          <div style={{ width: '100%', marginTop: '30px', position: 'relative', zIndex: 1 }}>
+          <div style={{ width: '100%', marginTop: '-100px', position: 'relative', zIndex: 1 }}>
             <img 
               src={beforeImage} 
               alt="Consultation Result" 

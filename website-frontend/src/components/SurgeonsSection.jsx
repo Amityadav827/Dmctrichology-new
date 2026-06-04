@@ -161,7 +161,7 @@ const SurgeonsSection = () => {
                     ))}
                   </div>
 
-                  <a href="https://dmctrichology-mkm4.vercel.app/service" className="surgeon-detail-btn" style={{ 
+                  <a href={currentSurgeon.buttonLink || '/team-of-dmc'} className="surgeon-detail-btn" style={{ 
                     padding: '12px 25px', 
                     borderRadius: '30px', 
                     border: '1px solid #ffffff', 

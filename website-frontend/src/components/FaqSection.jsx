@@ -99,7 +99,7 @@ export default function FaqSection() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '25px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '25px' }}>
             {(activeCategory?.faqs || []).map((faq, index) => {
               const catIndex = categories.indexOf(activeCategory);
               const isFirstFaqCard = index === 0;
