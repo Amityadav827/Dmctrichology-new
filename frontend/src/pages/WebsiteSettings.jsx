@@ -3,32 +3,34 @@ import axios from "../api/client";
 import toast from "react-hot-toast";
 import { Upload, Save, Loader2, BarChart2, Code2, Search } from "lucide-react";
 
+const DEFAULT_SETTINGS = {
+  websiteName: "",
+  logo: "",
+  favicon: "",
+  phone1: "",
+  phone2: "",
+  email: "",
+  address: "",
+  primaryColor: "#C19A5B",
+  secondaryColor: "#000000",
+  appointmentButtonText: "",
+  socialLinks: { facebook: "", instagram: "", youtube: "", linkedin: "" },
+  footerCopyright: "",
+  patientCount: "",
+  ratingStars: 5,
+  ratingText: "",
+  siteTitle: "",
+  defaultMetaDescription: "",
+  defaultOgImage: "",
+  ga4Id: "",
+  gtmId: "",
+  metaPixelId: "",
+  headScripts: "",
+  bodyStartScripts: "",
+};
+
 export default function WebsiteSettings() {
-  const [settings, setSettings] = useState({
-    websiteName: "",
-    logo: "",
-    favicon: "",
-    phone1: "",
-    phone2: "",
-    email: "",
-    address: "",
-    primaryColor: "#C19A5B",
-    secondaryColor: "#000000",
-    appointmentButtonText: "",
-    socialLinks: { facebook: "", instagram: "", youtube: "", linkedin: "" },
-    footerCopyright: "",
-    patientCount: "",
-    ratingStars: 5,
-    ratingText: "",
-    siteTitle: "",
-    defaultMetaDescription: "",
-    defaultOgImage: "",
-    ga4Id: "",
-    gtmId: "",
-    metaPixelId: "",
-    headScripts: "",
-    bodyStartScripts: "",
-  });
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
 
   const [files, setFiles] = useState({ logo: null, favicon: null });
   const [loading, setLoading] = useState(true);
@@ -42,7 +44,14 @@ export default function WebsiteSettings() {
     try {
       const { data } = await axios.get("/site-settings");
       if (data.success && data.data) {
-        setSettings(data.data);
+        setSettings({
+          ...DEFAULT_SETTINGS,
+          ...data.data,
+          socialLinks: {
+            ...DEFAULT_SETTINGS.socialLinks,
+            ...(data.data.socialLinks || {}),
+          },
+        });
       }
     } catch (error) {
       toast.error("Failed to load settings");

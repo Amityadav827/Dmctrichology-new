@@ -6,7 +6,7 @@ import Link from 'next/link';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
-export default function Header({ initialHeader }) {
+export default function Header({ initialHeader, siteSettings }) {
   const [headerData, setHeaderData] = useState(initialHeader || null);
   const [headerState, setHeaderState] = useState('default');
 
@@ -38,9 +38,10 @@ export default function Header({ initialHeader }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const logoUrl = headerData?.logoUrl || 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530477/dmc-trichology/pntwhlftziotd6k0kdkg.png';
-  const buttonText = headerData?.appointmentButtonText || 'Book Appointment';
+  const logoUrl = headerData?.logoUrl || siteSettings?.logo || 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530477/dmc-trichology/pntwhlftziotd6k0kdkg.png';
+  const buttonText = headerData?.appointmentButtonText || siteSettings?.appointmentButtonText || 'Book Appointment';
   const buttonLink = headerData?.appointmentButtonLink || '#book';
+  const websiteName = siteSettings?.websiteName || 'DMC Trichology';
 
   return (
     <EditableSection sectionId="header" label="Header">
@@ -48,7 +49,7 @@ export default function Header({ initialHeader }) {
         <div className="header-container">
           <div className="logo">
             <Link href="/" aria-label="Go to homepage">
-              <img src={logoUrl} alt="DMC Trichology Logo" />
+              <img src={logoUrl} alt={`${websiteName} Logo`} />
             </Link>
           </div>
 

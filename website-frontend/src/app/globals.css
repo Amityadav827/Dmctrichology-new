@@ -236,8 +236,8 @@ a {
 }
 
 .header-appointment-btn {
-  background: #3B5998 !important;
-  background-color: #3B5998 !important;
+  background: var(--primary-color, #3B5998) !important;
+  background-color: var(--primary-color, #3B5998) !important;
   color: #ffffff !important;
   transition: transform 0.25s ease, box-shadow 0.25s ease !important;
 }
@@ -502,7 +502,7 @@ a {
 
 /* ===================== TOPBAR ===================== */
 .topbar {
-  background-color: #3B5998;
+  background-color: var(--primary-color, #3B5998);
   color: var(--white);
   padding: 8px 5%;
   display: flex;
@@ -553,7 +553,7 @@ a {
   justify-content: center;
   border-radius: 50%;
   background: #ffffff;
-  color: #3B5998;
+  color: var(--primary-color, #3B5998);
   transition: transform 0.2s ease;
 }
 
@@ -571,7 +571,7 @@ a {
   width: 14px;
   height: 14px;
   display: block;
-  color: #3B5998;
+  color: var(--primary-color, #3B5998);
 }
 
 /* ===================== HEADER ===================== */

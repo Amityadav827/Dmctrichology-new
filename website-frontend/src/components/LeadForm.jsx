@@ -255,7 +255,7 @@ export default function LeadForm() {
         </div>
 
         <div style={{ marginTop: '32px' }}>
-          <button type="submit" className="btn-primary hero-submit-btn" style={{ width: '100%', position: 'relative', height: '60px', borderRadius: '50px', padding: '0 24px', cursor: loading ? 'not-allowed' : 'pointer', background: '#3B5998', backgroundColor: '#3B5998' }} disabled={loading}>
+          <button type="submit" className="btn-primary hero-submit-btn" style={{ width: '100%', position: 'relative', height: '60px', borderRadius: '50px', padding: '0 24px', cursor: loading ? 'not-allowed' : 'pointer', background: 'var(--primary-color, #3B5998)', backgroundColor: 'var(--primary-color, #3B5998)' }} disabled={loading}>
             <span style={{ fontFamily: "'Marcellus', serif", fontSize: '1.2rem', color: '#ffffff', margin: '0 auto' }}>{loading ? 'Submitting...' : 'Submit'}</span>
             <div className="icon-circle" style={{ position: 'absolute', right: '10px', backgroundColor: '#ffffff', width: '40px', height: '40px' }}>
               <img className="hero-submit-arrow" src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ngfngyyxjj86kvn5nd5n.png" alt="arrow" style={{ width: '16px', height: '16px', objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)' }} />

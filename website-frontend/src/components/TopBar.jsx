@@ -60,7 +60,15 @@ const SocialGlyph = ({ name }) => {
 
 const supportedSocialGlyphs = new Set(['telegram', 'instagram', 'facebook', 'youtube', 'linkedin']);
 
-export default function TopBar({ initialTopBar }) {
+const hasValue = (value) => typeof value === 'string' && value.trim() && value.trim() !== '#';
+
+const socialLinksFromSettings = (links = {}) => (
+  ['facebook', 'instagram', 'youtube', 'linkedin']
+    .filter((name) => hasValue(links[name]))
+    .map((name) => ({ name, link: links[name] }))
+);
+
+export default function TopBar({ initialTopBar, siteSettings }) {
   const { topBarCMS, setTopBarCMS } = useBuilder();
 
   useEffect(() => {
@@ -75,23 +83,28 @@ export default function TopBar({ initialTopBar }) {
   const topBarData = topBarCMS || initialTopBar;
 
   const fallbackSettings = {
-    phones: ['+91-8527830194', '+91-9810939319'],
+    phones: ['+91-9810939319', '+91-9667721501'],
     email: 'info@dadumedicalcentre.com',
     socials: [
-      { name: 'telegram', link: '#', iconUrl: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/trooomdx4mjupebkzsmy.png' },
-      { name: 'instagram', link: '#', iconUrl: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/pzzrzqodtujxvlktyk2s.png' },
-      { name: 'facebook', link: '#', iconUrl: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/jkidxsr5nbpwq7y7x0x0.png' },
-      { name: 'youtube', link: '#', iconUrl: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/dgkcwru8nqurjw7f1lz6.png' },
-      { name: 'linkedin', link: '#', iconUrl: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lhgvbca5okvyge6atokb.png' }
+      { name: 'facebook', link: 'https://www.facebook.com/dmctrichology/' },
+      { name: 'instagram', link: 'https://www.instagram.com/dmctrichology/' },
+      { name: 'youtube', link: 'https://www.youtube.com/dmctrichology' }
     ]
   };
 
+  const topBarPhones = topBarData ? [topBarData.phone1, topBarData.phone2].filter(hasValue) : [];
+  const settingsPhones = [siteSettings?.phone1, siteSettings?.phone2].filter(hasValue);
+  const settingsSocials = socialLinksFromSettings(siteSettings?.socialLinks);
+  const topBarSocials = Array.isArray(topBarData?.socialLinks)
+    ? topBarData.socialLinks.filter((social) => hasValue(social?.link))
+    : [];
+
   const isVisible = topBarData ? topBarData.isVisible : true;
-  const phones = topBarData ? [topBarData.phone1, topBarData.phone2].filter(Boolean) : fallbackSettings.phones;
-  const email = topBarData ? topBarData.email : fallbackSettings.email;
+  const phones = topBarPhones.length > 0 ? topBarPhones : (settingsPhones.length > 0 ? settingsPhones : fallbackSettings.phones);
+  const email = hasValue(topBarData?.email) ? topBarData.email : (hasValue(siteSettings?.email) ? siteSettings.email : fallbackSettings.email);
   const announcementText = topBarData ? topBarData.announcementText : "";
   
-  const socials = topBarData ? topBarData.socialLinks : fallbackSettings.socials;
+  const socials = topBarSocials.length > 0 ? topBarSocials : (settingsSocials.length > 0 ? settingsSocials : fallbackSettings.socials);
 
   const renderIcon = (social) => {
     const socialName = String(social.name || '').toLowerCase();
@@ -119,7 +132,7 @@ export default function TopBar({ initialTopBar }) {
           {phones.map((phone, i) => (
             <span key={i} className="topbar-contact-item">
               <EditableText sectionId="topbar" fieldPath={`phone${i+1}`} tag="span">
-                <a href={`tel:${phone.replace(/\s/g, '')}`} className="topbar-link">{phone}</a>
+                <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="topbar-link">{phone}</a>
               </EditableText>
               {i < phones.length - 1 && <span className="topbar-sep">|</span>}
             </span>

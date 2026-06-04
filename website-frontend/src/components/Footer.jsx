@@ -4,7 +4,22 @@ import { fetchFooter } from "../services/api";
 import EditableSection from "./Editable/EditableSection";
 import EditableText from "./Editable/EditableText";
 
-export default function Footer() {
+const hasValue = (value) => typeof value === 'string' && value.trim() && value.trim() !== '#';
+
+const socialIconByName = {
+  facebook: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/jkidxsr5nbpwq7y7x0x0.png",
+  instagram: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/pzzrzqodtujxvlktyk2s.png",
+  youtube: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/dgkcwru8nqurjw7f1lz6.png",
+  linkedin: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lhgvbca5okvyge6atokb.png",
+};
+
+const getSettingsSocials = (links = {}) => (
+  ['facebook', 'instagram', 'youtube', 'linkedin']
+    .filter((name) => hasValue(links[name]))
+    .map((name) => ({ name, icon: socialIconByName[name], url: links[name] }))
+);
+
+export default function Footer({ siteSettings }) {
   const [data, setData] = useState(null);
   
   // Newsletter form state
@@ -165,13 +180,19 @@ export default function Footer() {
     }
   ];
 
-  const contact = data?.contact || {
+  const footerContact = data?.contact || {};
+  const contact = {
     heading: "CONTACT US",
     address1: "Vasant Vihar A 2/6 Vasant Vihar, New delhi 110057, India",
     address2: "Rajouri Garden J-12/25, First Floor, Rajouri Garden New Delhi 110027, India",
     phone1: "+91-8527830194",
     phone2: "+91-9810939319",
-    email: "info@dadumedicalcentre.com"
+    email: "info@dadumedicalcentre.com",
+    ...footerContact,
+    phone1: hasValue(footerContact.phone1) ? footerContact.phone1 : (siteSettings?.phone1 || "+91-8527830194"),
+    phone2: hasValue(footerContact.phone2) ? footerContact.phone2 : (siteSettings?.phone2 || "+91-9810939319"),
+    email: hasValue(footerContact.email) ? footerContact.email : (siteSettings?.email || "info@dadumedicalcentre.com"),
+    address1: hasValue(footerContact.address1) ? footerContact.address1 : (siteSettings?.address || "Vasant Vihar A 2/6 Vasant Vihar, New delhi 110057, India"),
   };
 
   const disclaimer = data?.disclaimer || "Content is for awareness and education only, not medical advice. Consult a qualified trichologist or dermatologist for proper diagnosis and treatment. Results may vary for each individual.";
@@ -203,6 +224,20 @@ export default function Footer() {
     termsLink: "#",
     privacyText: "Privacy Policy",
     privacyLink: "#"
+  };
+
+  const settingSocials = getSettingsSocials(siteSettings?.socialLinks);
+  const hasFooterSocials = Array.isArray(data?.socials) && data.socials.length > 0;
+  const resolvedBranding = {
+    ...branding,
+    logo: hasValue(branding.logo) ? branding.logo : (siteSettings?.logo || branding.logo),
+  };
+  const resolvedSocials = hasFooterSocials
+    ? socials.map((social, index) => ({ ...social, url: hasValue(social.url) ? social.url : (settingSocials[index]?.url || social.url || '#') }))
+    : (settingSocials.length > 0 ? settingSocials : socials);
+  const resolvedBottomFooter = {
+    ...bottomFooter,
+    copyright: siteSettings?.footerCopyright || bottomFooter.copyright,
   };
 
   return (
@@ -270,27 +305,27 @@ export default function Footer() {
         </div>
 
         {/* Bottom Footer Section (Black) */}
-        <div className="footer-bottom" style={{ backgroundColor: '#3B5998', padding: '0 5% 0 5%', position: 'relative' }}>
+        <div className="footer-bottom" style={{ backgroundColor: 'var(--primary-color, #3B5998)', padding: '0 5% 0 5%', position: 'relative' }}>
           <div className="footer-bottom-inner" style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '100px' }}>
 
             {/* Left Side: Logo & About */}
             <div className="footer-brand-block" style={{ flex: '1', minWidth: '400px', paddingTop: '80px', paddingBottom: '60px', display: 'flex', alignItems: 'center', gap: '30px' }}>
               <img
-                src={branding.logo}
+                src={resolvedBranding.logo}
                 alt="logo"
                 style={{ width: '180px', flexShrink: 0 }}
               />
               <div>
-                <h5 style={{ color: '#fff', fontSize: '14px', letterSpacing: '1.2px', marginBottom: '12px', fontWeight: '500', fontFamily: "'Marcellus', serif" }}>ABOUT DMC TRICHOLOGY</h5>
+                <h5 style={{ color: '#fff', fontSize: '14px', letterSpacing: '1.2px', marginBottom: '12px', fontWeight: '500', fontFamily: "'Marcellus', serif", textTransform: 'uppercase' }}>{siteSettings?.websiteName || 'ABOUT DMC TRICHOLOGY'}</h5>
                 <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', maxWidth: '380px', lineHeight: '1.6', marginBottom: '20px' }}>
-                  <EditableText sectionId="footer-section" fieldPath="branding.aboutText" tag="span">{branding.aboutText}</EditableText>
+                  <EditableText sectionId="footer-section" fieldPath="branding.aboutText" tag="span">{resolvedBranding.aboutText}</EditableText>
                 </p>
 
                 {/* Social Icons */}
                 <div className="footer-socials" style={{ display: 'flex', gap: '15px' }}>
-                  {socials.map((social, i) => (
-                    <a key={i} href={social.url} className="social-icon-link" style={{ textDecoration: 'none', transition: 'all 0.3s ease' }}>
-                      <img src={social.icon} alt="social" style={{ width: '22px', transition: 'all 0.3s ease' }} />
+                  {resolvedSocials.map((social, i) => (
+                    <a key={i} href={social.url} className="social-icon-link" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', transition: 'all 0.3s ease' }}>
+                      <img src={social.icon} alt={social.name || "social"} style={{ width: '22px', transition: 'all 0.3s ease' }} />
                     </a>
                   ))}
                 </div>
@@ -428,14 +463,14 @@ export default function Footer() {
 
                 {/* Card Footer Links */}
                 <div className="footer-legal-row" style={{ borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#777' }}>
-                  <span><EditableText sectionId="footer-section" fieldPath="bottomFooter.copyright" tag="span">{bottomFooter.copyright}</EditableText></span>
+                  <span><EditableText sectionId="footer-section" fieldPath="bottomFooter.copyright" tag="span">{resolvedBottomFooter.copyright}</EditableText></span>
                   <div style={{ display: 'flex', gap: '15px' }}>
-                    <a href={bottomFooter.termsLink} style={{ color: '#1C1C1C', textDecoration: 'none' }}>
-                      <EditableText sectionId="footer-section" fieldPath="bottomFooter.termsText" tag="span">{bottomFooter.termsText}</EditableText>
+                    <a href={resolvedBottomFooter.termsLink} style={{ color: '#1C1C1C', textDecoration: 'none' }}>
+                      <EditableText sectionId="footer-section" fieldPath="bottomFooter.termsText" tag="span">{resolvedBottomFooter.termsText}</EditableText>
                     </a>
                     <span>|</span>
-                    <a href={bottomFooter.privacyLink} style={{ color: '#1C1C1C', textDecoration: 'none' }}>
-                      <EditableText sectionId="footer-section" fieldPath="bottomFooter.privacyText" tag="span">{bottomFooter.privacyText}</EditableText>
+                    <a href={resolvedBottomFooter.privacyLink} style={{ color: '#1C1C1C', textDecoration: 'none' }}>
+                      <EditableText sectionId="footer-section" fieldPath="bottomFooter.privacyText" tag="span">{resolvedBottomFooter.privacyText}</EditableText>
                     </a>
                   </div>
                 </div>

@@ -2,6 +2,7 @@ import './globals.css';
 import { BuilderProvider } from '../context/BuilderContext';
 import { fetchSiteSettings, fetchHeader, fetchTopBar } from '../services/api';
 import GlobalLayoutWrapper from '../components/GlobalLayoutWrapper';
+import CustomScriptsInjector from '../components/CustomScriptsInjector';
 import { Suspense } from 'react';
 import Script from 'next/script';
 
@@ -11,11 +12,27 @@ export const revalidate = 0;
 export async function generateMetadata() {
   const res = await fetchSiteSettings().catch(() => null);
   const s = res?.data || {};
+  const title = s.siteTitle || s.websiteName || 'DMC Trichology | Best Hair Transplant Clinic In Delhi';
+  const description = s.defaultMetaDescription || 'Experience The Art Of Natural Hair Restoration at DMC Trichology.';
+  const ogImage = s.defaultOgImage || s.logo || undefined;
+
   return {
-    title: s.siteTitle || 'DMC Trichology | Best Hair Transplant Clinic In Delhi',
-    description: s.defaultMetaDescription || 'Experience The Art Of Natural Hair Restoration at DMC Trichology.',
+    title,
+    description,
     icons: { icon: s.favicon || '/favicon.ico' },
-    openGraph: s.defaultOgImage ? { images: [{ url: s.defaultOgImage }] } : {},
+    openGraph: {
+      title,
+      description,
+      siteName: s.websiteName || 'DMC Trichology',
+      type: 'website',
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+    },
+    twitter: {
+      card: ogImage ? 'summary_large_image' : 'summary',
+      title,
+      description,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
   };
 }
 
@@ -37,6 +54,10 @@ export default async function RootLayout({ children }) {
   const metaPixelId = s.metaPixelId || "";
   const headScripts = s.headScripts || "";
   const bodyStartScripts = s.bodyStartScripts || "";
+  const customScriptText = `${headScripts}\n${bodyStartScripts}`;
+  const shouldInjectGa4 = ga4Id && !customScriptText.includes(ga4Id) && !customScriptText.includes('googletagmanager.com/gtag/js');
+  const shouldInjectGtm = gtmId && !customScriptText.includes(gtmId) && !customScriptText.includes('googletagmanager.com/gtm.js');
+  const shouldInjectMetaPixel = metaPixelId && !customScriptText.includes(metaPixelId) && !customScriptText.includes('connect.facebook.net/en_US/fbevents.js');
 
   return (
     <html lang="en">
@@ -48,17 +69,17 @@ export default async function RootLayout({ children }) {
           :root {
             --primary-color: ${primaryColor};
             --secondary-color: ${secondaryColor};
+            --clr-blue: ${primaryColor};
+            --bg-blue: ${primaryColor};
+            --color-blue: ${primaryColor};
+            --clr-blue-dark: ${secondaryColor};
+            --color-blue-dark: ${secondaryColor};
           }
         `}} />
-        {headScripts && (
-          <div dangerouslySetInnerHTML={{ __html: headScripts }} />
-        )}
       </head>
       <body>
-        {bodyStartScripts && (
-          <div dangerouslySetInnerHTML={{ __html: bodyStartScripts }} />
-        )}
-        {gtmId && (
+        <CustomScriptsInjector headScripts={headScripts} bodyStartScripts={bodyStartScripts} />
+        {shouldInjectGtm && (
           <noscript dangerouslySetInnerHTML={{ __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }} />
         )}
 
@@ -67,6 +88,7 @@ export default async function RootLayout({ children }) {
             <GlobalLayoutWrapper
               initialHeader={headerRes?.data}
               initialTopBar={topbarRes?.data}
+              initialSiteSettings={s}
             >
               {children}
             </GlobalLayoutWrapper>
@@ -83,16 +105,16 @@ export default async function RootLayout({ children }) {
           </defs>
         </svg>
 
-        {ga4Id && (
+        {shouldInjectGa4 && (
           <>
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} strategy="afterInteractive" />
             <Script id="ga4-init" strategy="afterInteractive">{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${ga4Id}');`}</Script>
           </>
         )}
-        {gtmId && (
+        {shouldInjectGtm && (
           <Script id="gtm-init" strategy="afterInteractive">{`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`}</Script>
         )}
-        {metaPixelId && (
+        {shouldInjectMetaPixel && (
           <Script id="meta-pixel" strategy="afterInteractive">{`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${metaPixelId}');fbq('track','PageView');`}</Script>
         )}
       </body>

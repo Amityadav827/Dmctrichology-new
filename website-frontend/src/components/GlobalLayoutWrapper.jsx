@@ -109,7 +109,7 @@ function useScrollReveal(pathname) {
   }, [pathname]);
 }
 
-export default function GlobalLayoutWrapper({ children, initialHeader, initialTopBar }) {
+export default function GlobalLayoutWrapper({ children, initialHeader, initialTopBar, initialSiteSettings }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
@@ -124,8 +124,8 @@ export default function GlobalLayoutWrapper({ children, initialHeader, initialTo
   
   return (
     <>
-      {!isEditingFooter && <TopBar initialTopBar={initialTopBar} />}
-      {!isEditingFooter && <Header initialHeader={initialHeader} />}
+      {!isEditingFooter && <TopBar initialTopBar={initialTopBar} siteSettings={initialSiteSettings} />}
+      {!isEditingFooter && <Header initialHeader={initialHeader} siteSettings={initialSiteSettings} />}
       
       <main>
         {/* Hide main content if we are JUST editing header/footer to avoid confusion */}
@@ -143,7 +143,7 @@ export default function GlobalLayoutWrapper({ children, initialHeader, initialTo
         )}
       </main>
 
-      {!isEditingHeader && <Footer />}
+      {!isEditingHeader && <Footer siteSettings={initialSiteSettings} />}
       {!(isEditingHeader || isEditingFooter) && <ScrollToTopButton />}
     </>
   );
