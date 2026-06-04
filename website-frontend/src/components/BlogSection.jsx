@@ -48,7 +48,7 @@ export default function BlogSection() {
 
   return (
     <EditableSection sectionId="blogs-home-section" label="News & Wellness Advice">
-      <section className="blogs-home-section" style={{ padding: '80px 5%', backgroundColor: '#fff' }}>
+      <section className="blogs-home-section" style={{ padding: '0 5%', backgroundColor: '#fff' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           
           {/* Header */}
