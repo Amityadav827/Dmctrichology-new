@@ -46,6 +46,8 @@ const ReviewCard = ({ name, text, sectionId, index }) => (
   </div>
 );
 
+const isDirectVideoUrl = (url = '') => /\.(mp4|webm|mov|ogg)(\?|#|$)/i.test(url);
+
 const VideoCard = ({ name, image, height = "400px", onPlay, sectionId, index }) => (
   <div style={{
     position: 'relative',
@@ -57,13 +59,13 @@ const VideoCard = ({ name, image, height = "400px", onPlay, sectionId, index }) 
     cursor: 'pointer',
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
   }} onClick={onPlay} className="premium-video-card">
-    <Image
-      src={image}
-      alt={name}
-      fill
-      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      style={{ objectFit: 'cover' }}
-    />
+    {image && (
+      <img
+        src={image}
+        alt={name}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+      />
+    )}
     <div style={{
       position: 'absolute',
       inset: 0,
@@ -82,17 +84,44 @@ const VideoCard = ({ name, image, height = "400px", onPlay, sectionId, index }) 
     </div>
     <button
       type="button"
-      className="review-video-play-toggle"
       aria-label={`Play ${name}`}
       onClick={(e) => {
         e.stopPropagation();
         onPlay?.();
       }}
+      style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '64px',
+        height: '64px',
+        borderRadius: '50%',
+        border: '1px solid rgba(255,255,255,0.7)',
+        background: 'rgba(255,255,255,0.92)',
+        boxShadow: '0 14px 36px rgba(0,0,0,0.22)',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '4px',
+        cursor: 'pointer',
+        zIndex: 3
+      }}
     >
-      <span className="review-video-play-icon" aria-hidden="true" />
-      <span className="review-video-pause-icon" aria-hidden="true">
-        <span />
-        <span />
+      <span
+        aria-hidden="true"
+        style={{
+          width: 0,
+          height: 0,
+          borderTop: '10px solid transparent',
+          borderBottom: '10px solid transparent',
+          borderLeft: '16px solid #3B5998',
+          marginLeft: '4px'
+        }}
+      />
+      <span aria-hidden="true" style={{ display: 'inline-flex', gap: '4px' }}>
+        <span style={{ width: '4px', height: '18px', borderRadius: '4px', background: '#3B5998', opacity: 0.35 }} />
+        <span style={{ width: '4px', height: '18px', borderRadius: '4px', background: '#3B5998', opacity: 0.35 }} />
       </span>
     </button>
   </div>
@@ -156,7 +185,7 @@ const TestimonialSection = () => {
                     sectionId="reviews-section" 
                     index={col} 
                     name={videos[col]?.name} 
-                    image={videos[col]?.image} 
+                    image={videos[col]?.image || videos[col]?.thumbnail || videos[col]?.thumbnailUrl || videos[col]?.poster} 
                     height={col % 2 !== 0 ? "480px" : "450px"} 
                     onPlay={() => setActiveVideo(videos[col]?.url)} 
                   />
@@ -182,55 +211,17 @@ const TestimonialSection = () => {
           <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={closeVideo}>
             <div style={{ position: 'relative', width: '100%', maxWidth: '900px', aspectRatio: '16/9', backgroundColor: '#000', borderRadius: '20px', overflow: 'hidden' }} onClick={(e) => e.stopPropagation()}>
               <button onClick={closeVideo} style={{ position: 'absolute', top: '20px', right: '20px', backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff', border: 'none', width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer', fontSize: '20px', zIndex: 10 }}>&times;</button>
-              <iframe width="100%" height="100%" src={`${activeVideo}?autoplay=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+              {isDirectVideoUrl(activeVideo) ? (
+                <video width="100%" height="100%" src={activeVideo} controls autoPlay playsInline style={{ display: 'block', width: '100%', height: '100%', objectFit: 'contain' }} />
+              ) : (
+                <iframe width="100%" height="100%" src={`${activeVideo}?autoplay=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+              )}
             </div>
           </div>
         )}
 
         <style jsx>{`
           .premium-review-card:hover, .premium-video-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important; border-color: #ffffff !important; }
-          .review-video-play-toggle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.7);
-            background: rgba(255,255,255,0.92);
-            box-shadow: 0 14px 36px rgba(0,0,0,0.22);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            cursor: pointer;
-            z-index: 3;
-            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
-          }
-          .review-video-play-toggle:hover {
-            transform: translate(-50%, -50%) scale(1.08);
-            box-shadow: 0 18px 44px rgba(0,0,0,0.28);
-            background: #ffffff;
-          }
-          .review-video-play-icon {
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 16px solid #3B5998;
-            margin-left: 4px;
-          }
-          .review-video-pause-icon {
-            display: none;
-            gap: 4px;
-          }
-          .review-video-pause-icon span {
-            width: 5px;
-            height: 20px;
-            border-radius: 4px;
-            background: #3B5998;
-          }
           .view-all-testimonials-btn:hover { background-color: #3B5998 !important; border-color: #3B5998 !important; color: #fff !important; transform: translateY(-2px); }
           .view-all-testimonials-arrow {
             width: 32px;
@@ -287,10 +278,6 @@ const TestimonialSection = () => {
             .premium-video-card {
               height: 360px !important;
               border-radius: 22px !important;
-            }
-            .review-video-play-toggle {
-              width: 56px;
-              height: 56px;
             }
             .view-all-testimonials-btn {
               width: 100%;
