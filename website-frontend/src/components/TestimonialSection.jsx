@@ -80,6 +80,21 @@ const VideoCard = ({ name, image, height = "400px", onPlay, sectionId, index }) 
         </EditableText>
       </h4>
     </div>
+    <button
+      type="button"
+      className="review-video-play-toggle"
+      aria-label={`Play ${name}`}
+      onClick={(e) => {
+        e.stopPropagation();
+        onPlay?.();
+      }}
+    >
+      <span className="review-video-play-icon" aria-hidden="true" />
+      <span className="review-video-pause-icon" aria-hidden="true">
+        <span />
+        <span />
+      </span>
+    </button>
   </div>
 );
 
@@ -174,6 +189,48 @@ const TestimonialSection = () => {
 
         <style jsx>{`
           .premium-review-card:hover, .premium-video-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important; border-color: #ffffff !important; }
+          .review-video-play-toggle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.92);
+            box-shadow: 0 14px 36px rgba(0,0,0,0.22);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            z-index: 3;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+          }
+          .review-video-play-toggle:hover {
+            transform: translate(-50%, -50%) scale(1.08);
+            box-shadow: 0 18px 44px rgba(0,0,0,0.28);
+            background: #ffffff;
+          }
+          .review-video-play-icon {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 16px solid #3B5998;
+            margin-left: 4px;
+          }
+          .review-video-pause-icon {
+            display: none;
+            gap: 4px;
+          }
+          .review-video-pause-icon span {
+            width: 5px;
+            height: 20px;
+            border-radius: 4px;
+            background: #3B5998;
+          }
           .view-all-testimonials-btn:hover { background-color: #3B5998 !important; border-color: #3B5998 !important; color: #fff !important; transform: translateY(-2px); }
           .view-all-testimonials-arrow {
             width: 32px;
@@ -230,6 +287,10 @@ const TestimonialSection = () => {
             .premium-video-card {
               height: 360px !important;
               border-radius: 22px !important;
+            }
+            .review-video-play-toggle {
+              width: 56px;
+              height: 56px;
             }
             .view-all-testimonials-btn {
               width: 100%;
