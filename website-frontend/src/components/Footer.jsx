@@ -10,13 +10,17 @@ const socialIconByName = {
   facebook: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/jkidxsr5nbpwq7y7x0x0.png",
   instagram: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/pzzrzqodtujxvlktyk2s.png",
   youtube: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/dgkcwru8nqurjw7f1lz6.png",
-  linkedin: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lhgvbca5okvyge6atokb.png",
+};
+
+const defaultSocialLinks = {
+  facebook: "https://www.facebook.com/dmctrichology/",
+  instagram: "https://www.instagram.com/dmctrichology/",
+  youtube: "https://www.youtube.com/dmctrichology",
 };
 
 const getSettingsSocials = (links = {}) => (
-  ['facebook', 'instagram', 'youtube', 'linkedin']
-    .filter((name) => hasValue(links[name]))
-    .map((name) => ({ name, icon: socialIconByName[name], url: links[name] }))
+  ['facebook', 'instagram', 'youtube']
+    .map((name) => ({ name, icon: socialIconByName[name], url: hasValue(links[name]) ? links[name] : defaultSocialLinks[name] }))
 );
 
 export default function Footer({ siteSettings }) {
@@ -210,12 +214,10 @@ export default function Footer({ siteSettings }) {
     checkboxLabel: "Subscribe For Health Tips & Updates"
   };
 
-  const socials = (data?.socials || []).length > 0 ? data.socials : [
-    { icon: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/trooomdx4mjupebkzsmy.png", url: "#" },
-    { icon: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/pzzrzqodtujxvlktyk2s.png", url: "#" },
-    { icon: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/jkidxsr5nbpwq7y7x0x0.png", url: "#" },
-    { icon: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/dgkcwru8nqurjw7f1lz6.png", url: "#" },
-    { icon: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lhgvbca5okvyge6atokb.png", url: "#" }
+  const socials = [
+    { name: "facebook", icon: socialIconByName.facebook, url: defaultSocialLinks.facebook },
+    { name: "instagram", icon: socialIconByName.instagram, url: defaultSocialLinks.instagram },
+    { name: "youtube", icon: socialIconByName.youtube, url: defaultSocialLinks.youtube }
   ];
 
   const bottomFooter = data?.bottomFooter || {
@@ -227,14 +229,11 @@ export default function Footer({ siteSettings }) {
   };
 
   const settingSocials = getSettingsSocials(siteSettings?.socialLinks);
-  const hasFooterSocials = Array.isArray(data?.socials) && data.socials.length > 0;
   const resolvedBranding = {
     ...branding,
     logo: hasValue(branding.logo) ? branding.logo : (siteSettings?.logo || branding.logo),
   };
-  const resolvedSocials = hasFooterSocials
-    ? socials.map((social, index) => ({ ...social, url: hasValue(social.url) ? social.url : (settingSocials[index]?.url || social.url || '#') }))
-    : (settingSocials.length > 0 ? settingSocials : socials);
+  const resolvedSocials = settingSocials.length > 0 ? settingSocials : socials;
   const resolvedBottomFooter = {
     ...bottomFooter,
     copyright: hasValue(bottomFooter.copyright) ? bottomFooter.copyright : (siteSettings?.footerCopyright || bottomFooter.copyright),
@@ -325,7 +324,7 @@ export default function Footer({ siteSettings }) {
                 <div className="footer-socials" style={{ display: 'flex', gap: '15px' }}>
                   {resolvedSocials.map((social, i) => (
                     <a key={i} href={social.url} className="social-icon-link" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', transition: 'all 0.3s ease' }}>
-                      <img src={social.icon} alt={social.name || "social"} style={{ width: '22px', transition: 'all 0.3s ease' }} />
+                      <img src={social.icon} alt={social.name || "social"} style={{ width: '30px', transition: 'all 0.3s ease' }} />
                     </a>
                   ))}
                 </div>
@@ -443,14 +442,13 @@ export default function Footer({ siteSettings }) {
                 )}
 
                 {/* Contact Info Pills */}
-                <div className="footer-contact-pills" style={{ display: 'flex', justifyContent: 'center', gap: '25px', marginBottom: '20px', flexWrap: 'wrap' }}>
-                  <a href={`tel:${contact.phone1.replace(/[^+\d]/g, '')}`} className="premium-footer-pill" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', cursor: 'pointer', transition: 'transform 0.2s ease-in-out' }}>
-                    <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777623764/dmc-trichology/onx0emcsxjwpat8uk5i4.png" alt="phone" style={{ width: '32px' }} />
-                    <span style={{ fontSize: '16px', fontWeight: '600', color: '#1C1C1C' }}>{contact.phone1}</span>
+                <div className="footer-contact-pills" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '18px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                  <a href="tel:+919810939319" className="premium-footer-pill" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', cursor: 'pointer', transition: 'transform 0.2s ease-in-out' }}>
+                    <span style={{ fontSize: '16px', fontWeight: '600', color: '#1C1C1C' }}>+91-9810939319</span>
                   </a>
-                  <a href={`mailto:${contact.email.toLowerCase()}`} className="premium-footer-pill" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', cursor: 'pointer', transition: 'transform 0.2s ease-in-out' }}>
-                    <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777703175/dmc-trichology/vj4qbxtxftqzqslowwgd.png" alt="arrow" style={{ width: '32px' }} />
-                    <span style={{ fontSize: '14px', fontWeight: '600', color: '#1C1C1C' }}>{contact.email.toUpperCase()}</span>
+                  <span className="footer-contact-separator" style={{ color: '#1C1C1C', fontSize: '16px', fontWeight: '600' }}>|</span>
+                  <a href="mailto:info@dadumedicalcentre.com" className="premium-footer-pill" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', cursor: 'pointer', transition: 'transform 0.2s ease-in-out' }}>
+                    <span style={{ fontSize: '14px', fontWeight: '600', color: '#1C1C1C' }}>Info@dadumedicalcentre.com</span>
                   </a>
                 </div>
 
@@ -584,7 +582,7 @@ export default function Footer({ siteSettings }) {
               width: 140px !important;
             }
             .footer-socials img {
-              width: 50px !important;
+              width: 30px !important;
             }
             .footer-socials {
               justify-content: center;
@@ -617,9 +615,9 @@ export default function Footer({ siteSettings }) {
               text-align: left;
             }
             .footer-contact-pills {
-              flex-direction: column;
+              flex-direction: row !important;
               align-items: center;
-              gap: 14px !important;
+              gap: 8px !important;
             }
             .footer-contact-pills a {
               max-width: 100%;
