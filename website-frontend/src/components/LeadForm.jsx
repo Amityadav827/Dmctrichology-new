@@ -235,11 +235,11 @@ export default function LeadForm() {
           </div>
         </div>
 
-        <div className="form-row" style={{ alignItems: 'stretch', border: '1px solid #ddd', borderRadius: '12px', overflow: 'hidden' }}>
-          <div style={{ flex: '0 0 100px', backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50px', borderRight: '1px solid #ddd', userSelect: 'none' }}>
+        <div className="form-row hero-captcha-row" style={{ alignItems: 'stretch', border: '1px solid #ddd', borderRadius: '12px', overflow: 'hidden' }}>
+          <div className="hero-captcha-code" style={{ flex: '0 0 100px', backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50px', borderRight: '1px solid #ddd', userSelect: 'none' }}>
             <span style={{ color: '#888', letterSpacing: '4px', fontWeight: 'bold' }}>{captcha}</span>
           </div>
-          <div style={{ flex: 1 }}>
+          <div className="hero-captcha-input" style={{ flex: 1 }}>
             <input 
               type="text" 
               name="code" 
