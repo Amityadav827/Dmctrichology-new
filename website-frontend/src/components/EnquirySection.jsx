@@ -800,6 +800,14 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
             .enquiry-section div[style*="margin-top: -95px"] img {
               border-radius: 22px !important;
             }
+            .enquiry-section div[style*="marginTop: '-100px'"],
+            .enquiry-section div[style*="margin-top: -100px"] {
+              margin-top: 30px !important;
+            }
+            .enquiry-section div[style*="marginTop: '-100px'"] img,
+            .enquiry-section div[style*="margin-top: -100px"] img {
+              border-radius: 0 !important;
+            }
           }
           @media (max-width: 390px) {
             .enquiry-section div[style*="letter-spacing: 4px"] {
