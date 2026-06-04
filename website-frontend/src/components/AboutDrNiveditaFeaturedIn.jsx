@@ -121,7 +121,7 @@ export default function AboutDrNiveditaFeaturedIn({ data = {} }) {
         .dr-nivedita-featured-divider {
           width: 60px;
           height: 2px;
-          background: #E4B753;
+          background: #ffffff;
           margin: 0 auto 36px auto;
         }
         .dr-nivedita-pub-logo-grid {

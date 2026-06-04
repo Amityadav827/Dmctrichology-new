@@ -94,7 +94,7 @@ const AboutUsTestimonials = ({ data = {} }) => {
                     {/* Monochrome Stars */}
                     <div className="about-testi-stars">
                       {[...Array(review.rating || 5)].map((_, i) => (
-                        <Star key={i} size={15} fill="#E4B753" color="#E4B753" />
+                        <Star key={i} size={15} fill="#ffffff" color="#ffffff" />
                       ))}
                     </div>
 

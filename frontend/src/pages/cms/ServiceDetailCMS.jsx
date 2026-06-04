@@ -150,6 +150,94 @@ DMC-TRICHOLOGY is known to yield highly effective results with our most notable 
   isVisible: true
 };
 
+const serviceGlobalSectionDefaults = {
+  section1: {
+    isVisible: true,
+    sortOrder: 10,
+    label: "",
+    title: "",
+    description: "",
+    media: []
+  },
+  section2: {
+    isVisible: true,
+    sortOrder: 20,
+    badge: "",
+    title: "",
+    points: [],
+    image: ""
+  },
+  section3: {
+    isVisible: true,
+    sortOrder: 30,
+    title: "",
+    subtitle: "",
+    candidates: [],
+    image: "",
+    ctaTitle: "",
+    ctaDescription: "",
+    ctaButtonText: ""
+  },
+  section4: {
+    isVisible: true,
+    sortOrder: 40,
+    title: "",
+    processSteps: []
+  },
+  section5: {
+    isVisible: true,
+    sortOrder: 50,
+    badge: "",
+    title: "",
+    description: "",
+    image: ""
+  },
+  section6: {
+    isVisible: true,
+    sortOrder: 60,
+    title: "",
+    results: []
+  },
+  section7: {
+    isVisible: true,
+    sortOrder: 70,
+    beforeTitle: "Before Treatment",
+    afterTitle: "After Treatment",
+    beforePoints: [],
+    afterPoints: []
+  },
+  section8: {
+    isVisible: true,
+    sortOrder: 80,
+    introText: "",
+    title: "",
+    faqs: [],
+    formTitle: "",
+    buttonText: ""
+  },
+  section9: {
+    isVisible: true,
+    sortOrder: 90,
+    badge: "",
+    title: "",
+    rows: [],
+    note: ""
+  }
+};
+
+const withGlobalSectionDefaults = (payload = {}) => ({
+  ...payload,
+  section1: { ...serviceGlobalSectionDefaults.section1, ...(payload.section1 || {}) },
+  section2: { ...serviceGlobalSectionDefaults.section2, ...(payload.section2 || {}) },
+  section3: { ...serviceGlobalSectionDefaults.section3, ...(payload.section3 || {}) },
+  section4: { ...serviceGlobalSectionDefaults.section4, ...(payload.section4 || {}) },
+  section5: { ...serviceGlobalSectionDefaults.section5, ...(payload.section5 || {}) },
+  section6: { ...serviceGlobalSectionDefaults.section6, ...(payload.section6 || {}) },
+  section7: { ...serviceGlobalSectionDefaults.section7, ...(payload.section7 || {}) },
+  section8: { ...serviceGlobalSectionDefaults.section8, ...(payload.section8 || {}) },
+  section9: { ...serviceGlobalSectionDefaults.section9, ...(payload.section9 || {}) }
+});
+
 const isGenericBenefitPointSet = (points = []) => {
   const text = points.map(point => String(point?.benefitText || "").toLowerCase()).join(" ");
   return points.length < 4 || text.includes("painless and non-invasive") || text.includes("maximizes hair density") || text.includes("minimal post-treatment");
@@ -207,7 +295,7 @@ const normalizeHairCostContentBlocks = (contentBlocks = []) => {
 };
 
 // ─── Unified Media Item Editor (supports Image + Video) ───────────────────────
-function MediaItemEditor({ item, index, onUpdate, onRemove, onPickFromLibrary }) {
+function MediaItemEditor({ item, index, onUpdate, onRemove, onPickFromLibrary, onMoveUp, onMoveDown, canMoveUp = false, canMoveDown = false }) {
   const [uploading, setUploading] = useState(false);
   const [thumbUploading, setThumbUploading] = useState(false);
 
@@ -245,12 +333,32 @@ function MediaItemEditor({ item, index, onUpdate, onRemove, onPickFromLibrary })
           </div>
           <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Slide {index + 1}</span>
         </div>
-        <button 
-          onClick={onRemove} 
-          className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100"
-        >
-          <Trash2 size={15} />
-        </button>
+        <div className="flex items-center gap-1">
+          {onMoveUp && (
+            <button
+              onClick={onMoveUp}
+              disabled={!canMoveUp}
+              className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-xl transition-all disabled:opacity-30"
+            >
+              <ArrowUp size={14} />
+            </button>
+          )}
+          {onMoveDown && (
+            <button
+              onClick={onMoveDown}
+              disabled={!canMoveDown}
+              className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-xl transition-all disabled:opacity-30"
+            >
+              <ArrowDown size={14} />
+            </button>
+          )}
+          <button
+            onClick={onRemove}
+            className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+          >
+            <Trash2 size={15} />
+          </button>
+        </div>
       </div>
 
       {/* Media Type Toggle */}
@@ -502,7 +610,6 @@ const bestHairTransplantTemplate = {
     title: "Best Hair Transplant",
     subtitle: "Advanced hair restoration with natural-looking density and expert surgical planning.",
     duration: "6-8 hours",
-    rating: "4.9",
     buttonText: "Book Consultation",
     backgroundImage: "",
     secondaryTitle: "Best Hair Transplant",
@@ -512,10 +619,8 @@ const bestHairTransplantTemplate = {
   intro: {
     badgeText: "ABOUT THE TREATMENT",
     title: "Best Hair Transplant",
-    introHeading: "Best Hair Transplant",
     rating: "4.9",
     duration: "6-8 hours",
-    shortDescription: "A permanent solution for thinning hair, bald patches, and receding hairline.",
     longDescription: "A hair transplant is a minimally invasive surgical procedure in which hair follicles are extracted from a donor site, generally the back or sides of the head, and transplanted to the balding or thinning areas.\n\nHair transplants can give permanent, natural-looking results when planned carefully around your face structure, donor area, and future hair loss pattern.",
     benefits: [
       { text: "Permanent and natural-looking results" },
@@ -523,7 +628,6 @@ const bestHairTransplantTemplate = {
       { text: "Advanced techniques for better density" },
       { text: "Clear post-procedure aftercare guidance" }
     ],
-    closingText: "At DMC Trichology, every hair transplant plan is designed around your donor area, scalp health, and expected long-term result.",
     introMedia: []
   },
   contentBlocks: [
@@ -662,15 +766,17 @@ const getServiceDetailTemplate = (slug) => {
 };
 
 const applyTemplateToData = (currentData, template, selectedSlug, serviceInfo = {}) => ({
-  ...(currentData || {}),
-  ...template,
-  slug: selectedSlug,
-  title: serviceInfo.title || template.title || currentData?.title || "",
-  category: serviceInfo.category || template.category || currentData?.category || "",
-  seo: {
-    ...(currentData?.seo || {}),
-    ...(template.seo || {})
-  }
+  ...withGlobalSectionDefaults({
+    ...(currentData || {}),
+    ...template,
+    slug: selectedSlug,
+    title: serviceInfo.title || template.title || currentData?.title || "",
+    category: serviceInfo.category || template.category || currentData?.category || "",
+    seo: {
+      ...(currentData?.seo || {}),
+      ...(template.seo || {})
+    }
+  })
 });
 
 export default function ServiceDetailCMS() {
@@ -692,30 +798,15 @@ export default function ServiceDetailCMS() {
 
   const ALL_SECTIONS = [
     { id: "banner", label: "Hero & Intro" },
-    { id: "contentBlocks", label: "Content Blocks" },
-    { id: "benefitsSection", label: "Benefits Section" },
-    { id: "fueProcedureSection", label: "FUE Procedure" },
-    { id: "fueCostSection", label: "FUE Cost" },
-    { id: "fueOptingBenefitsSection", label: "FUE Benefits" },
-    { id: "bodyHairIntroSection", label: "BHT Intro" },
-    { id: "bodyHairSuitableSection", label: "BHT Suitable" },
-    { id: "idealCandidates", label: "Ideal Candidates" },
-    { id: "notCandidates", label: "Not Candidates" },
-    { id: "techniques", label: "Techniques" },
-    { id: "infoBlocks", label: "Info Blocks" },
-    { id: "aftercare", label: "Aftercare" },
-    { id: "whyChooseUs", label: "Why Choose Us" },
-    { id: "editorialFaq", label: "Editorial FAQ" },
-    { id: "googleReviewCta", label: "Google Review CTA" },
-    { id: "resultsSection", label: "Before & After Results" },
-    { id: "videosSection", label: "Videos Section" },
-    { id: "enquirySection", label: "Enquiry Form" },
-    { id: "process", label: "Process Steps" },
-    { id: "idealFrequency", label: "Suitability & CTA" },
-    { id: "beforeAfter", label: "Before/After" },
-    { id: "faqEnquiry", label: "FAQs & Options" },
-    { id: "hairTransplantInfo", label: "Transplant Info" },
-    { id: "hairTransplantWhy", label: "Transplant Why" },
+    { id: "section1", label: "Section 1" },
+    { id: "section2", label: "Section 2" },
+    { id: "section3", label: "Section 3" },
+    { id: "section4", label: "Section 4" },
+    { id: "section5", label: "Section 5" },
+    { id: "section6", label: "Section 6" },
+    { id: "section7", label: "Section 7" },
+    { id: "section8", label: "Section 8" },
+    { id: "section9", label: "Section 9" },
   ];
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -727,7 +818,7 @@ export default function ServiceDetailCMS() {
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryLoading, setGalleryLoading] = useState(false);
   const [gallerySearch, setGallerySearch] = useState("");
-  const [activePickerTarget, setActivePickerTarget] = useState(null); // { index: number, field: 'url' | 'thumbnail' }
+  const [activePickerTarget, setActivePickerTarget] = useState(null); // { section, arrayField, index, field }
   const activeTemplate = getServiceDetailTemplate(selectedSlug);
 
   const fetchGallery = async () => {
@@ -744,23 +835,23 @@ export default function ServiceDetailCMS() {
     }
   };
 
-  const handleOpenGalleryPicker = (index, field) => {
-    setActivePickerTarget({ index, field });
+  const handleOpenGalleryPicker = (index, field, section = "intro", arrayField = "introMedia") => {
+    setActivePickerTarget({ section, arrayField, index, field });
     fetchGallery();
     setShowGalleryPicker(true);
   };
 
   const handleSelectGalleryItem = (item) => {
     if (!activePickerTarget) return;
-    const { index, field } = activePickerTarget;
+    const { section, arrayField, index, field } = activePickerTarget;
     // Set the selected URL
     const url = item.imageUrl || item.image || item.url || "";
-    updateArrayItem("intro", "introMedia", index, field, url);
+    updateArrayItem(section, arrayField, index, field, url);
     
     // Auto-fill type and default thumbnail if it's the main URL
     if (field === 'url') {
       const isVid = item.mediaType === 'video';
-      updateArrayItem("intro", "introMedia", index, 'type', isVid ? 'video' : 'image');
+      updateArrayItem(section, arrayField, index, 'type', isVid ? 'video' : 'image');
     }
 
     setShowGalleryPicker(false);
@@ -1020,6 +1111,7 @@ export default function ServiceDetailCMS() {
           if (isHairCostDelhiSlug(selectedSlug) && !fetchedData.editorialFaqSection.sectionDescription) {
             fetchedData.editorialFaqSection.sectionDescription = hairCostEditorialFaqDescription;
           }
+          Object.assign(fetchedData, withGlobalSectionDefaults(fetchedData));
           setSectionsLayout(fetchedData.sectionsLayout || {});
           setData(fetchedData);
         }
@@ -1041,12 +1133,12 @@ export default function ServiceDetailCMS() {
 
           const isCostFallback = isHairCostDelhiSlug(selectedSlug);
 
-          setData({
+          setData(withGlobalSectionDefaults({
             slug: selectedSlug,
             title: serviceInfo.title || "",
             category: serviceInfo.category || "",
-            banner: { badgeText: "PREMIUM TREATMENT", title: serviceInfo.title || "", subtitle: "", duration: "45 mins", rating: "4.9", buttonText: "Book Consultation", backgroundImage: "" },
-            intro: { badgeText: "ABOUT THE TREATMENT", title: serviceInfo.title || "", rating: "4.9", duration: "45 mins", shortDescription: "", longDescription: "", benefits: [], closingText: "", introMedia: [] },
+            banner: { badgeText: "PREMIUM TREATMENT", title: serviceInfo.title || "", subtitle: "", duration: "45 mins", buttonText: "Book Consultation", backgroundImage: "" },
+            intro: { badgeText: "ABOUT THE TREATMENT", title: serviceInfo.title || "", rating: "4.9", duration: "45 mins", longDescription: "", benefits: [], introMedia: [] },
             process: { sectionTitle: "How it works?", processSteps: [], isVisible: true },
             idealFrequency: { frequencyTitle: "Treatment Frequency & Suitability", frequencyDescription: "", idealForPoints: [], notIdealForPoints: [], ctaTitle: "", ctaDescription: "", ctaButtonText: "", ctaButtonLink: "", ctaImage: "" },
             beforeAfter: { beforeTitle: "Before Treatment Checklist", afterTitle: "Aftercare Instructions", beforePoints: [], afterPoints: [], sectionBackground: "#f9f7f2" },
@@ -1110,7 +1202,7 @@ export default function ServiceDetailCMS() {
                 { bulletText: "Those looking for permanent, natural-looking high density restoration", sortOrder: 3, isVisible: true }
               ]
             }
-          });
+          }));
         } else {
           toast.error("Failed to load service details");
         }
@@ -1418,6 +1510,12 @@ export default function ServiceDetailCMS() {
 
   const reorderArrayItem = (section, arrayField, idx, direction) => {
     const newArr = moveArrayItem(data[section][arrayField] || [], idx, direction);
+    updateSectionField(section, arrayField, newArr);
+  };
+
+  const reorderOrderedArrayItem = (section, arrayField, idx, direction) => {
+    const newArr = moveArrayItem(data[section][arrayField] || [], idx, direction)
+      .map((item, index) => (typeof item === "object" ? { ...item, sortOrder: index + 1 } : item));
     updateSectionField(section, arrayField, newArr);
   };
 
@@ -2006,6 +2104,15 @@ export default function ServiceDetailCMS() {
           <div className="hidden">
             {[
               { id: "banner", label: "Hero & Intro", icon: Layout },
+              { id: "section1", label: "Section 1", icon: Film },
+              { id: "section2", label: "Section 2", icon: CheckCircle },
+              { id: "section3", label: "Section 3", icon: Star },
+              { id: "section4", label: "Section 4", icon: List },
+              { id: "section5", label: "Section 5", icon: ImageIcon },
+              { id: "section6", label: "Section 6", icon: RefreshCw },
+              { id: "section7", label: "Section 7", icon: CheckCircle },
+              { id: "section8", label: "Section 8", icon: HelpCircle },
+              { id: "section9", label: "Section 9", icon: List },
               { id: "contentBlocks", label: "Content Blocks", icon: Type },
               { id: "benefitsSection", label: "Benefits Section", icon: CheckCircle },
               { id: "fueProcedureSection", label: "FUE Procedure", icon: ImageIcon },
@@ -2186,57 +2293,15 @@ export default function ServiceDetailCMS() {
                     <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Banner Title</label>
                     <input type="text" value={data.banner.title || ""} onChange={e => updateSectionField("banner", "title", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
                   </div>
-                  <div>
-                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Rating</label>
-                    <input 
-                      type="number" 
-                      step="0.1" 
-                      min="0"
-                      max="5"
-                      value={data.banner.rating ?? 4.9} 
-                      onChange={e => updateSectionField("banner", "rating", parseFloat(e.target.value) || 0)} 
-                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" 
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Review Count</label>
-                    <input 
-                      type="number" 
-                      value={data.banner.reviewCount ?? 1250} 
-                      onChange={e => updateSectionField("banner", "reviewCount", parseInt(e.target.value, 10) || 0)} 
-                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" 
-                    />
-                  </div>
                 </div>
               </div>
 
               <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10 mt-8">
                 <h3 className="text-lg font-bold mb-6 text-slate-800 flex items-center gap-2"><Type size={18} className="text-blue-500"/> Service Intro Description</h3>
                 <div className="space-y-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Intro Heading</label>
-                      <input type="text" value={data.intro.introHeading || ""} onChange={e => updateSectionField("intro", "introHeading", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Short Description</label>
-                      <input type="text" value={data.intro.shortDescription || ""} onChange={e => updateSectionField("intro", "shortDescription", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
-                    </div>
-                  </div>
-
                   <div>
                     <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Long Description</label>
                     <textarea value={data.intro.longDescription || ""} onChange={e => updateSectionField("intro", "longDescription", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold min-h-[120px]" />
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Closing Text</label>
-                    <textarea
-                      value={data.intro.closingText || ""}
-                      onChange={e => updateSectionField("intro", "closingText", e.target.value)}
-                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold min-h-[90px]"
-                      placeholder="Optional final line below the intro content..."
-                    />
                   </div>
 
                   {/* RESTORED GRID FOR BENEFITS AND MEDIA */}
@@ -2294,6 +2359,495 @@ export default function ServiceDetailCMS() {
                 </div>
               </div>
               </>
+            )}
+
+            {(true || activeTab === 'section1') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><Film size={18} className="text-blue-500"/> Section 1</h3>
+                    <p className="text-xs text-slate-400 mt-1">Left media slider with right-side label, title, and rich text content.</p>
+                  </div>
+                  {renderSectionVisibilityToggle("section1")}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="lg:col-span-2 space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
+                        <input type="number" value={data.section1?.sortOrder ?? 10} onChange={e => updateSectionField("section1", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Small Label</label>
+                        <input type="text" value={data.section1?.label || ""} onChange={e => updateSectionField("section1", "label", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Hair Health" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Heading</label>
+                        <input type="text" value={data.section1?.title || ""} onChange={e => updateSectionField("section1", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Section heading" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Rich Text Content</label>
+                      <textarea value={data.section1?.description || ""} onChange={e => updateSectionField("section1", "description", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium min-h-[180px]" placeholder="Use blank lines to separate paragraphs." />
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Media Slider</h4>
+                        <p className="text-[10px] text-slate-400 mt-1">Supports images and videos.</p>
+                      </div>
+                      <button onClick={() => addArrayItem("section1", "media", { type: "image", url: "", title: "", alt: "", thumbnail: "", sortOrder: (data.section1?.media?.length || 0) + 1, isVisible: true })} className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all">
+                        <Plus size={13}/> Add Media
+                      </button>
+                    </div>
+                    {(data.section1?.media || []).map((item, i) => (
+                      <MediaItemEditor
+                        key={i}
+                        item={item}
+                        index={i}
+                        onUpdate={(field, val) => updateArrayItem("section1", "media", i, field, val)}
+                        onRemove={() => removeArrayItem("section1", "media", i)}
+                        onPickFromLibrary={(field) => handleOpenGalleryPicker(i, field, "section1", "media")}
+                        onMoveUp={() => reorderOrderedArrayItem("section1", "media", i, "up")}
+                        onMoveDown={() => reorderOrderedArrayItem("section1", "media", i, "down")}
+                        canMoveUp={i > 0}
+                        canMoveDown={i < (data.section1?.media?.length || 0) - 1}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {(true || activeTab === 'section2') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><CheckCircle size={18} className="text-blue-500"/> Section 2</h3>
+                    <p className="text-xs text-slate-400 mt-1">Left content with unlimited ordered points and right-side image.</p>
+                  </div>
+                  {renderSectionVisibilityToggle("section2")}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="space-y-6">
+                    <MediaUploader label="Right Image" value={data.section2?.image || ""} onChange={val => updateSectionField("section2", "image", val)} />
+                  </div>
+                  <div className="lg:col-span-2 space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
+                        <input type="number" value={data.section2?.sortOrder ?? 20} onChange={e => updateSectionField("section2", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Badge</label>
+                        <input type="text" value={data.section2?.badge || ""} onChange={e => updateSectionField("section2", "badge", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Benefits Section" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Title</label>
+                        <input type="text" value={data.section2?.title || ""} onChange={e => updateSectionField("section2", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="What Sets It Apart" />
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-4">
+                      <div className="flex justify-between items-center">
+                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Points</h4>
+                        <button onClick={() => addArrayItem("section2", "points", { text: "", sortOrder: (data.section2?.points?.length || 0) + 1, isVisible: true })} className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all">
+                          <Plus size={13}/> Add Point
+                        </button>
+                      </div>
+                      {(data.section2?.points || []).map((point, i) => (
+                        <div key={i} className="bg-white p-4 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                          <input value={point.text || ""} onChange={e => updateArrayItem("section2", "points", i, "text", e.target.value)} className="md:col-span-6 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold" placeholder="Point text" />
+                          <input type="number" value={point.sortOrder ?? (i + 1)} onChange={e => updateArrayItem("section2", "points", i, "sortOrder", parseInt(e.target.value, 10) || 0)} className="md:col-span-2 px-2 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-center" />
+                          <label className="md:col-span-2 flex items-center gap-1 text-[10px] font-black uppercase text-slate-500"><input type="checkbox" checked={point.isVisible !== false} onChange={e => updateArrayItem("section2", "points", i, "isVisible", e.target.checked)} /> Visible</label>
+                          <div className="md:col-span-2 flex justify-end gap-1">
+                            <button onClick={() => reorderOrderedArrayItem("section2", "points", i, "up")} disabled={i === 0} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowUp size={12}/></button>
+                            <button onClick={() => reorderOrderedArrayItem("section2", "points", i, "down")} disabled={i === (data.section2?.points?.length || 0) - 1} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowDown size={12}/></button>
+                            <button onClick={() => removeArrayItem("section2", "points", i)} className="p-1 bg-red-50 text-red-500 rounded"><Trash2 size={12}/></button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {(true || activeTab === 'section3') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><Star size={18} className="text-blue-500"/> Section 3</h3>
+                    <p className="text-xs text-slate-400 mt-1">Two-column candidates panel with consultation CTA.</p>
+                  </div>
+                  {renderSectionVisibilityToggle("section3")}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="space-y-6">
+                    <MediaUploader label="CTA Illustration/Image" value={data.section3?.image || ""} onChange={val => updateSectionField("section3", "image", val)} />
+                  </div>
+                  <div className="lg:col-span-2 space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
+                        <input type="number" value={data.section3?.sortOrder ?? 30} onChange={e => updateSectionField("section3", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Title</label>
+                        <input value={data.section3?.title || ""} onChange={e => updateSectionField("section3", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Who It's For" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Subtitle</label>
+                        <input value={data.section3?.subtitle || ""} onChange={e => updateSectionField("section3", "subtitle", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="After 6-8 sessions..." />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <input value={data.section3?.ctaTitle || ""} onChange={e => updateSectionField("section3", "ctaTitle", e.target.value)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="CTA title" />
+                      <input value={data.section3?.ctaDescription || ""} onChange={e => updateSectionField("section3", "ctaDescription", e.target.value)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="CTA description" />
+                      <input value={data.section3?.ctaButtonText || ""} onChange={e => updateSectionField("section3", "ctaButtonText", e.target.value)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Button text" />
+                    </div>
+
+                    <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-4">
+                      <div className="flex justify-between items-center">
+                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Candidates</h4>
+                        <button onClick={() => addArrayItem("section3", "candidates", { text: "", sortOrder: (data.section3?.candidates?.length || 0) + 1, isVisible: true })} className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all">
+                          <Plus size={13}/> Add Candidate
+                        </button>
+                      </div>
+                      {(data.section3?.candidates || []).map((candidate, i) => (
+                        <div key={i} className="bg-white p-4 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                          <input value={candidate.text || ""} onChange={e => updateArrayItem("section3", "candidates", i, "text", e.target.value)} className="md:col-span-6 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold" placeholder="Candidate text" />
+                          <input type="number" value={candidate.sortOrder ?? (i + 1)} onChange={e => updateArrayItem("section3", "candidates", i, "sortOrder", parseInt(e.target.value, 10) || 0)} className="md:col-span-2 px-2 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-center" />
+                          <label className="md:col-span-2 flex items-center gap-1 text-[10px] font-black uppercase text-slate-500"><input type="checkbox" checked={candidate.isVisible !== false} onChange={e => updateArrayItem("section3", "candidates", i, "isVisible", e.target.checked)} /> Visible</label>
+                          <div className="md:col-span-2 flex justify-end gap-1">
+                            <button onClick={() => reorderOrderedArrayItem("section3", "candidates", i, "up")} disabled={i === 0} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowUp size={12}/></button>
+                            <button onClick={() => reorderOrderedArrayItem("section3", "candidates", i, "down")} disabled={i === (data.section3?.candidates?.length || 0) - 1} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowDown size={12}/></button>
+                            <button onClick={() => removeArrayItem("section3", "candidates", i)} className="p-1 bg-red-50 text-red-500 rounded"><Trash2 size={12}/></button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {(true || activeTab === 'section4') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><List size={18} className="text-blue-500"/> Section 4</h3>
+                    <p className="text-xs text-slate-400 mt-1">Horizontal process slider with image, step title, and description.</p>
+                  </div>
+                  {renderSectionVisibilityToggle("section4")}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
+                    <input type="number" value={data.section4?.sortOrder ?? 40} onChange={e => updateSectionField("section4", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Title</label>
+                    <input value={data.section4?.title || ""} onChange={e => updateSectionField("section4", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="The Process" />
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Process Steps</h4>
+                    <button onClick={() => addArrayItem("section4", "processSteps", { id: Date.now().toString(), title: "", description: "", image: "", sortOrder: (data.section4?.processSteps?.length || 0) + 1, isVisible: true })} className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all">
+                      <Plus size={13}/> Add Step
+                    </button>
+                  </div>
+                  {(data.section4?.processSteps || []).map((step, i) => (
+                    <div key={i} className="bg-white p-5 rounded-xl border border-slate-200 space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Step {i + 1}</span>
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => reorderOrderedArrayItem("section4", "processSteps", i, "up")} disabled={i === 0} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowUp size={12}/></button>
+                          <button onClick={() => reorderOrderedArrayItem("section4", "processSteps", i, "down")} disabled={i === (data.section4?.processSteps?.length || 0) - 1} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowDown size={12}/></button>
+                          <button onClick={() => removeArrayItem("section4", "processSteps", i)} className="p-1 bg-red-50 text-red-500 rounded"><Trash2 size={12}/></button>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                        <MediaUploader label="Step Image" value={step.image || ""} onChange={val => updateArrayItem("section4", "processSteps", i, "image", val)} />
+                        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <input value={step.title || ""} onChange={e => updateArrayItem("section4", "processSteps", i, "title", e.target.value)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Step title" />
+                          <input type="number" value={step.sortOrder ?? (i + 1)} onChange={e => updateArrayItem("section4", "processSteps", i, "sortOrder", parseInt(e.target.value, 10) || 0)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                          <label className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-500"><input type="checkbox" checked={step.isVisible !== false} onChange={e => updateArrayItem("section4", "processSteps", i, "isVisible", e.target.checked)} /> Visible</label>
+                          <textarea value={step.description || ""} onChange={e => updateArrayItem("section4", "processSteps", i, "description", e.target.value)} className="md:col-span-3 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium min-h-[90px]" placeholder="Step description" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {(true || activeTab === 'section5') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><ImageIcon size={18} className="text-blue-500"/> Section 5</h3>
+                    <p className="text-xs text-slate-400 mt-1">Two-column large image with badge, heading, and rich text content.</p>
+                  </div>
+                  {renderSectionVisibilityToggle("section5")}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="space-y-6">
+                    <MediaUploader label="Large Image" value={data.section5?.image || ""} onChange={val => updateSectionField("section5", "image", val)} />
+                  </div>
+                  <div className="lg:col-span-2 space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
+                        <input type="number" value={data.section5?.sortOrder ?? 50} onChange={e => updateSectionField("section5", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Badge</label>
+                        <input value={data.section5?.badge || ""} onChange={e => updateSectionField("section5", "badge", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Techniques" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Title</label>
+                        <input value={data.section5?.title || ""} onChange={e => updateSectionField("section5", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="The Detail That Actually Matters" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Rich Text Description</label>
+                      <textarea value={data.section5?.description || ""} onChange={e => updateSectionField("section5", "description", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium min-h-[220px]" placeholder="Use blank lines to separate paragraphs." />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {(true || activeTab === 'section6') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><RefreshCw size={18} className="text-blue-500"/> Section 6</h3>
+                    <p className="text-xs text-slate-400 mt-1">Before and after results carousel with unlimited cards.</p>
+                  </div>
+                  {renderSectionVisibilityToggle("section6")}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
+                    <input type="number" value={data.section6?.sortOrder ?? 60} onChange={e => updateSectionField("section6", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Title</label>
+                    <input value={data.section6?.title || ""} onChange={e => updateSectionField("section6", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Before & After Results" />
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Results</h4>
+                    <button onClick={() => addArrayItem("section6", "results", { id: Date.now().toString(), title: "", beforeImage: "", afterImage: "", description: "", sortOrder: (data.section6?.results?.length || 0) + 1, isVisible: true })} className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all">
+                      <Plus size={13}/> Add Result
+                    </button>
+                  </div>
+                  {(data.section6?.results || []).map((result, i) => (
+                    <div key={i} className="bg-white p-5 rounded-xl border border-slate-200 space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Result {i + 1}</span>
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => reorderOrderedArrayItem("section6", "results", i, "up")} disabled={i === 0} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowUp size={12}/></button>
+                          <button onClick={() => reorderOrderedArrayItem("section6", "results", i, "down")} disabled={i === (data.section6?.results?.length || 0) - 1} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowDown size={12}/></button>
+                          <button onClick={() => removeArrayItem("section6", "results", i)} className="p-1 bg-red-50 text-red-500 rounded"><Trash2 size={12}/></button>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <MediaUploader label="Before Image" value={result.beforeImage || ""} onChange={val => updateArrayItem("section6", "results", i, "beforeImage", val)} />
+                        <MediaUploader label="After Image" value={result.afterImage || ""} onChange={val => updateArrayItem("section6", "results", i, "afterImage", val)} />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <input value={result.title || ""} onChange={e => updateArrayItem("section6", "results", i, "title", e.target.value)} className="md:col-span-2 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Result title" />
+                        <input type="number" value={result.sortOrder ?? (i + 1)} onChange={e => updateArrayItem("section6", "results", i, "sortOrder", parseInt(e.target.value, 10) || 0)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                        <label className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-500"><input type="checkbox" checked={result.isVisible !== false} onChange={e => updateArrayItem("section6", "results", i, "isVisible", e.target.checked)} /> Visible</label>
+                        <input value={result.description || ""} onChange={e => updateArrayItem("section6", "results", i, "description", e.target.value)} className="md:col-span-4 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" placeholder="After 6 sessions" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {(true || activeTab === 'section7') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><CheckCircle size={18} className="text-blue-500"/> Section 7</h3>
+                    <p className="text-xs text-slate-400 mt-1">Before Treatment and After Treatment bullet cards.</p>
+                  </div>
+                  {renderSectionVisibilityToggle("section7")}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
+                    <input type="number" value={data.section7?.sortOrder ?? 70} onChange={e => updateSectionField("section7", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Before Heading</label>
+                    <input value={data.section7?.beforeTitle || ""} onChange={e => updateSectionField("section7", "beforeTitle", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Before Treatment" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">After Heading</label>
+                    <input value={data.section7?.afterTitle || ""} onChange={e => updateSectionField("section7", "afterTitle", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="After Treatment" />
+                  </div>
+                </div>
+
+                {[
+                  { key: "beforePoints", label: "Before Treatment Bullets" },
+                  { key: "afterPoints", label: "After Treatment Bullets" }
+                ].map(group => (
+                  <div key={group.key} className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-4 mb-6">
+                    <div className="flex justify-between items-center">
+                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">{group.label}</h4>
+                      <button onClick={() => addArrayItem("section7", group.key, { text: "", sortOrder: (data.section7?.[group.key]?.length || 0) + 1, isVisible: true })} className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all">
+                        <Plus size={13}/> Add Bullet
+                      </button>
+                    </div>
+                    {(data.section7?.[group.key] || []).map((point, i) => (
+                      <div key={i} className="bg-white p-4 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                        <input value={point.text || ""} onChange={e => updateArrayItem("section7", group.key, i, "text", e.target.value)} className="md:col-span-6 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold" placeholder="Bullet text" />
+                        <input type="number" value={point.sortOrder ?? (i + 1)} onChange={e => updateArrayItem("section7", group.key, i, "sortOrder", parseInt(e.target.value, 10) || 0)} className="md:col-span-2 px-2 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-center" />
+                        <label className="md:col-span-2 flex items-center gap-1 text-[10px] font-black uppercase text-slate-500"><input type="checkbox" checked={point.isVisible !== false} onChange={e => updateArrayItem("section7", group.key, i, "isVisible", e.target.checked)} /> Visible</label>
+                        <div className="md:col-span-2 flex justify-end gap-1">
+                          <button onClick={() => reorderOrderedArrayItem("section7", group.key, i, "up")} disabled={i === 0} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowUp size={12}/></button>
+                          <button onClick={() => reorderOrderedArrayItem("section7", group.key, i, "down")} disabled={i === (data.section7?.[group.key]?.length || 0) - 1} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowDown size={12}/></button>
+                          <button onClick={() => removeArrayItem("section7", group.key, i)} className="p-1 bg-red-50 text-red-500 rounded"><Trash2 size={12}/></button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {(true || activeTab === 'section8') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><HelpCircle size={18} className="text-blue-500"/> Section 8</h3>
+                    <p className="text-xs text-slate-400 mt-1">Common concerns accordion and enquiry form.</p>
+                  </div>
+                  {renderSectionVisibilityToggle("section8")}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
+                    <input type="number" value={data.section8?.sortOrder ?? 80} onChange={e => updateSectionField("section8", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Heading</label>
+                    <input value={data.section8?.title || ""} onChange={e => updateSectionField("section8", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Few Of The Common Concerns" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Form Title</label>
+                    <input value={data.section8?.formTitle || ""} onChange={e => updateSectionField("section8", "formTitle", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Enquiry Here Below!" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Intro Text</label>
+                    <textarea value={data.section8?.introText || ""} onChange={e => updateSectionField("section8", "introText", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium min-h-[90px]" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Button Text</label>
+                    <input value={data.section8?.buttonText || ""} onChange={e => updateSectionField("section8", "buttonText", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Schedule Your Visit" />
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">FAQs</h4>
+                    <button onClick={() => addArrayItem("section8", "faqs", { id: Date.now().toString(), question: "", answer: "", sortOrder: (data.section8?.faqs?.length || 0) + 1, isVisible: true })} className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all">
+                      <Plus size={13}/> Add FAQ
+                    </button>
+                  </div>
+                  {(data.section8?.faqs || []).map((faq, i) => (
+                    <div key={i} className="bg-white p-5 rounded-xl border border-slate-200 space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">FAQ {i + 1}</span>
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => reorderOrderedArrayItem("section8", "faqs", i, "up")} disabled={i === 0} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowUp size={12}/></button>
+                          <button onClick={() => reorderOrderedArrayItem("section8", "faqs", i, "down")} disabled={i === (data.section8?.faqs?.length || 0) - 1} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowDown size={12}/></button>
+                          <button onClick={() => removeArrayItem("section8", "faqs", i)} className="p-1 bg-red-50 text-red-500 rounded"><Trash2 size={12}/></button>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <input value={faq.question || ""} onChange={e => updateArrayItem("section8", "faqs", i, "question", e.target.value)} className="md:col-span-2 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Question" />
+                        <input type="number" value={faq.sortOrder ?? (i + 1)} onChange={e => updateArrayItem("section8", "faqs", i, "sortOrder", parseInt(e.target.value, 10) || 0)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                        <label className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-500"><input type="checkbox" checked={faq.isVisible !== false} onChange={e => updateArrayItem("section8", "faqs", i, "isVisible", e.target.checked)} /> Visible</label>
+                        <textarea value={faq.answer || ""} onChange={e => updateArrayItem("section8", "faqs", i, "answer", e.target.value)} className="md:col-span-4 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium min-h-[90px]" placeholder="Answer" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {(true || activeTab === 'section9') && (
+              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><List size={18} className="text-blue-500"/> Section 9</h3>
+                    <p className="text-xs text-slate-400 mt-1">Cost by graft count pricing table.</p>
+                  </div>
+                  {renderSectionVisibilityToggle("section9")}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
+                    <input type="number" value={data.section9?.sortOrder ?? 90} onChange={e => updateSectionField("section9", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Badge</label>
+                    <input value={data.section9?.badge || ""} onChange={e => updateSectionField("section9", "badge", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Pricing Guide" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Heading</label>
+                    <input value={data.section9?.title || ""} onChange={e => updateSectionField("section9", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Cost By Graft Count" />
+                  </div>
+                  <div className="md:col-span-3">
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Pricing Note</label>
+                    <textarea value={data.section9?.note || ""} onChange={e => updateSectionField("section9", "note", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium min-h-[90px]" placeholder="Per graft cost ranges from ₹20 to ₹120 based on donor site health. Final pricing is confirmed at your consultation." />
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-200 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Pricing Rows</h4>
+                    <button onClick={() => addArrayItem("section9", "rows", { id: Date.now().toString(), graftRange: "", cost: "", sortOrder: (data.section9?.rows?.length || 0) + 1, isVisible: true })} className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all">
+                      <Plus size={13}/> Add Row
+                    </button>
+                  </div>
+                  {(data.section9?.rows || []).map((row, i) => (
+                    <div key={row.id || i} className="bg-white p-4 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                      <input value={row.graftRange || ""} onChange={e => updateArrayItem("section9", "rows", i, "graftRange", e.target.value)} className="md:col-span-4 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold" placeholder="Grafts Required" />
+                      <input value={row.cost || ""} onChange={e => updateArrayItem("section9", "rows", i, "cost", e.target.value)} className="md:col-span-4 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold" placeholder="Approximate Cost" />
+                      <input type="number" value={row.sortOrder ?? (i + 1)} onChange={e => updateArrayItem("section9", "rows", i, "sortOrder", parseInt(e.target.value, 10) || 0)} className="md:col-span-2 px-2 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-center" />
+                      <div className="md:col-span-2 flex justify-end gap-1">
+                        <button onClick={() => reorderOrderedArrayItem("section9", "rows", i, "up")} disabled={i === 0} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowUp size={12}/></button>
+                        <button onClick={() => reorderOrderedArrayItem("section9", "rows", i, "down")} disabled={i === (data.section9?.rows?.length || 0) - 1} className="p-1 bg-slate-50 text-slate-500 rounded disabled:opacity-30"><ArrowDown size={12}/></button>
+                        <button onClick={() => removeArrayItem("section9", "rows", i)} className="p-1 bg-red-50 text-red-500 rounded"><Trash2 size={12}/></button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
 
             {(true || activeTab === 'contentBlocks') && (

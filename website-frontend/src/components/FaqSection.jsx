@@ -99,7 +99,7 @@ export default function FaqSection() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '25px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '25px' }}>
             {(activeCategory?.faqs || []).map((faq, index) => {
               const catIndex = categories.indexOf(activeCategory);
               const isFirstFaqCard = index === 0;
@@ -285,8 +285,53 @@ export default function FaqSection() {
             filter: brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%);
           }
 
+          @media (max-width: 1199px) {
+            section {
+              padding: 64px 4% !important;
+              overflow: hidden;
+            }
+            section .section-title {
+              font-size: clamp(34px, 5vw, 48px) !important;
+              line-height: 1.1 !important;
+            }
+            div[style*="gridTemplateColumns"] {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+            div[style*="border-radius: 50px"] {
+              max-width: 100%;
+              overflow-x: auto;
+            }
+          }
           @media (max-width: 768px) {
+            section {
+              padding: 48px 16px !important;
+            }
+            section > div > div:first-child {
+              margin-bottom: 34px !important;
+            }
+            section .section-title {
+              font-size: clamp(30px, 8.5vw, 40px) !important;
+            }
             div[style*="gridTemplateColumns"] { grid-template-columns: 1fr !important; }
+            .faq-card {
+              flex-direction: column;
+              align-items: flex-start !important;
+              border-radius: 24px !important;
+              padding: 20px !important;
+              gap: 14px !important;
+            }
+            .faq-card h3 {
+              font-size: 20px !important;
+            }
+            .view-all-faq-btn {
+              width: 100%;
+              justify-content: center;
+            }
+          }
+          @media (max-width: 390px) {
+            .faq-card h3 {
+              font-size: 18px !important;
+            }
           }
         `}</style>
       </section>

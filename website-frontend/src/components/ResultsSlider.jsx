@@ -246,6 +246,44 @@ export default function ResultsSlider() {
             .results-section {
               padding: 60px 5% !important;
             }
+            .result-card {
+              padding: 20px !important;
+            }
+            .images-container img {
+              height: clamp(170px, 24vw, 220px) !important;
+            }
+          }
+          @media (max-width: 767px) {
+            .results-section {
+              padding: 48px 16px 36px !important;
+            }
+            .results-section .section-header {
+              margin-bottom: 28px !important;
+            }
+            .results-section .section-title {
+              font-size: clamp(30px, 8.5vw, 40px) !important;
+              line-height: 1.12 !important;
+            }
+            .result-card {
+              border-radius: 14px !important;
+              padding: 16px !important;
+            }
+            .result-card h3 {
+              min-height: auto !important;
+              margin-bottom: 16px !important;
+            }
+            .images-container {
+              gap: 8px !important;
+              margin-bottom: 14px !important;
+            }
+            .images-container img {
+              height: 190px !important;
+            }
+          }
+          @media (max-width: 390px) {
+            .images-container img {
+              height: 160px !important;
+            }
           }
         `}</style>
       </section>

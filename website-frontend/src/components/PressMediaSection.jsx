@@ -237,11 +237,57 @@ export default function PressMediaSection() {
           :global(.swiper-wrapper) {
             transition-timing-function: linear !important;
           }
+          @media (max-width: 1199px) {
+            section {
+              padding: 56px 4% !important;
+              overflow: hidden;
+            }
+            .press-media-card {
+              padding: 34px !important;
+              border-radius: 28px !important;
+            }
+            .press-media-title {
+              font-size: clamp(34px, 5vw, 48px) !important;
+              line-height: 1.1 !important;
+            }
+            .press-media-card div[style*="min-width: 350px"] {
+              min-width: min(100%, 320px) !important;
+            }
+          }
           @media (max-width: 768px) {
-            div[style*="flexDirection: column"] { alignItems: center !important; }
-            .section-title { text-align: center !important; margin-bottom: 30px !important; font-size: 28px !important; }
+            section {
+              padding: 48px 16px !important;
+            }
+            .press-media-card {
+              padding: 26px 18px !important;
+              border-radius: 24px !important;
+            }
+            div[style*="flexDirection: column"] { align-items: center !important; }
+            .section-title,
+            .press-media-title {
+              text-align: center !important;
+              margin-bottom: 28px !important;
+              font-size: clamp(28px, 8vw, 36px) !important;
+            }
             div[style*="alignItems: center"] { justify-content: center !important; }
             div[style*="marginTop: 40px"] { margin-top: 20px !important; }
+            .free-consult-btn {
+              width: 100%;
+              justify-content: center;
+              padding-left: 18px !important;
+            }
+            .press-media-card div[style*="gap: 25px"] {
+              flex-direction: column;
+              gap: 16px !important;
+            }
+          }
+          @media (max-width: 390px) {
+            .press-media-card {
+              padding: 22px 14px !important;
+            }
+            .free-consult-btn {
+              font-size: 14px !important;
+            }
           }
         `}</style>
       </section>

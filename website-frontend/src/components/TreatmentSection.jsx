@@ -145,12 +145,56 @@ export default function TreatmentSection() {
             transition: transform 0.3s ease;
           }
           @media (max-width: 992px) {
+            section {
+              padding: 64px 4% !important;
+              overflow: hidden;
+            }
+            .treatment-grid {
+              gap: 24px !important;
+            }
             .treatment-grid > div {
               flex-direction: column !important;
+              min-height: 0 !important;
             }
             .treatment-grid > div > div {
               flex: none !important;
               width: 100% !important;
+            }
+            .treatment-grid img {
+              height: 280px !important;
+            }
+          }
+          @media (max-width: 767px) {
+            section {
+              padding: 48px 16px !important;
+            }
+            section > div > div:first-child {
+              margin-bottom: 34px !important;
+            }
+            section .section-title {
+              font-size: clamp(30px, 8.5vw, 40px) !important;
+              line-height: 1.12 !important;
+            }
+            .treatment-grid > div {
+              border-radius: 22px !important;
+            }
+            .treatment-grid img {
+              height: 230px !important;
+            }
+            .treatment-grid > div > div:last-child {
+              padding: 24px !important;
+            }
+            .treatment-grid h3 {
+              font-size: 24px !important;
+            }
+            .treatment-btn {
+              width: 100% !important;
+              justify-content: center;
+            }
+          }
+          @media (max-width: 390px) {
+            .treatment-grid img {
+              height: 200px !important;
             }
           }
         `}</style>

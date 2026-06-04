@@ -121,14 +121,14 @@ export default function LeadForm() {
         }
       `}} />
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', height: '30px' }}>
+      <div className="hero-form-eyebrow" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', height: '30px' }}>
         <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '30px', height: '30px', objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)' }} />
         <span className="section-subtitle" style={{ fontSize: '11px' }}>Book a Session</span>
       </div>
       
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', gap: '15px', height: '50px' }}>
+      <div className="hero-form-head" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', gap: '15px', height: '50px' }}>
         <h2 className="section-title" style={{ fontSize: '2.2rem', whiteSpace: 'nowrap', textTransform: 'none' }}>Request A Call</h2>
-        <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="hero-form-patients" style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ display: 'flex', height: '30px' }}>
             {[
               "https://d8j0ntlcm91z4.cloudfront.net/user_3DhqmopiNve9pSuyMJA0Ki49qEA/hf_20260525_081533_e6490b2d-e5d7-41c2-95d8-96f3067b0f1e.png",

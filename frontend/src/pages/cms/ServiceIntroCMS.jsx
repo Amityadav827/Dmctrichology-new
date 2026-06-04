@@ -18,7 +18,6 @@ export default function ServiceIntroCMS() {
     title: "",
     rating: "",
     duration: "",
-    shortDescription: "",
     longDescription: "",
     benefits: [],
     videos: [],
@@ -60,7 +59,8 @@ export default function ServiceIntroCMS() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await axios.put("/details-page", { intro: data });
+      const { shortDescription, ...introPayload } = data;
+      await axios.put("/details-page", { intro: introPayload });
       toast.success("Service intro saved successfully");
     } catch {
       toast.error("Save failed");
@@ -136,17 +136,10 @@ export default function ServiceIntroCMS() {
                       className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-lg font-black outline-none" />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Duration Text</label>
-                      <input type="text" value={data.duration} onChange={e => updateField("duration", e.target.value)}
-                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Short Catchy Description</label>
-                      <input type="text" value={data.shortDescription} onChange={e => updateField("shortDescription", e.target.value)}
-                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none" />
-                    </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Duration Text</label>
+                    <input type="text" value={data.duration} onChange={e => updateField("duration", e.target.value)}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none" />
                   </div>
 
                   <div>

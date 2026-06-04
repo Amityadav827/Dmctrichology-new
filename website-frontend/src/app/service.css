@@ -179,8 +179,8 @@
 }
 
 .filter-item-premium.active .filter-indicator {
-  background: #E4B753;
-  border-color: #E4B753;
+  background: #ffffff;
+  border-color: #ffffff;
   box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
 }
 
@@ -277,8 +277,8 @@
 }
 
 .promo-link:hover {
-  color: #E4B753;
-  border-color: #E4B753;
+  color: #ffffff;
+  border-color: #ffffff;
 }
 
 /* ─── MAIN GRID ─────────────────────────────────────────────────── */
@@ -548,6 +548,10 @@
     gap: 8px;
   }
 
+  .filter-item-premium {
+    width: 100%;
+  }
+
   .results-count-premium {
     flex-direction: row;
     align-items: flex-end;
@@ -600,6 +604,10 @@
 
 /* ─── RESPONSIVE: 480px ──────────────────────────────────────────── */
 @media (max-width: 480px) {
+  .service-hero-title {
+    font-size: 34px !important;
+  }
+
   .service-card-image-box {
     height: 180px !important;
   }

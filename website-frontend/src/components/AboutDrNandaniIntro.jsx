@@ -158,7 +158,7 @@ export default function AboutDrNandaniIntro({ data = {} }) {
         }
 
         .intro-bullet-item:hover .intro-bullet-icon {
-          color: #E4B753;
+          color: #ffffff;
         }
 
         .intro-bullet-text {

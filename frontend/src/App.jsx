@@ -61,6 +61,9 @@ import ScienceDmcCMS from "./pages/cms/ScienceDmcCMS";
 import VisualLiveBuilder from "./pages/cms/VisualLiveBuilder";
 import AboutDrNandaniCMS from "./pages/cms/AboutDrNandaniCMS";
 import AboutDrNiveditaCMS from "./pages/cms/AboutDrNiveditaCMS";
+import AboutDmcTrichologyCMS from "./pages/cms/AboutDmcTrichologyCMS";
+import OurTeamCMS from "./pages/cms/OurTeamCMS";
+import FaqsPageCMS from "./pages/cms/FaqsPageCMS";
 import DrNandaniLeads from "./pages/DrNandaniLeads";
 import DetailsBannerCMS from "./pages/cms/DetailsBannerCMS";
 import ServiceIntroCMS from "./pages/cms/ServiceIntroCMS";
@@ -255,6 +258,30 @@ function App() {
           }
         />
         <Route
+          path="cms/about-dmc-trichology"
+          element={
+            <ProtectedRoute permission="cms">
+              <AboutDmcTrichologyCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/our-team"
+          element={
+            <ProtectedRoute permission="cms">
+              <OurTeamCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/faqs-page"
+          element={
+            <ProtectedRoute permission="cms">
+              <FaqsPageCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="cms/footer"
           element={
             <ProtectedRoute permission="cms">
@@ -359,6 +386,14 @@ function App() {
         />
         <Route
           path="blogs"
+          element={
+            <ProtectedRoute permission="blog">
+              <Blogs />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="blogs/edit/:slug"
           element={
             <ProtectedRoute permission="blog">
               <Blogs />

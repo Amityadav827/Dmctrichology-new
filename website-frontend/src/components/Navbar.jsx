@@ -16,6 +16,7 @@ export default function Navbar({ cmsMenu }) {
   
   const menuItems = cmsMenu && cmsMenu.length > 0 ? cmsMenu : defaultMenuItems;
   const [isOpen, setIsOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
   const navRef = useRef(null);
 
   // Helper to ensure absolute links (starts with '/') and maps legacy '/services' to '/service'
@@ -45,6 +46,7 @@ export default function Navbar({ cmsMenu }) {
     const handleClickOutside = (e) => {
       if (navRef.current && !navRef.current.contains(e.target)) {
         setIsOpen(false);
+        setOpenDropdown(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -54,18 +56,24 @@ export default function Navbar({ cmsMenu }) {
   // Close on ESC
   useEffect(() => {
     const handleEsc = (e) => {
-      if (e.key === 'Escape') setIsOpen(false);
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+        setOpenDropdown(null);
+      }
     };
     document.addEventListener('keydown', handleEsc);
     return () => document.removeEventListener('keydown', handleEsc);
   }, []);
 
   return (
-    <div ref={navRef} style={{ display: 'flex', alignItems: 'center' }}>
+    <div ref={navRef} className={`mobile-nav ${isOpen ? 'is-open' : ''}`} style={{ display: 'flex', alignItems: 'center' }}>
       {/* Hamburger Toggle Button */}
       <button
         className="mobile-toggle"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          setIsOpen(!isOpen);
+          if (isOpen) setOpenDropdown(null);
+        }}
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
       >
@@ -74,15 +82,43 @@ export default function Navbar({ cmsMenu }) {
 
       {/* Desktop + Mobile Nav */}
       <nav className={`navbar ${isOpen ? 'open' : ''}`}>
+        <button
+          className="mobile-menu-close"
+          type="button"
+          onClick={() => {
+            setIsOpen(false);
+            setOpenDropdown(null);
+          }}
+          aria-label="Close menu"
+        >
+          <X size={24} />
+        </button>
         {menuItems.map((item, i) => (
-          <div key={i} className="nav-item" style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+          <div key={i} className={`nav-item ${openDropdown === i ? 'dropdown-open' : ''}`} style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
             <a
               href={ensureAbsoluteLink(item.link)}
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                setOpenDropdown(null);
+              }}
             >
               {item.label}
             </a>
-            {((item.dropdown && item.dropdown.length > 0) || (item.submenu && item.submenu.length > 0)) && <ChevronDown size={14} className="nav-chevron" />}
+            {((item.dropdown && item.dropdown.length > 0) || (item.submenu && item.submenu.length > 0)) && (
+              <button
+                className="nav-chevron-btn"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setOpenDropdown(openDropdown === i ? null : i);
+                }}
+                aria-label={`${openDropdown === i ? 'Close' : 'Open'} ${item.label} menu`}
+                aria-expanded={openDropdown === i}
+              >
+                <ChevronDown size={14} className="nav-chevron" />
+              </button>
+            )}
             {((item.dropdown && item.dropdown.length > 0) || (item.submenu && item.submenu.length > 0)) && (
               <div className="dropdown-menu">
                 {(item.dropdown || item.submenu).map((sub, j) => (
@@ -90,7 +126,10 @@ export default function Navbar({ cmsMenu }) {
                     key={j}
                     href={ensureAbsoluteLink(sub.link)}
                     className="dropdown-item"
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                      setIsOpen(false);
+                      setOpenDropdown(null);
+                    }}
                   >
                     {sub.label}
                   </a>

@@ -210,8 +210,8 @@ export default function Footer() {
       <footer style={{ backgroundColor: '#EDEEF8', position: 'relative', overflow: 'hidden' }}>
         
         {/* Top Footer Section (Beige) */}
-        <div style={{ padding: '80px 5% 180px 5%', maxWidth: '1400px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px' }}>
+        <div className="footer-top" style={{ padding: '80px 5% 180px 5%', maxWidth: '1400px', margin: '0 auto' }}>
+          <div className="footer-top-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px' }}>
             
             {/* Dynamic Columns */}
             {columns.map((col, cIdx) => (
@@ -270,11 +270,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom Footer Section (Black) */}
-        <div style={{ backgroundColor: '#3B5998', padding: '0 5% 0 5%', position: 'relative' }}>
-          <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '100px' }}>
+        <div className="footer-bottom" style={{ backgroundColor: '#3B5998', padding: '0 5% 0 5%', position: 'relative' }}>
+          <div className="footer-bottom-inner" style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '100px' }}>
 
             {/* Left Side: Logo & About */}
-            <div style={{ flex: '1', minWidth: '400px', paddingTop: '80px', paddingBottom: '60px', display: 'flex', alignItems: 'center', gap: '30px' }}>
+            <div className="footer-brand-block" style={{ flex: '1', minWidth: '400px', paddingTop: '80px', paddingBottom: '60px', display: 'flex', alignItems: 'center', gap: '30px' }}>
               <img
                 src={branding.logo}
                 alt="logo"
@@ -287,10 +287,10 @@ export default function Footer() {
                 </p>
 
                 {/* Social Icons */}
-                <div style={{ display: 'flex', gap: '15px' }}>
+                <div className="footer-socials" style={{ display: 'flex', gap: '15px' }}>
                   {socials.map((social, i) => (
                     <a key={i} href={social.url} className="social-icon-link" style={{ textDecoration: 'none', transition: 'all 0.3s ease' }}>
-                      <img src={social.icon} alt="social" style={{ width: '32px', transition: 'all 0.3s ease' }} />
+                      <img src={social.icon} alt="social" style={{ width: '22px', transition: 'all 0.3s ease' }} />
                     </a>
                   ))}
                 </div>
@@ -298,14 +298,14 @@ export default function Footer() {
             </div>
 
             {/* Right Side: Overlap Card */}
-            <div style={{
+            <div className="footer-newsletter-wrap" style={{
               flex: '1',
               minWidth: '350px',
               maxWidth: '750px',
               marginTop: '-160px',
               zIndex: '10'
             }}>
-              <div style={{
+              <div className="footer-newsletter-card" style={{
                 backgroundColor: '#D3E1F3',
                 borderRadius: '40px',
                 padding: '60px 50px',
@@ -322,7 +322,7 @@ export default function Footer() {
 
                 {/* Newsletter Input */}
                 <form onSubmit={handleSubmitNewsletter}>
-                  <div style={{
+                  <div className="footer-newsletter-input-row" style={{
                     display: 'flex',
                     backgroundColor: '#000',
                     borderRadius: '50px',
@@ -373,7 +373,7 @@ export default function Footer() {
                   </div>
 
                   {/* Subscription Checkbox */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '15px' }}>
+                  <div className="footer-checkbox-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '15px' }}>
                     <input 
                       type="checkbox" 
                       id="subscribe" 
@@ -408,7 +408,7 @@ export default function Footer() {
                 )}
 
                 {/* Contact Info Pills */}
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '25px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                <div className="footer-contact-pills" style={{ display: 'flex', justifyContent: 'center', gap: '25px', marginBottom: '20px', flexWrap: 'wrap' }}>
                   <a href={`tel:${contact.phone1.replace(/[^+\d]/g, '')}`} className="premium-footer-pill" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', cursor: 'pointer', transition: 'transform 0.2s ease-in-out' }}>
                     <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777623764/dmc-trichology/onx0emcsxjwpat8uk5i4.png" alt="phone" style={{ width: '32px' }} />
                     <span style={{ fontSize: '16px', fontWeight: '600', color: '#1C1C1C' }}>{contact.phone1}</span>
@@ -427,7 +427,7 @@ export default function Footer() {
                 </div>
 
                 {/* Card Footer Links */}
-                <div style={{ borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#777' }}>
+                <div className="footer-legal-row" style={{ borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#777' }}>
                   <span><EditableText sectionId="footer-section" fieldPath="bottomFooter.copyright" tag="span">{bottomFooter.copyright}</EditableText></span>
                   <div style={{ display: 'flex', gap: '15px' }}>
                     <a href={bottomFooter.termsLink} style={{ color: '#1C1C1C', textDecoration: 'none' }}>
@@ -482,9 +482,137 @@ export default function Footer() {
             to { opacity: 1; transform: translateY(0); }
           }
           @media (max-width: 992px) {
-            footer > div { padding: 40px 5% !important; }
-            div[style*="marginTop: -120px"] { margin-top: 0 !important; }
-            div[style*="justifyContent: space-between"] { justify-content: center !important; text-align: center; }
+            .footer-top {
+              padding: 56px 5% 72px !important;
+            }
+            .footer-top-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 34px !important;
+            }
+            .footer-bottom {
+              padding: 0 5% 48px !important;
+            }
+            .footer-bottom-inner {
+              gap: 36px !important;
+              justify-content: center !important;
+              align-items: stretch !important;
+            }
+            .footer-brand-block {
+              min-width: 0 !important;
+              width: 100%;
+              padding-top: 52px !important;
+              padding-bottom: 0 !important;
+              justify-content: center;
+            }
+            .footer-newsletter-wrap {
+              min-width: 0 !important;
+              width: 100%;
+              margin-top: 0 !important;
+              max-width: 760px !important;
+            }
+            .footer-newsletter-card {
+              padding: 42px 34px !important;
+              border-radius: 32px !important;
+            }
+            .footer-legal-row {
+              gap: 18px;
+            }
+          }
+          @media (max-width: 767px) {
+            .footer-top {
+              padding: 44px 16px 48px !important;
+              text-align: center;
+            }
+            .footer-top-grid {
+              grid-template-columns: 1fr !important;
+              gap: 30px !important;
+            }
+            .footer-top a,
+            .footer-top p {
+              overflow-wrap: anywhere;
+            }
+            .footer-bottom {
+              padding: 0 16px 36px !important;
+            }
+            .footer-bottom-inner {
+              display: flex !important;
+              flex-direction: column !important;
+              gap: 28px !important;
+            }
+            .footer-brand-block {
+              flex-direction: column !important;
+              text-align: center;
+              gap: 20px !important;
+              padding-top: 42px !important;
+            }
+            .footer-brand-block > img {
+              width: 140px !important;
+            }
+            .footer-socials img {
+              width: 50px !important;
+            }
+            .footer-socials {
+              justify-content: center;
+              flex-wrap: wrap;
+            }
+            .footer-newsletter-card {
+              padding: 30px 20px !important;
+              border-radius: 26px !important;
+            }
+            .footer-newsletter-card h2 {
+              font-size: clamp(26px, 8vw, 32px) !important;
+              line-height: 1.12 !important;
+            }
+            .footer-newsletter-input-row {
+              flex-direction: column;
+              border-radius: 24px !important;
+              padding: 14px !important;
+              gap: 10px;
+            }
+            .footer-newsletter-input-row input {
+              width: 100%;
+              text-align: center;
+            }
+            .footer-submit-btn {
+              width: 100%;
+              justify-content: center;
+            }
+            .footer-checkbox-row {
+              align-items: flex-start !important;
+              text-align: left;
+            }
+            .footer-contact-pills {
+              flex-direction: column;
+              align-items: center;
+              gap: 14px !important;
+            }
+            .footer-contact-pills a {
+              max-width: 100%;
+              justify-content: center;
+              overflow-wrap: anywhere;
+            }
+            .footer-contact-pills span {
+              font-size: 13px !important;
+              overflow-wrap: anywhere;
+            }
+            .footer-legal-row {
+              flex-direction: column;
+              align-items: center;
+              justify-content: center !important;
+              text-align: center;
+            }
+            .footer-legal-row > div {
+              justify-content: center;
+              flex-wrap: wrap;
+            }
+          }
+          @media (max-width: 360px) {
+            .footer-newsletter-card {
+              padding: 26px 16px !important;
+            }
+            .footer-brand-block > img {
+              width: 124px !important;
+            }
           }
         `}</style>
       </footer>

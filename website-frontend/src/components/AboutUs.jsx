@@ -106,12 +106,44 @@ const AboutUs = () => {
         </div>
 
         <style jsx>{`
+          @media (max-width: 1199px) {
+            .welcome-section {
+              padding: 72px 4% !important;
+              overflow: hidden;
+            }
+            .welcome-section .section-title {
+              font-size: clamp(34px, 5vw, 48px) !important;
+              line-height: 1.1 !important;
+            }
+            .stats-grid {
+              gap: 30px !important;
+            }
+          }
           @media (max-width: 768px) {
-            p { font-size: 18px !important; }
+            .welcome-section {
+              padding: 52px 16px !important;
+            }
+            .welcome-section .section-title {
+              font-size: clamp(30px, 8.5vw, 40px) !important;
+            }
+            .welcome-section > div > p {
+              font-size: clamp(22px, 7vw, 30px) !important;
+              line-height: 1.25 !important;
+              margin-bottom: 38px !important;
+            }
             .stats-grid { grid-template-columns: 1fr 1fr !important; }
+            .stats-grid h3 {
+              font-size: 34px !important;
+            }
+            .stats-grid p {
+              overflow-wrap: anywhere;
+            }
           }
           @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr !important; }
+            .stats-grid {
+              gap: 28px !important;
+            }
           }
         `}</style>
       </section>

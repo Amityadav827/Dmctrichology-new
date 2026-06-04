@@ -113,7 +113,7 @@ export default function AboutDrNiveditaHero({ data = {} }) {
 
         @media (max-width: 1024px) {
           .dr-nivedita-hero-wrapper {
-            padding: 110px 5% 60px 5% !important;
+            padding: 150px 5% 60px 5% !important;
           }
           .dr-nivedita-hero-inner-grid {
             grid-template-columns: 1fr;
@@ -171,7 +171,7 @@ export default function AboutDrNiveditaHero({ data = {} }) {
           font-weight: 700 !important;
           letter-spacing: 2px !important;
           text-transform: uppercase !important;
-          color: #E4B753 !important;
+          color: #ffffff !important;
           margin-bottom: 12px;
         }
 
@@ -188,7 +188,7 @@ export default function AboutDrNiveditaHero({ data = {} }) {
         .dr-nivedita-editorial-degree {
           display: inline-block;
           padding: 6px 14px;
-          background-color: #E4B753;
+          background-color: #ffffff;
           color: #000000;
           border-radius: 4px;
           font-size: 12px;

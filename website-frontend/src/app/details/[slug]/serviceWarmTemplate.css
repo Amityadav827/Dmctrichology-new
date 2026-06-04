@@ -2,7 +2,7 @@
    Warm Service Template — Scoped stylesheet for warm-v2 pages.
    All rules namespaced .dmc-service-warm-* to avoid collisions
    with classic-template details.css.
-   Brand: #3B5998 primary, #E4B753 gold, #061A3A ink,
+   Brand: #3B5998 primary, #ffffff gold, #061A3A ink,
           #FFFBF4 warm cream, #F4EFE5 soft beige, #2A1C0B deep
    ============================================================ */
 
@@ -20,7 +20,7 @@
   display: inline-block;
   width: 28px;
   height: 1px;
-  background: #E4B753;
+  background: #ffffff;
   vertical-align: middle;
   margin-right: 12px;
 }
@@ -71,12 +71,12 @@
   font-weight: 600;
   letter-spacing: 3.5px;
   text-transform: uppercase;
-  color: #E4B753;
+  color: #ffffff;
   margin-bottom: 28px;
 }
 
 .dmc-warm-hero-eyebrow .dmc-warm-eyebrow-line {
-  background: #E4B753;
+  background: #ffffff;
   width: 36px;
 }
 
@@ -111,7 +111,7 @@
 .dmc-warm-cta-primary {
   display: inline-flex;
   align-items: center;
-  background: #E4B753;
+  background: #ffffff;
   color: #2A1C0B;
   font-family: 'Lato', sans-serif;
   font-weight: 700;
@@ -146,8 +146,8 @@
 }
 
 .dmc-warm-cta-secondary:hover {
-  color: #E4B753;
-  border-bottom-color: #E4B753;
+  color: #ffffff;
+  border-bottom-color: #ffffff;
 }
 
 .dmc-warm-hero-trust {
@@ -161,7 +161,7 @@
 .dmc-warm-hero-stars {
   display: inline-flex;
   gap: 3px;
-  color: #E4B753;
+  color: #ffffff;
 }
 
 .dmc-warm-hero-stars svg {
@@ -192,9 +192,9 @@
   transition: color 0.2s ease;
 }
 
-.dmc-warm-hero-breadcrumb a:hover { color: #E4B753; }
+.dmc-warm-hero-breadcrumb a:hover { color: #ffffff; }
 .dmc-warm-hero-breadcrumb .sep { color: rgba(255,255,255,0.4); }
-.dmc-warm-hero-breadcrumb .current { color: #E4B753; }
+.dmc-warm-hero-breadcrumb .current { color: #ffffff; }
 
 @media (max-width: 768px) {
   .dmc-warm-hero-content { padding: 120px 6% 60px; }
@@ -382,7 +382,7 @@
   font-size: clamp(22px, 2.3vw, 28px);
   line-height: 1.4;
   color: #2A1C0B;
-  border-left: 3px solid #E4B753;
+  border-left: 3px solid #ffffff;
   background: #FFFBF4;
 }
 
@@ -455,7 +455,7 @@
   font-family: 'Marcellus', serif;
   font-size: 110px;
   line-height: 0.6;
-  color: #E4B753;
+  color: #ffffff;
   display: block;
   margin-bottom: 10px;
 }
@@ -594,7 +594,7 @@
 }
 
 .dmc-warm-candidacy-icon.is-yes {
-  background: #E4B753;
+  background: #ffffff;
   color: #2A1C0B;
 }
 

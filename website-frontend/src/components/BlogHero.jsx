@@ -74,7 +74,7 @@ const BlogHero = ({ data: initialData }) => {
       <style jsx>{`
         @media (max-width: 768px) {
           .service-hero-premium h1 {
-            font-size: 36px !important;
+            font-size: 34px !important;
           }
         }
       `}</style>

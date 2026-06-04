@@ -252,6 +252,43 @@ const SurgeonsSection = () => {
 
           @media (max-width: 1024px) {
             .surgeons-section { padding: 60px 5% !important; }
+            .surgeons-section > div > div:last-child {
+              gap: 28px !important;
+            }
+            .surgeons-section .section-title {
+              font-size: clamp(34px, 5vw, 48px) !important;
+              line-height: 1.1 !important;
+            }
+          }
+          @media (max-width: 767px) {
+            .surgeons-section {
+              padding: 48px 16px !important;
+            }
+            .surgeons-section > div > div:first-child {
+              margin-bottom: 32px !important;
+            }
+            .surgeons-section .section-title {
+              font-size: clamp(30px, 8.5vw, 40px) !important;
+            }
+            .surgeon-tab {
+              padding: 18px 20px !important;
+              border-radius: 20px !important;
+            }
+            .surgeon-tab span {
+              font-size: 16px !important;
+            }
+            .surgeons-section div[style*="background-color: rgb(59, 89, 152)"] {
+              padding: 18px !important;
+              border-radius: 24px !important;
+              gap: 20px !important;
+            }
+            .surgeons-section img {
+              max-width: 100%;
+            }
+            .surgeon-detail-btn {
+              width: 100% !important;
+              justify-content: center;
+            }
           }
         `}</style>
       </section>

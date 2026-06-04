@@ -5,11 +5,33 @@ import Loader from "../components/Loader";
 import Table from "../components/Table";
 import api from "../api/client";
 import { getBlogCategories, getGalleryItems, createGalleryItems } from "../api/services";
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { FRONTEND_URL } from "../utils/config";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Modules moved inside component for proper handler binding
+
+const BlockEmbed = Quill.import('blots/block/embed');
+
+class BlogTableBlot extends BlockEmbed {
+  static blotName = 'blogTable';
+  static tagName = 'div';
+  static className = 'table-responsive';
+
+  static create(value) {
+    const node = super.create();
+    node.setAttribute('contenteditable', 'false');
+    node.innerHTML = value || '<table><tbody></tbody></table>';
+    return node;
+  }
+
+  static value(node) {
+    return node.innerHTML;
+  }
+}
+
+Quill.register(BlogTableBlot, true);
 
 // Derive the uploads base URL from the API base URL
 const getImageUrl = (path) => {
@@ -208,6 +230,147 @@ const slugify = (text) => {
     .replace(/-+$/, '');
 };
 
+const BLOG_PASTE_ALLOWED_TAGS = new Set([
+  'a', 'b', 'blockquote', 'br', 'caption', 'col', 'colgroup', 'div', 'em', 'i', 'li',
+  'ol', 'p', 'span', 'strong', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr',
+  'u', 'ul'
+]);
+
+const sanitizeBlogPasteNode = (node, doc) => {
+  if (node.nodeType === Node.TEXT_NODE) {
+    return doc.createTextNode(node.textContent || '');
+  }
+
+  if (node.nodeType !== Node.ELEMENT_NODE) {
+    return doc.createDocumentFragment();
+  }
+
+  const tagName = node.tagName.toLowerCase();
+  const fragment = doc.createDocumentFragment();
+
+  if (!BLOG_PASTE_ALLOWED_TAGS.has(tagName)) {
+    Array.from(node.childNodes).forEach(child => {
+      fragment.appendChild(sanitizeBlogPasteNode(child, doc));
+    });
+    return fragment;
+  }
+
+  const cleanNode = doc.createElement(tagName);
+
+  if (tagName === 'a') {
+    const href = node.getAttribute('href') || '';
+    if (/^(https?:|mailto:|tel:|\/|#)/i.test(href)) {
+      cleanNode.setAttribute('href', href);
+      cleanNode.setAttribute('target', node.getAttribute('target') || '_blank');
+      cleanNode.setAttribute('rel', 'noopener noreferrer');
+    }
+  }
+
+  if (['td', 'th'].includes(tagName)) {
+    ['colspan', 'rowspan', 'scope'].forEach(attr => {
+      const value = node.getAttribute(attr);
+      if (value) cleanNode.setAttribute(attr, value);
+    });
+  }
+
+  if (tagName === 'div' && node.classList.contains('table-responsive')) {
+    cleanNode.setAttribute('class', 'table-responsive');
+  }
+
+  Array.from(node.childNodes).forEach(child => {
+    cleanNode.appendChild(sanitizeBlogPasteNode(child, doc));
+  });
+
+  return cleanNode;
+};
+
+const sanitizeBlogTablePasteHtml = (html) => {
+  if (!html || !/<table[\s>]/i.test(html)) return "";
+
+  const parser = new DOMParser();
+  const sourceDoc = parser.parseFromString(html, 'text/html');
+  const cleanDoc = document.implementation.createHTMLDocument('');
+  const wrapper = cleanDoc.createElement('div');
+
+  Array.from(sourceDoc.body.childNodes).forEach(node => {
+    wrapper.appendChild(sanitizeBlogPasteNode(node, cleanDoc));
+  });
+
+  wrapper.querySelectorAll('table').forEach(table => {
+    if (table.parentElement?.classList.contains('table-responsive')) return;
+    const responsiveWrap = cleanDoc.createElement('div');
+    responsiveWrap.setAttribute('class', 'table-responsive');
+    table.parentNode.insertBefore(responsiveWrap, table);
+    responsiveWrap.appendChild(table);
+  });
+
+  return wrapper.querySelector('table') ? wrapper.innerHTML : "";
+};
+
+const escapeTableCellText = (value = "") => String(value)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#039;');
+
+const buildTableFromPlainText = (text = "") => {
+  const lines = String(text)
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean);
+
+  if (lines.length < 2) return "";
+
+  const rows = lines.map(line => {
+    if (line.includes('\t')) return line.split('\t').map(cell => cell.trim());
+    if (line.includes('|')) return line.split('|').map(cell => cell.trim()).filter(Boolean);
+    if (line.includes(',')) return line.split(',').map(cell => cell.trim());
+    return line.split(/\s{2,}/).map(cell => cell.trim()).filter(Boolean);
+  });
+
+  const columnCount = Math.max(...rows.map(row => row.length));
+  if (columnCount < 2 || rows.some(row => row.length < 2)) return "";
+
+  const normalizedRows = rows.map(row => [
+    ...row,
+    ...Array.from({ length: columnCount - row.length }, () => "")
+  ]);
+
+  const [headerRow, ...bodyRows] = normalizedRows;
+  return `
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>${headerRow.map(cell => `<th>${escapeTableCellText(cell)}</th>`).join('')}</tr>
+        </thead>
+        <tbody>
+          ${bodyRows.map(row => `<tr>${row.map(cell => `<td>${escapeTableCellText(cell)}</td>`).join('')}</tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+};
+
+const extractTableEmbedValues = (html = "") => {
+  if (!html) return [];
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const tableWraps = Array.from(doc.querySelectorAll('.table-responsive'));
+
+  if (tableWraps.length > 0) {
+    return tableWraps
+      .map(node => node.innerHTML)
+      .filter(value => /<table[\s>]/i.test(value));
+  }
+
+  return Array.from(doc.querySelectorAll('table'))
+    .map(table => table.outerHTML)
+    .filter(Boolean);
+};
+
 const processEditorialHtml = (html) => {
   if (!html) return html;
   
@@ -237,10 +400,16 @@ const processEditorialHtml = (html) => {
     }
   });
 
+  doc.querySelectorAll('.table-responsive').forEach(wrapper => {
+    wrapper.removeAttribute('contenteditable');
+  });
+
   return doc.body.innerHTML;
 };
 
 function Blogs() {
+  const navigate = useNavigate();
+  const { slug: routeSlug } = useParams();
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -375,9 +544,10 @@ function Blogs() {
     setEditingId(null);
     setIsSlugManual(false);
     setView("form");
+    navigate("/blogs");
   };
 
-  const handleEdit = (item) => {
+  const handleEdit = (item, updateUrl = true) => {
     setFormData({
       showType: item.showType || "Inside",
       layoutType: item.layoutType || "Left",
@@ -407,7 +577,34 @@ function Blogs() {
     setEditingId(item._id);
     setIsSlugManual(true);
     setView("form");
+
+    if (updateUrl && item.slug) {
+      navigate(`/blogs/edit/${item.slug}`);
+    }
   };
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!routeSlug) {
+      if (editingId) {
+        setEditingId(null);
+        setView("list");
+      }
+      return;
+    }
+
+    const matchedBlog = items.find(item => item.slug === routeSlug);
+    if (!matchedBlog) {
+      toast.error("Blog not found for this URL");
+      navigate("/blogs", { replace: true });
+      return;
+    }
+
+    if (editingId !== matchedBlog._id) {
+      handleEdit(matchedBlog, false);
+    }
+  }, [routeSlug, items, loading]);
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
@@ -440,6 +637,51 @@ function Blogs() {
 
   const handleQuillChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFullDescriptionPasteCapture = (event) => {
+    const clipboard = event.clipboardData;
+    if (!clipboard) return;
+
+    const html = clipboard.getData('text/html') || '';
+    const plainText = clipboard.getData('text/plain') || '';
+    const tableHtml = sanitizeBlogTablePasteHtml(html) || buildTableFromPlainText(plainText);
+    const tableEmbedValues = extractTableEmbedValues(tableHtml);
+
+    console.groupCollapsed('[Blog CMS] Paste debug');
+    console.log('text/html:', html.slice(0, 2000));
+    console.log('text/plain:', plainText.slice(0, 2000));
+    console.log('contains html table:', /<table[\s>]/i.test(html));
+    console.log('generated table html:', tableHtml.slice(0, 2000));
+    console.log('table embeds:', tableEmbedValues.length);
+    console.groupEnd();
+
+    if (tableEmbedValues.length === 0) return;
+
+    const quill = quillRef.current?.getEditor?.();
+    if (!quill) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const range = quill.getSelection(true) || { index: quill.getLength(), length: 0 };
+    if (range.length) {
+      quill.deleteText(range.index, range.length, 'user');
+    }
+
+    let insertIndex = range.index;
+    tableEmbedValues.forEach(tableValue => {
+      quill.insertEmbed(insertIndex, 'blogTable', tableValue, 'user');
+      insertIndex += 1;
+      quill.insertText(insertIndex, '\n', 'user');
+      insertIndex += 1;
+    });
+
+    quill.setSelection(insertIndex, 0, 'silent');
+
+    const nextHtml = quill.root.innerHTML;
+    setFormData(prev => ({ ...prev, fullDescription: nextHtml }));
+    quill.update('silent');
   };
 
   const handleAddFaq = () => {
@@ -736,8 +978,8 @@ function Blogs() {
         {/* Top Bar */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <button
-              onClick={() => setView("list")}
+            <button 
+              onClick={() => navigate("/blogs")}
               style={{ width: "38px", height: "38px", borderRadius: "50%", background: "#FFFFFF", border: "1px solid #E2E8F0", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#475569" }}
             >
               <ArrowLeft size={18} />
@@ -868,7 +1110,7 @@ function Blogs() {
                   Full Description <span style={{ color: "#EF4444" }}>*</span>
                 </label>
               </div>
-              <div style={{ background: "#FFFFFF", borderRadius: "12px", overflow: "hidden", border: "1px solid #E2E8F0" }} onDoubleClick={handleEditorDoubleClick}>
+              <div style={{ background: "#FFFFFF", borderRadius: "12px", overflow: "hidden", border: "1px solid #E2E8F0" }} onDoubleClick={handleEditorDoubleClick} onPasteCapture={handleFullDescriptionPasteCapture}>
                 <ReactQuill 
                   onFocus={() => {
                     const editor = quillRef.current.getEditor();

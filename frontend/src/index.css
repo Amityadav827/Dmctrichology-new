@@ -299,6 +299,34 @@
   color: #0F172A;
 }
 
+.ql-editor .table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.ql-editor table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+}
+
+.ql-editor th,
+.ql-editor td {
+  border: 1px solid #CBD5E1;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.ql-editor th {
+  background: #EFF6FF;
+  color: #1E3A8A;
+  font-weight: 700;
+}
+
 .ql-editor.ql-blank::before {
   color: #94A3B8;
   font-style: normal;

@@ -53,7 +53,7 @@ export default function AboutDrNandaniEducationExperience({ data = {} }) {
   const isDarkCard = true;
   const textColor = "#FFFFFF";
   const subtextColor = "#E5E7EB";
-  const goldColor = "#E4B753";
+  const goldColor = "#ffffff";
 
   return (
     <EditableSection sectionId="about-nandani-education" label="Dr Nandani Edu & Exp">

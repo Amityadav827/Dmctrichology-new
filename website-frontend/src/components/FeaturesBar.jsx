@@ -88,6 +88,31 @@ export default function FeaturesBar() {
             ))}
           </div>
         </div>
+        <style jsx>{`
+          @media (max-width: 1199px) {
+            .features-bar {
+              padding-top: 44px !important;
+              padding-bottom: 44px !important;
+            }
+            .marquee-content {
+              gap: 20px !important;
+            }
+            .marquee-content > div {
+              width: clamp(140px, 22vw, 190px) !important;
+              margin-right: 22px !important;
+            }
+          }
+          @media (max-width: 767px) {
+            .features-bar {
+              padding-top: 34px !important;
+              padding-bottom: 34px !important;
+            }
+            .marquee-content > div {
+              width: 132px !important;
+              margin-right: 12px !important;
+            }
+          }
+        `}</style>
       </section>
     </EditableSection>
   );

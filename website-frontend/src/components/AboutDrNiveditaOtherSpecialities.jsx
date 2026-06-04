@@ -107,7 +107,7 @@ export default function AboutDrNiveditaOtherSpecialities({ data = {} }) {
               {specialitiesList.map((bullet, idx) => (
                 <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "14px" }}>
                   <div style={{ flexShrink: 0, marginTop: "3px", display: "flex", alignItems: "center" }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E4B753" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </div>
@@ -148,7 +148,7 @@ export default function AboutDrNiveditaOtherSpecialities({ data = {} }) {
           <div className="dr-nivedita-specialities-right" style={{ width: "100%" }}>
             <div
               style={{
-                border: "2px solid #E4B753",
+                border: "2px solid #ffffff",
                 overflow: "hidden",
                 boxShadow: "0 15px 45px rgba(0, 0, 0, 0.5)",
                 display: "flex",
@@ -172,7 +172,7 @@ export default function AboutDrNiveditaOtherSpecialities({ data = {} }) {
           font-family: 'Marcellus', serif !important;
         }
         .dr-nivedita-other-specialities-wrapper .niv-gold-accent {
-          color: #E4B753 !important;
+          color: #ffffff !important;
           font-weight: 600 !important;
         }
         @media (max-width: 991px) {

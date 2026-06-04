@@ -47,7 +47,7 @@ export default function AboutDrNiveditaEducationExperience({ data = {} }) {
   const cardBgColor = "#3b5998";
   const textColor = "#FFFFFF";
   const subtextColor = "#E5E7EB";
-  const goldColor = "#E4B753";
+  const goldColor = "#ffffff";
 
   return (
     <EditableSection sectionId="about-nivedita-education" label="Dr Nivedita Edu & Exp">

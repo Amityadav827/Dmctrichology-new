@@ -48,7 +48,7 @@ export default function BlogSection() {
 
   return (
     <EditableSection sectionId="blogs-home-section" label="News & Wellness Advice">
-      <section style={{ padding: '80px 5%', backgroundColor: '#fff' }}>
+      <section className="blogs-home-section" style={{ padding: '80px 5%', backgroundColor: '#fff' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           
           {/* Header */}
@@ -190,7 +190,7 @@ export default function BlogSection() {
 
         </div>
 
-        <style jsx global>{`
+        <style jsx>{`
           .home-blog-card:hover {
             background-color: #3B5998 !important;
             border-color: transparent !important;
@@ -297,8 +297,59 @@ export default function BlogSection() {
             filter: brightness(0) saturate(100%) invert(34%) sepia(19%) saturate(1704%) hue-rotate(183deg) brightness(92%) contrast(89%);
           }
 
+          @media (max-width: 1199px) {
+            section {
+              padding: 64px 4% !important;
+              overflow: hidden;
+            }
+            section .section-title {
+              font-size: clamp(34px, 5vw, 48px) !important;
+              line-height: 1.1 !important;
+            }
+            .home-blog-card {
+              border-radius: 30px !important;
+            }
+            .home-blog-card img {
+              max-width: 100%;
+            }
+          }
           @media (max-width: 768px) {
-            section { padding: 60px 5% !important; }
+            section { padding: 48px 16px !important; }
+            section > div > div:first-child {
+              margin-bottom: 34px !important;
+            }
+            section .section-title {
+              font-size: clamp(30px, 8.5vw, 40px) !important;
+            }
+            div[style*="gridTemplateColumns"] {
+              grid-template-columns: 1fr !important;
+            }
+            .home-blog-card {
+              padding: 18px !important;
+              border-radius: 24px !important;
+            }
+            .home-blog-card img {
+              height: 220px !important;
+              border-radius: 20px !important;
+            }
+            .home-blog-title {
+              font-size: 22px !important;
+            }
+            .view-all-blogs-btn {
+              width: 100%;
+              justify-content: center;
+            }
+          }
+          @media (max-width: 390px) {
+            .home-blog-card img {
+              height: 190px !important;
+            }
+            .home-blog-date-pill {
+              left: 12px !important;
+              top: 12px !important;
+              padding: 5px 12px !important;
+              font-size: 12px !important;
+            }
           }
         `}</style>
       </section>

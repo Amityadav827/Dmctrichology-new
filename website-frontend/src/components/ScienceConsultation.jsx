@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import { useBuilder } from '../context/BuilderContext';
@@ -11,6 +11,8 @@ const ScienceConsultation = ({ data: initialData = {} }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [showServiceDropdown, setShowServiceDropdown] = useState(false);
+  const serviceDropdownRef = useRef(null);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -56,6 +58,16 @@ const ScienceConsultation = ({ data: initialData = {} }) => {
     };
     window.addEventListener('cms-update', handleCmsUpdate);
     return () => window.removeEventListener('cms-update', handleCmsUpdate);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (serviceDropdownRef.current && !serviceDropdownRef.current.contains(event.target)) {
+        setShowServiceDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleChange = (e) => {
@@ -172,6 +184,34 @@ const ScienceConsultation = ({ data: initialData = {} }) => {
                   <option value="Stem Cell Therapy">Stem Cell Therapy</option>
                   <option value="General Consultation">General Consultation</option>
                 </select>
+                <div className="sci-responsive-service-dropdown" ref={serviceDropdownRef}>
+                  <button
+                    type="button"
+                    className="sci-responsive-service-trigger"
+                    onClick={() => !loading && setShowServiceDropdown((open) => !open)}
+                    disabled={loading}
+                    aria-expanded={showServiceDropdown}
+                  >
+                    <span>{formData.service}</span>
+                  </button>
+                  {showServiceDropdown && (
+                    <div className="sci-responsive-service-menu">
+                      {['Hair Restoration', 'Laser Therapy', 'Stem Cell Therapy', 'General Consultation'].map((option) => (
+                        <button
+                          key={option}
+                          type="button"
+                          className="sci-responsive-service-option"
+                          onClick={() => {
+                            setFormData(prev => ({ ...prev, service: option }));
+                            setShowServiceDropdown(false);
+                          }}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <div className="sci-input-group">
@@ -275,6 +315,10 @@ const ScienceConsultation = ({ data: initialData = {} }) => {
           color: white;
         }
 
+        .sci-responsive-service-dropdown {
+          display: none;
+        }
+
         .sci-submit-btn {
           margin-top: 10px;
           padding: 18px;
@@ -328,6 +372,168 @@ const ScienceConsultation = ({ data: initialData = {} }) => {
           .sci-consult-container { padding: 40px 20px; }
           .sci-input-row { flex-direction: column; gap: 20px; }
           .sci-consult-title { font-size: 28px !important; }
+          .sci-input-group {
+            position: relative;
+            min-width: 0;
+          }
+          .sci-consult-form select[name="service"] {
+            display: none;
+          }
+          .sci-responsive-service-dropdown {
+            display: block;
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            z-index: 40;
+          }
+          .sci-responsive-service-trigger {
+            width: 100%;
+            max-width: 100%;
+            min-height: 51px;
+            padding: 16px 42px 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Lato', sans-serif;
+            font-size: 15px;
+            line-height: 1.25;
+            text-align: left;
+            cursor: pointer;
+            overflow-wrap: anywhere;
+          }
+          .sci-responsive-service-trigger::after {
+            content: '';
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid rgba(255,255,255,0.85);
+            border-bottom: 2px solid rgba(255,255,255,0.85);
+            transform: translateY(-65%) rotate(45deg);
+            pointer-events: none;
+          }
+          .sci-responsive-service-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            width: 100%;
+            max-width: 100%;
+            max-height: 240px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: #0d0d1a;
+            border: 1px solid rgba(139, 180, 246, 0.55);
+            border-radius: 12px;
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+            z-index: 90;
+          }
+          .sci-responsive-service-option {
+            width: 100%;
+            min-height: 44px;
+            padding: 11px 20px;
+            border: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: #0d0d1a;
+            color: white;
+            font-family: 'Lato', sans-serif;
+            font-size: 15px;
+            line-height: 1.35;
+            text-align: left;
+            cursor: pointer;
+            white-space: normal;
+            overflow-wrap: anywhere;
+          }
+          .sci-responsive-service-option:first-child {
+            background: #256bd7;
+          }
+          .sci-responsive-service-option:last-child {
+            border-bottom: 0;
+          }
+        }
+        @media (min-width: 769px) and (max-width: 1199px) {
+          .sci-input-group {
+            position: relative;
+            min-width: 0;
+          }
+          .sci-consult-form select[name="service"] {
+            display: none;
+          }
+          .sci-responsive-service-dropdown {
+            display: block;
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            z-index: 40;
+          }
+          .sci-responsive-service-trigger {
+            width: 100%;
+            max-width: 100%;
+            min-height: 51px;
+            padding: 16px 42px 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Lato', sans-serif;
+            font-size: 15px;
+            line-height: 1.25;
+            text-align: left;
+            cursor: pointer;
+            overflow-wrap: anywhere;
+          }
+          .sci-responsive-service-trigger::after {
+            content: '';
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid rgba(255,255,255,0.85);
+            border-bottom: 2px solid rgba(255,255,255,0.85);
+            transform: translateY(-65%) rotate(45deg);
+            pointer-events: none;
+          }
+          .sci-responsive-service-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            width: 100%;
+            max-width: 100%;
+            max-height: 240px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: #0d0d1a;
+            border: 1px solid rgba(139, 180, 246, 0.55);
+            border-radius: 12px;
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+            z-index: 90;
+          }
+          .sci-responsive-service-option {
+            width: 100%;
+            min-height: 44px;
+            padding: 11px 20px;
+            border: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: #0d0d1a;
+            color: white;
+            font-family: 'Lato', sans-serif;
+            font-size: 15px;
+            line-height: 1.35;
+            text-align: left;
+            cursor: pointer;
+            white-space: normal;
+            overflow-wrap: anywhere;
+          }
+          .sci-responsive-service-option:first-child {
+            background: #256bd7;
+          }
+          .sci-responsive-service-option:last-child {
+            border-bottom: 0;
+          }
         }
       `}</style>
     </EditableSection>

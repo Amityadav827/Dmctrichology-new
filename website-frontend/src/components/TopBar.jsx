@@ -110,7 +110,7 @@ export default function TopBar({ initialTopBar }) {
         <div className="topbar-left">
           {announcementText && (
             <>
-              <EditableText sectionId="topbar" fieldPath="announcementText" tag="span" className="topbar-contact-item" style={{ color: '#E4B753', fontWeight: '500' }}>
+              <EditableText sectionId="topbar" fieldPath="announcementText" tag="span" className="topbar-contact-item" style={{ color: '#ffffff', fontWeight: '500' }}>
                 {announcementText}
               </EditableText>
               <span className="topbar-sep">|</span>

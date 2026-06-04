@@ -210,6 +210,57 @@ const WhyChooseUs = () => {
           .feature-callout { opacity: 1 !important; pointer-events: auto !important; }
           .card-item { width: 90% !important; max-width: 400px; margin: 0 auto; }
         }
+        @media (max-width: 1199px) {
+          .why-choose-us {
+            padding-left: 4% !important;
+            padding-right: 4% !important;
+          }
+          .why-choose-us .section-title {
+            margin-bottom: 48px !important;
+          }
+          .why-choose-stage {
+            gap: 20px;
+          }
+          .why-choose-center {
+            width: min(420px, 72vw) !important;
+            height: auto !important;
+            order: -1;
+          }
+          .feature-callout {
+            width: 100%;
+          }
+        }
+        @media (max-width: 767px) {
+          .why-choose-us {
+            padding-top: 48px !important;
+            padding-bottom: 48px !important;
+          }
+          .why-choose-us .section-title {
+            font-size: clamp(30px, 8.5vw, 40px) !important;
+            line-height: 1.12 !important;
+            margin-bottom: 32px !important;
+          }
+          .why-choose-stage {
+            padding-bottom: 0 !important;
+          }
+          .why-choose-center {
+            width: min(300px, 86vw) !important;
+          }
+          .card-item {
+            width: 100% !important;
+            max-width: none !important;
+            padding: 18px !important;
+            gap: 14px !important;
+            border-radius: 20px !important;
+          }
+          .card-item h4 {
+            font-size: 21px !important;
+          }
+          .card-item p {
+            font-size: 13px !important;
+            line-height: 1.45 !important;
+          }
+        }
       `}} />
     </EditableSection>
   );

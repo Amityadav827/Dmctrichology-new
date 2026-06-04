@@ -154,7 +154,7 @@ export default function AboutDrNandaniHero({ data = {} }) {
 
         @media (max-width: 1024px) {
           .dr-nandani-hero-wrapper {
-            padding: 110px 5% 60px 5% !important;
+            padding: 150px 5% 60px 5% !important;
           }
           .dr-nandani-hero-inner-grid {
             grid-template-columns: 1fr;
@@ -214,7 +214,7 @@ export default function AboutDrNandaniHero({ data = {} }) {
           font-weight: 700 !important;
           letter-spacing: 2px !important;
           text-transform: uppercase !important;
-          color: #E4B753 !important; /* Premium Gold */
+          color: #ffffff !important;
           margin-bottom: 12px;
         }
 
@@ -231,7 +231,7 @@ export default function AboutDrNandaniHero({ data = {} }) {
         .doctor-editorial-degree {
           display: inline-block;
           padding: 6px 14px;
-          background-color: #E4B753;
+          background-color: #ffffff;
           color: #000000;
           border-radius: 4px;
           font-size: 12px;

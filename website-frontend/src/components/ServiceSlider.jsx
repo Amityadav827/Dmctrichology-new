@@ -156,6 +156,58 @@ export default function ServiceSlider() {
             </button>
           </div>
         </div>
+        <style jsx>{`
+          @media (max-width: 1199px) {
+            .service-slider-section {
+              padding: 64px 4% !important;
+              overflow: hidden;
+            }
+            .service-slider-section :global(.swiper-slide) {
+              height: auto;
+            }
+            .service-card-item {
+              height: 100%;
+              display: flex !important;
+              flex-direction: column;
+            }
+            .service-card-item > div {
+              height: clamp(230px, 28vw, 300px) !important;
+            }
+            .service-card-item h3 {
+              min-height: 52px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+          @media (max-width: 767px) {
+            .service-slider-section {
+              padding: 48px 16px !important;
+            }
+            .service-slider-section h2 {
+              font-size: clamp(30px, 9vw, 42px) !important;
+              line-height: 1.1 !important;
+              text-align: center;
+            }
+            .service-slider-section a[style*="position: absolute"] {
+              position: static !important;
+              margin-top: 18px;
+            }
+            .service-card-item > div {
+              height: 260px !important;
+              border-radius: 20px !important;
+            }
+            .service-prev-btn,
+            .service-next-btn {
+              display: none !important;
+            }
+          }
+          @media (max-width: 390px) {
+            .service-card-item > div {
+              height: 230px !important;
+            }
+          }
+        `}</style>
       </section>
     </EditableSection>
   );

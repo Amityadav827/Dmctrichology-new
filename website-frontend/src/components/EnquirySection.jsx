@@ -31,11 +31,13 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
 
   // Date & Time Picker states
   const [showCalendar, setShowCalendar] = useState(false);
+  const [showServiceDropdown, setShowServiceDropdown] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDateTime, setSelectedDateTime] = useState(''); // Stores final backend payload format
   
   const calendarRef = useRef(null);
+  const serviceDropdownRef = useRef(null);
 
   // Generate 4-digit captcha
   const generateCaptcha = () => {
@@ -92,6 +94,9 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
     const handleClickOutside = (event) => {
       if (calendarRef.current && !calendarRef.current.contains(event.target)) {
         setShowCalendar(false);
+      }
+      if (serviceDropdownRef.current && !serviceDropdownRef.current.contains(event.target)) {
+        setShowServiceDropdown(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -301,7 +306,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '20px', marginBottom: '0' }}>
             
             {/* Header and Contact Info */}
-            <div style={{ flex: '1 1 500px' }}>
+            <div style={{ flex: '1 1 250px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
                 <img src={iconUrl} alt="icon" style={{ width: '40px', height: 'auto', filter: blueIconFilter }} />
                 <EditableText sectionId={sectionId} fieldPath="badgeText" tag="span" className="section-subtitle">
@@ -418,6 +423,45 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                        <option key={i} value={opt}>{opt}</option>
                      ))}
                    </select>
+                   <div className="responsive-service-dropdown" ref={serviceDropdownRef}>
+                     <button
+                       type="button"
+                       className="responsive-service-trigger"
+                       onClick={() => !loading && setShowServiceDropdown((open) => !open)}
+                       disabled={loading}
+                       aria-expanded={showServiceDropdown}
+                     >
+                       <span>{formData.service || 'Type Of Service Enquiry*'}</span>
+                     </button>
+                     {showServiceDropdown && (
+                       <div className="responsive-service-menu">
+                         <button
+                           type="button"
+                           className="responsive-service-option"
+                           onClick={() => {
+                             setFormData({ ...formData, service: '' });
+                             setShowServiceDropdown(false);
+                           }}
+                         >
+                           Type Of Service Enquiry*
+                         </button>
+                         {finalServiceOptions.map((opt, i) => (
+                           <button
+                             key={i}
+                             type="button"
+                             className="responsive-service-option"
+                             onClick={() => {
+                               setFormData({ ...formData, service: opt });
+                               setShowServiceDropdown(false);
+                               if (error) setError('');
+                             }}
+                           >
+                             {opt}
+                           </button>
+                         ))}
+                       </div>
+                     )}
+                   </div>
                    <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777623764/dmc-trichology/qcrzwotm1zyqsdbu6ttb.png" style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', width: '12px', pointerEvents: 'none' }} alt="icon" />
                 </div>
                 
@@ -548,7 +592,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
           </div>
 
           {/* Bottom Row: Full Width Image */}
-          <div style={{ width: '100%', marginTop: '-95px', position: 'relative', zIndex: 1 }}>
+          <div style={{ width: '100%', marginTop: '30px', position: 'relative', zIndex: 1 }}>
             <img 
               src={beforeImage} 
               alt="Consultation Result" 
@@ -565,6 +609,9 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
           .premium-submit-btn:hover { transform: none; box-shadow: 0 15px 30px rgba(59, 89, 152, 0.28); background-color: #314b82 !important; }
           .premium-submit-btn:hover .consultation-btn-arrow { transform: rotate(0deg) translateX(5px); }
           .premium-submit-btn:active { transform: none; }
+          .responsive-service-dropdown {
+            display: none;
+          }
           
           .time-slots-container::-webkit-scrollbar {
             width: 4px;
@@ -579,8 +626,187 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
           }
           
           @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-          @media (max-width: 1024px) { .enquiry-section { padding: 60px 5% !important; } }
-          @media (max-width: 640px) { form { grid-template-columns: 1fr !important; } form div { grid-column: span 1 !important; } }
+          @media (min-width: 1025px) and (max-width: 1199px) {
+            .premium-select {
+              display: none !important;
+            }
+            .responsive-service-dropdown {
+              display: block;
+              position: relative;
+              width: 100%;
+              max-width: 100%;
+              z-index: 30;
+            }
+            .responsive-service-trigger {
+              width: 100%;
+              min-height: 48px;
+              padding: 15px 48px 15px 25px;
+              border-radius: 30px;
+              border: none;
+              background-color: #F2F2F2;
+              color: #111111;
+              font-family: 'Marcellus', serif;
+              font-size: 14px;
+              line-height: 1.25;
+              text-align: left;
+              cursor: pointer;
+              overflow-wrap: anywhere;
+            }
+            .responsive-service-menu {
+              position: absolute;
+              top: calc(100% + 6px);
+              left: 0;
+              right: 0;
+              width: 100%;
+              max-width: 100%;
+              max-height: 260px;
+              overflow-y: auto;
+              overflow-x: hidden;
+              background: #ffffff;
+              border: 1px solid #3B5998;
+              border-radius: 18px;
+              box-shadow: 0 18px 38px rgba(0, 0, 0, 0.12);
+              z-index: 60;
+            }
+            .responsive-service-option {
+              width: 100%;
+              min-height: 44px;
+              padding: 11px 22px;
+              border: 0;
+              border-bottom: 1px solid rgba(59, 89, 152, 0.1);
+              background: #ffffff;
+              color: #111111;
+              font-family: 'Marcellus', serif;
+              font-size: 14px;
+              line-height: 1.35;
+              text-align: left;
+              cursor: pointer;
+              white-space: normal;
+              overflow-wrap: anywhere;
+            }
+            .responsive-service-option:first-child {
+              background: #E8EAF6;
+            }
+            .responsive-service-option:last-child {
+              border-bottom: 0;
+            }
+          }
+          @media (max-width: 1024px) {
+            .enquiry-section { padding: 60px 5% !important; overflow: hidden; }
+            .enquiry-section .section-title {
+              font-size: clamp(34px, 5vw, 48px) !important;
+              line-height: 1.1 !important;
+            }
+            .luxury-datepicker-overlay {
+              right: auto !important;
+              left: 0 !important;
+              width: min(330px, calc(100vw - 40px)) !important;
+            }
+            .premium-select {
+              display: none !important;
+            }
+            .responsive-service-dropdown {
+              display: block;
+              position: relative;
+              width: 100%;
+              max-width: 100%;
+              z-index: 30;
+            }
+            .responsive-service-trigger {
+              width: 100%;
+              min-height: 48px;
+              padding: 15px 48px 15px 25px;
+              border-radius: 30px;
+              border: none;
+              background-color: #F2F2F2;
+              color: #111111;
+              font-family: 'Marcellus', serif;
+              font-size: 14px;
+              line-height: 1.25;
+              text-align: left;
+              cursor: pointer;
+              overflow-wrap: anywhere;
+            }
+            .responsive-service-menu {
+              position: absolute;
+              top: calc(100% + 6px);
+              left: 0;
+              right: 0;
+              width: 100%;
+              max-width: 100%;
+              max-height: 260px;
+              overflow-y: auto;
+              overflow-x: hidden;
+              background: #ffffff;
+              border: 1px solid #3B5998;
+              border-radius: 18px;
+              box-shadow: 0 18px 38px rgba(0, 0, 0, 0.12);
+              z-index: 60;
+            }
+            .responsive-service-option {
+              width: 100%;
+              min-height: 44px;
+              padding: 11px 22px;
+              border: 0;
+              border-bottom: 1px solid rgba(59, 89, 152, 0.1);
+              background: #ffffff;
+              color: #111111;
+              font-family: 'Marcellus', serif;
+              font-size: 14px;
+              line-height: 1.35;
+              text-align: left;
+              cursor: pointer;
+              white-space: normal;
+              overflow-wrap: anywhere;
+            }
+            .responsive-service-option:first-child {
+              background: #E8EAF6;
+            }
+            .responsive-service-option:last-child {
+              border-bottom: 0;
+            }
+          }
+          @media (max-width: 767px) {
+            .enquiry-section {
+              padding: 48px 16px !important;
+            }
+            .enquiry-section > div > div:first-child {
+              flex-direction: column !important;
+              gap: 26px !important;
+            }
+            .enquiry-section .section-title {
+              font-size: clamp(30px, 8.5vw, 40px) !important;
+            }
+            .enquiry-section form {
+              grid-template-columns: 1fr !important;
+            }
+            .enquiry-section form div {
+              grid-column: span 1 !important;
+              min-width: 0;
+            }
+            .enquiry-section input,
+            .enquiry-section select,
+            .enquiry-section textarea,
+            .enquiry-section button {
+              max-width: 100%;
+            }
+            .enquiry-section div[style*="border-left"] {
+              border-left: 0 !important;
+              padding-left: 0 !important;
+            }
+            .enquiry-section div[style*="margin-top: -95px"] {
+              margin-top: 20px !important;
+            }
+            .enquiry-section div[style*="margin-top: -95px"] img {
+              border-radius: 22px !important;
+            }
+          }
+          @media (max-width: 390px) {
+            .enquiry-section div[style*="letter-spacing: 4px"] {
+              padding-left: 14px !important;
+              padding-right: 14px !important;
+            }
+          }
         `}</style>
       </section>
     </EditableSection>

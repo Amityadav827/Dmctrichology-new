@@ -122,7 +122,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           /* Left premium image card */
           .nandani-trust-image-card {
             background-color: #ffffff;
-            border: 3px solid #E4B753;
+            border: 3px solid #ffffff;
             padding: 10px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
             border-radius: 0px !important; /* SQUARE CORNERS only */
@@ -241,7 +241,7 @@ export default function AboutDrNandaniTrust({ data = {} }) {
                       height="20"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="#E4B753"
+                      stroke="#ffffff"
                       strokeWidth="4"
                       strokeLinecap="round"
                       strokeLinejoin="round"

@@ -266,6 +266,31 @@ export default function GradeSlider() {
           }
           @media (max-width: 1024px) {
             .grade-section { padding-top: 60px !important; padding-bottom: 60px !important; }
+            .flip-card {
+              height: 300px !important;
+            }
+            .grade-section .section-title {
+              font-size: clamp(34px, 5vw, 48px) !important;
+              line-height: 1.1 !important;
+            }
+          }
+          @media (max-width: 767px) {
+            .grade-section {
+              padding: 48px 16px !important;
+            }
+            .grade-header {
+              margin-bottom: 28px !important;
+            }
+            .grade-section .section-title {
+              font-size: clamp(30px, 8.5vw, 40px) !important;
+            }
+            .flip-card {
+              height: 280px !important;
+            }
+            .flip-card-front,
+            .flip-card-back {
+              border-radius: 20px !important;
+            }
           }
         `}</style>
       </section>

@@ -48,7 +48,7 @@ export default function HeroSlider() {
               className={`slide-bg ${index === currentSlide ? 'slide-bg-zoom' : ''}`}
               style={{ backgroundImage: `url(${slide.backgroundImage || slide.image})` }}
             />
-            <div style={{ 
+            <div className="slide-overlay" style={{ 
               position: 'absolute', 
               inset: 0, 
               background: 'rgba(171, 187, 202, 0.55)', 

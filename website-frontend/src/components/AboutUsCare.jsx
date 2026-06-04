@@ -49,7 +49,7 @@ const AboutUsCare = () => {
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '40px' }}>
           
           {/* Left Side: Large Image */}
-          <div style={{ flex: '1 1 450px', position: 'relative' }}>
+          <div style={{ flex: '1 1 350px', position: 'relative' }}>
             <div style={{ 
               width: '100%'
             }}>
@@ -63,7 +63,7 @@ const AboutUsCare = () => {
 
 
           {/* Right Side: Content */}
-          <div style={{ flex: '1 1 450px' }}>
+          <div style={{ flex: '1 1 350px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
                <img 
                  src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" 
@@ -150,8 +150,39 @@ const AboutUsCare = () => {
         <style jsx>{`
           @media (max-width: 1024px) {
             .about-us-care { padding: 60px 5% !important; }
+            .about-us-care > div {
+              gap: 32px !important;
+            }
+            .about-us-care img {
+              max-width: 100%;
+            }
           }
           @media (max-width: 640px) {
+            .about-us-care {
+              padding: 48px 16px !important;
+            }
+            .about-us-care > div {
+              flex-direction: column !important;
+              gap: 28px !important;
+            }
+            .about-us-care .section-title {
+              font-size: clamp(30px, 8.5vw, 40px) !important;
+              line-height: 1.12 !important;
+            }
+            .about-us-care div[style*="background-color: rgb(59, 89, 152)"],
+            .about-us-care div[style*="backgroundColor: '#3B5998'"] {
+              max-width: 100%;
+            }
+            .about-us-care div[style*="display: flex"][style*="border-radius: 20px"] {
+              flex-direction: column !important;
+            }
+            .about-us-care div[style*="width: 40%"],
+            .about-us-care div[style*="width: 60%"] {
+              width: 100% !important;
+            }
+            .about-us-care div[style*="gridTemplateColumns"] {
+              grid-template-columns: 1fr !important;
+            }
             .points-grid { grid-template-columns: 1fr !important; }
           }
         `}</style>

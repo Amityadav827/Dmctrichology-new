@@ -21,7 +21,7 @@ const ReviewCard = ({ name, text, sectionId, index }) => (
   }} className="premium-review-card">
     <div style={{ display: 'flex', gap: '4px', marginBottom: '15px' }}>
       {[1, 2, 3, 4, 5].map(s => (
-        <span key={s} style={{ color: '#E4B753', fontSize: '18px' }}>★</span>
+        <span key={s} style={{ color: '#ffffff', fontSize: '18px' }}>★</span>
       ))}
     </div>
     <p style={{
@@ -173,7 +173,7 @@ const TestimonialSection = () => {
         )}
 
         <style jsx>{`
-          .premium-review-card:hover, .premium-video-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important; border-color: #E4B753 !important; }
+          .premium-review-card:hover, .premium-video-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important; border-color: #ffffff !important; }
           .view-all-testimonials-btn:hover { background-color: #3B5998 !important; border-color: #3B5998 !important; color: #fff !important; transform: translateY(-2px); }
           .view-all-testimonials-arrow {
             width: 32px;
@@ -193,10 +193,53 @@ const TestimonialSection = () => {
             transform: rotate(0deg);
           }
           @media (max-width: 1200px) { .testimonial-col-3, .testimonial-col-4 { display: none !important; } }
+          @media (max-width: 1199px) {
+            .testimonials-grid-section {
+              padding: 0 4% 72px 4% !important;
+              overflow: hidden;
+            }
+            .testimonials-grid-section .section-title {
+              font-size: clamp(34px, 5vw, 48px) !important;
+              line-height: 1.1 !important;
+            }
+            .premium-review-card,
+            .premium-video-card {
+              max-width: 100%;
+            }
+          }
           @media (max-width: 992px) { .testimonial-col-2 { display: none !important; } }
           @media (max-width: 768px) {
+            .testimonials-grid-section {
+              padding: 0 16px 56px 16px !important;
+            }
+            .testimonials-grid-section > div > div:first-child {
+              margin-bottom: 36px !important;
+            }
+            .testimonials-grid-section .section-title {
+              font-size: clamp(30px, 8.5vw, 40px) !important;
+            }
+            .testimonials-grid-section div[style*="justify-content: center"] {
+              flex-wrap: wrap;
+            }
             .testimonial-staggered-grid { flex-direction: column; gap: 20px; }
             .testimonial-staggered-grid > div { margin-top: 0 !important; width: 100%; display: flex !important; }
+            .premium-review-card {
+              padding: 20px !important;
+              border-radius: 20px !important;
+            }
+            .premium-video-card {
+              height: 360px !important;
+              border-radius: 22px !important;
+            }
+            .view-all-testimonials-btn {
+              width: 100%;
+              justify-content: center;
+            }
+          }
+          @media (max-width: 390px) {
+            .premium-video-card {
+              height: 300px !important;
+            }
           }
         `}</style>
       </section>
