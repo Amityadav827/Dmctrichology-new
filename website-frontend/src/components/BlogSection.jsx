@@ -1,18 +1,50 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { fetchHomeBlog } from '../services/api';
+import { fetchBlogs, fetchHomeBlog } from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import { formatDate } from '../utils/dateFormatter';
+
+const getBlogTimestamp = (blog = {}) => {
+  const dateValue = blog.blogDate || blog.date || blog.createdAt || blog.updatedAt;
+  const timestamp = new Date(dateValue).getTime();
+  return Number.isNaN(timestamp) ? 0 : timestamp;
+};
+
+const mapLatestBlog = (blog = {}) => ({
+  image: blog.blogImage || blog.image || blog.bannerImage || 'https://via.placeholder.com/600x400',
+  title: blog.title || '',
+  author: blog.author || 'DMC',
+  date: blog.blogDate || blog.date || blog.createdAt || blog.updatedAt,
+  buttonText: 'Explore More',
+  buttonLink: blog.slug ? `/blog/${blog.slug}` : '/blog',
+});
 
 export default function BlogSection() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
-      const res = await fetchHomeBlog();
-      if (res?.success) setData(res.data);
+      const [homeRes, blogsRes] = await Promise.all([
+        fetchHomeBlog(),
+        fetchBlogs({ status: 'Published' }),
+      ]);
+
+      const latestBlogs = Array.isArray(blogsRes?.data)
+        ? blogsRes.data
+            .filter(blog => String(blog.status || 'Published').toLowerCase() === 'published')
+            .sort((a, b) => getBlogTimestamp(b) - getBlogTimestamp(a))
+            .slice(0, 3)
+            .map(mapLatestBlog)
+        : [];
+
+      if (homeRes?.success) {
+        setData({
+          ...homeRes.data,
+          blogs: latestBlogs.length > 0 ? latestBlogs : (homeRes.data?.blogs || []),
+        });
+      }
     };
     loadData();
 
@@ -158,7 +190,7 @@ export default function BlogSection() {
 
           {/* View All Button */}
           <div style={{ textAlign: 'center', marginTop: '60px' }}>
-            <Link href="https://dmctrichology-mkm4.vercel.app/blog" className="view-all-blogs-btn" style={{
+            <Link href="/blog" className="view-all-blogs-btn" style={{
               textDecoration: 'none',
               display: 'inline-flex',
               alignItems: 'center',

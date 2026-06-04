@@ -164,7 +164,7 @@ export default function FaqSection() {
 
           {/* View All Button */}
           <div style={{ textAlign: 'center', marginTop: '60px' }}>
-            <a href="https://dmctrichology-mkm4.vercel.app/service" className="view-all-faq-btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '12px', padding: '10px 10px 10px 28px', borderRadius: '50px', border: '1px solid #E5E5E5', backgroundColor: '#fff', color: '#000', cursor: 'pointer', fontSize: '14px', fontWeight: '600', fontFamily: "'Marcellus', serif" }}>
+            <a href="/faqs" className="view-all-faq-btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '12px', padding: '10px 10px 10px 28px', borderRadius: '50px', border: '1px solid #E5E5E5', backgroundColor: '#fff', color: '#000', cursor: 'pointer', fontSize: '14px', fontWeight: '600', fontFamily: "'Marcellus', serif" }}>
               <EditableText sectionId="faq-section" fieldPath="buttonText" tag="span">
                 {buttonText}
               </EditableText>
