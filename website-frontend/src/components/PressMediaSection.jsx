@@ -61,10 +61,15 @@ export default function PressMediaSection() {
   const allSame = dbAvatars.length > 0 && dbAvatars.every(a => a.image === dbAvatars[0].image);
   const avatars = (dbAvatars.length > 0 && !allSame) ? dbAvatars : generatedAvatars;
 
-  const logos = (data?.mediaLogos || []).length > 0 ? data.mediaLogos.map(l => l.image) : [
-    "https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/rervxi6jq1fl20lu2fps.png",
-    "https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/pvyogcawczl9mv7wb82v.png",
-    "https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/tixdm9gnhknxtwvlj3xd.png"
+  const dbLogos = Array.isArray(data?.mediaLogos)
+    ? data.mediaLogos
+        .filter((logo) => logo?.image && logo.isVisible !== false)
+        .sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
+    : [];
+  const logos = dbLogos.length > 0 ? dbLogos : [
+    { image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/rervxi6jq1fl20lu2fps.png", title: "Press logo", link: "#" },
+    { image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/pvyogcawczl9mv7wb82v.png", title: "Press logo", link: "#" },
+    { image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/tixdm9gnhknxtwvlj3xd.png", title: "Press logo", link: "#" }
   ];
 
   // Duplicate logos for a smoother infinite effect
@@ -202,9 +207,15 @@ export default function PressMediaSection() {
                     }}
                     style={{ width: '100%' }}
                   >
-                    {sliderLogos.map((url, i) => (
+                    {sliderLogos.map((logo, i) => (
                       <SwiperSlide key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <img src={url} alt="media logo" style={{ maxHeight: '55px', maxWidth: '100%', objectFit: 'contain' }} />
+                        {logo.link && logo.link !== '#' ? (
+                          <a href={logo.link} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+                            <img src={logo.image} alt={logo.title || 'media logo'} style={{ maxHeight: '55px', maxWidth: '100%', objectFit: 'contain' }} />
+                          </a>
+                        ) : (
+                          <img src={logo.image} alt={logo.title || 'media logo'} style={{ maxHeight: '55px', maxWidth: '100%', objectFit: 'contain' }} />
+                        )}
                       </SwiperSlide>
                     ))}
                   </Swiper>

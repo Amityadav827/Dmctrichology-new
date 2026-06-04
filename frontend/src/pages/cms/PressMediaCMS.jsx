@@ -66,6 +66,15 @@ const DEFAULT_CARD = {
   order: 0,
 };
 
+const DEFAULT_LOGO = {
+  id: '',
+  title: '',
+  image: '',
+  link: '#',
+  isVisible: true,
+  order: 0,
+};
+
 // ─── Main component ────────────────────────────────────────────────────────────
 export default function PressMediaCMS() {
   const [data, setData] = useState(null);
@@ -73,6 +82,7 @@ export default function PressMediaCMS() {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('hero');
   const [expandedCard, setExpandedCard] = useState(null);
+  const [expandedLogo, setExpandedLogo] = useState(null);
 
   // ── Fetch ────────────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -86,6 +96,7 @@ export default function PressMediaCMS() {
           if (!d.hero) d.hero = { ...DEFAULT_HERO };
           // Ensure mediaCards exists
           if (!d.mediaCards) d.mediaCards = [];
+          if (!d.mediaLogos) d.mediaLogos = [];
           setData(d);
         }
       } catch {
@@ -163,6 +174,51 @@ export default function PressMediaCMS() {
     setData(prev => ({ ...prev, mediaCards: cards }));
   };
 
+  const addLogo = () => {
+    const logos = data.mediaLogos || [];
+    const newLogo = {
+      ...DEFAULT_LOGO,
+      id: Date.now().toString(),
+      title: `Press Logo ${logos.length + 1}`,
+      order: logos.length,
+    };
+    setData(prev => ({
+      ...prev,
+      mediaLogos: [...(prev.mediaLogos || []), newLogo],
+    }));
+    setExpandedLogo(logos.length);
+  };
+
+  const updateLogo = (idx, field, value) => {
+    setData(prev => {
+      const logos = [...(prev.mediaLogos || [])];
+      logos[idx] = { ...logos[idx], [field]: value };
+      return { ...prev, mediaLogos: logos };
+    });
+  };
+
+  const removeLogo = (idx) => {
+    if (!window.confirm('Remove this marquee logo?')) return;
+    setData(prev => ({
+      ...prev,
+      mediaLogos: (prev.mediaLogos || []).filter((_, i) => i !== idx),
+    }));
+    setExpandedLogo(null);
+  };
+
+  const toggleLogoVisibility = (idx) => {
+    updateLogo(idx, 'isVisible', data.mediaLogos[idx].isVisible === false);
+  };
+
+  const moveLogo = (idx, direction) => {
+    const logos = [...(data.mediaLogos || [])];
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= logos.length) return;
+    [logos[idx], logos[swapIdx]] = [logos[swapIdx], logos[idx]];
+    logos.forEach((logo, i) => { logo.order = i; });
+    setData(prev => ({ ...prev, mediaLogos: logos }));
+  };
+
   // ─────────────────────────────────────────────────────────────────────────────
   if (loading) {
     return (
@@ -181,6 +237,7 @@ export default function PressMediaCMS() {
   }
 
   const visibleCount = data.mediaCards.filter(c => c.isVisible).length;
+  const visibleLogoCount = (data.mediaLogos || []).filter(l => l.isVisible !== false).length;
 
   return (
     <div className="p-8 max-w-6xl mx-auto bg-slate-50 min-h-screen">
@@ -198,7 +255,8 @@ export default function PressMediaCMS() {
           </h1>
           <p className="text-sm text-slate-500 italic mt-0.5">
             {visibleCount} visible card{visibleCount !== 1 ? 's' : ''} &nbsp;·&nbsp;
-            {data.mediaCards.length} total
+            {data.mediaCards.length} total &nbsp;Â·&nbsp;
+            {visibleLogoCount} marquee logo{visibleLogoCount !== 1 ? 's' : ''}
           </p>
         </div>
 
@@ -217,6 +275,7 @@ export default function PressMediaCMS() {
         {[
           { id: 'hero',  icon: <Layout size={13} />,  label: 'Hero Banner' },
           { id: 'cards', icon: <Layers size={13} />,  label: `Media Cards (${data.mediaCards.length})` },
+          { id: 'logos', icon: <ImageIcon size={13} />, label: `Homepage Marquee Logos (${(data.mediaLogos || []).length})` },
         ].map(tab => (
           <button
             key={tab.id}
@@ -573,6 +632,193 @@ export default function PressMediaCMS() {
               >
                 {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                 {saving ? 'Saving…' : 'Publish Changes'}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* TAB: HOMEPAGE MARQUEE LOGOS */}
+      {activeTab === 'logos' && (
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <p className="text-sm text-slate-500 italic">
+              These logos appear in the homepage Press &amp; Media marquee above the footer.
+            </p>
+            <button
+              onClick={addLogo}
+              className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg shadow-blue-200"
+            >
+              <Plus size={15} /> Add Marquee Logo
+            </button>
+          </div>
+
+          {(data.mediaLogos || []).length === 0 && (
+            <div className="bg-white rounded-[32px] border-2 border-dashed border-slate-200 p-20 text-center">
+              <ImageIcon size={40} className="mx-auto text-slate-300 mb-4" />
+              <p className="text-slate-400 font-medium">No marquee logos yet.</p>
+              <p className="text-slate-400 text-sm">Click "Add Marquee Logo" to add homepage press logos.</p>
+            </div>
+          )}
+
+          {(data.mediaLogos || []).map((logo, idx) => (
+            <div
+              key={logo.id || idx}
+              className={`bg-white rounded-[28px] border border-slate-200 shadow-sm overflow-hidden transition-all ${
+                logo.isVisible === false ? 'opacity-60' : ''
+              }`}
+            >
+              <div className="flex items-center gap-4 px-8 py-5 border-b border-slate-100">
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  <button
+                    onClick={() => moveLogo(idx, 'up')}
+                    disabled={idx === 0}
+                    title="Move up"
+                    className="p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ArrowUp size={14} className="text-slate-500" />
+                  </button>
+                  <button
+                    onClick={() => moveLogo(idx, 'down')}
+                    disabled={idx === (data.mediaLogos || []).length - 1}
+                    title="Move down"
+                    className="p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ArrowDown size={14} className="text-slate-500" />
+                  </button>
+                </div>
+
+                <div className="w-24 h-12 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-100 flex items-center justify-center">
+                  {logo.image ? (
+                    <img src={logo.image} alt="" className="w-full h-full object-contain p-2 bg-white" />
+                  ) : (
+                    <ImageIcon size={16} className="text-slate-400" />
+                  )}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-black text-slate-800 truncate">
+                    {logo.title || `Marquee Logo #${idx + 1}`}
+                  </p>
+                  <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wide">
+                    Logo {idx + 1} &nbsp;Â·&nbsp; {logo.isVisible !== false ? 'Visible' : 'Hidden'}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <button
+                    onClick={() => toggleLogoVisibility(idx)}
+                    title={logo.isVisible !== false ? 'Hide logo' : 'Show logo'}
+                    className={`p-2 rounded-xl border transition-all ${
+                      logo.isVisible !== false
+                        ? 'border-green-200 bg-green-50 text-green-600 hover:bg-green-100'
+                        : 'border-slate-200 bg-slate-50 text-slate-400 hover:bg-slate-100'
+                    }`}
+                  >
+                    {logo.isVisible !== false ? <Eye size={15} /> : <EyeOff size={15} />}
+                  </button>
+                  <button
+                    onClick={() => removeLogo(idx)}
+                    title="Delete logo"
+                    className="p-2 rounded-xl border border-red-100 bg-red-50 text-red-500 hover:bg-red-100 transition-all"
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                  <button
+                    onClick={() => setExpandedLogo(expandedLogo === idx ? null : idx)}
+                    className="px-4 py-2 rounded-xl border border-slate-200 text-xs font-black text-slate-600 hover:bg-slate-50 uppercase tracking-widest transition-all"
+                  >
+                    {expandedLogo === idx ? 'Collapse' : 'Edit'}
+                  </button>
+                </div>
+              </div>
+
+              {expandedLogo === idx && (
+                <div className="px-8 py-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="md:col-span-2">
+                    <Field label="Logo Image URL">
+                      <div className="flex gap-4">
+                        <input
+                          type="text"
+                          value={logo.image || ''}
+                          onChange={e => updateLogo(idx, 'image', e.target.value)}
+                          placeholder="https://example.com/logo.png"
+                          className={inputCls}
+                        />
+                        <ImgPreview src={logo.image} className="h-14 w-28 object-contain bg-white" />
+                      </div>
+                    </Field>
+                  </div>
+
+                  <Field label="Logo Title / Alt Text">
+                    <input
+                      type="text"
+                      value={logo.title || ''}
+                      onChange={e => updateLogo(idx, 'title', e.target.value)}
+                      placeholder="Publication name"
+                      className={inputCls}
+                    />
+                  </Field>
+
+                  <Field label="Optional Link" hint='Use "#" if the logo should not link anywhere.'>
+                    <div className="flex gap-3 items-center">
+                      <input
+                        type="url"
+                        value={logo.link || '#'}
+                        onChange={e => updateLogo(idx, 'link', e.target.value)}
+                        placeholder="https://publication.com"
+                        className={inputCls}
+                      />
+                      {logo.link && logo.link !== '#' && (
+                        <a
+                          href={logo.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-shrink-0 p-3 rounded-xl border border-slate-200 text-blue-600 hover:bg-blue-50 transition-all"
+                          title="Open link"
+                        >
+                          <ExternalLink size={16} />
+                        </a>
+                      )}
+                    </div>
+                  </Field>
+
+                  <Field label="Visibility">
+                    <button
+                      onClick={() => toggleLogoVisibility(idx)}
+                      className={`flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all border ${
+                        logo.isVisible !== false
+                          ? 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100'
+                          : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'
+                      }`}
+                    >
+                      {logo.isVisible !== false ? <Eye size={14} /> : <EyeOff size={14} />}
+                      {logo.isVisible !== false ? 'Visible on Homepage' : 'Hidden from Homepage'}
+                    </button>
+                  </Field>
+
+                  <Field label="Sort Order (use â†‘â†“ buttons above to reorder)">
+                    <input
+                      type="number"
+                      value={logo.order ?? idx}
+                      onChange={e => updateLogo(idx, 'order', parseInt(e.target.value, 10))}
+                      className={inputCls}
+                    />
+                  </Field>
+                </div>
+              )}
+            </div>
+          ))}
+
+          {(data.mediaLogos || []).length > 0 && (
+            <div className="flex justify-end pt-4">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="flex items-center gap-2 bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 disabled:opacity-50 transition-all shadow-xl shadow-slate-200"
+              >
+                {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                {saving ? 'Savingâ€¦' : 'Publish Changes'}
               </button>
             </div>
           )}
