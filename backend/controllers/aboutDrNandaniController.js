@@ -12,6 +12,12 @@ const fallbackData = {
     doctorName: "Dr. Nandani Dadu",
     degreeText: "MD (Dermatology)",
     descriptionParagraph: "Dr. Nandini Dadu, MBBS, a Board-Certified Trichologist, has been studying hair and scalp treatments for over ten years. Throughout her career, she has successfully treated severe cases with excellent outcomes and has attained the title of the best hair transplant surgeon in Delhi.",
+    pageEyebrow: "About DMC Trichology",
+    statsCards: [
+      { label: "10+ Years Experience" },
+      { label: "Thousands of Successful Cases" },
+      { label: "Board Certified Specialist" }
+    ],
     namePlaceholder: "Name*",
     phonePlaceholder: "Mobile Number*",
     emailPlaceholder: "E-Mail Address*",
@@ -21,6 +27,20 @@ const fallbackData = {
     submitButtonText: "Schedule Your Visit",
     backgroundColor: "#3b5998",
     overlayOpacity: 0.4
+  },
+  specialist: {
+    heading: "Best Hair Specialist in Delhi",
+    description1: "Dr. Nandini Dadu is a well-known former consultant at ARTEMIS HOSPITAL in Gurgaon. Over the years, she has provided insights to several dignitaries and celebrities in New Delhi. She is the best hair specialist in Delhi. She works in close collaboration with doctors at Hair Care & Transplant Surgeons and is always looking for new, cutting-edge products for hair and scalp care treatments.",
+    description2: "Being a specialist in the cosmetological and trichological sciences combined, Dr. Nandini is dedicated to thorough diagnosis, effective treatment processes, and the best DMC Golden Touch Techniques for generating amazing outcomes at the highest level of client satisfaction. So, to get the long-lasting effects opt to get treated by the best hair specialist in Delhi only at DMC Trichology.",
+    highlightedText: "She employs cutting-edge knowledge in Hair & Scalp Treatments with:",
+    bullets: ["MESOGROW", "ADVANCED HGP", "ADVANCED HGP 2.0", "RRT (ROOT RESTORE THERAPY)", "FUE TECHNIQUE (Follicular Hair Transplant)"],
+    featureCards: [
+      { title: "Advanced Hair Restoration" },
+      { title: "Hair Transplant Expertise" },
+      { title: "Scalp & Hair Diagnosis" },
+      { title: "Personalized Treatment Plans" }
+    ],
+    sectionBgColor: "#FFFFFF"
   }
 };
 

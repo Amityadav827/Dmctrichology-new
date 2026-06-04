@@ -6,24 +6,41 @@ import EditableText from './Editable/EditableText';
 
 const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
 
-export default function AboutDrNandaniHero({ data = {} }) {
+const defaultStats = [
+  { label: "10+ Years Experience" },
+  { label: "Thousands of Successful Cases" },
+  { label: "Board Certified Specialist" }
+];
+
+export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, formSettings = {} }) {
   const {
     backgroundImage = "",
     doctorImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
+    pageEyebrow = "About DMC Trichology",
     mainHeading = "BEST HAIR TRANSPLANT SURGEON IN DELHI",
     doctorName = "Dr. Nandani Dadu",
     degreeText = "MD (Dermatology)",
     descriptionParagraph = "Dr. Nandini Dadu, MBBS, a Board-Certified Trichologist, has been studying hair and scalp treatments for over ten years. Throughout her career, she has successfully treated severe cases with excellent outcomes and has attained the title of the best hair transplant surgeon in Delhi.",
+    statsCards = defaultStats,
     namePlaceholder = "Name*",
     phonePlaceholder = "Mobile Number*",
     emailPlaceholder = "E-Mail Address*",
     datePlaceholder = "Select Preferred Date*",
     messagePlaceholder = "Enter Your Message Here",
     captchaPlaceholder = "Code*",
-    submitButtonText = "Schedule Your Visit",
-    backgroundColor = "#3b5998",
-    overlayOpacity = 0.4
+    submitButtonText = "Schedule Your Visit"
   } = data;
+
+  const {
+    parentLabel = "Home",
+    parentUrl = "/",
+    currentPageText = "About Dr. Nandani Dadu"
+  } = breadcrumbData;
+
+  const formTitle = formSettings?.title || "Request Private Consultation";
+  const formSubtitle = formSettings?.subtitle || "Reserve your bespoke scalp assessment and consultation session.";
+  const successMessage = formSettings?.successMessage || "Your consultation request has been successfully submitted. Our concierge team will reach out to you shortly.";
+  const resolvedStats = Array.isArray(statsCards) && statsCards.length > 0 ? statsCards : defaultStats;
 
   const [formData, setFormData] = useState({
     name: '',
@@ -33,20 +50,16 @@ export default function AboutDrNandaniHero({ data = {} }) {
     message: '',
     captchaInput: ''
   });
-
   const [captcha, setCaptcha] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  // Set initial captcha on mount
   useEffect(() => {
     setCaptcha(createCaptcha());
   }, []);
 
-  const generateCaptcha = () => {
-    setCaptcha(createCaptcha());
-  };
+  const generateCaptcha = () => setCaptcha(createCaptcha());
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -61,32 +74,22 @@ export default function AboutDrNandaniHero({ data = {} }) {
     setError('');
     setSuccess(false);
 
-    // Form validations
-    if (!formData.name.trim()) {
-      setError('Please enter your name.');
-      return;
-    }
+    if (!formData.name.trim()) return setError('Please enter your name.');
     if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      setError('Please enter a valid email address.');
-      return;
+      return setError('Please enter a valid email address.');
     }
+
     const trimmedMobile = formData.mobile.replace(/\s+/g, '');
     if (!trimmedMobile || !/^\d{10}$/.test(trimmedMobile)) {
-      setError('Please enter a valid 10-digit mobile number.');
-      return;
+      return setError('Please enter a valid 10-digit mobile number.');
     }
-    if (!formData.appointmentDate) {
-      setError('Please select a preferred date.');
-      return;
-    }
+    if (!formData.appointmentDate) return setError('Please select a preferred date.');
     if (!formData.captchaInput.trim() || formData.captchaInput.trim() !== captcha) {
-      setError('Invalid verification code.');
-      return;
+      return setError('Invalid verification code.');
     }
 
     setLoading(true);
     try {
-      // Post to isolated leads endpoint
       await api.post('/about-dr-nandani/lead', {
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
@@ -113,479 +116,533 @@ export default function AboutDrNandaniHero({ data = {} }) {
     }
   };
 
-  const bgStyle = backgroundImage ? {
-    backgroundImage: `url(${backgroundImage})`
-  } : {};
+  const heroStyle = backgroundImage
+    ? { '--nandani-hero-bg': `url(${backgroundImage})` }
+    : {};
 
   return (
-    <EditableSection sectionId="about-nandani-hero" label="Doctor Hero Section">
-      {/* Scope CSS to prevent global layout interference */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        .dr-nandani-hero-wrapper {
+    <>
+      <EditableSection sectionId="about-nandani-hero" label="Dr Nandani Page Hero">
+        <section className="dr-nandani-page-hero" style={heroStyle}>
+          <div className="dr-nandani-hero-shape shape-one" />
+          <div className="dr-nandani-hero-shape shape-two" />
+          <div className="dr-nandani-page-hero-inner">
+            <div className="dr-nandani-hero-left-label">
+              <span className="dr-nandani-line-dot" />
+              <EditableText sectionId="about-nandani-hero" fieldPath="pageEyebrow" tag="span">
+                {pageEyebrow}
+              </EditableText>
+            </div>
+
+            <div className="dr-nandani-hero-title-block">
+              <h1>
+                <EditableText sectionId="about-nandani-hero" fieldPath="doctorName" tag="span">
+                  {doctorName}
+                </EditableText>
+              </h1>
+              <p>
+                <EditableText sectionId="about-nandani-hero" fieldPath="descriptionParagraph" tag="span">
+                  {descriptionParagraph}
+                </EditableText>
+              </p>
+              <div className="dr-nandani-hero-breadcrumb">
+                <a href={parentUrl}>
+                  <EditableText sectionId="about-nandani-breadcrumb" fieldPath="parentLabel" tag="span">
+                    {parentLabel}
+                  </EditableText>
+                </a>
+                <span>/</span>
+                <span>
+                  <EditableText sectionId="about-nandani-breadcrumb" fieldPath="currentPageText" tag="span">
+                    {currentPageText}
+                  </EditableText>
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </EditableSection>
+
+      <EditableSection sectionId="about-nandani-hero" label="Dr Nandani Intro And Lead Form">
+        <section className="dr-nandani-intro-form-section">
+          <div className="dr-nandani-intro-grid">
+            <div className="dr-nandani-image-column">
+              <div className="dr-nandani-doctor-image-card">
+                <img src={doctorImage} alt={`${doctorName} portrait`} />
+              </div>
+              <div className="dr-nandani-stats-grid">
+                {resolvedStats.map((stat, index) => (
+                  <div className="dr-nandani-stat-card" key={`${stat.label}-${index}`}>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <p>
+                      <EditableText sectionId="about-nandani-hero" fieldPath={`statsCards.${index}.label`} tag="span">
+                        {stat.label}
+                      </EditableText>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="dr-nandani-info-form-column">
+              <div className="dr-nandani-doctor-copy">
+                <span className="dr-nandani-eyebrow">
+                  <EditableText sectionId="about-nandani-hero" fieldPath="mainHeading" tag="span">
+                    {mainHeading}
+                  </EditableText>
+                </span>
+                <h2>
+                  <EditableText sectionId="about-nandani-hero" fieldPath="doctorName" tag="span">
+                    {doctorName}
+                  </EditableText>
+                </h2>
+                <p className="dr-nandani-degree">
+                  <EditableText sectionId="about-nandani-hero" fieldPath="degreeText" tag="span">
+                    {degreeText}
+                  </EditableText>
+                </p>
+                <p className="dr-nandani-description">
+                  <EditableText sectionId="about-nandani-hero" fieldPath="descriptionParagraph" tag="span">
+                    {descriptionParagraph}
+                  </EditableText>
+                </p>
+              </div>
+
+              <form className="dr-nandani-lead-card" onSubmit={handleSubmit}>
+                <div className="dr-nandani-form-heading">
+                  <h3>{formTitle}</h3>
+                  <p>{formSubtitle}</p>
+                </div>
+
+                {success && <div className="dr-nandani-alert success">{successMessage}</div>}
+                {error && <div className="dr-nandani-alert error">{error}</div>}
+
+                <div className="dr-nandani-form-grid">
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder={namePlaceholder} disabled={loading} required />
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder={emailPlaceholder} disabled={loading} required />
+                  <input type="tel" name="mobile" value={formData.mobile} onChange={handleChange} placeholder={phonePlaceholder} disabled={loading} required />
+                  <input type="date" name="appointmentDate" value={formData.appointmentDate} onChange={handleChange} aria-label={datePlaceholder} disabled={loading} required />
+                  <div className="dr-nandani-captcha-row">
+                    <button type="button" onClick={generateCaptcha} title="Click to regenerate captcha">{captcha}</button>
+                    <input type="text" name="captchaInput" value={formData.captchaInput} onChange={handleChange} placeholder={captchaPlaceholder} disabled={loading} required />
+                  </div>
+                  <textarea name="message" value={formData.message} onChange={handleChange} placeholder={messagePlaceholder} disabled={loading} />
+                </div>
+
+                <button className="dr-nandani-submit-btn" type="submit" disabled={loading}>
+                  <EditableText sectionId="about-nandani-hero" fieldPath="submitButtonText" tag="span">
+                    {loading ? "Scheduling..." : submitButtonText}
+                  </EditableText>
+                  <span aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24">
+                      <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="#3B5998" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+      </EditableSection>
+
+      <style jsx>{`
+        .dr-nandani-page-hero {
           position: relative;
-          padding: 140px 5% 90px 5%;
-          background-color: ${backgroundColor};
+          overflow: hidden;
+          padding: 156px 5% 92px;
+          background:
+            linear-gradient(135deg, rgba(237, 238, 248, 0.92), rgba(255, 255, 255, 0.96)),
+            var(--nandani-hero-bg, none);
           background-size: cover;
           background-position: center;
-          color: #ffffff;
-          overflow: hidden;
-          width: 100%;
         }
-
-        .dr-nandani-hero-overlay-curtain {
+        .dr-nandani-page-hero::before {
+          content: "";
           position: absolute;
           inset: 0;
-          background-color: #000000;
-          opacity: ${overlayOpacity};
-          z-index: 1;
+          background:
+            radial-gradient(circle at 18% 18%, rgba(59, 89, 152, 0.14), transparent 28%),
+            radial-gradient(circle at 86% 20%, rgba(59, 89, 152, 0.10), transparent 28%);
           pointer-events: none;
         }
-
-        .dr-nandani-hero-inner-grid {
-          display: grid;
-          grid-template-columns: 0.9fr 1.1fr;
-          gap: 48px;
-          align-items: center;
-          max-width: 1350px;
-          margin: 0 auto;
+        .dr-nandani-hero-shape {
+          position: absolute;
+          border-radius: 999px;
+          background: rgba(59, 89, 152, 0.08);
+          filter: blur(2px);
+        }
+        .shape-one {
+          width: 280px;
+          height: 280px;
+          left: -80px;
+          bottom: -120px;
+        }
+        .shape-two {
+          width: 360px;
+          height: 360px;
+          right: -130px;
+          top: -120px;
+        }
+        .dr-nandani-page-hero-inner {
           position: relative;
-          z-index: 2;
-        }
-
-        @media (max-width: 1024px) {
-          .dr-nandani-hero-wrapper {
-            padding: 150px 5% 60px 5% !important;
-          }
-          .dr-nandani-hero-inner-grid {
-            grid-template-columns: 1fr;
-            gap: 36px;
-          }
-          .doctor-portrait-bordered-holder {
-            max-width: 380px !important;
-          }
-        }
-
-        /* Portrait Left Styling */
-        .doctor-portrait-frame-box {
-          display: flex;
-          justify-content: center;
+          z-index: 1;
+          max-width: 1320px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: minmax(220px, 0.34fr) minmax(0, 0.66fr);
+          gap: 42px;
           align-items: center;
-          width: 100%;
         }
-
-        .doctor-portrait-bordered-holder {
-          border: 6px solid #ffffff;
-          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.28);
-          background-color: #ffffff;
-          width: 100%;
-          max-width: 460px;
-          aspect-ratio: 4/4.5;
+        .dr-nandani-hero-left-label,
+        .dr-nandani-eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          font-family: 'Lato', sans-serif;
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: 2.4px;
+          text-transform: uppercase;
+          color: #3B5998;
+        }
+        .dr-nandani-line-dot {
+          width: 52px;
+          height: 1px;
+          background: #3B5998;
+          position: relative;
+          display: inline-block;
+        }
+        .dr-nandani-line-dot::after {
+          content: "";
+          position: absolute;
+          right: -4px;
+          top: -3px;
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #3B5998;
+        }
+        .dr-nandani-hero-title-block {
+          text-align: center;
+        }
+        .dr-nandani-hero-title-block h1 {
+          font-family: 'Marcellus', serif;
+          font-size: clamp(42px, 5.2vw, 76px);
+          line-height: 1;
+          font-weight: 400;
+          color: #111111;
+          margin: 0 0 20px;
+        }
+        .dr-nandani-hero-title-block p {
+          max-width: 760px;
+          margin: 0 auto 22px;
+          font-family: 'Lato', sans-serif;
+          font-size: 15px;
+          line-height: 1.8;
+          color: #4b5563;
+        }
+        .dr-nandani-hero-breadcrumb {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 18px;
+          border: 1px solid rgba(59, 89, 152, 0.16);
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.74);
+          box-shadow: 0 12px 32px rgba(59, 89, 152, 0.08);
+          font-family: 'Lato', sans-serif;
+          font-size: 12px;
+        }
+        .dr-nandani-hero-breadcrumb a {
+          color: #3B5998;
+          text-decoration: none;
+          font-weight: 800;
+        }
+        .dr-nandani-hero-breadcrumb span {
+          color: #111111;
+        }
+        .dr-nandani-intro-form-section {
+          background: #ffffff;
+          padding: 90px 5%;
+        }
+        .dr-nandani-intro-grid {
+          max-width: 1320px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: minmax(0, 1.2fr) minmax(390px, 0.8fr);
+          gap: 56px;
+          align-items: start;
+        }
+        .dr-nandani-image-column {
+          position: relative;
+        }
+        .dr-nandani-doctor-image-card {
+          background: #eef2fb;
+          border-radius: 34px;
           overflow: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          border: 1px solid rgba(59, 89, 152, 0.12);
+          box-shadow: 0 28px 70px rgba(15, 35, 79, 0.13);
+          aspect-ratio: 1.05 / 0.9;
         }
-
-        .doctor-portrait-bordered-holder img {
+        .dr-nandani-doctor-image-card img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           display: block;
         }
-
-        /* Editorial Info Right Styling */
-        .doctor-editorial-content-box {
+        .dr-nandani-stats-grid {
+          width: calc(100% - 56px);
+          margin: -38px auto 0;
+          position: relative;
+          z-index: 2;
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 14px;
+        }
+        .dr-nandani-stat-card {
+          min-height: 102px;
+          padding: 18px;
+          border-radius: 22px;
+          background: rgba(255, 255, 255, 0.92);
+          border: 1px solid rgba(59, 89, 152, 0.12);
+          box-shadow: 0 20px 44px rgba(15, 35, 79, 0.11);
+          backdrop-filter: blur(14px);
+        }
+        .dr-nandani-stat-card span {
+          display: block;
+          color: #3B5998;
+          font-family: 'Lato', sans-serif;
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 1.2px;
+          margin-bottom: 8px;
+        }
+        .dr-nandani-stat-card p {
+          margin: 0;
+          font-family: 'Marcellus', serif;
+          font-size: 18px;
+          line-height: 1.22;
+          color: #111111;
+        }
+        .dr-nandani-info-form-column {
           display: flex;
           flex-direction: column;
-          align-items: flex-start;
-          width: 100%;
+          gap: 28px;
         }
-
-        @media (max-width: 1024px) {
-          .doctor-editorial-content-box {
-            align-items: center;
-            text-align: center;
-          }
+        .dr-nandani-doctor-copy h2 {
+          font-family: 'Marcellus', serif;
+          font-size: clamp(34px, 3.4vw, 52px);
+          line-height: 1.05;
+          font-weight: 400;
+          color: #111111;
+          margin: 18px 0 10px;
         }
-
-        .doctor-editorial-eyebrow {
-          font-family: 'Marcellus', serif !important;
-          font-size: 14px !important;
-          font-weight: 700 !important;
-          letter-spacing: 2px !important;
-          text-transform: uppercase !important;
-          color: #ffffff !important;
-          margin-bottom: 12px;
-        }
-
-        .doctor-editorial-name {
-          font-family: 'Marcellus', serif !important;
-          font-size: 40px !important;
-          font-weight: 400 !important;
-          color: #ffffff !important;
-          margin-bottom: 12px;
-          line-height: 1.2 !important;
-          text-transform: uppercase;
-        }
-
-        .doctor-editorial-degree {
-          display: inline-block;
-          padding: 6px 14px;
-          background-color: #ffffff;
-          color: #000000;
-          border-radius: 4px;
+        .dr-nandani-degree {
+          display: inline-flex;
+          margin: 0 0 18px;
+          padding: 7px 14px;
+          border-radius: 999px;
+          background: #eef2fb;
+          color: #111111;
+          font-family: 'Lato', sans-serif;
           font-size: 12px;
-          font-weight: 700;
-          text-transform: uppercase;
+          font-weight: 900;
           letter-spacing: 1px;
-          font-family: 'Lato', sans-serif !important;
-          margin-bottom: 24px;
-        }
-
-        .doctor-editorial-desc {
-          font-family: 'Marcellus', serif !important;
-          font-size: 14.5px !important;
-          line-height: 1.6 !important;
-          color: #f3f4f6 !important;
-          margin-bottom: 32px;
-          text-align: justify;
-        }
-
-        @media (max-width: 1024px) {
-          .doctor-editorial-desc {
-            text-align: center;
-          }
-        }
-
-        /* Consultation Paper Form Styling */
-        .doctor-paper-form-wrapper {
-          background-color: #ffffff;
-          border-radius: 16px;
-          padding: 28px;
-          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
-          color: #333333;
-          width: 100%;
-          text-align: left;
-        }
-
-        .doctor-paper-form-wrapper h3 {
-          font-family: 'Marcellus', serif !important;
-          font-size: 20px !important;
-          color: #3B5998 !important;
-          margin-bottom: 20px !important;
           text-transform: uppercase;
-          text-align: center;
-          font-weight: 500;
         }
-
-        .doctor-form-grid-two-col {
+        .dr-nandani-description {
+          font-family: 'Lato', sans-serif;
+          font-size: 15px;
+          line-height: 1.8;
+          color: #333333;
+          margin: 0;
+        }
+        .dr-nandani-lead-card {
+          padding: 30px;
+          border-radius: 30px;
+          background: linear-gradient(145deg, rgba(237, 238, 248, 0.92), rgba(255, 255, 255, 0.92));
+          border: 1px solid rgba(59, 89, 152, 0.13);
+          box-shadow: 0 26px 70px rgba(15, 35, 79, 0.13);
+        }
+        .dr-nandani-form-heading h3 {
+          font-family: 'Marcellus', serif;
+          font-size: 26px;
+          font-weight: 400;
+          color: #111111;
+          margin: 0 0 8px;
+        }
+        .dr-nandani-form-heading p {
+          font-family: 'Lato', sans-serif;
+          font-size: 13px;
+          line-height: 1.5;
+          color: #586174;
+          margin: 0 0 20px;
+        }
+        .dr-nandani-form-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 16px;
-          margin-bottom: 16px;
+          gap: 14px;
         }
-
-        @media (max-width: 640px) {
-          .doctor-form-grid-two-col {
-            grid-template-columns: 1fr;
-            gap: 12px;
-          }
-        }
-
-        .doctor-input-classic-field {
+        .dr-nandani-form-grid input,
+        .dr-nandani-form-grid textarea {
           width: 100%;
-          padding: 12px 20px;
-          border: 1px solid #B8B8B8;
-          border-radius: 30px;
-          font-size: 13.5px;
-          font-family: 'Marcellus', serif !important;
+          min-height: 50px;
+          border: 1px solid rgba(59, 89, 152, 0.14);
+          border-radius: 16px;
+          background: rgba(255, 255, 255, 0.86);
+          padding: 13px 16px;
           outline: none;
-          background-color: #ffffff;
-          transition: all 0.25s ease;
-          height: 46px;
-          color: #333333;
+          color: #111111;
+          font-family: 'Lato', sans-serif;
+          font-size: 13px;
+          transition: all .25s ease;
         }
-
-        .doctor-input-classic-field:focus {
+        .dr-nandani-form-grid input:focus,
+        .dr-nandani-form-grid textarea:focus {
           border-color: #3B5998;
-          box-shadow: 0 0 0 2px rgba(59, 89, 152, 0.15);
+          box-shadow: 0 0 0 4px rgba(59, 89, 152, 0.08);
+          background: #ffffff;
         }
-
-        .doctor-textarea-classic-field {
-          width: 100%;
-          padding: 14px 20px;
-          border: 1px solid #B8B8B8;
-          border-radius: 20px;
-          font-size: 13.5px;
-          font-family: 'Marcellus', serif !important;
-          outline: none;
-          background-color: #ffffff;
-          transition: all 0.25s ease;
-          min-height: 80px;
+        .dr-nandani-form-grid textarea {
+          grid-column: 1 / -1;
+          min-height: 92px;
           resize: none;
-          color: #333333;
-          grid-column: span 2;
         }
-
-        @media (max-width: 640px) {
-          .doctor-textarea-classic-field {
-            grid-column: span 1;
-          }
-        }
-
-        .doctor-textarea-classic-field:focus {
-          border-color: #3B5998;
-          box-shadow: 0 0 0 2px rgba(59, 89, 152, 0.15);
-        }
-
-        /* Captcha Aligned Grid */
-        .doctor-captcha-grid-row {
+        .dr-nandani-captcha-row {
+          grid-column: 1 / -1;
           display: grid;
-          grid-template-columns: 110px 1fr;
-          gap: 12px;
-          align-items: center;
-          margin-bottom: 16px;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
         }
-
-        .doctor-captcha-display-badge {
-          background-color: #3B5998;
+        .dr-nandani-captcha-row button {
+          min-height: 50px;
+          border: 0;
+          border-radius: 16px;
+          background: #3B5998;
           color: #ffffff;
-          font-weight: 700;
-          font-size: 15px;
-          letter-spacing: 4px;
-          border-radius: 30px;
-          height: 46px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          user-select: none;
-          font-family: 'Marcellus', serif !important;
+          font-family: 'Lato', sans-serif;
+          font-size: 16px;
+          font-weight: 900;
+          letter-spacing: 5px;
           cursor: pointer;
         }
-
-        /* Custom alert notification toasts */
-        .doctor-form-alert-curtain {
-          padding: 10px 16px;
-          border-radius: 12px;
-          font-size: 12.5px;
-          font-family: 'Lato', sans-serif !important;
-          margin-bottom: 16px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          line-height: 1.4;
-        }
-
-        .alert-curtain-success {
-          background-color: #e6fffa;
-          border: 1px solid #b2f5ea;
-          color: #234e52;
-        }
-
-        .alert-curtain-error {
-          background-color: #fff5f5;
-          border: 1px solid #fed7d7;
-          color: #9b2c2c;
-        }
-
-        /* Submit action button */
-        .doctor-form-submit-action-btn {
+        .dr-nandani-submit-btn {
           width: 100%;
-          padding: 12px;
-          border-radius: 30px;
-          background-color: #3B5998;
+          min-height: 56px;
+          margin-top: 18px;
+          border: 0;
+          border-radius: 999px;
+          background: #3B5998;
           color: #ffffff;
-          border: none;
-          font-size: 15px;
-          font-weight: 700;
-          cursor: pointer;
-          font-family: 'Marcellus', serif !important;
+          font-family: 'Marcellus', serif;
+          font-size: 16px;
+          font-weight: 600;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 12px;
-          transition: all 0.25s ease;
-          height: 48px;
+          gap: 14px;
+          cursor: pointer;
+          transition: all .25s ease;
         }
-
-        .doctor-form-submit-action-btn:hover {
-          background-color: #2f477a;
-          box-shadow: 0 6px 20px rgba(59, 89, 152, 0.28);
-        }
-
-        .doctor-form-submit-action-btn:disabled {
-          background-color: #cbd5e0;
-          color: #718096;
-          cursor: not-allowed;
-        }
-
-        .submit-circle-arrow-holder {
-          width: 28px;
-          height: 28px;
+        .dr-nandani-submit-btn span:last-child {
+          width: 34px;
+          height: 34px;
           border-radius: 50%;
-          background-color: #ffffff;
-          display: flex;
+          background: #ffffff;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
           transform: rotate(-45deg);
-          transition: transform 0.3s ease;
+          transition: transform .25s ease;
         }
-
-        .doctor-form-submit-action-btn:hover .submit-circle-arrow-holder {
-          transform: rotate(0deg) translateX(2px);
+        .dr-nandani-submit-btn:hover {
+          background: #314b82;
+          box-shadow: 0 18px 32px rgba(59, 89, 152, 0.24);
         }
-      `}} />
-
-      <section className="dr-nandani-hero-wrapper" style={bgStyle}>
-        <div className="dr-nandani-hero-overlay-curtain" />
-
-        <div className="dr-nandani-hero-inner-grid">
-          {/* LEFT COLUMN: Portrait inside thick white bordered frame */}
-          <div className="doctor-portrait-frame-box">
-            <div className="doctor-portrait-bordered-holder">
-              <img src={doctorImage} alt="Dr. Nandani Dadu Portrait" />
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN: Content & Form */}
-          <div className="doctor-editorial-content-box">
-            <span className="doctor-editorial-eyebrow">
-              <EditableText sectionId="about-nandani-hero" fieldPath="mainHeading" tag="span">
-                {mainHeading}
-              </EditableText>
-            </span>
-
-            <h1 className="doctor-editorial-name">
-              <EditableText sectionId="about-nandani-hero" fieldPath="doctorName" tag="span">
-                {doctorName}
-              </EditableText>
-            </h1>
-
-            <span className="doctor-editorial-degree">
-              <EditableText sectionId="about-nandani-hero" fieldPath="degreeText" tag="span">
-                {degreeText}
-              </EditableText>
-            </span>
-
-            <p className="doctor-editorial-desc">
-              <EditableText sectionId="about-nandani-hero" fieldPath="descriptionParagraph" tag="span">
-                {descriptionParagraph}
-              </EditableText>
-            </p>
-
-            {/* Consultation Form Box */}
-            <div className="doctor-paper-form-wrapper">
-              <h3>Request Consultation</h3>
-
-              {success && (
-                <div className="doctor-form-alert-curtain alert-curtain-success">
-                  <strong>✓ Successfully Submitted! Our team will contact you shortly.</strong>
-                </div>
-              )}
-
-              {error && (
-                <div className="doctor-form-alert-curtain alert-curtain-error">
-                  <strong>⚠️ {error}</strong>
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit}>
-                <div className="doctor-form-grid-two-col">
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder={namePlaceholder}
-                    className="doctor-input-classic-field"
-                    disabled={loading}
-                    required
-                  />
-
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder={emailPlaceholder}
-                    className="doctor-input-classic-field"
-                    disabled={loading}
-                    required
-                  />
-
-                  <input
-                    type="tel"
-                    name="mobile"
-                    value={formData.mobile}
-                    onChange={handleChange}
-                    placeholder={phonePlaceholder}
-                    className="doctor-input-classic-field"
-                    disabled={loading}
-                    required
-                  />
-
-                  <input
-                    type="date"
-                    name="appointmentDate"
-                    value={formData.appointmentDate}
-                    onChange={handleChange}
-                    placeholder={datePlaceholder}
-                    className="doctor-input-classic-field"
-                    disabled={loading}
-                    required
-                  />
-
-                  <div className="doctor-captcha-grid-row">
-                    <div
-                      className="doctor-captcha-display-badge"
-                      onClick={generateCaptcha}
-                      title="Click to regenerate captcha"
-                    >
-                      {captcha}
-                    </div>
-
-                    <input
-                      type="text"
-                      name="captchaInput"
-                      value={formData.captchaInput}
-                      onChange={handleChange}
-                      placeholder={captchaPlaceholder}
-                      className="doctor-input-classic-field"
-                      disabled={loading}
-                      required
-                    />
-                  </div>
-
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder={messagePlaceholder}
-                    className="doctor-textarea-classic-field"
-                    disabled={loading}
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="doctor-form-submit-action-btn"
-                >
-                  <EditableText sectionId="about-nandani-hero" fieldPath="submitButtonText" tag="span">
-                    {loading ? "Scheduling..." : submitButtonText}
-                  </EditableText>
-                  
-                  <div className="submit-circle-arrow-holder">
-                    <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true" style={{ display: 'block' }}>
-                      <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="#3B5998" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </div>
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-    </EditableSection>
+        .dr-nandani-submit-btn:hover span:last-child {
+          transform: rotate(0deg);
+        }
+        .dr-nandani-submit-btn:disabled {
+          opacity: .6;
+          cursor: not-allowed;
+        }
+        .dr-nandani-alert {
+          border-radius: 16px;
+          padding: 12px 14px;
+          font-family: 'Lato', sans-serif;
+          font-size: 13px;
+          line-height: 1.45;
+          margin-bottom: 14px;
+        }
+        .dr-nandani-alert.success {
+          background: #ecfdf5;
+          color: #166534;
+          border: 1px solid #bbf7d0;
+        }
+        .dr-nandani-alert.error {
+          background: #fef2f2;
+          color: #991b1b;
+          border: 1px solid #fecaca;
+        }
+        @media (max-width: 1024px) {
+          .dr-nandani-page-hero {
+            padding: 136px 5% 72px;
+          }
+          .dr-nandani-page-hero-inner,
+          .dr-nandani-intro-grid {
+            grid-template-columns: 1fr;
+          }
+          .dr-nandani-hero-left-label,
+          .dr-nandani-hero-title-block,
+          .dr-nandani-doctor-copy {
+            text-align: center;
+            justify-content: center;
+          }
+          .dr-nandani-intro-grid {
+            gap: 38px;
+          }
+        }
+        @media (max-width: 767px) {
+          .dr-nandani-page-hero {
+            padding: 124px 16px 56px;
+          }
+          .dr-nandani-hero-title-block h1 {
+            font-size: clamp(38px, 12vw, 52px);
+          }
+          .dr-nandani-hero-title-block p {
+            font-size: 14px;
+          }
+          .dr-nandani-intro-form-section {
+            padding: 54px 16px;
+          }
+          .dr-nandani-doctor-image-card {
+            border-radius: 26px;
+            aspect-ratio: 1 / 1.08;
+          }
+          .dr-nandani-stats-grid {
+            width: 100%;
+            margin-top: 16px;
+            grid-template-columns: 1fr;
+          }
+          .dr-nandani-stat-card {
+            min-height: auto;
+          }
+          .dr-nandani-info-form-column {
+            gap: 24px;
+          }
+          .dr-nandani-lead-card {
+            padding: 22px;
+            border-radius: 24px;
+          }
+          .dr-nandani-form-grid,
+          .dr-nandani-captcha-row {
+            grid-template-columns: 1fr;
+          }
+          .dr-nandani-captcha-row {
+            gap: 10px;
+          }
+        }
+      `}</style>
+    </>
   );
 }

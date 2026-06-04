@@ -8,6 +8,15 @@ const AboutDrNandaniSchema = new mongoose.Schema({
     doctorName: { type: String, default: "Dr. Nandani Dadu" },
     degreeText: { type: String, default: "MD (Dermatology)" },
     descriptionParagraph: { type: String, default: "Dr. Nandini Dadu, MBBS, a Board-Certified Trichologist, has been studying hair and scalp treatments for over ten years. Throughout her career, she has successfully treated severe cases with excellent outcomes and has attained the title of the best hair transplant surgeon in Delhi." },
+    pageEyebrow: { type: String, default: "About DMC Trichology" },
+    statsCards: {
+      type: [{ label: { type: String } }],
+      default: [
+        { label: "10+ Years Experience" },
+        { label: "Thousands of Successful Cases" },
+        { label: "Board Certified Specialist" }
+      ]
+    },
     namePlaceholder: { type: String, default: "Name*" },
     phonePlaceholder: { type: String, default: "Mobile Number*" },
     emailPlaceholder: { type: String, default: "E-Mail Address*" },
@@ -63,6 +72,15 @@ const AboutDrNandaniSchema = new mongoose.Schema({
     description2: { type: String, default: "Being a specialist in the cosmetological and trichological sciences combined, Dr. Nandini is dedicated to thorough diagnosis, effective treatment processes, and the best DMC Golden Touch Techniques for generating amazing outcomes at the highest level of client satisfaction. So, to get the long-lasting effects opt to get treated by the best hair specialist in Delhi only at DMC Trichology." },
     highlightedText: { type: String, default: "She employs cutting-edge knowledge in Hair & Scalp Treatments with:" },
     bullets: { type: [String], default: ["MESOGROW", "ADVANCED HGP", "ADVANCED HGP 2.0", "RRT (ROOT RESTORE THERAPY)", "FUE TECHNIQUE (Follicular Hair Transplant)"] },
+    featureCards: {
+      type: [{ title: { type: String } }],
+      default: [
+        { title: "Advanced Hair Restoration" },
+        { title: "Hair Transplant Expertise" },
+        { title: "Scalp & Hair Diagnosis" },
+        { title: "Personalized Treatment Plans" }
+      ]
+    },
     sectionBgColor: { type: String, default: "#FFFFFF" },
     cardBgColor: { type: String, default: "#3b5998" }
   },

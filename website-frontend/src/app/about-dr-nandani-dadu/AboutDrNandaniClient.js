@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useBuilder } from '../../context/BuilderContext';
 import AboutDrNandaniHero from '../../components/AboutDrNandaniHero';
-import AboutDrNandaniBreadcrumb from '../../components/AboutDrNandaniBreadcrumb';
 import AboutDrNandaniSpecialist from '../../components/AboutDrNandaniSpecialist';
 import AboutDrNandaniTimeline from '../../components/AboutDrNandaniTimeline';
 import AboutDrNandaniEducationExperience from '../../components/AboutDrNandaniEducationExperience';
@@ -165,8 +164,11 @@ export default function AboutDrNandaniClient({ initialData }) {
 
   return (
     <main style={{ minHeight: '100vh', backgroundColor: pageData.hero?.backgroundColor || '#3b5998' }}>
-      <AboutDrNandaniHero data={pageData.hero || {}} />
-      <AboutDrNandaniBreadcrumb data={pageData.breadcrumb || {}} />
+      <AboutDrNandaniHero
+        data={pageData.hero || {}}
+        breadcrumbData={pageData.breadcrumb || {}}
+        formSettings={pageData.formSettings || {}}
+      />
       <AboutDrNandaniSpecialist data={pageData.specialist || {}} />
       <AboutDrNandaniTimeline data={pageData.timeline || {}} />
       <AboutDrNandaniEducationExperience data={pageData.educationExperience || {}} />

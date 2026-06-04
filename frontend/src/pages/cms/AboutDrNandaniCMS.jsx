@@ -32,7 +32,31 @@ export default function AboutDrNandaniCMS() {
     try {
       const { data: res } = await axios.get("/about-dr-nandani");
       if (res.success && res.data) {
-        setData(res.data);
+        setData({
+          ...res.data,
+          hero: {
+            ...(res.data.hero || {}),
+            pageEyebrow: res.data.hero?.pageEyebrow || "About DMC Trichology",
+            statsCards: (res.data.hero?.statsCards || []).length > 0
+              ? res.data.hero.statsCards
+              : [
+                  { label: "10+ Years Experience" },
+                  { label: "Thousands of Successful Cases" },
+                  { label: "Board Certified Specialist" }
+                ]
+          },
+          specialist: {
+            ...(res.data.specialist || {}),
+            featureCards: (res.data.specialist?.featureCards || []).length > 0
+              ? res.data.specialist.featureCards
+              : [
+                  { title: "Advanced Hair Restoration" },
+                  { title: "Hair Transplant Expertise" },
+                  { title: "Scalp & Hair Diagnosis" },
+                  { title: "Personalized Treatment Plans" }
+                ]
+          }
+        });
       }
     } catch (error) {
       toast.error("Failed to load page settings");
@@ -202,6 +226,15 @@ export default function AboutDrNandaniCMS() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Page Hero Eyebrow</label>
+                  <input
+                    type="text"
+                    value={data.hero?.pageEyebrow || ""}
+                    onChange={e => updateSectionField("hero", "pageEyebrow", e.target.value)}
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+                <div>
                   <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Eyebrow Heading</label>
                   <input 
                     type="text" 
@@ -298,6 +331,45 @@ export default function AboutDrNandaniCMS() {
                     onChange={e => updateSectionField("hero", "overlayOpacity", parseFloat(e.target.value))} 
                     className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-indigo-600" 
                   />
+                </div>
+
+                <div className="md:col-span-2">
+                  <div className="flex justify-between items-center mb-3">
+                    <label className="block text-[10px] font-black uppercase text-slate-400 tracking-widest">Statistics Cards</label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const currentStats = data.hero?.statsCards || [];
+                        updateNestedField("hero.statsCards", [...currentStats, { label: "New Statistic" }]);
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-all"
+                    >
+                      <Plus size={12} />
+                      Add Stat
+                    </button>
+                  </div>
+                  <div className="space-y-3">
+                    {(data.hero?.statsCards || []).map((stat, idx) => (
+                      <div key={idx} className="flex gap-3 items-center">
+                        <input
+                          type="text"
+                          value={stat.label || ""}
+                          onChange={e => updateNestedField(`hero.statsCards.${idx}.label`, e.target.value)}
+                          className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const filtered = (data.hero?.statsCards || []).filter((_, sIdx) => sIdx !== idx);
+                            updateNestedField("hero.statsCards", filtered);
+                          }}
+                          className="p-3.5 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-2xl transition-all"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -606,6 +678,45 @@ export default function AboutDrNandaniCMS() {
                           onClick={() => {
                             const filtered = data.specialist.bullets.filter((_, bIdx) => bIdx !== idx);
                             updateNestedField("specialist.bullets", filtered);
+                          }}
+                          className="p-3.5 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-2xl transition-all"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="md:col-span-2">
+                  <div className="flex justify-between items-center mb-3">
+                    <label className="block text-[10px] font-black uppercase text-slate-400 tracking-widest">Right Side Feature Cards</label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const currentFeatures = data.specialist?.featureCards || [];
+                        updateNestedField("specialist.featureCards", [...currentFeatures, { title: "New Feature Card" }]);
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-all"
+                    >
+                      <Plus size={12} />
+                      Add Feature
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {(data.specialist?.featureCards || []).map((feature, idx) => (
+                      <div key={idx} className="flex gap-3 items-center">
+                        <input
+                          type="text"
+                          value={feature.title || ""}
+                          onChange={e => updateNestedField(`specialist.featureCards.${idx}.title`, e.target.value)}
+                          className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const filtered = (data.specialist?.featureCards || []).filter((_, fIdx) => fIdx !== idx);
+                            updateNestedField("specialist.featureCards", filtered);
                           }}
                           className="p-3.5 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-2xl transition-all"
                         >
