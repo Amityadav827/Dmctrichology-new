@@ -2,27 +2,12 @@ const supabase = require('../config/supabase');
 
 exports.getServices = async (req, res) => {
   try {
-    let query = supabase
+    const { data: services, error } = await supabase
       .from('service_cards')
       .select('*')
       .order('order_index', { ascending: true });
 
-    if (req.query.featured === 'true') {
-      query = query.eq('featured', true);
-    }
-
-    let { data: services, error } = await query;
-
     if (error) throw error;
-
-    // If featured filter returned nothing, fall back to all cards
-    if (req.query.featured === 'true' && (!services || services.length === 0)) {
-      const { data: all } = await supabase
-        .from('service_cards')
-        .select('*')
-        .order('order_index', { ascending: true });
-      services = all || [];
-    }
 
     // Dynamically retrieve real-time rating, reviewCount, and duration from corresponding service_details
     const populatedServices = await Promise.all(
@@ -45,6 +30,7 @@ exports.getServices = async (req, res) => {
         // Merge data blob so camelCase fields (buttonText, buttonLink, shortDescription, featured)
         // are available at top level. Top-level columns take precedence over blob values.
         const blob = service.data || {};
+        const featuredValue = service.featured ?? blob.featured ?? false;
         return {
           ...blob,
           ...service,
@@ -52,7 +38,7 @@ exports.getServices = async (req, res) => {
           shortDescription: service.short_description || blob.shortDescription || '',
           buttonText: service.button_text || blob.buttonText || 'View Details',
           buttonLink: service.button_link || blob.buttonLink || `/details/${service.slug}`,
-          featured: service.featured ?? blob.featured ?? false,
+          featured: featuredValue === true || featuredValue === 'true' || featuredValue === 1 || featuredValue === '1',
           sortOrder: service.order_index ?? blob.sortOrder ?? 0,
           // Real-time values from service_details
           rating: ratingVal,
@@ -62,7 +48,16 @@ exports.getServices = async (req, res) => {
       })
     );
 
-    res.status(200).json({ success: true, data: populatedServices });
+    const filteredServices = req.query.featured === 'true'
+      ? populatedServices.filter((service) => service.featured)
+      : populatedServices;
+
+    // Preserve existing behavior: if no featured cards are configured, return all cards.
+    const responseServices = req.query.featured === 'true' && filteredServices.length === 0
+      ? populatedServices
+      : filteredServices;
+
+    res.status(200).json({ success: true, data: responseServices });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
