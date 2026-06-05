@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { fetchReviews } from '../services/api';
 import EditableSection from './Editable/EditableSection';
@@ -48,83 +48,153 @@ const ReviewCard = ({ name, text, sectionId, index }) => (
 
 const isDirectVideoUrl = (url = '') => /\.(mp4|webm|mov|ogg)(\?|#|$)/i.test(url);
 
-const VideoCard = ({ name, image, height = "400px", onPlay, sectionId, index }) => (
-  <div style={{
-    position: 'relative',
-    width: '100%',
-    height: height,
-    borderRadius: '30px',
-    overflow: 'hidden',
-    marginBottom: '24px',
-    cursor: 'pointer',
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-  }} onClick={onPlay} className="premium-video-card">
-    {image && (
-      <img
-        src={image}
-        alt={name}
-        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-      />
-    )}
+const getEmbedUrl = (url = '') => {
+  const youtubeMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([^?&/]+)/i);
+  if (youtubeMatch?.[1]) return `https://www.youtube.com/embed/${youtubeMatch[1]}?autoplay=1&rel=0`;
+
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/i);
+  if (vimeoMatch?.[1]) return `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1`;
+
+  return url;
+};
+
+const VideoCard = ({ name, image, videoUrl, height = "400px", sectionId, index }) => {
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const directVideo = isDirectVideoUrl(videoUrl);
+
+  const togglePlayback = async () => {
+    if (!videoUrl) return;
+
+    if (directVideo && videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        try {
+          await videoRef.current.play();
+          setIsPlaying(true);
+        } catch (error) {
+          setIsPlaying(false);
+        }
+      }
+      return;
+    }
+
+    setIsPlaying(current => !current);
+  };
+
+  return (
     <div style={{
-      position: 'absolute',
-      inset: 0,
-      background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 40%, rgba(0,0,0,0.4) 100%)',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      padding: '24px',
-      alignItems: 'center'
-    }}>
-      <h4 style={{ color: '#fff', fontSize: '20px', fontFamily: "'Marcellus', serif", fontWeight: '400', textAlign: 'center' }}>
-        <EditableText sectionId={sectionId} fieldPath={`videos.${index}.name`} tag="span">
-          {name}
-        </EditableText>
-      </h4>
-    </div>
-    <button
-      type="button"
-      aria-label={`Play ${name}`}
-      onClick={(e) => {
-        e.stopPropagation();
-        onPlay?.();
-      }}
-      style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '64px',
-        height: '64px',
-        borderRadius: '50%',
-        border: '2px solid rgba(255,255,255,0.85)',
-        background: '#ffffff',
-        boxShadow: '0 14px 36px rgba(0,0,0,0.22)',
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer',
-        zIndex: 3
-      }}
-    >
-      <span
-        aria-hidden="true"
-        style={{
-          width: 0,
-          height: 0,
-          borderTop: '10px solid transparent',
-          borderBottom: '10px solid transparent',
-          borderLeft: '16px solid #3B5998',
-          marginLeft: '4px'
+      position: 'relative',
+      width: '100%',
+      height: height,
+      borderRadius: '30px',
+      overflow: 'hidden',
+      marginBottom: '24px',
+      cursor: 'pointer',
+      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+    }} onClick={togglePlayback} className="premium-video-card">
+      {directVideo ? (
+        <video
+          ref={videoRef}
+          src={videoUrl}
+          poster={image || undefined}
+          playsInline
+          controls={isPlaying}
+          preload="metadata"
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
+      ) : isPlaying ? (
+        <iframe
+          src={getEmbedUrl(videoUrl)}
+          title={name || 'Real Results Story'}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          style={{ width: '100%', height: '100%', border: 0, display: 'block' }}
+        />
+      ) : image ? (
+        <img
+          src={image}
+          alt={name}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
+      ) : (
+        <div style={{ width: '100%', height: '100%', background: 'linear-gradient(180deg, #d8d8d8, #a5a5a5)' }} />
+      )}
+
+      {!isPlaying && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 40%, rgba(0,0,0,0.4) 100%)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: '24px',
+          alignItems: 'center',
+          pointerEvents: 'none'
+        }}>
+          <h4 style={{ color: '#fff', fontSize: '20px', fontFamily: "'Marcellus', serif", fontWeight: '400', textAlign: 'center' }}>
+            <EditableText sectionId={sectionId} fieldPath={`videos.${index}.name`} tag="span">
+              {name}
+            </EditableText>
+          </h4>
+        </div>
+      )}
+
+      <button
+        type="button"
+        aria-label={`${isPlaying ? 'Pause' : 'Play'} ${name}`}
+        onClick={(e) => {
+          e.stopPropagation();
+          togglePlayback();
         }}
-      />
-    </button>
-  </div>
-);
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '64px',
+          height: '64px',
+          borderRadius: '50%',
+          border: '2px solid rgba(255,255,255,0.85)',
+          background: '#ffffff',
+          boxShadow: '0 14px 36px rgba(0,0,0,0.22)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          zIndex: 3
+        }}
+      >
+        {isPlaying ? (
+          <span aria-hidden="true" style={{ display: 'inline-flex', gap: '5px' }}>
+            <i style={{ width: '6px', height: '22px', borderRadius: '4px', background: '#3B5998', display: 'block' }} />
+            <i style={{ width: '6px', height: '22px', borderRadius: '4px', background: '#3B5998', display: 'block' }} />
+          </span>
+        ) : (
+          <span
+            aria-hidden="true"
+            style={{
+              width: 0,
+              height: 0,
+              borderTop: '10px solid transparent',
+              borderBottom: '10px solid transparent',
+              borderLeft: '16px solid #3B5998',
+              marginLeft: '4px'
+            }}
+          />
+        )}
+      </button>
+    </div>
+  );
+};
 
 const TestimonialSection = () => {
   const [data, setData] = useState(null);
-  const [activeVideo, setActiveVideo] = useState(null);
 
   useEffect(() => {
     fetchReviews().then(res => {
@@ -141,8 +211,6 @@ const TestimonialSection = () => {
   const reviewsCount = data ? (data.googleReviewText || '') : '7000+ Reviews on';
   const reviews = Array.isArray(data?.reviews) ? data.reviews : [];
   const videos = Array.isArray(data?.videos) ? data.videos : [];
-
-  const closeVideo = () => setActiveVideo(null);
 
   return (
     <EditableSection sectionId="reviews-section" label="Reviews & Stories">
@@ -181,8 +249,8 @@ const TestimonialSection = () => {
                     index={col} 
                     name={videos[col]?.name} 
                     image={videos[col]?.image || videos[col]?.thumbnail || videos[col]?.thumbnailUrl || videos[col]?.poster} 
+                    videoUrl={videos[col]?.url}
                     height={col % 2 !== 0 ? "480px" : "450px"} 
-                    onPlay={() => setActiveVideo(videos[col]?.url)} 
                   />
                 )}
                 {reviews[col * 2 + 1] && <ReviewCard sectionId="reviews-section" index={col * 2 + 1} name={reviews[col * 2 + 1]?.name} text={reviews[col * 2 + 1]?.text} />}
@@ -201,19 +269,6 @@ const TestimonialSection = () => {
             </button>
           </div>
         </div>
-
-        {activeVideo && (
-          <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={closeVideo}>
-            <div style={{ position: 'relative', width: '100%', maxWidth: '900px', aspectRatio: '16/9', backgroundColor: '#000', borderRadius: '20px', overflow: 'hidden' }} onClick={(e) => e.stopPropagation()}>
-              <button onClick={closeVideo} style={{ position: 'absolute', top: '20px', right: '20px', backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff', border: 'none', width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer', fontSize: '20px', zIndex: 10 }}>&times;</button>
-              {isDirectVideoUrl(activeVideo) ? (
-                <video width="100%" height="100%" src={activeVideo} controls autoPlay playsInline style={{ display: 'block', width: '100%', height: '100%', objectFit: 'contain' }} />
-              ) : (
-                <iframe width="100%" height="100%" src={`${activeVideo}?autoplay=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
-              )}
-            </div>
-          </div>
-        )}
 
         <style jsx>{`
           .premium-review-card:hover, .premium-video-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important; border-color: #ffffff !important; }

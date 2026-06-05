@@ -4,6 +4,8 @@ import { fetchHeroSlides } from '../services/api';
 import EditableText from './Editable/EditableText';
 import EditableSection from './Editable/EditableSection';
 
+const mobileHeroImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780667061631-3356311.png';
+
 export default function HeroSlider() {
   const [slides, setSlides] = useState([
     {
@@ -46,7 +48,10 @@ export default function HeroSlider() {
             {/* Background with zoom animation */}
             <div
               className={`slide-bg ${index === currentSlide ? 'slide-bg-zoom' : ''}`}
-              style={{ backgroundImage: `url(${slide.backgroundImage || slide.image})` }}
+              style={{
+                '--desktop-hero-bg': `url(${slide.backgroundImage || slide.image})`,
+                '--mobile-hero-bg': `url(${mobileHeroImage})`
+              }}
             />
             <div className="slide-overlay" style={{ 
               position: 'absolute', 
@@ -89,6 +94,17 @@ export default function HeroSlider() {
             ></div>
           ))}
         </div>
+        <style jsx>{`
+          .slide-bg {
+            background-image: var(--desktop-hero-bg);
+          }
+
+          @media (max-width: 767px) {
+            .slide-bg {
+              background-image: var(--mobile-hero-bg);
+            }
+          }
+        `}</style>
       </div>
     </EditableSection>
   );
