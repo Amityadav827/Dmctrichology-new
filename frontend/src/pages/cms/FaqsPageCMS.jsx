@@ -3,6 +3,18 @@ import axios from "../../api/client";
 import toast from "react-hot-toast";
 import { Eye, HelpCircle, Image as ImageIcon, Loader2, Plus, Save, Settings, Trash2 } from "lucide-react";
 
+const defaultFaqs = [
+  { isEnabled: true, category: "General", question: "What Is The DMC-Golden Touch Technique?", answer: "The DMC-Golden Touch Technique is our signature method that combines precision hair transplantation with advanced healing protocols for natural results.", sortOrder: 10 },
+  { isEnabled: true, category: "General", question: "Who Performs The Hair Transplants At DMC Trichology?", answer: "Our procedures are performed by experienced DMC Trichology specialists using personalized planning and advanced clinical care.", sortOrder: 20 },
+  { isEnabled: true, category: "General", question: "Can Both Men And Women Undergo Hair Transplant Procedures At DMC Trichology?", answer: "Yes. Treatment plans are customized for both men and women based on scalp condition, donor availability, and the desired result.", sortOrder: 30 },
+  { isEnabled: true, category: "Pricing & Billing", question: "How Is Hair Transplant Pricing Decided?", answer: "Pricing depends on graft requirement, donor area health, treatment complexity, and the final plan confirmed during consultation.", sortOrder: 10 },
+  { isEnabled: true, category: "Pricing & Billing", question: "Is The Consultation Fee Adjusted In Treatment Cost?", answer: "The billing and adjustment details are explained clearly by the clinic team during your consultation and treatment planning.", sortOrder: 20 },
+  { isEnabled: true, category: "Pricing & Billing", question: "Are EMI Or Payment Options Available?", answer: "Available payment options can be discussed with the DMC Trichology team before confirming your treatment schedule.", sortOrder: 30 },
+  { isEnabled: true, category: "Our Treatments", question: "What Types Of Hair Treatments Are Available At DMC Trichology?", answer: "DMC Trichology offers advanced hair transplant, scalp restoration, non-surgical hair therapies, and personalized trichology protocols.", sortOrder: 10 },
+  { isEnabled: true, category: "Our Treatments", question: "What Should I Wear To My Appointment?", answer: "Wear loose, comfortable clothes. Avoid tight or formal clothing if you are coming for a procedure or detailed consultation.", sortOrder: 20 },
+  { isEnabled: true, category: "Our Treatments", question: "How Can I Book A Consultation At DMC Trichology?", answer: "You can book a consultation through the website form, call the clinic, or contact the DMC Trichology team directly.", sortOrder: 30 }
+];
+
 const emptyData = {
   hero: {
     isEnabled: true,
@@ -13,9 +25,11 @@ const emptyData = {
   },
   faqSection: {
     isEnabled: true,
-    faqs: []
+    faqs: defaultFaqs
   }
 };
+
+const faqCategories = ["General", "Pricing & Billing", "Our Treatments"];
 
 export default function FaqsPageCMS() {
   const [data, setData] = useState(emptyData);
@@ -36,8 +50,14 @@ export default function FaqsPageCMS() {
           hero: { ...emptyData.hero, ...(res.data?.hero || {}) },
           faqSection: {
             ...emptyData.faqSection,
-            ...(res.data?.faqSection || {}),
-            faqs: Array.isArray(res.data?.faqSection?.faqs) ? res.data.faqSection.faqs : []
+          ...(res.data?.faqSection || {}),
+            faqs: Array.isArray(res.data?.faqSection?.faqs)
+              ? res.data.faqSection.faqs.map((faq, index) => ({
+                  ...faq,
+                  category: faqCategories.includes(faq.category) ? faq.category : "General",
+                  sortOrder: faq.sortOrder ?? ((index + 1) * 10)
+                }))
+              : []
           }
         });
       }
@@ -67,7 +87,7 @@ export default function FaqsPageCMS() {
         ...prev.faqSection,
         faqs: [
           ...(prev.faqSection?.faqs || []),
-          { isEnabled: true, question: "", answer: "", sortOrder: ((prev.faqSection?.faqs || []).length + 1) * 10 }
+          { isEnabled: true, question: "", answer: "", category: "General", sortOrder: ((prev.faqSection?.faqs || []).length + 1) * 10 }
         ]
       }
     }));
@@ -240,6 +260,11 @@ export default function FaqsPageCMS() {
                   </label>
                   <input value={faq.question || ""} onChange={e => updateFaq(index, "question", e.target.value)} placeholder="Question" className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none md:col-span-2" />
                   <textarea rows={5} value={faq.answer || ""} onChange={e => updateFaq(index, "answer", e.target.value)} placeholder="Answer" className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none resize-y md:col-span-2" />
+                  <select value={faqCategories.includes(faq.category) ? faq.category : "General"} onChange={e => updateFaq(index, "category", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none">
+                    {faqCategories.map(category => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
                   <input type="number" value={faq.sortOrder ?? ""} onChange={e => updateFaq(index, "sortOrder", Number(e.target.value))} placeholder="Sort Order" className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none" />
                 </div>
               </div>

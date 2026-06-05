@@ -7,8 +7,8 @@ const staticFallback = {
   hero: {
     isEnabled: true,
     backgroundImage: '',
-    pageTitle: 'Frequently Asked Questions',
-    breadcrumbLabel: 'Frequently Asked Questions',
+    pageTitle: 'Frequently Asked Question',
+    breadcrumbLabel: 'Faq',
     overlayOpacity: 0.64
   },
   faqSection: {
@@ -36,7 +36,7 @@ async function getPageData() {
 export async function generateMetadata() {
   const data = await getPageData();
   return {
-    title: data.hero?.pageTitle || 'Frequently Asked Questions',
+    title: data.hero?.pageTitle || 'Frequently Asked Question',
     description: 'Frequently asked questions about DMC Trichology.'
   };
 }
