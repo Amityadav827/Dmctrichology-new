@@ -14,9 +14,7 @@ const defaultStats = [
 
 export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, formSettings = {} }) {
   const {
-    backgroundImage = "",
     doctorImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
-    pageEyebrow = "About DMC Trichology",
     mainHeading = "BEST HAIR TRANSPLANT SURGEON IN DELHI",
     doctorName = "Dr. Nandani Dadu",
     degreeText = "MD (Dermatology)",
@@ -32,10 +30,13 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
   } = data;
 
   const {
+    title = "About Dr. Nandani Dadu",
     parentLabel = "Home",
     parentUrl = "/",
     currentPageText = "About Dr. Nandani Dadu"
   } = breadcrumbData;
+  const resolvedTitle = title && title !== "Hair Specialist in Delhi" ? title : "About Dr. Nandani Dadu";
+  const resolvedCurrentPageText = currentPageText && currentPageText !== "Hair Specialist in Delhi" ? currentPageText : resolvedTitle;
 
   const formTitle = formSettings?.title || "Request Private Consultation";
   const formSubtitle = formSettings?.subtitle || "Reserve your bespoke scalp assessment and consultation session.";
@@ -116,35 +117,17 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
     }
   };
 
-  const heroStyle = backgroundImage
-    ? { '--nandani-hero-bg': `url(${backgroundImage})` }
-    : {};
-
   return (
     <>
       <EditableSection sectionId="about-nandani-hero" label="Dr Nandani Page Hero">
-        <section className="dr-nandani-page-hero" style={heroStyle}>
-          <div className="dr-nandani-hero-shape shape-one" />
-          <div className="dr-nandani-hero-shape shape-two" />
+        <section className="dr-nandani-page-hero">
           <div className="dr-nandani-page-hero-inner">
-            <div className="dr-nandani-hero-left-label">
-              <span className="dr-nandani-line-dot" />
-              <EditableText sectionId="about-nandani-hero" fieldPath="pageEyebrow" tag="span">
-                {pageEyebrow}
-              </EditableText>
-            </div>
-
             <div className="dr-nandani-hero-title-block">
               <h1>
-                <EditableText sectionId="about-nandani-hero" fieldPath="doctorName" tag="span">
-                  {doctorName}
+                <EditableText sectionId="about-nandani-breadcrumb" fieldPath="title" tag="span">
+                  {resolvedTitle}
                 </EditableText>
               </h1>
-              <p>
-                <EditableText sectionId="about-nandani-hero" fieldPath="descriptionParagraph" tag="span">
-                  {descriptionParagraph}
-                </EditableText>
-              </p>
               <div className="dr-nandani-hero-breadcrumb">
                 <a href={parentUrl}>
                   <EditableText sectionId="about-nandani-breadcrumb" fieldPath="parentLabel" tag="span">
@@ -154,7 +137,7 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
                 <span>/</span>
                 <span>
                   <EditableText sectionId="about-nandani-breadcrumb" fieldPath="currentPageText" tag="span">
-                    {currentPageText}
+                    {resolvedCurrentPageText}
                   </EditableText>
                 </span>
               </div>
@@ -249,51 +232,20 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
         .dr-nandani-page-hero {
           position: relative;
           overflow: hidden;
-          padding: 156px 5% 92px;
-          background:
-            linear-gradient(135deg, rgba(237, 238, 248, 0.92), rgba(255, 255, 255, 0.96)),
-            var(--nandani-hero-bg, none);
-          background-size: cover;
-          background-position: center;
-        }
-        .dr-nandani-page-hero::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background:
-            radial-gradient(circle at 18% 18%, rgba(59, 89, 152, 0.14), transparent 28%),
-            radial-gradient(circle at 86% 20%, rgba(59, 89, 152, 0.10), transparent 28%);
-          pointer-events: none;
-        }
-        .dr-nandani-hero-shape {
-          position: absolute;
-          border-radius: 999px;
-          background: rgba(59, 89, 152, 0.08);
-          filter: blur(2px);
-        }
-        .shape-one {
-          width: 280px;
-          height: 280px;
-          left: -80px;
-          bottom: -120px;
-        }
-        .shape-two {
-          width: 360px;
-          height: 360px;
-          right: -130px;
-          top: -120px;
+          margin-top: 112px;
+          padding: 80px 5% 60px;
+          background: #EEF0FA;
         }
         .dr-nandani-page-hero-inner {
           position: relative;
           z-index: 1;
           max-width: 1320px;
           margin: 0 auto;
-          display: grid;
-          grid-template-columns: minmax(220px, 0.34fr) minmax(0, 0.66fr);
-          gap: 42px;
+          display: flex;
+          justify-content: center;
           align-items: center;
+          text-align: center;
         }
-        .dr-nandani-hero-left-label,
         .dr-nandani-eyebrow {
           display: inline-flex;
           align-items: center;
@@ -305,58 +257,34 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
           text-transform: uppercase;
           color: #3B5998;
         }
-        .dr-nandani-line-dot {
-          width: 52px;
-          height: 1px;
-          background: #3B5998;
-          position: relative;
-          display: inline-block;
-        }
-        .dr-nandani-line-dot::after {
-          content: "";
-          position: absolute;
-          right: -4px;
-          top: -3px;
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: #3B5998;
-        }
         .dr-nandani-hero-title-block {
           text-align: center;
         }
         .dr-nandani-hero-title-block h1 {
           font-family: 'Marcellus', serif;
-          font-size: clamp(42px, 5.2vw, 76px);
-          line-height: 1;
+          font-size: clamp(34px, 4vw, 48px);
+          line-height: 1.2;
           font-weight: 400;
           color: #111111;
-          margin: 0 0 20px;
-        }
-        .dr-nandani-hero-title-block p {
-          max-width: 760px;
-          margin: 0 auto 22px;
-          font-family: 'Lato', sans-serif;
-          font-size: 15px;
-          line-height: 1.8;
-          color: #4b5563;
+          margin: 0 0 22px;
         }
         .dr-nandani-hero-breadcrumb {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-          padding: 10px 18px;
-          border: 1px solid rgba(59, 89, 152, 0.16);
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.74);
-          box-shadow: 0 12px 32px rgba(59, 89, 152, 0.08);
+          justify-content: center;
+          gap: 8px;
+          padding: 0;
+          border: 0;
+          border-radius: 0;
+          background: transparent;
+          box-shadow: none;
           font-family: 'Lato', sans-serif;
-          font-size: 12px;
+          font-size: 13px;
         }
         .dr-nandani-hero-breadcrumb a {
-          color: #3B5998;
+          color: #111111;
           text-decoration: none;
-          font-weight: 800;
+          font-weight: 500;
         }
         .dr-nandani-hero-breadcrumb span {
           color: #111111;
@@ -586,13 +514,12 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
         }
         @media (max-width: 1024px) {
           .dr-nandani-page-hero {
-            padding: 136px 5% 72px;
+            margin-top: 104px;
+            padding: 70px 5% 52px;
           }
-          .dr-nandani-page-hero-inner,
           .dr-nandani-intro-grid {
             grid-template-columns: 1fr;
           }
-          .dr-nandani-hero-left-label,
           .dr-nandani-hero-title-block,
           .dr-nandani-doctor-copy {
             text-align: center;
@@ -604,13 +531,11 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
         }
         @media (max-width: 767px) {
           .dr-nandani-page-hero {
-            padding: 124px 16px 56px;
+            margin-top: 112px;
+            padding: 56px 16px 42px;
           }
           .dr-nandani-hero-title-block h1 {
-            font-size: clamp(38px, 12vw, 52px);
-          }
-          .dr-nandani-hero-title-block p {
-            font-size: 14px;
+            font-size: clamp(30px, 9vw, 40px);
           }
           .dr-nandani-intro-form-section {
             padding: 54px 16px;
