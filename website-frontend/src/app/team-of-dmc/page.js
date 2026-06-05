@@ -13,26 +13,7 @@ const staticFallback = {
   },
   teamMembers: {
     isEnabled: true,
-    members: [
-      {
-        image: '',
-        name: 'Dr. Nandini Dadu',
-        designation: 'Hair Transplant Surgeon',
-        qualification: 'MBBS, Senior Consultant, Dadu Medical Centre',
-        shortDescription: 'A leading hair restoration expert focused on advanced, natural-looking scalp and hair solutions.',
-        profileLink: '/about-dr-nandani-dadu',
-        sortOrder: 10
-      },
-      {
-        image: '',
-        name: 'Dr. Nivedita Dadu',
-        designation: 'Founder, Dadu Medical Centre',
-        qualification: 'M.B.B.S., D.D.V.L., D.N.B., M.N.A.M.S (Dermatology)',
-        shortDescription: 'A renowned dermatologist and trichology specialist known for clinically refined patient care.',
-        profileLink: '/about-dr-nivedita-dadu',
-        sortOrder: 20
-      }
-    ]
+    members: []
   }
 };
 

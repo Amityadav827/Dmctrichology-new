@@ -1,4 +1,4 @@
-import AboutDmcTrichologyPage from '../../components/AboutDmcTrichologyPage';
+import AboutDaduMedicalCentreClient from './AboutDaduMedicalCentreClient';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -92,6 +92,22 @@ async function getPageData() {
   }
 }
 
+async function getHomeFaqData() {
+  try {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
+    const response = await fetch(`${API_URL}/home-faq?t=${Date.now()}`, {
+      cache: 'no-store'
+    });
+
+    if (!response.ok) return null;
+    const result = await response.json();
+    return result.success ? result.data : null;
+  } catch (error) {
+    console.error('SSR Fetch Error (Home FAQ for About DMC Trichology page):', error);
+    return null;
+  }
+}
+
 export async function generateMetadata() {
   const data = await getPageData();
   const title = data.hero?.mainHeading || 'About DMC Trichology';
@@ -107,6 +123,10 @@ export async function generateMetadata() {
 }
 
 export default async function AboutDaduMedicalCentreRoute() {
-  const data = await getPageData();
-  return <AboutDmcTrichologyPage data={data} />;
+  const [data, faqData] = await Promise.all([
+    getPageData(),
+    getHomeFaqData()
+  ]);
+
+  return <AboutDaduMedicalCentreClient initialData={data} initialFaqData={faqData} />;
 }

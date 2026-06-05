@@ -13,26 +13,7 @@ const emptyData = {
   },
   teamMembers: {
     isEnabled: true,
-    members: [
-      {
-        image: "",
-        name: "Dr. Nandini Dadu",
-        designation: "Hair Transplant Surgeon",
-        qualification: "MBBS, Senior Consultant, Dadu Medical Centre",
-        shortDescription: "A leading hair restoration expert focused on advanced, natural-looking scalp and hair solutions.",
-        profileLink: "/about-dr-nandani-dadu",
-        sortOrder: 10
-      },
-      {
-        image: "",
-        name: "Dr. Nivedita Dadu",
-        designation: "Founder, Dadu Medical Centre",
-        qualification: "M.B.B.S., D.D.V.L., D.N.B., M.N.A.M.S (Dermatology)",
-        shortDescription: "A renowned dermatologist and trichology specialist known for clinically refined patient care.",
-        profileLink: "/about-dr-nivedita-dadu",
-        sortOrder: 20
-      }
-    ]
+    members: []
   }
 };
 
@@ -56,7 +37,14 @@ export default function OurTeamCMS() {
           teamMembers: {
             ...emptyData.teamMembers,
             ...(res.data?.teamMembers || {}),
-            members: Array.isArray(res.data?.teamMembers?.members) ? res.data.teamMembers.members : emptyData.teamMembers.members
+            members: Array.isArray(res.data?.teamMembers?.members)
+              ? res.data.teamMembers.members.map((member, index) => ({
+                  ...member,
+                  shortDescription: member.shortDescription || member.description || "",
+                  description: member.description || member.shortDescription || "",
+                  sortOrder: member.sortOrder ?? ((index + 1) * 10)
+                }))
+              : emptyData.teamMembers.members
           }
         });
       }
@@ -86,7 +74,7 @@ export default function OurTeamCMS() {
         ...prev.teamMembers,
         members: [
           ...(prev.teamMembers?.members || []),
-          { image: "", name: "", designation: "", qualification: "", shortDescription: "", profileLink: "", sortOrder: ((prev.teamMembers?.members || []).length + 1) * 10 }
+          { image: "", name: "", designation: "", qualification: "", shortDescription: "", description: "", profileLink: "", sortOrder: ((prev.teamMembers?.members || []).length + 1) * 10 }
         ]
       }
     }));
@@ -273,7 +261,7 @@ export default function OurTeamCMS() {
                   <input value={member.qualification || ""} onChange={e => updateMember(index, "qualification", e.target.value)} placeholder="Qualification" className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none" />
                   <input type="number" value={member.sortOrder ?? ""} onChange={e => updateMember(index, "sortOrder", Number(e.target.value))} placeholder="Sort Order" className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none" />
                   <input value={member.profileLink || ""} onChange={e => updateMember(index, "profileLink", e.target.value)} placeholder="Profile Link" className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none md:col-span-2" />
-                  <textarea rows={4} value={member.shortDescription || ""} onChange={e => updateMember(index, "shortDescription", e.target.value)} placeholder="Short Description" className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none resize-none md:col-span-2" />
+                  <textarea rows={4} value={member.shortDescription || member.description || ""} onChange={e => { updateMember(index, "shortDescription", e.target.value); updateMember(index, "description", e.target.value); }} placeholder="Description" className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none resize-none md:col-span-2" />
                   <div className="md:col-span-2 flex gap-4 items-center">
                     <input value={member.image || ""} onChange={e => updateMember(index, "image", e.target.value)} placeholder="Image URL" className="flex-1 px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none" />
                     <label className="cursor-pointer shrink-0">

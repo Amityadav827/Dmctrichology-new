@@ -6,17 +6,14 @@ function OurTeamHero({ data = {} }) {
   if (data.isEnabled === false) return null;
   const pageTitle = data.pageTitle || 'Our Team';
   const breadcrumbLabel = data.breadcrumbLabel || 'Our Team';
-  const overlayOpacity = typeof data.overlayOpacity === 'number' ? data.overlayOpacity : 0.62;
-  const style = data.backgroundImage ? { backgroundImage: `url(${data.backgroundImage})` } : {};
 
   return (
-    <section className="our-team-hero" style={style}>
-      <div className="our-team-hero-overlay" style={{ opacity: overlayOpacity }} />
+    <section className="our-team-hero">
       <div className="our-team-hero-inner">
         <h1>{pageTitle}</h1>
         <div className="our-team-breadcrumb">
           <Link href="/">Home</Link>
-          <span>→</span>
+          <span>/</span>
           <span>{breadcrumbLabel}</span>
         </div>
       </div>
@@ -27,7 +24,9 @@ function OurTeamHero({ data = {} }) {
 function TeamMembersSection({ data = {} }) {
   if (data.isEnabled === false) return null;
   const members = Array.isArray(data.members)
-    ? [...data.members].sort((a, b) => Number(a.sortOrder || 0) - Number(b.sortOrder || 0))
+    ? [...data.members]
+      .filter(member => hasText(member?.name))
+      .sort((a, b) => Number(a.sortOrder || 0) - Number(b.sortOrder || 0))
     : [];
 
   if (members.length === 0) return null;
@@ -36,6 +35,7 @@ function TeamMembersSection({ data = {} }) {
     <section className="our-team-members">
       <div className="our-team-members-grid">
         {members.map((member, index) => {
+          const description = member.shortDescription || member.description || '';
           const CardContent = (
             <>
               <div className="our-team-portrait">
@@ -46,10 +46,10 @@ function TeamMembersSection({ data = {} }) {
                 )}
               </div>
               <div className="our-team-card-content">
-                {hasText(member.name) && <h2>{member.name}</h2>}
+                <h2>{member.name}</h2>
                 {hasText(member.designation) && <p className="our-team-designation">{member.designation}</p>}
                 {hasText(member.qualification) && <p className="our-team-qualification">{member.qualification}</p>}
-                {hasText(member.shortDescription) && <p className="our-team-description">{member.shortDescription}</p>}
+                {hasText(description) && <p className="our-team-description">{description}</p>}
               </div>
             </>
           );
@@ -80,107 +80,91 @@ export default function OurTeamPage({ data = {} }) {
         }
 
         .our-team-hero {
-          position: relative;
-          min-height: 430px;
-          padding: 170px 5% 92px;
-          background-color: #3B5998;
-          background-size: cover;
-          background-position: center;
-          display: flex;
-          align-items: flex-end;
-          overflow: hidden;
-        }
-
-        .our-team-hero-overlay {
-          position: absolute;
-          inset: 0;
-          background: #000000;
-          z-index: 1;
-          pointer-events: none;
+          width: 100%;
+          margin-top: 112px;
+          padding: 80px 5% 60px;
+          background: #EEF0FA;
+          box-sizing: border-box;
         }
 
         .our-team-hero-inner {
-          position: relative;
-          z-index: 2;
-          width: min(100%, 1220px);
+          max-width: 1200px;
           margin: 0 auto;
-          color: #ffffff;
+          text-align: center;
         }
 
         .our-team-hero h1 {
           font-family: 'Marcellus', serif;
-          font-size: 48px;
-          line-height: 1.15;
+          font-size: clamp(34px, 3.4vw, 46px);
+          line-height: 1.18;
           font-weight: 400;
-          color: #ffffff;
-          margin: 0 0 18px;
+          color: #111111;
+          margin: 0 0 20px;
         }
 
         .our-team-breadcrumb {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 10px;
+          justify-content: center;
+          gap: 8px;
           font-family: 'Lato', sans-serif;
-          font-size: 15px;
+          font-size: 13px;
+          line-height: 1.4;
+          color: #111111;
         }
 
         .our-team-breadcrumb a {
-          color: #ffffff;
+          color: #111111;
           text-decoration: none;
-          font-weight: 700;
-        }
-
-        .our-team-breadcrumb span:last-child {
-          color: #ffffff;
         }
 
         .our-team-members {
-          background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
-          padding: 86px 5% 104px;
+          background: #ffffff;
+          padding: 86px 5% 110px;
+          box-sizing: border-box;
         }
 
         .our-team-members-grid {
-          max-width: 1040px;
+          max-width: 1180px;
           margin: 0 auto;
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 34px;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 40px;
+          align-items: stretch;
         }
 
         .our-team-card {
+          min-height: 100%;
           display: flex;
           flex-direction: column;
-          align-items: center;
           text-align: center;
           text-decoration: none;
           color: inherit;
-          background: #ffffff;
-          border: 1px solid rgba(59,89,152,.14);
-          border-radius: 12px;
-          padding: 42px 34px 36px;
-          box-shadow: 0 20px 48px rgba(59,89,152,.1);
-          transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+          background: #EEF0FA;
+          border: 1px solid rgba(59, 89, 152, 0.08);
+          border-radius: 24px;
+          padding: 18px 18px 34px;
+          box-shadow: 0 16px 34px rgba(59, 89, 152, 0.06);
+          transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+          box-sizing: border-box;
         }
 
         .our-team-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 30px 70px rgba(59,89,152,.16);
-          border-color: rgba(59,89,152,.28);
+          transform: translateY(-8px);
+          box-shadow: 0 28px 58px rgba(59, 89, 152, 0.14);
+          border-color: rgba(59, 89, 152, 0.18);
         }
 
         .our-team-portrait {
-          width: 250px;
-          height: 250px;
-          border-radius: 50%;
-          background: #edeef8;
-          border: 8px solid #ffffff;
-          outline: 1px solid rgba(59,89,152,.18);
-          box-shadow: 0 18px 38px rgba(0,0,0,.12);
+          width: 100%;
+          aspect-ratio: 1.18 / 1;
+          border-radius: 22px;
+          background: #3B5998;
           overflow: hidden;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-bottom: 28px;
+          margin-bottom: 24px;
         }
 
         .our-team-portrait img {
@@ -193,106 +177,100 @@ export default function OurTeamPage({ data = {} }) {
         .our-team-portrait span {
           font-family: 'Marcellus', serif;
           font-size: 74px;
-          color: #3B5998;
+          color: #ffffff;
+        }
+
+        .our-team-card-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 0 10px;
         }
 
         .our-team-card h2 {
           font-family: 'Marcellus', serif;
-          font-size: 25px;
-          line-height: 1.25;
+          font-size: 18px;
+          line-height: 1.28;
           font-weight: 400;
           color: #111111;
-          margin: 0 0 10px;
-        }
-
-        .our-team-designation,
-        .our-team-qualification,
-        .our-team-description {
-          font-family: 'Lato', sans-serif;
-          color: #333333;
-          margin: 0;
+          margin: 0 0 8px;
         }
 
         .our-team-designation {
+          font-family: 'Lato', sans-serif;
           color: #3B5998;
-          font-size: 13px;
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: .06em;
-          margin-bottom: 8px;
+          font-size: 12px;
+          line-height: 1.35;
+          font-weight: 700;
+          margin: 0 0 14px;
         }
 
         .our-team-qualification {
-          font-size: 13px;
-          line-height: 1.55;
+          font-family: 'Lato', sans-serif;
+          color: #111111;
+          font-size: 11px;
+          line-height: 1.5;
           font-weight: 700;
-          margin-bottom: 14px;
+          margin: 0 0 12px;
         }
 
         .our-team-description {
-          font-size: 14px;
-          line-height: 1.65;
-          max-width: 360px;
+          font-family: 'Lato', sans-serif;
+          color: #111111;
+          font-size: 11px;
+          line-height: 1.55;
+          margin: 0;
+          max-width: 270px;
+        }
+
+        @media (max-width: 1199px) {
+          .our-team-members-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            max-width: 820px;
+          }
         }
 
         @media (max-width: 1024px) {
           .our-team-hero {
-            min-height: 390px;
-            padding: 145px 5% 78px;
-          }
-
-          .our-team-hero h1 {
-            font-size: 42px;
-          }
-
-          .our-team-portrait {
-            width: 220px;
-            height: 220px;
+            margin-top: 104px;
+            padding: 70px 5% 52px;
           }
         }
 
         @media (max-width: 767px) {
           .our-team-hero {
-            min-height: 330px;
-            padding: 120px 5% 58px;
+            margin-top: 0;
+            padding: 156px 16px 42px;
           }
 
           .our-team-hero h1 {
-            font-size: 36px;
+            font-size: clamp(30px, 8vw, 38px);
           }
 
           .our-team-members {
-            padding: 58px 5% 72px;
+            padding: 58px 16px 76px;
           }
 
           .our-team-members-grid {
             grid-template-columns: 1fr;
-            gap: 24px;
+            max-width: 380px;
+            gap: 26px;
           }
 
           .our-team-card {
-            padding: 32px 22px 30px;
+            padding: 16px 16px 30px;
+            border-radius: 22px;
           }
 
           .our-team-portrait {
-            width: 190px;
-            height: 190px;
+            border-radius: 20px;
           }
         }
 
         @media (max-width: 390px) {
-          .our-team-hero h1 {
-            font-size: 32px;
-          }
-
           .our-team-breadcrumb {
             font-size: 13px;
             flex-wrap: wrap;
-          }
-
-          .our-team-portrait {
-            width: 170px;
-            height: 170px;
           }
         }
       `}} />

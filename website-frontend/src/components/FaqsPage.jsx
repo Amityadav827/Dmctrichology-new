@@ -16,13 +16,6 @@ const defaultFaqs = [
   { isEnabled: true, category: 'Our Treatments', question: 'How Can I Book A Consultation At DMC Trichology?', answer: 'You can book a consultation through the website form, call the clinic, or contact the DMC Trichology team directly.', sortOrder: 30 }
 ];
 
-const iconPaths = [
-  'M12 3v4m0 10v4M5.64 5.64l2.83 2.83m7.06 7.06 2.83 2.83M3 12h4m10 0h4M5.64 18.36l2.83-2.83m7.06-7.06 2.83-2.83',
-  'M9 7h6m-6 4h6m-7 4h8M7 3h10a2 2 0 0 1 2 2v14l-3-2-3 2-3-2-3 2V5a2 2 0 0 1 2-2Z',
-  'M12 3 4 7v6c0 5 8 8 8 8s8-3 8-8V7l-8-4Zm-3 9 2 2 4-4',
-  'M8 6h8M8 10h8M8 14h5m-9 6V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16l-4-2-4 2-4-2-4 2Z'
-];
-
 const hasText = (value) => String(value || '').trim().length > 0;
 
 function stripHtml(value = '') {
@@ -48,16 +41,6 @@ function FaqsHero({ data = {} }) {
         </div>
       </div>
     </section>
-  );
-}
-
-function FaqIcon({ index }) {
-  return (
-    <span className="faqs-page-card-icon" aria-hidden="true">
-      <svg width="24" height="24" viewBox="0 0 24 24">
-        <path d={iconPaths[index % iconPaths.length]} fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
   );
 }
 
@@ -132,7 +115,6 @@ function FaqGrid({ data = {} }) {
                 }
               }}
             >
-              <FaqIcon index={index} />
               <div className="faqs-page-card-copy">
                 <h2>{faq.question}</h2>
                 <p>{faq.answerPreview}</p>
@@ -233,7 +215,7 @@ export default function FaqsPage({ data = {} }) {
         }
 
         .faqs-page-grid {
-          max-width: 1120px;
+          max-width: 1400px;
           margin: 0 auto;
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -242,14 +224,12 @@ export default function FaqsPage({ data = {} }) {
 
         .faqs-page-card {
           min-height: 104px;
-          display: grid;
-          grid-template-columns: 64px 1fr;
+          display: flex;
           align-items: center;
-          gap: 18px;
           border: 1px solid rgba(17, 17, 17, 0.78);
           border-radius: 22px;
           background: #E8EAF6;
-          padding: 18px 24px;
+          padding: 24px 34px;
           box-sizing: border-box;
           cursor: pointer;
           transition: transform .25s ease, background .25s ease, color .25s ease, box-shadow .25s ease, border-color .25s ease;
@@ -258,6 +238,9 @@ export default function FaqsPage({ data = {} }) {
         .faqs-page-card:hover,
         .faqs-page-card:focus-visible {
           transform: translateY(-2px);
+          background: #3B5998;
+          border-color: #3B5998;
+          color: #ffffff;
           box-shadow: 0 18px 36px rgba(59, 89, 152, 0.14);
           outline: none;
         }
@@ -267,23 +250,6 @@ export default function FaqsPage({ data = {} }) {
           border-color: #3B5998;
           color: #ffffff;
           box-shadow: 0 22px 44px rgba(59, 89, 152, 0.18);
-        }
-
-        .faqs-page-card-icon {
-          width: 52px;
-          height: 52px;
-          border-radius: 50%;
-          background: #3B5998;
-          color: #ffffff;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          transition: background .25s ease, color .25s ease;
-        }
-
-        .faqs-page-card.is-active .faqs-page-card-icon {
-          background: rgba(255, 255, 255, 0.18);
-          color: #ffffff;
         }
 
         .faqs-page-card-copy h2 {
@@ -308,6 +274,8 @@ export default function FaqsPage({ data = {} }) {
           overflow: hidden;
         }
 
+        .faqs-page-card:hover .faqs-page-card-copy p,
+        .faqs-page-card:focus-visible .faqs-page-card-copy p,
         .faqs-page-card.is-active .faqs-page-card-copy p {
           color: rgba(255, 255, 255, 0.92);
         }
@@ -323,8 +291,7 @@ export default function FaqsPage({ data = {} }) {
           }
 
           .faqs-page-card {
-            grid-template-columns: 58px 1fr;
-            padding: 17px 18px;
+            padding: 22px 24px;
           }
         }
 
@@ -359,10 +326,9 @@ export default function FaqsPage({ data = {} }) {
           }
 
           .faqs-page-card {
-            grid-template-columns: 56px 1fr;
             min-height: 112px;
             border-radius: 22px;
-            padding: 18px 20px;
+            padding: 22px 20px;
           }
 
           .faqs-page-card-copy h2 {
@@ -372,13 +338,7 @@ export default function FaqsPage({ data = {} }) {
 
         @media (max-width: 390px) {
           .faqs-page-card {
-            grid-template-columns: 1fr;
             text-align: left;
-          }
-
-          .faqs-page-card-icon {
-            width: 48px;
-            height: 48px;
           }
         }
       `}} />

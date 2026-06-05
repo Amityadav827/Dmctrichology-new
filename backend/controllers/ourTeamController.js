@@ -13,28 +13,31 @@ const fallbackData = {
   },
   teamMembers: {
     isEnabled: true,
-    members: [
-      {
-        image: '',
-        name: 'Dr. Nandini Dadu',
-        designation: 'Hair Transplant Surgeon',
-        qualification: 'MBBS, Senior Consultant, Dadu Medical Centre',
-        shortDescription: 'A leading hair restoration expert focused on advanced, natural-looking scalp and hair solutions.',
-        profileLink: '/about-dr-nandani-dadu',
-        sortOrder: 10
-      },
-      {
-        image: '',
-        name: 'Dr. Nivedita Dadu',
-        designation: 'Founder, Dadu Medical Centre',
-        qualification: 'M.B.B.S., D.D.V.L., D.N.B., M.N.A.M.S (Dermatology)',
-        shortDescription: 'A renowned dermatologist and trichology specialist known for clinically refined patient care.',
-        profileLink: '/about-dr-nivedita-dadu',
-        sortOrder: 20
-      }
-    ]
+    members: []
   }
 };
+
+const normalizeMember = (member = {}, index = 0) => ({
+  image: member.image || '',
+  name: member.name || '',
+  designation: member.designation || '',
+  qualification: member.qualification || '',
+  shortDescription: member.shortDescription || member.description || '',
+  description: member.description || member.shortDescription || '',
+  profileLink: member.profileLink || '',
+  sortOrder: Number.isFinite(Number(member.sortOrder)) ? Number(member.sortOrder) : (index + 1) * 10
+});
+
+const normalizePayload = (source = fallbackData) => ({
+  hero: { ...fallbackData.hero, ...(source.hero || {}) },
+  teamMembers: {
+    ...fallbackData.teamMembers,
+    ...(source.teamMembers || {}),
+    members: Array.isArray(source.teamMembers?.members)
+      ? source.teamMembers.members.map(normalizeMember)
+      : []
+  }
+});
 
 exports.getSettings = async (req, res) => {
   try {
@@ -48,7 +51,7 @@ exports.getSettings = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      data: row?.data || fallbackData,
+      data: normalizePayload(row?.data || fallbackData),
       isFallback: !row
     });
   } catch (error) {
@@ -59,14 +62,7 @@ exports.getSettings = async (req, res) => {
 
 exports.updateSettings = async (req, res) => {
   try {
-    const payload = {
-      hero: { ...fallbackData.hero, ...(req.body?.hero || {}) },
-      teamMembers: {
-        ...fallbackData.teamMembers,
-        ...(req.body?.teamMembers || {}),
-        members: Array.isArray(req.body?.teamMembers?.members) ? req.body.teamMembers.members : fallbackData.teamMembers.members
-      }
-    };
+    const payload = normalizePayload(req.body || fallbackData);
 
     const { error } = await supabase
       .from('cms_sections')
