@@ -6,20 +6,12 @@ import EditableText from './Editable/EditableText';
 
 const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
 
-const defaultStats = [
-  { label: "10+ Years Experience" },
-  { label: "Thousands of Successful Cases" },
-  { label: "Board Certified Specialist" }
-];
-
 export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, formSettings = {} }) {
   const {
-    doctorImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
     mainHeading = "BEST HAIR TRANSPLANT SURGEON IN DELHI",
     doctorName = "Dr. Nandani Dadu",
     degreeText = "MD (Dermatology)",
     descriptionParagraph = "Dr. Nandini Dadu, MBBS, a Board-Certified Trichologist, has been studying hair and scalp treatments for over ten years. Throughout her career, she has successfully treated severe cases with excellent outcomes and has attained the title of the best hair transplant surgeon in Delhi.",
-    statsCards = defaultStats,
     namePlaceholder = "Name*",
     phonePlaceholder = "Mobile Number*",
     emailPlaceholder = "E-Mail Address*",
@@ -41,7 +33,7 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
   const formTitle = formSettings?.title || "Request Private Consultation";
   const formSubtitle = formSettings?.subtitle || "Reserve your bespoke scalp assessment and consultation session.";
   const successMessage = formSettings?.successMessage || "Your consultation request has been successfully submitted. Our concierge team will reach out to you shortly.";
-  const resolvedStats = Array.isArray(statsCards) && statsCards.length > 0 ? statsCards : defaultStats;
+  const galleryImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
 
   const [formData, setFormData] = useState({
     name: '',
@@ -150,20 +142,18 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
         <section className="dr-nandani-intro-form-section">
           <div className="dr-nandani-intro-grid">
             <div className="dr-nandani-image-column">
-              <div className="dr-nandani-doctor-image-card">
-                <img src={doctorImage} alt={`${doctorName} portrait`} />
-              </div>
-              <div className="dr-nandani-stats-grid">
-                {resolvedStats.map((stat, index) => (
-                  <div className="dr-nandani-stat-card" key={`${stat.label}-${index}`}>
-                    <span>{String(index + 1).padStart(2, '0')}</span>
-                    <p>
-                      <EditableText sectionId="about-nandani-hero" fieldPath={`statsCards.${index}.label`} tag="span">
-                        {stat.label}
-                      </EditableText>
-                    </p>
+              <div className="dr-nandani-gallery-grid">
+                <div className="dr-nandani-gallery-main">
+                  <img src={galleryImage} alt={`${doctorName} clinic introduction`} />
+                </div>
+                <div className="dr-nandani-gallery-side">
+                  <div className="dr-nandani-gallery-small">
+                    <img src={galleryImage} alt={`${doctorName} treatment space`} />
                   </div>
-                ))}
+                  <div className="dr-nandani-gallery-small">
+                    <img src={galleryImage} alt={`${doctorName} consultation space`} />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -290,107 +280,117 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
           color: #111111;
         }
         .dr-nandani-intro-form-section {
-          background: #ffffff;
-          padding: 90px 5%;
+          position: relative;
+          overflow: hidden;
+          background:
+            radial-gradient(circle at 22% 44%, rgba(59, 89, 152, 0.08), transparent 34%),
+            radial-gradient(circle at 78% 56%, rgba(59, 89, 152, 0.055), transparent 34%),
+            #ffffff;
+          padding: 100px 5%;
         }
         .dr-nandani-intro-grid {
           max-width: 1320px;
           margin: 0 auto;
           display: grid;
-          grid-template-columns: minmax(0, 1.2fr) minmax(390px, 0.8fr);
-          gap: 56px;
-          align-items: start;
+          grid-template-columns: minmax(0, 1.12fr) minmax(420px, 0.88fr);
+          gap: 40px;
+          align-items: center;
         }
         .dr-nandani-image-column {
           position: relative;
         }
-        .dr-nandani-doctor-image-card {
-          background: #eef2fb;
-          border-radius: 34px;
-          overflow: hidden;
-          border: 1px solid rgba(59, 89, 152, 0.12);
-          box-shadow: 0 28px 70px rgba(15, 35, 79, 0.13);
-          aspect-ratio: 1.05 / 0.9;
+        .dr-nandani-gallery-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+          gap: 20px;
+          width: 100%;
         }
-        .dr-nandani-doctor-image-card img {
+        .dr-nandani-gallery-main,
+        .dr-nandani-gallery-small {
+          background: #d8d8d8;
+          border-radius: 24px;
+          overflow: hidden;
+          border: 0;
+        }
+        .dr-nandani-gallery-main {
+          min-height: 440px;
+        }
+        .dr-nandani-gallery-side {
+          display: grid;
+          grid-template-rows: 1fr 1fr;
+          gap: 20px;
+        }
+        .dr-nandani-gallery-main img,
+        .dr-nandani-gallery-small img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           display: block;
         }
-        .dr-nandani-stats-grid {
-          width: calc(100% - 56px);
-          margin: -38px auto 0;
-          position: relative;
-          z-index: 2;
-          display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 14px;
-        }
-        .dr-nandani-stat-card {
-          min-height: 102px;
-          padding: 18px;
-          border-radius: 22px;
-          background: rgba(255, 255, 255, 0.92);
-          border: 1px solid rgba(59, 89, 152, 0.12);
-          box-shadow: 0 20px 44px rgba(15, 35, 79, 0.11);
-          backdrop-filter: blur(14px);
-        }
-        .dr-nandani-stat-card span {
-          display: block;
-          color: #3B5998;
-          font-family: 'Lato', sans-serif;
-          font-size: 11px;
-          font-weight: 900;
-          letter-spacing: 1.2px;
-          margin-bottom: 8px;
-        }
-        .dr-nandani-stat-card p {
-          margin: 0;
-          font-family: 'Marcellus', serif;
-          font-size: 18px;
-          line-height: 1.22;
-          color: #111111;
-        }
         .dr-nandani-info-form-column {
           display: flex;
           flex-direction: column;
-          gap: 28px;
+          gap: 22px;
+        }
+        .dr-nandani-eyebrow::before {
+          content: "";
+          width: 58px;
+          height: 1px;
+          background: #3B5998;
+          display: inline-block;
+          position: relative;
+        }
+        .dr-nandani-eyebrow::after {
+          content: "";
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+          background: #3B5998;
+          position: absolute;
+          left: 52px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+        .dr-nandani-eyebrow {
+          position: relative;
         }
         .dr-nandani-doctor-copy h2 {
           font-family: 'Marcellus', serif;
-          font-size: clamp(34px, 3.4vw, 52px);
+          font-size: clamp(34px, 3.2vw, 46px);
           line-height: 1.05;
           font-weight: 400;
           color: #111111;
-          margin: 18px 0 10px;
+          margin: 20px 0 6px;
         }
         .dr-nandani-degree {
-          display: inline-flex;
-          margin: 0 0 18px;
-          padding: 7px 14px;
-          border-radius: 999px;
-          background: #eef2fb;
+          display: block;
+          margin: 0 0 28px;
+          padding: 0;
+          border-radius: 0;
+          background: transparent;
           color: #111111;
           font-family: 'Lato', sans-serif;
           font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 1px;
-          text-transform: uppercase;
+          font-weight: 700;
+          letter-spacing: 0;
+          text-transform: none;
         }
         .dr-nandani-description {
           font-family: 'Lato', sans-serif;
-          font-size: 15px;
-          line-height: 1.8;
+          font-size: 14px;
+          line-height: 1.85;
           color: #333333;
           margin: 0;
+          font-weight: 700;
+          max-width: 640px;
         }
         .dr-nandani-lead-card {
-          padding: 30px;
-          border-radius: 30px;
-          background: linear-gradient(145deg, rgba(237, 238, 248, 0.92), rgba(255, 255, 255, 0.92));
-          border: 1px solid rgba(59, 89, 152, 0.13);
-          box-shadow: 0 26px 70px rgba(15, 35, 79, 0.13);
+          padding: 24px 0 0;
+          border-radius: 0;
+          background: transparent;
+          border: 0;
+          border-top: 1px solid rgba(17, 17, 17, 0.16);
+          box-shadow: none;
         }
         .dr-nandani-form-heading h3 {
           font-family: 'Marcellus', serif;
@@ -414,11 +414,11 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
         .dr-nandani-form-grid input,
         .dr-nandani-form-grid textarea {
           width: 100%;
-          min-height: 50px;
-          border: 1px solid rgba(59, 89, 152, 0.14);
-          border-radius: 16px;
-          background: rgba(255, 255, 255, 0.86);
-          padding: 13px 16px;
+          min-height: 42px;
+          border: 1px solid #111111;
+          border-radius: 4px;
+          background: #ffffff;
+          padding: 10px 16px;
           outline: none;
           color: #111111;
           font-family: 'Lato', sans-serif;
@@ -433,21 +433,24 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
         }
         .dr-nandani-form-grid textarea {
           grid-column: 1 / -1;
-          min-height: 92px;
+          min-height: 72px;
           resize: none;
         }
         .dr-nandani-captcha-row {
           grid-column: 1 / -1;
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 14px;
+          gap: 0;
+          border: 1px solid #111111;
+          border-radius: 4px;
+          overflow: hidden;
         }
         .dr-nandani-captcha-row button {
-          min-height: 50px;
+          min-height: 42px;
           border: 0;
-          border-radius: 16px;
-          background: #3B5998;
-          color: #ffffff;
+          border-radius: 0;
+          background: #ffffff;
+          color: #111111;
           font-family: 'Lato', sans-serif;
           font-size: 16px;
           font-weight: 900;
@@ -456,7 +459,7 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
         }
         .dr-nandani-submit-btn {
           width: 100%;
-          min-height: 56px;
+          min-height: 42px;
           margin-top: 18px;
           border: 0;
           border-radius: 999px;
@@ -526,7 +529,14 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
             justify-content: center;
           }
           .dr-nandani-intro-grid {
-            gap: 38px;
+            gap: 44px;
+          }
+          .dr-nandani-gallery-main {
+            min-height: 420px;
+          }
+          .dr-nandani-info-form-column {
+            max-width: 760px;
+            margin: 0 auto;
           }
         }
         @media (max-width: 767px) {
@@ -538,33 +548,35 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
             font-size: clamp(30px, 9vw, 40px);
           }
           .dr-nandani-intro-form-section {
-            padding: 54px 16px;
+            padding: 64px 16px;
           }
-          .dr-nandani-doctor-image-card {
-            border-radius: 26px;
-            aspect-ratio: 1 / 1.08;
-          }
-          .dr-nandani-stats-grid {
-            width: 100%;
-            margin-top: 16px;
+          .dr-nandani-gallery-grid {
             grid-template-columns: 1fr;
+            gap: 16px;
           }
-          .dr-nandani-stat-card {
+          .dr-nandani-gallery-side {
+            grid-template-columns: 1fr;
+            grid-template-rows: none;
+            gap: 16px;
+          }
+          .dr-nandani-gallery-main,
+          .dr-nandani-gallery-small {
             min-height: auto;
+            border-radius: 24px;
+          }
+          .dr-nandani-gallery-main img,
+          .dr-nandani-gallery-small img {
+            height: auto;
+            object-fit: contain;
           }
           .dr-nandani-info-form-column {
             gap: 24px;
           }
-          .dr-nandani-lead-card {
-            padding: 22px;
-            border-radius: 24px;
-          }
-          .dr-nandani-form-grid,
-          .dr-nandani-captcha-row {
+          .dr-nandani-form-grid {
             grid-template-columns: 1fr;
           }
           .dr-nandani-captcha-row {
-            gap: 10px;
+            grid-template-columns: 1fr 1fr;
           }
         }
       `}</style>
