@@ -1,36 +1,45 @@
 "use client";
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
+const backgroundImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780628617563-236798553.png";
+const patientImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780567033792-259164490.png";
+
 const defaultTestimonials = [
   {
-    text: "Dr. Nandani Dadu is an excellent hair specialist in Delhi. I visited her clinic for hair loss treatment, and the results have been outstanding. She is very knowledgeable and patient, taking time to explain everything clearly.",
+    text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
     patientName: "Sanadhan Chaima",
-    disclaimer: "* Opinions/Results may vary from person to person.",
+    disclaimer: "*Opinions/Results May Vary From Person To Person.",
     stars: 5
   },
   {
-    text: "Dr. Nandani Dadu is the best hair transplant surgeon in Delhi. I underwent a hair transplant procedure at her clinic, and the results have been amazing. She uses advanced techniques and ensures a comfortable procedure.",
-    patientName: "Akhilesh Singh",
-    disclaimer: "* Opinions/Results may vary from person to person.",
+    text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
+    patientName: "Sanadhan Chaima",
+    disclaimer: "*Opinions/Results May Vary From Person To Person.",
     stars: 5
   },
   {
-    text: "Dr. Nandani Dadu is undoubtedly the best hair specialist in Delhi. She helped me regain confidence with her effective treatment for hair thinning. Her approach is personalized, focusing on understanding the root cause of hair problems.",
-    patientName: "Naveen Yadav",
-    disclaimer: "* Opinions/Results may vary from person to person.",
+    text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
+    patientName: "Sanadhan Chaima",
+    disclaimer: "*Opinions/Results May Vary From Person To Person.",
+    stars: 5
+  },
+  {
+    text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
+    patientName: "Sanadhan Chaima",
+    disclaimer: "*Opinions/Results May Vary From Person To Person.",
     stars: 5
   }
 ];
 
 function StarRating({ count = 5 }) {
+  const total = Math.min(Math.max(Number(count) || 5, 1), 5);
+
   return (
-    <div style={{ display: 'flex', gap: '4px', marginBottom: '18px' }}>
-      {Array.from({ length: Math.min(Math.max(count, 1), 5) }).map((_, i) => (
-        <svg key={i} width="18" height="18" viewBox="0 0 24 24" fill="#3b5998" stroke="#3b5998" strokeWidth="1">
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-        </svg>
+    <div className="dmc-testimonial-stars" aria-label={`${total} star rating`}>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <span key={index}>{index < total ? "★" : "☆"}</span>
       ))}
     </div>
   );
@@ -39,276 +48,292 @@ function StarRating({ count = 5 }) {
 export default function AboutDrNandaniTestimonials({ data = {} }) {
   const {
     heading = "Patient Testimonials",
-    testimonials = defaultTestimonials,
-    viewMoreText = "VIEW MORE",
-    viewMoreUrl = "https://dmctrichology-mkm4.vercel.app/clients-feedback",
-    backgroundColor = "#ffffff",
-    cardBackgroundColor = "#3B5998",
-    contentMaxWidth = "1400px",
-    paddingTop = "100px",
-    paddingBottom = "100px",
-    gridGap = "35px"
+    testimonials = defaultTestimonials
   } = data;
 
-  const cards = testimonials && testimonials.length > 0 ? testimonials : defaultTestimonials;
+  const slides = useMemo(() => {
+    const source = Array.isArray(testimonials) && testimonials.length > 0 ? testimonials : defaultTestimonials;
+    const repeated = [...source];
+
+    while (repeated.length < 4) {
+      repeated.push(source[repeated.length % source.length]);
+    }
+
+    return repeated.slice(0, Math.max(repeated.length, 4));
+  }, [testimonials]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeSlide = slides[activeIndex] || defaultTestimonials[0];
+
+  const goPrev = () => {
+    setActiveIndex((current) => (current === 0 ? slides.length - 1 : current - 1));
+  };
+
+  const goNext = () => {
+    setActiveIndex((current) => (current + 1) % slides.length);
+  };
 
   return (
     <EditableSection sectionId="about-nandani-testimonials" label="Patient Testimonials Section">
-      <section
-        className="dmc-testimonials-wrapper"
-        style={{
-          backgroundColor: backgroundColor || "#ffffff",
-          paddingTop: paddingTop || "100px",
-          paddingBottom: paddingBottom || "100px",
-          paddingLeft: "24px",
-          paddingRight: "24px",
-          width: "100%",
-          boxSizing: "border-box"
-        }}
-      >
-        {/* Centered Content Wrapper */}
-        <div
-          style={{
-            maxWidth: contentMaxWidth || "1400px",
-            margin: "0 auto",
-            width: "100%"
-          }}
-        >
-          {/* Section Heading */}
-          <div style={{ textAlign: "center", marginBottom: "60px" }}>
-            <h2
-              className="dmc-testimonials-heading"
-              style={{
-                fontSize: "42px",
-                fontWeight: "400",
-                color: "#333333",
-                fontFamily: "'Marcellus', serif",
-                letterSpacing: "0.04em",
-                lineHeight: "1.2",
-                margin: "0 0 16px 0"
-              }}
-            >
-              <EditableText
-                sectionId="about-nandani-testimonials"
-                fieldPath="testimonialsSection.heading"
-              >
+      <section className="dmc-testimonials-wrapper">
+        <div className="dmc-testimonials-bg-card">
+          <div className="dmc-testimonial-nav" aria-label="Testimonial navigation">
+            <button type="button" onClick={goPrev} aria-label="Previous testimonial">
+              <svg width="16" height="16" viewBox="0 0 24 24">
+                <path d="M15 18 9 12l6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <button type="button" onClick={goNext} aria-label="Next testimonial">
+              <svg width="16" height="16" viewBox="0 0 24 24">
+                <path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="dmc-testimonial-content" key={activeIndex}>
+            <span className="dmc-testimonial-eyebrow">
+              <span />
+              TRUSTED CARE SERVICES
+            </span>
+
+            <h2>
+              <EditableText sectionId="about-nandani-testimonials" fieldPath="testimonialsSection.heading">
                 {heading}
               </EditableText>
             </h2>
-            {/* Navy underline accent */}
-            <div
-              style={{
-                width: "80px",
-                height: "2px",
-                backgroundColor: "#3b5998",
-                margin: "0 auto"
-              }}
-            />
-          </div>
 
-          {/* Testimonials Grid */}
-          <div className="dmc-testimonials-grid" style={{ gap: gridGap || "35px" }}>
-            {cards.map((item, idx) => (
-              <div
-                key={idx}
-                className="dmc-testimonial-card"
-                style={{
-                  backgroundColor: cardBackgroundColor || "#000000",
-                  border: "1px solid rgba(59,89,152,0.35)",
-                  borderRadius: "0px",
-                  padding: "35px",
-                  boxSizing: "border-box",
-                  boxShadow: "0 8px 40px rgba(0,0,0,0.35)",
-                  display: "flex",
-                  flexDirection: "column",
-                  transition: "border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease"
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = "rgba(59,89,152,0.85)";
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "0 16px 55px rgba(0,0,0,0.45)";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = "rgba(59,89,152,0.35)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 8px 40px rgba(0,0,0,0.35)";
-                }}
-              >
-                {/* Star Rating */}
-                <StarRating count={item.stars || 5} />
+            <img className="dmc-testimonial-patient" src={patientImage} alt={activeSlide.patientName || "Patient testimonial"} />
 
-                {/* Testimonial Text */}
-                <div
-                  className="dmc-testimonial-scroll"
-                  style={{
-                    flex: 1,
-                    marginBottom: "24px",
-                    overflowY: "auto",
-                    maxHeight: "160px"
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: "15px",
-                      lineHeight: "1.75",
-                      color: "rgba(255,255,255,0.88)",
-                      fontFamily: "'Marcellus', serif",
-                      fontStyle: "italic",
-                      margin: "0"
-                    }}
-                  >
-                    <EditableText
-                      sectionId="about-nandani-testimonials"
-                      fieldPath={`testimonialsSection.testimonials.${idx}.text`}
-                    >
-                      {item.text}
-                    </EditableText>
-                  </p>
-                </div>
-
-                {/* Divider */}
-                <div
-                  style={{
-                    width: "40px",
-                    height: "1px",
-                    backgroundColor: "#3b5998",
-                    marginBottom: "18px",
-                    opacity: 0.7
-                  }}
-                />
-
-                {/* Patient Name */}
-                <p
-                  style={{
-                    fontSize: "15px",
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    fontFamily: "'Marcellus', serif",
-                    margin: "0 0 10px 0",
-                    letterSpacing: "0.04em"
-                  }}
-                >
-                  <EditableText
-                    sectionId="about-nandani-testimonials"
-                    fieldPath={`testimonialsSection.testimonials.${idx}.patientName`}
-                  >
-                    {item.patientName}
-                  </EditableText>
-                </p>
-
-                {/* Disclaimer */}
-                <p
-                  style={{
-                    fontSize: "11px",
-                    color: "rgba(255,255,255,0.45)",
-                    fontFamily: "'Marcellus', serif",
-                    margin: "0",
-                    lineHeight: "1.5"
-                  }}
-                >
-                  <EditableText
-                    sectionId="about-nandani-testimonials"
-                    fieldPath={`testimonialsSection.testimonials.${idx}.disclaimer`}
-                  >
-                    {item.disclaimer}
-                  </EditableText>
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* VIEW MORE Button */}
-          <div style={{ textAlign: "center", marginTop: "56px" }}>
-            <a
-              href={viewMoreUrl || "https://dmctrichology-mkm4.vercel.app/clients-feedback"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="dmc-testimonials-btn"
-            >
-              <EditableText
-                sectionId="about-nandani-testimonials"
-                fieldPath="testimonialsSection.viewMoreText"
-              >
-                {viewMoreText}
+            <p className="dmc-testimonial-text">
+              <EditableText sectionId="about-nandani-testimonials" fieldPath={`testimonialsSection.testimonials.${activeIndex}.text`}>
+                {activeSlide.text || defaultTestimonials[0].text}
               </EditableText>
-            </a>
+            </p>
+
+            <StarRating count={activeSlide.stars || 5} />
+
+            <p className="dmc-testimonial-name">
+              <EditableText sectionId="about-nandani-testimonials" fieldPath={`testimonialsSection.testimonials.${activeIndex}.patientName`}>
+                {activeSlide.patientName || defaultTestimonials[0].patientName}
+              </EditableText>
+            </p>
+
+            <p className="dmc-testimonial-disclaimer">
+              <EditableText sectionId="about-nandani-testimonials" fieldPath={`testimonialsSection.testimonials.${activeIndex}.disclaimer`}>
+                {activeSlide.disclaimer || defaultTestimonials[0].disclaimer}
+              </EditableText>
+            </p>
           </div>
         </div>
       </section>
 
-      <style jsx global>{`
-        .dmc-testimonials-wrapper,
-        .dmc-testimonials-wrapper * {
-          font-family: 'Marcellus', serif !important;
-        }
-
-        .dmc-testimonials-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 35px;
+      <style jsx>{`
+        .dmc-testimonials-wrapper {
           width: 100%;
+          padding: 100px 24px;
+          background: #ffffff;
+          box-sizing: border-box;
+          display: flex;
+          justify-content: center;
         }
-
-        .dmc-testimonial-scroll::-webkit-scrollbar {
-          width: 4px;
+        .dmc-testimonials-bg-card {
+          width: 100%;
+          max-width: 1260px;
+          min-height: 486px;
+          position: relative;
+          background-image: url("${backgroundImage}");
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          background-position: center;
+          padding: 58px 90px 68px;
+          box-sizing: border-box;
+          overflow: visible;
         }
-        .dmc-testimonial-scroll::-webkit-scrollbar-track {
-          background: transparent;
+        .dmc-testimonial-nav {
+          position: absolute;
+          top: 12px;
+          right: 13px;
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          z-index: 3;
         }
-        .dmc-testimonial-scroll::-webkit-scrollbar-thumb {
-          background: #3b5998;
-          border-radius: 2px;
-        }
-
-        .dmc-testimonials-btn {
-          display: inline-block;
-          background: #3b5998;
-          border: 1px solid #3b5998;
-          color: #ffffff !important;
-          padding: 16px 42px;
-          font-family: 'Marcellus', serif !important;
-          font-size: 13px;
-          font-weight: 600;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          text-decoration: none;
+        .dmc-testimonial-nav button {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          border: 0;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           cursor: pointer;
-          transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+          transition: transform .25s ease, background .25s ease, color .25s ease;
         }
-        .dmc-testimonials-btn:hover {
-          background: #2a4280 !important;
-          color: #ffffff !important;
+        .dmc-testimonial-nav button:first-child {
+          background: #EEF0FA;
+          color: #3B5998;
+        }
+        .dmc-testimonial-nav button:last-child {
+          background: #3B5998;
+          color: #ffffff;
+        }
+        .dmc-testimonial-nav button:hover {
           transform: translateY(-2px);
         }
-
-        /* Tablet: 2 columns */
-        @media (max-width: 1024px) {
-          .dmc-testimonials-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 28px !important;
+        .dmc-testimonial-content {
+          max-width: 760px;
+          margin: 0 auto;
+          text-align: center;
+          color: #ffffff;
+          animation: dmcTestimonialFade .38s ease;
+        }
+        .dmc-testimonial-eyebrow {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          font-family: 'Lato', sans-serif;
+          font-size: 9px;
+          line-height: 1;
+          letter-spacing: 1.2px;
+          text-transform: uppercase;
+          color: #ffffff;
+          margin-bottom: 20px;
+        }
+        .dmc-testimonial-eyebrow span {
+          width: 60px;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.82);
+          display: inline-block;
+          position: relative;
+        }
+        .dmc-testimonial-eyebrow span::after {
+          content: "";
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #ffffff;
+          position: absolute;
+          right: -4px;
+          top: -3.5px;
+        }
+        .dmc-testimonial-content h2 {
+          font-family: 'Marcellus', serif;
+          font-size: clamp(34px, 3vw, 44px);
+          line-height: 1.08;
+          font-weight: 400;
+          color: #ffffff;
+          margin: 0 0 46px;
+        }
+        .dmc-testimonial-patient {
+          width: 90px;
+          height: 90px;
+          border-radius: 50%;
+          object-fit: cover;
+          display: block;
+          margin: 0 auto 30px;
+        }
+        .dmc-testimonial-text {
+          font-family: 'Marcellus', serif;
+          font-size: clamp(19px, 1.9vw, 26px);
+          line-height: 1.48;
+          font-weight: 400;
+          color: #ffffff;
+          margin: 0 auto 20px;
+          max-width: 820px;
+        }
+        .dmc-testimonial-stars {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 3px;
+          margin-bottom: 14px;
+          color: #FFD22E;
+          font-size: 24px;
+          line-height: 1;
+          letter-spacing: 1px;
+        }
+        .dmc-testimonial-name {
+          font-family: 'Marcellus', serif;
+          font-size: 15px;
+          line-height: 1.2;
+          color: #ffffff;
+          margin: 0 0 4px;
+        }
+        .dmc-testimonial-disclaimer {
+          font-family: 'Lato', sans-serif;
+          font-size: 9px;
+          line-height: 1.2;
+          color: rgba(255, 255, 255, 0.78);
+          margin: 0;
+        }
+        @keyframes dmcTestimonialFade {
+          from {
+            opacity: .42;
+            transform: translateY(8px);
           }
-          .dmc-testimonials-heading {
-            font-size: 34px !important;
+          to {
+            opacity: 1;
+            transform: translateY(0);
           }
         }
-
-        /* Mobile: 1 column */
-        @media (max-width: 640px) {
-          .dmc-testimonials-grid {
-            grid-template-columns: 1fr !important;
-            gap: 22px !important;
-          }
+        @media (max-width: 1024px) {
           .dmc-testimonials-wrapper {
-            padding-top: 64px !important;
-            padding-bottom: 64px !important;
-            padding-left: 16px !important;
-            padding-right: 16px !important;
+            padding: 82px 18px;
           }
-          .dmc-testimonial-card {
-            padding: 28px 22px !important;
+          .dmc-testimonials-bg-card {
+            min-height: 460px;
+            padding: 58px 58px 64px;
           }
-          .dmc-testimonials-heading {
-            font-size: 28px !important;
+          .dmc-testimonial-text {
+            font-size: 21px;
+          }
+        }
+        @media (max-width: 767px) {
+          .dmc-testimonials-wrapper {
+            padding: 58px 14px;
+          }
+          .dmc-testimonials-bg-card {
+            min-height: 560px;
+            padding: 64px 24px 52px;
+            background-size: 100% 100%;
+          }
+          .dmc-testimonial-nav {
+            top: 12px;
+            right: 18px;
+            gap: 10px;
+          }
+          .dmc-testimonial-nav button {
+            width: 34px;
+            height: 34px;
+          }
+          .dmc-testimonial-content h2 {
+            font-size: clamp(30px, 9vw, 38px);
+            margin-bottom: 36px;
+          }
+          .dmc-testimonial-patient {
+            width: 82px;
+            height: 82px;
+            margin-bottom: 26px;
+          }
+          .dmc-testimonial-text {
+            font-size: 18px;
+            line-height: 1.55;
+          }
+          .dmc-testimonial-stars {
+            font-size: 21px;
+          }
+        }
+        @media (max-width: 420px) {
+          .dmc-testimonials-bg-card {
+            padding-left: 18px;
+            padding-right: 18px;
+          }
+          .dmc-testimonial-eyebrow span {
+            width: 42px;
+          }
+          .dmc-testimonial-text {
+            font-size: 16px;
           }
         }
       `}</style>
