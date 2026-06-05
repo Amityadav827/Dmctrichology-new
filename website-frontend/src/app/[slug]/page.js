@@ -1,7 +1,6 @@
 import ScienceHero from '@/components/ScienceHero';
 import ScienceIntro from '@/components/ScienceIntro';
 import ScienceDualFeatures from '@/components/ScienceDualFeatures';
-import ScienceConsultation from '@/components/ScienceConsultation';
 import { notFound } from 'next/navigation';
 
 export const metadata = {
@@ -84,7 +83,6 @@ export default async function DynamicSlugPage({ params }) {
           <ScienceHero data={heroData} />
           <ScienceIntro data={introData} />
           <ScienceDualFeatures data={featuresData} />
-          <ScienceConsultation data={consultationData} />
         </main>
       );
     }
