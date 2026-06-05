@@ -65,6 +65,7 @@ import AboutDmcTrichologyCMS from "./pages/cms/AboutDmcTrichologyCMS";
 import OurTeamCMS from "./pages/cms/OurTeamCMS";
 import FaqsPageCMS from "./pages/cms/FaqsPageCMS";
 import ClientFeedbackCMS from "./pages/cms/ClientFeedbackCMS";
+import RealResultsCMS from "./pages/cms/RealResultsCMS";
 import DrNandaniLeads from "./pages/DrNandaniLeads";
 import DetailsBannerCMS from "./pages/cms/DetailsBannerCMS";
 import ServiceIntroCMS from "./pages/cms/ServiceIntroCMS";
@@ -294,7 +295,7 @@ function App() {
           path="cms/real-results"
           element={
             <ProtectedRoute permission="cms">
-              <PlaceholderPage title="Real Results" />
+              <RealResultsCMS />
             </ProtectedRoute>
           }
         />
