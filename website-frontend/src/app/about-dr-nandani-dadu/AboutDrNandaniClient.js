@@ -10,7 +10,7 @@ import AboutDrNandaniEducationExperience from '../../components/AboutDrNandaniEd
 import AboutDrNandaniTrust from '../../components/AboutDrNandaniTrust';
 import AboutDrNandaniOtherSpecialities from '../../components/AboutDrNandaniOtherSpecialities';
 import AboutDrNandaniTestimonials from '../../components/AboutDrNandaniTestimonials';
-import AboutDrNandaniFAQ from '../../components/AboutDrNandaniFAQ';
+import FaqSection from '../../components/FaqSection';
 
 export default function AboutDrNandaniClient({ initialData }) {
   const [pageData, setPageData] = useState(initialData);
@@ -177,7 +177,7 @@ export default function AboutDrNandaniClient({ initialData }) {
       />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection || {}} />
       <AboutDrNandaniTestimonials data={pageData.testimonialsSection || {}} />
-      <AboutDrNandaniFAQ data={pageData.faqSection || {}} />
+      <FaqSection />
     </main>
   );
 }
