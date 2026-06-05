@@ -12,7 +12,7 @@ const emptyData = {
   },
   feedbackSection: {
     isEnabled: true,
-    itemsPerPage: 3,
+    itemsPerPage: 15,
     cards: []
   }
 };
@@ -49,7 +49,7 @@ export default function ClientFeedbackCMS() {
 
   const fetchSettings = async () => {
     try {
-      const { data: res } = await axios.get("/client-feedback");
+      const { data: res } = await axios.get("/clients-feedback");
       if (res.success) {
         setData({
           hero: { ...emptyData.hero, ...(res.data?.hero || {}) },
@@ -143,7 +143,7 @@ export default function ClientFeedbackCMS() {
           }))
         }
       };
-      const { data: res } = await axios.put("/client-feedback", payload);
+      const { data: res } = await axios.put("/clients-feedback", payload);
       if (res.success) {
         toast.success("Client Feedback page saved successfully");
         setData(res.data);
@@ -158,7 +158,7 @@ export default function ClientFeedbackCMS() {
   const uploadImage = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
-    const { data: res } = await axios.post("/client-feedback/upload-image", formData, {
+    const { data: res } = await axios.post("/clients-feedback/upload-image", formData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
     return res.url;
@@ -180,7 +180,7 @@ export default function ClientFeedbackCMS() {
     }
   };
 
-  const previewUrl = `${import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"}/client-feedback`;
+  const previewUrl = `${import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"}/clients-feedback`;
 
   if (loading) {
     return (

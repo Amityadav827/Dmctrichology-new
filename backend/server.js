@@ -214,7 +214,9 @@ app.use("/api/about-dr-nivedita", aboutDrNiveditaRoutes);
 app.use("/api/about-dmc-trichology", aboutDmcTrichologyRoutes);
 app.use("/api/our-team", ourTeamRoutes);
 app.use("/api/faqs-page", faqsPageRoutes);
+app.use("/api/clients-feedback", clientFeedbackRoutes);
 app.use("/api/client-feedback", clientFeedbackRoutes);
+app.use("/api/results-page", realResultsRoutes);
 app.use("/api/real-results", realResultsRoutes);
 
 

@@ -40,8 +40,8 @@ function Sidebar() {
     window.location.pathname.startsWith("/cms/about-dr-nivedita")
   );
   const [isResultsOpen, setIsResultsOpen] = React.useState(() =>
-    window.location.pathname.startsWith("/cms/client-feedback") ||
-    window.location.pathname.startsWith("/cms/real-results")
+    window.location.pathname.startsWith("/cms/clients-feedback") ||
+    window.location.pathname.startsWith("/cms/results")
   );
   const [isServiceDetailsOpen, setIsServiceDetailsOpen] = React.useState(true);
   const [serviceDetailsItems, setServiceDetailsItems] = React.useState([]);
@@ -209,10 +209,10 @@ function Sidebar() {
             </div>
             {isResultsOpen && (
               <div className="service-details-subnav">
-                <NavLink to="/cms/client-feedback" className={getNavClass}>
+                <NavLink to="/cms/clients-feedback" className={getNavClass}>
                   <Star size={14} /> Client Feedback
                 </NavLink>
-                <NavLink to="/cms/real-results" className={getNavClass}>
+                <NavLink to="/cms/results" className={getNavClass}>
                   <Activity size={14} /> Real Results
                 </NavLink>
               </div>

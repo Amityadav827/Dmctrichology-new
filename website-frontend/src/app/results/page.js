@@ -4,7 +4,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onr
 
 async function getRealResultsData() {
   try {
-    const response = await fetch(`${API_BASE}/real-results?t=${Date.now()}`, {
+    const response = await fetch(`${API_BASE}/results-page?t=${Date.now()}`, {
       cache: 'no-store',
       next: { revalidate: 0 }
     });
@@ -26,7 +26,7 @@ export async function generateMetadata() {
     title: `${title} | DMC Trichology`,
     description: 'Real before and after treatment results from DMC Trichology.',
     alternates: {
-      canonical: '/real-results'
+      canonical: '/results'
     }
   };
 }

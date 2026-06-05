@@ -284,7 +284,7 @@ function App() {
           }
         />
         <Route
-          path="cms/client-feedback"
+          path="cms/clients-feedback"
           element={
             <ProtectedRoute permission="cms">
               <ClientFeedbackCMS />
@@ -292,7 +292,7 @@ function App() {
           }
         />
         <Route
-          path="cms/real-results"
+          path="cms/results"
           element={
             <ProtectedRoute permission="cms">
               <RealResultsCMS />

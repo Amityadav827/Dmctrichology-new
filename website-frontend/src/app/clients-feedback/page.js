@@ -12,7 +12,7 @@ const staticFallback = {
   },
   feedbackSection: {
     isEnabled: true,
-    itemsPerPage: 3,
+    itemsPerPage: 15,
     cards: []
   }
 };
@@ -20,7 +20,7 @@ const staticFallback = {
 async function getPageData() {
   try {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
-    const response = await fetch(`${API_URL}/client-feedback?t=${Date.now()}`, {
+    const response = await fetch(`${API_URL}/clients-feedback?t=${Date.now()}`, {
       cache: 'no-store'
     });
 
@@ -37,7 +37,10 @@ export async function generateMetadata() {
   const data = await getPageData();
   return {
     title: `${data.hero?.pageTitle || 'Client Feedback'} | DMC Trichology`,
-    description: 'Client feedback and patient experiences at DMC Trichology.'
+    description: 'Client feedback and patient experiences at DMC Trichology.',
+    alternates: {
+      canonical: '/clients-feedback'
+    }
   };
 }
 

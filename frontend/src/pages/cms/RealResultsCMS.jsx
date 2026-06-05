@@ -69,7 +69,7 @@ export default function RealResultsCMS() {
 
   const fetchSettings = async () => {
     try {
-      const { data: res } = await axios.get("/real-results");
+      const { data: res } = await axios.get("/results-page");
       if (res.success) {
         setData({
           hero: { ...emptyData.hero, ...(res.data?.hero || {}) },
@@ -162,7 +162,7 @@ export default function RealResultsCMS() {
           }))
         }
       };
-      const { data: res } = await axios.put("/real-results", payload);
+      const { data: res } = await axios.put("/results-page", payload);
       if (res.success) {
         toast.success("Real Results page saved successfully");
         setData(res.data);
@@ -177,7 +177,7 @@ export default function RealResultsCMS() {
   const uploadImage = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
-    const { data: res } = await axios.post("/real-results/upload-image", formData, {
+    const { data: res } = await axios.post("/results-page/upload-image", formData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
     return res.url;
@@ -199,7 +199,7 @@ export default function RealResultsCMS() {
     }
   };
 
-  const previewUrl = `${import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"}/real-results`;
+  const previewUrl = `${import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"}/results`;
 
   if (loading) {
     return (

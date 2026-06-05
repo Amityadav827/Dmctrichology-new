@@ -12,7 +12,7 @@ const fallbackData = {
   },
   feedbackSection: {
     isEnabled: true,
-    itemsPerPage: 3,
+    itemsPerPage: 15,
     cards: []
   }
 };

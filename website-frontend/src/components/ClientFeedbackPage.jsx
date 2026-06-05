@@ -41,7 +41,7 @@ function FeedbackCard({ card }) {
 
   return (
     <article className="cf-card">
-      <div className="cf-quote">”</div>
+      <div className="cf-quote" aria-hidden="true">"</div>
       <p className="cf-text">{card.feedbackText}</p>
 
       <div className="cf-shape" aria-hidden="true" />
@@ -61,7 +61,7 @@ function FeedbackCard({ card }) {
           {hasText(card.location) && <p>{card.location}</p>}
         </div>
         <div className="cf-rating" aria-label={`${rating} star rating`}>
-          <span>★</span>
+          <span>{'\u2605'}</span>
           <em>({rating.toFixed(1).replace('.0', '')})</em>
         </div>
       </div>
@@ -109,12 +109,13 @@ function FeedbackGrid({ data = {} }) {
       .sort((a, b) => Number(a.sortOrder || 0) - Number(b.sortOrder || 0));
   }, [data.cards]);
 
-  const perPage = Math.max(1, Number(data.itemsPerPage || 3));
+  if (cards.length === 0) return null;
+
+  const shouldPaginate = cards.length > 15;
+  const perPage = shouldPaginate ? Math.max(1, Number(data.itemsPerPage || 15)) : cards.length;
   const totalPages = Math.max(1, Math.ceil(cards.length / perPage));
   const safePage = Math.min(page, totalPages);
-  const visibleCards = cards.slice((safePage - 1) * perPage, safePage * perPage);
-
-  if (cards.length === 0) return null;
+  const visibleCards = shouldPaginate ? cards.slice((safePage - 1) * perPage, safePage * perPage) : cards;
 
   return (
     <section className="cf-section">
@@ -123,7 +124,7 @@ function FeedbackGrid({ data = {} }) {
           <FeedbackCard key={`${card.clientName}-${index}`} card={card} />
         ))}
       </div>
-      <Pagination page={safePage} totalPages={totalPages} onChange={setPage} />
+      {shouldPaginate && <Pagination page={safePage} totalPages={totalPages} onChange={setPage} />}
     </section>
   );
 }
@@ -182,16 +183,16 @@ export default function ClientFeedbackPage({ data = {} }) {
         }
 
         .cf-grid {
-          max-width: 1160px;
+          max-width: 1168px;
           margin: 0 auto;
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 38px;
+          gap: 40px;
         }
 
         .cf-card {
           position: relative;
-          min-height: 348px;
+          min-height: 356px;
           border-radius: 30px;
           overflow: hidden;
           background: #e8eaf6;
@@ -209,18 +210,18 @@ export default function ClientFeedbackPage({ data = {} }) {
           align-items: center;
           justify-content: center;
           font-family: Georgia, serif;
-          font-size: 58px;
+          font-size: 46px;
           line-height: 1;
-          margin: 32px auto 22px;
-          padding-bottom: 18px;
+          margin: 32px auto 20px;
+          padding-bottom: 10px;
           box-sizing: border-box;
         }
 
         .cf-text {
           position: relative;
           z-index: 3;
-          max-width: 282px;
-          min-height: 132px;
+          max-width: 286px;
+          min-height: 128px;
           margin: 0 auto;
           font-family: 'Marcellus', serif;
           font-size: 19px;
@@ -235,7 +236,7 @@ export default function ClientFeedbackPage({ data = {} }) {
           left: 0;
           right: 0;
           bottom: 0;
-          height: 124px;
+          height: 154px;
           background-image: url(${shapeImage});
           background-size: 100% 100%;
           background-repeat: no-repeat;
@@ -246,19 +247,21 @@ export default function ClientFeedbackPage({ data = {} }) {
         .cf-client-image {
           position: absolute;
           right: 62px;
-          bottom: 90px;
+          bottom: 94px;
           z-index: 4;
-          width: 60px;
-          height: 60px;
+          width: 64px;
+          height: 64px;
           border-radius: 50%;
           overflow: hidden;
           background: #EEF0FA;
+          border: 6px solid #3B5998;
           display: flex;
           align-items: center;
           justify-content: center;
           font-family: 'Marcellus', serif;
           font-size: 24px;
           color: #3B5998;
+          box-sizing: border-box;
         }
 
         .cf-client-image img {
@@ -272,7 +275,7 @@ export default function ClientFeedbackPage({ data = {} }) {
           position: absolute;
           left: 24px;
           right: 24px;
-          bottom: 24px;
+          bottom: 26px;
           z-index: 3;
           display: flex;
           align-items: flex-end;
@@ -319,7 +322,7 @@ export default function ClientFeedbackPage({ data = {} }) {
         }
 
         .cf-pagination {
-          max-width: 1160px;
+          max-width: 1168px;
           margin: 58px auto 0;
           display: flex;
           align-items: center;
@@ -394,15 +397,6 @@ export default function ClientFeedbackPage({ data = {} }) {
             max-width: 380px;
             gap: 28px;
           }
-
-          .cf-card {
-            min-height: 348px;
-          }
-
-          .cf-pagination {
-            max-width: 380px;
-            gap: 12px;
-          }
         }
 
         @media (max-width: 390px) {
@@ -416,7 +410,7 @@ export default function ClientFeedbackPage({ data = {} }) {
           }
 
           .cf-client-image {
-            right: 50px;
+            right: 48px;
           }
         }
       `}} />
