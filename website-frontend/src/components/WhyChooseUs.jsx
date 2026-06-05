@@ -37,8 +37,10 @@ const WhyChooseUs = () => {
   // Fallbacks only when data === null (not yet loaded from DB)
   const title = data ? (data.title || '') : 'Why DMC Trichology Is The Best Hair Transplant Clinic In Delhi';
   const subtitle = data ? (data.subtitle || '') : 'Best Hair Graft Clinic';
-  const fallbackCentralImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777550637/dmc-trichology/mprq5pm7g2utm2olrnj1.png';
-  const centralImage = data?.centralImage?.trim() || fallbackCentralImage;
+  const oldCentralImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777550637/dmc-trichology/mprq5pm7g2utm2olrnj1.png';
+  const fallbackCentralImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780667061631-3356311.png';
+  const savedCentralImage = data?.centralImage?.trim();
+  const centralImage = savedCentralImage && savedCentralImage !== oldCentralImage ? savedCentralImage : fallbackCentralImage;
 
   // Always safe — never crash on .map
   const safeFeatures = Array.isArray(data?.features) ? data.features : null;
