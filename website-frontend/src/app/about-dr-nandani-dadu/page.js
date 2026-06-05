@@ -281,6 +281,22 @@ async function getPageData() {
   }
 }
 
+async function getHomeFaqData() {
+  try {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
+    const response = await fetch(`${API_URL}/home-faq?t=${Date.now()}`, {
+      cache: 'no-store'
+    });
+
+    if (!response.ok) return null;
+    const result = await response.json();
+    return result.success ? result.data : null;
+  } catch (error) {
+    console.error('SSR Fetch Error (Home FAQ for Dr. Nandani page):', error);
+    return null;
+  }
+}
+
 // Generate dynamic SEO Metadata
 export async function generateMetadata() {
   const data = await getPageData();
@@ -298,6 +314,10 @@ export async function generateMetadata() {
 }
 
 export default async function DrNandaniPage() {
-  const data = await getPageData();
-  return <AboutDrNandaniClient initialData={data} />;
+  const [data, faqData] = await Promise.all([
+    getPageData(),
+    getHomeFaqData()
+  ]);
+
+  return <AboutDrNandaniClient initialData={data} initialFaqData={faqData} />;
 }

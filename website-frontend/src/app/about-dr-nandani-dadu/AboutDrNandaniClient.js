@@ -12,14 +12,15 @@ import AboutDrNandaniOtherSpecialities from '../../components/AboutDrNandaniOthe
 import AboutDrNandaniTestimonials from '../../components/AboutDrNandaniTestimonials';
 import FaqSection from '../../components/FaqSection';
 
-export default function AboutDrNandaniClient({ initialData }) {
+export default function AboutDrNandaniClient({ initialData, initialFaqData = null }) {
   const [pageData, setPageData] = useState(initialData);
-  const { siteConfig } = useBuilder();
+  const { isEditMode, siteConfig } = useBuilder();
   const searchParams = useSearchParams();
   const isEditing = searchParams.get('edit') === 'true';
 
   // 1. Sync settings from parent Visual Live Builder Frame (Vite)
   useEffect(() => {
+    if (!isEditing && !isEditMode) return;
     if (!siteConfig || Object.keys(siteConfig).length === 0) return;
 
     setPageData(prev => {
@@ -100,7 +101,7 @@ export default function AboutDrNandaniClient({ initialData }) {
 
       return hasChanges ? newData : prev;
     });
-  }, [siteConfig]);
+  }, [isEditing, isEditMode, siteConfig]);
 
   // 2. Sync page state with local inline edit updates (e.g. text/image typing blurs)
   useEffect(() => {
@@ -162,7 +163,7 @@ export default function AboutDrNandaniClient({ initialData }) {
   }, [isEditing]);
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: pageData.hero?.backgroundColor || '#3b5998' }}>
+    <main style={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
       <AboutDrNandaniHero
         data={pageData.hero || {}}
         breadcrumbData={pageData.breadcrumb || {}}
@@ -177,7 +178,7 @@ export default function AboutDrNandaniClient({ initialData }) {
       />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection || {}} />
       <AboutDrNandaniTestimonials data={pageData.testimonialsSection || {}} />
-      <FaqSection />
+      <FaqSection initialData={initialFaqData} />
     </main>
   );
 }

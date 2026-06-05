@@ -6,11 +6,19 @@ import EditableText from './Editable/EditableText';
 
 const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
 
-export default function FaqSection() {
-  const [data, setData] = useState(null);
-  const [activeTab, setActiveTab] = useState('');
+export default function FaqSection({ initialData = null }) {
+  const [data, setData] = useState(initialData);
+  const [activeTab, setActiveTab] = useState(initialData?.categories?.[0]?.title || '');
 
   useEffect(() => {
+    if (initialData) {
+      setData(initialData);
+      if (initialData.categories?.length > 0) {
+        setActiveTab(initialData.categories[0].title);
+      }
+      return;
+    }
+
     const loadData = async () => {
       const res = await fetchHomeFAQ();
       if (res?.success) {
@@ -43,7 +51,7 @@ export default function FaqSection() {
 
     window.addEventListener('cms-update', handleCmsUpdate);
     return () => window.removeEventListener('cms-update', handleCmsUpdate);
-  }, []);
+  }, [initialData]);
 
   if (!data?.enabled && data !== null) return null;
 
