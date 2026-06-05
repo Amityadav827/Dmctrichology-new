@@ -6,7 +6,16 @@ import EditableText from './Editable/EditableText';
 
 const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
 
-export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, formSettings = {} }) {
+export default function AboutDrNandaniHero({
+  data = {},
+  breadcrumbData = {},
+  formSettings = {},
+  leadEndpoint = '/about-dr-nandani/lead',
+  leadService = 'Dr. Nandani Consultation Form',
+  sectionIds = {}
+}) {
+  const heroSectionId = sectionIds.hero || 'about-nandani-hero';
+  const breadcrumbSectionId = sectionIds.breadcrumb || 'about-nandani-breadcrumb';
   const {
     mainHeading = "BEST HAIR TRANSPLANT SURGEON IN DELHI",
     doctorName = "Dr. Nandani Dadu",
@@ -33,7 +42,7 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
   const formTitle = formSettings?.title || "Request Private Consultation";
   const formSubtitle = formSettings?.subtitle || "Reserve your bespoke scalp assessment and consultation session.";
   const successMessage = formSettings?.successMessage || "Your consultation request has been successfully submitted. Our concierge team will reach out to you shortly.";
-  const galleryImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
+  const galleryImage = data.galleryImage || data.doctorImage || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
 
   const [formData, setFormData] = useState({
     name: '',
@@ -83,13 +92,13 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
 
     setLoading(true);
     try {
-      await api.post('/about-dr-nandani/lead', {
+      await api.post(leadEndpoint, {
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
         mobile: trimmedMobile,
         appointmentDate: formData.appointmentDate,
         message: formData.message.trim(),
-        service: "Dr. Nandani Consultation Form"
+        service: leadService
       });
 
       setSuccess(true);
@@ -111,24 +120,24 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
 
   return (
     <>
-      <EditableSection sectionId="about-nandani-hero" label="Dr Nandani Page Hero">
+      <EditableSection sectionId={heroSectionId} label="Doctor Page Hero">
         <section className="dr-nandani-page-hero">
           <div className="dr-nandani-page-hero-inner">
             <div className="dr-nandani-hero-title-block">
               <h1>
-                <EditableText sectionId="about-nandani-breadcrumb" fieldPath="title" tag="span">
+                <EditableText sectionId={breadcrumbSectionId} fieldPath="title" tag="span">
                   {resolvedTitle}
                 </EditableText>
               </h1>
               <div className="dr-nandani-hero-breadcrumb">
                 <a href={parentUrl}>
-                  <EditableText sectionId="about-nandani-breadcrumb" fieldPath="parentLabel" tag="span">
+                  <EditableText sectionId={breadcrumbSectionId} fieldPath="parentLabel" tag="span">
                     {parentLabel}
                   </EditableText>
                 </a>
                 <span>/</span>
                 <span>
-                  <EditableText sectionId="about-nandani-breadcrumb" fieldPath="currentPageText" tag="span">
+                  <EditableText sectionId={breadcrumbSectionId} fieldPath="currentPageText" tag="span">
                     {resolvedCurrentPageText}
                   </EditableText>
                 </span>
@@ -138,7 +147,7 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
         </section>
       </EditableSection>
 
-      <EditableSection sectionId="about-nandani-hero" label="Dr Nandani Intro And Lead Form">
+      <EditableSection sectionId={heroSectionId} label="Doctor Intro And Lead Form">
         <section className="dr-nandani-intro-form-section">
           <div className="dr-nandani-intro-grid">
             <div className="dr-nandani-image-column">
@@ -160,22 +169,22 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
             <div className="dr-nandani-info-form-column">
               <div className="dr-nandani-doctor-copy">
                 <span className="dr-nandani-eyebrow">
-                  <EditableText sectionId="about-nandani-hero" fieldPath="mainHeading" tag="span">
+                  <EditableText sectionId={heroSectionId} fieldPath="mainHeading" tag="span">
                     {mainHeading}
                   </EditableText>
                 </span>
                 <h2>
-                  <EditableText sectionId="about-nandani-hero" fieldPath="doctorName" tag="span">
+                  <EditableText sectionId={heroSectionId} fieldPath="doctorName" tag="span">
                     {doctorName}
                   </EditableText>
                 </h2>
                 <p className="dr-nandani-degree">
-                  <EditableText sectionId="about-nandani-hero" fieldPath="degreeText" tag="span">
+                  <EditableText sectionId={heroSectionId} fieldPath="degreeText" tag="span">
                     {degreeText}
                   </EditableText>
                 </p>
                 <p className="dr-nandani-description">
-                  <EditableText sectionId="about-nandani-hero" fieldPath="descriptionParagraph" tag="span">
+                  <EditableText sectionId={heroSectionId} fieldPath="descriptionParagraph" tag="span">
                     {descriptionParagraph}
                   </EditableText>
                 </p>
@@ -203,7 +212,7 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
                 </div>
 
                 <button className="dr-nandani-submit-btn" type="submit" disabled={loading}>
-                  <EditableText sectionId="about-nandani-hero" fieldPath="submitButtonText" tag="span">
+                  <EditableText sectionId={heroSectionId} fieldPath="submitButtonText" tag="span">
                     {loading ? "Scheduling..." : submitButtonText}
                   </EditableText>
                   <span aria-hidden="true">
