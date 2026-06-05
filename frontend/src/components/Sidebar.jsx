@@ -39,6 +39,10 @@ function Sidebar() {
     window.location.pathname.startsWith("/cms/about-dr-nandani") ||
     window.location.pathname.startsWith("/cms/about-dr-nivedita")
   );
+  const [isResultsOpen, setIsResultsOpen] = React.useState(() =>
+    window.location.pathname.startsWith("/cms/client-feedback") ||
+    window.location.pathname.startsWith("/cms/real-results")
+  );
   const [isServiceDetailsOpen, setIsServiceDetailsOpen] = React.useState(true);
   const [serviceDetailsItems, setServiceDetailsItems] = React.useState([]);
   const location = useLocation();
@@ -187,6 +191,29 @@ function Sidebar() {
                 </NavLink>
                 <NavLink to="/cms/about-dr-nivedita" className={getNavClass}>
                   <User size={14} /> Dr Nivedita
+                </NavLink>
+              </div>
+            )}
+            <div className="service-details-parent-row">
+              <span className="nav-item" style={{ pointerEvents: "none", flex: 1 }}>
+                <Star size={16} /> Results
+              </span>
+              <button
+                type="button"
+                className={`service-details-toggle${isResultsOpen ? " open" : ""}`}
+                onClick={() => setIsResultsOpen(p => !p)}
+                aria-label={isResultsOpen ? "Collapse" : "Expand"}
+              >
+                <ChevronRight size={15} />
+              </button>
+            </div>
+            {isResultsOpen && (
+              <div className="service-details-subnav">
+                <NavLink to="/cms/client-feedback" className={getNavClass}>
+                  <Star size={14} /> Client Feedback
+                </NavLink>
+                <NavLink to="/cms/real-results" className={getNavClass}>
+                  <Activity size={14} /> Real Results
                 </NavLink>
               </div>
             )}

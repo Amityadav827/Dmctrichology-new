@@ -70,6 +70,7 @@ const aboutDrNiveditaRoutes = require("./routes/aboutDrNiveditaRoutes");
 const aboutDmcTrichologyRoutes = require("./routes/aboutDmcTrichologyRoutes");
 const ourTeamRoutes = require("./routes/ourTeamRoutes");
 const faqsPageRoutes = require("./routes/faqsPageRoutes");
+const clientFeedbackRoutes = require("./routes/clientFeedbackRoutes");
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const redirectMiddleware = require("./middleware/redirectMiddleware");
@@ -212,6 +213,7 @@ app.use("/api/about-dr-nivedita", aboutDrNiveditaRoutes);
 app.use("/api/about-dmc-trichology", aboutDmcTrichologyRoutes);
 app.use("/api/our-team", ourTeamRoutes);
 app.use("/api/faqs-page", faqsPageRoutes);
+app.use("/api/client-feedback", clientFeedbackRoutes);
 
 
 // SEO

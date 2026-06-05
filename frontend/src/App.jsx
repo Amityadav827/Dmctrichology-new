@@ -64,6 +64,7 @@ import AboutDrNiveditaCMS from "./pages/cms/AboutDrNiveditaCMS";
 import AboutDmcTrichologyCMS from "./pages/cms/AboutDmcTrichologyCMS";
 import OurTeamCMS from "./pages/cms/OurTeamCMS";
 import FaqsPageCMS from "./pages/cms/FaqsPageCMS";
+import ClientFeedbackCMS from "./pages/cms/ClientFeedbackCMS";
 import DrNandaniLeads from "./pages/DrNandaniLeads";
 import DetailsBannerCMS from "./pages/cms/DetailsBannerCMS";
 import ServiceIntroCMS from "./pages/cms/ServiceIntroCMS";
@@ -278,6 +279,22 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <FaqsPageCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/client-feedback"
+          element={
+            <ProtectedRoute permission="cms">
+              <ClientFeedbackCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/real-results"
+          element={
+            <ProtectedRoute permission="cms">
+              <PlaceholderPage title="Real Results" />
             </ProtectedRoute>
           }
         />
