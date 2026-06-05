@@ -231,7 +231,7 @@ export default function AboutDrNandaniHero({
         .dr-nandani-page-hero {
           position: relative;
           overflow: hidden;
-          margin-top: 112px;
+          margin-top: 0;
           padding: 80px 5% 60px;
           background: #EEF0FA;
         }
@@ -244,6 +244,7 @@ export default function AboutDrNandaniHero({
           justify-content: center;
           align-items: center;
           text-align: center;
+          margin-top: 110px;
         }
         .dr-nandani-eyebrow {
           display: inline-flex;

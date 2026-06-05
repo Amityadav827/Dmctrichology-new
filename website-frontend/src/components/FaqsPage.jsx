@@ -139,7 +139,7 @@ export default function FaqsPage({ data = {} }) {
 
         .faqs-page-hero {
           width: 100%;
-          margin-top: 112px;
+          margin-top: 0;
           padding: 80px 5% 60px;
           background: #EEF0FA;
           box-sizing: border-box;
@@ -149,6 +149,7 @@ export default function FaqsPage({ data = {} }) {
           max-width: 1200px;
           margin: 0 auto;
           text-align: center;
+          margin-top: 110px;
         }
 
         .faqs-page-hero h1 {
@@ -298,7 +299,7 @@ export default function FaqsPage({ data = {} }) {
         @media (max-width: 767px) {
           .faqs-page-hero {
             margin-top: 0;
-            padding: 156px 16px 42px;
+            padding: 30px 16px 42px;
           }
 
           .faqs-page-hero h1 {

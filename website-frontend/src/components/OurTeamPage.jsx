@@ -81,7 +81,7 @@ export default function OurTeamPage({ data = {} }) {
 
         .our-team-hero {
           width: 100%;
-          margin-top: 112px;
+          margin-top: 0;
           padding: 80px 5% 60px;
           background: #EEF0FA;
           box-sizing: border-box;
@@ -91,6 +91,7 @@ export default function OurTeamPage({ data = {} }) {
           max-width: 1200px;
           margin: 0 auto;
           text-align: center;
+          margin-top: 110px;
         }
 
         .our-team-hero h1 {
