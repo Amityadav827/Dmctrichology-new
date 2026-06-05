@@ -14,239 +14,208 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
     ],
     conclusionParagraph = "For more information contact the **best hair specialist in Delhi** at DMC Trichology. We have our centres located at Vasant Vihar (South Delhi) & Rajouri Garden (West Delhi).",
     image = "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
-    imageAlt = "Other Specialities",
-    backgroundColor = "#ffffff",
-    cardBackgroundColor = "#ffffff",
-    contentMaxWidth = "1200px",
-    paddingTop = "100px",
-    paddingBottom = "100px",
-    gridGap = "70px"
+    imageAlt = "Other Specialities"
   } = data;
 
-  // Helper function to format bold/strong text as luxury Gold (#ffffff)
   const renderFormattedText = (text) => {
     if (!text) return "";
-    let processed = text;
-    // Replace **text** with gold strong tags
-    processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong class="gold-accent">$1</strong>');
-    // Replace <strong>text</strong> with gold strong tags
-    processed = processed.replace(/<strong>(.*?)<\/strong>/g, '<strong class="gold-accent">$1</strong>');
-    // Also style special keyword references dynamically
-    processed = processed.replace(/best hair specialist in Delhi/gi, '<strong class="gold-accent">best hair specialist in Delhi</strong>');
-    processed = processed.replace(/DMC Trichology/gi, '<strong class="gold-accent">DMC Trichology</strong>');
+    const processed = String(text)
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/<strong>(.*?)<\/strong>/g, '<strong>$1</strong>');
+
     return <span dangerouslySetInnerHTML={{ __html: processed }} />;
   };
 
   return (
     <EditableSection sectionId="about-nandani-other-specialities" label="Other Specialities Section">
-      <section
-        className="dr-nandani-other-specialities-wrapper"
-        style={{
-          backgroundColor: backgroundColor || "#ffffff",
-          paddingTop: paddingTop || "100px",
-          paddingBottom: paddingBottom || "100px",
-          paddingLeft: "24px",
-          paddingRight: "24px",
-          width: "100%",
-          boxSizing: "border-box",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        <div
-          className="dr-nandani-other-specialities-card"
-          style={{
-            backgroundColor: cardBackgroundColor || "#ffffff",
-            borderRadius: "0px",
-            maxWidth: contentMaxWidth || "1200px",
-            width: "100%",
-            margin: "0 auto",
-            padding: "60px",
-            boxSizing: "border-box",
-            boxShadow: "0 25px 70px rgba(0, 0, 0, 0.35)",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: gridGap || "70px",
-            alignItems: "center"
-          }}
-        >
-          {/* LEFT SIDE CONTENT */}
-          <div className="other-specialities-left-content" style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
-            
-            {/* Section Heading */}
-            <h2
-              style={{
-                fontSize: "36px",
-                lineHeight: "1.2",
-                fontWeight: "400",
-                color: "#ffffff",
-                margin: "0",
-                fontFamily: "'Marcellus', serif",
-                letterSpacing: "0.03em"
-              }}
-            >
+      <section className="dr-nandani-other-specialities-wrapper">
+        <div className="dr-nandani-other-specialities-card">
+          <div className="dr-nandani-other-image-card">
+            <img
+              src={image || "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png"}
+              alt={imageAlt || "Other Specialities"}
+            />
+          </div>
+
+          <div className="dr-nandani-other-content">
+            <div className="dr-nandani-other-icon" aria-hidden="true">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                <path d="M12 20V7" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                <path d="M12 12C8.9 11.4 7 9.4 6.2 6.2c3.2.4 5.1 2.2 5.8 5.8Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                <path d="M12 14c3.2-.6 5.1-2.6 5.8-5.8-3.2.4-5.1 2.2-5.8 5.8Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+              </svg>
+            </div>
+
+            <h2>
               <EditableText sectionId="about-nandani-other-specialities" fieldPath="otherSpecialitiesSection.heading">
                 {heading}
               </EditableText>
             </h2>
 
-            {/* Intro Paragraph */}
-            <p
-              style={{
-                fontSize: "16px",
-                lineHeight: "1.7",
-                color: "#ffffff",
-                margin: "0",
-                fontFamily: "'Marcellus', serif",
-                fontWeight: "300"
-              }}
-            >
+            <p className="dr-nandani-other-intro">
               <EditableText sectionId="about-nandani-other-specialities" fieldPath="otherSpecialitiesSection.introParagraph">
                 {renderFormattedText(introParagraph)}
               </EditableText>
             </p>
 
-            {/* Bullet Specialties List */}
-            <div
-              className="specialities-bullet-list"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "16px",
-                marginTop: "4px",
-                marginBottom: "4px"
-              }}
-            >
+            <div className="dr-nandani-other-list">
               {specialitiesList.map((bullet, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: "14px"
-                  }}
-                >
-                  {/* Gold Checkmark SVG */}
-                  <div style={{ flexShrink: 0, marginTop: "3px", display: "flex", alignItems: "center" }}>
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#ffffff"
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="20 6 9 17 4 12" />
+                <div className="dr-nandani-other-list-item" key={`${bullet.title}-${idx}`}>
+                  <span aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 24 24">
+                      <path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                  </div>
-                  
-                  <span
-                    style={{
-                      fontSize: "15px",
-                      lineHeight: "1.4",
-                      fontWeight: "400",
-                      color: "#ffffff",
-                      fontFamily: "'Marcellus', serif"
-                    }}
-                  >
+                  </span>
+                  <p>
                     <EditableText sectionId="about-nandani-other-specialities" fieldPath={`otherSpecialitiesSection.specialitiesList.${idx}.title`}>
                       {bullet.title}
                     </EditableText>
-                  </span>
+                  </p>
                 </div>
               ))}
             </div>
 
-            {/* Bottom Paragraph */}
-            <p
-              style={{
-                fontSize: "15px",
-                lineHeight: "1.7",
-                color: "#ffffff",
-                margin: "0",
-                fontFamily: "'Marcellus', serif",
-                fontWeight: "300"
-              }}
-            >
+            <p className="dr-nandani-other-conclusion">
               <EditableText sectionId="about-nandani-other-specialities" fieldPath="otherSpecialitiesSection.conclusionParagraph">
                 {renderFormattedText(conclusionParagraph)}
               </EditableText>
             </p>
           </div>
-
-          {/* RIGHT SIDE IMAGE */}
-          <div className="other-specialities-right-image" style={{ width: "100%" }}>
-            <div
-              className="editorial-image-frame"
-              style={{
-                border: "2px solid #ffffff",
-                padding: "0",
-                boxSizing: "border-box",
-                overflow: "hidden",
-                boxShadow: "0 15px 45px rgba(0, 0, 0, 0.5)",
-                display: "flex",
-                width: "100%",
-                aspectRatio: "4 / 3"
-              }}
-            >
-              <img
-                src={image || "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png"}
-                alt={imageAlt || "Other Specialities"}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block"
-                }}
-              />
-            </div>
-          </div>
         </div>
       </section>
 
-      <style jsx global>{`
-        .dr-nandani-other-specialities-wrapper,
-        .dr-nandani-other-specialities-wrapper * {
-          font-family: 'Marcellus', serif !important;
+      <style jsx>{`
+        .dr-nandani-other-specialities-wrapper {
+          width: 100%;
+          padding: 72px 24px;
+          background: #ffffff;
+          display: flex;
+          justify-content: center;
+          box-sizing: border-box;
         }
-        .dr-nandani-other-specialities-wrapper .gold-accent {
-          color: #ffffff !important;
-          font-weight: 600 !important;
+        .dr-nandani-other-specialities-card {
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 40px;
+          border-radius: 24px;
+          background: #EEF0FA;
+          display: grid;
+          grid-template-columns: minmax(260px, 0.35fr) minmax(0, 0.65fr);
+          gap: 32px;
+          align-items: center;
+          box-sizing: border-box;
         }
-        @media (max-width: 991px) {
+        .dr-nandani-other-image-card {
+          width: 100%;
+          height: 100%;
+          min-height: 346px;
+          border-radius: 20px;
+          overflow: hidden;
+          background: #d9d9d9;
+        }
+        .dr-nandani-other-image-card img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+        .dr-nandani-other-content {
+          padding: 8px 0;
+        }
+        .dr-nandani-other-icon {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: #3B5998;
+          color: #ffffff;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 18px;
+        }
+        .dr-nandani-other-content h2 {
+          font-family: 'Marcellus', serif;
+          font-size: clamp(34px, 3vw, 44px);
+          line-height: 1.08;
+          font-weight: 400;
+          color: #111111;
+          margin: 0 0 18px;
+        }
+        .dr-nandani-other-intro,
+        .dr-nandani-other-conclusion {
+          font-family: 'Lato', sans-serif;
+          font-size: 13px;
+          line-height: 1.7;
+          color: #2b2b2b;
+          margin: 0;
+          max-width: 760px;
+        }
+        .dr-nandani-other-list {
+          display: flex;
+          flex-direction: column;
+          gap: 13px;
+          margin: 24px 0 26px;
+        }
+        .dr-nandani-other-list-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .dr-nandani-other-list-item span {
+          width: 18px;
+          height: 18px;
+          flex: 0 0 18px;
+          border-radius: 50%;
+          background: #3B5998;
+          color: #ffffff;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .dr-nandani-other-list-item p {
+          margin: 0;
+          font-family: 'Lato', sans-serif;
+          font-size: 13px;
+          line-height: 1.4;
+          color: #111111;
+        }
+        .dr-nandani-other-conclusion strong {
+          font-weight: 700;
+        }
+        @media (max-width: 1024px) {
           .dr-nandani-other-specialities-card {
-            grid-template-columns: 1fr !important;
-            gap: 50px !important;
-            padding: 48px !important;
+            grid-template-columns: 1fr;
+            gap: 30px;
+          }
+          .dr-nandani-other-image-card {
+            min-height: 420px;
           }
         }
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
           .dr-nandani-other-specialities-wrapper {
-            padding-top: 60px !important;
-            padding-bottom: 60px !important;
-            padding-left: 16px !important;
-            padding-right: 16px !important;
+            padding: 52px 16px;
           }
           .dr-nandani-other-specialities-card {
-            padding: 36px 24px !important;
-            gap: 40px !important;
+            padding: 24px;
+            border-radius: 24px;
           }
-          .dr-nandani-other-specialities-card h2 {
-            font-size: 28px !important;
+          .dr-nandani-other-image-card {
+            min-height: auto;
+            aspect-ratio: 1 / 1.08;
           }
-          .dr-nandani-other-specialities-card p,
-          .dr-nandani-other-specialities-card span {
-            font-size: 14px !important;
+          .dr-nandani-other-icon {
+            width: 52px;
+            height: 52px;
+            margin-bottom: 16px;
           }
-          .other-specialities-left-content {
-            gap: 20px !important;
-            order: 1 !important; /* text first */
+          .dr-nandani-other-content h2 {
+            font-size: clamp(30px, 9vw, 38px);
           }
-          .other-specialities-right-image {
-            order: 2 !important; /* image second */
+          .dr-nandani-other-intro,
+          .dr-nandani-other-conclusion,
+          .dr-nandani-other-list-item p {
+            font-size: 13px;
           }
         }
       `}</style>
