@@ -107,7 +107,7 @@ const InfluencerCard = ({ card }) => {
     } else {
       videoRef.current.pause();
     }
-  }, [isPlaying, media.isNativeVideo]);
+  }, [isPlaying, media.isNativeVideo, media.videoUrl]);
 
   const togglePlayback = () => {
     if (!media.isVideo) return;
@@ -120,14 +120,16 @@ const InfluencerCard = ({ card }) => {
       onClick={togglePlayback}
     >
       <div className="influencer-media">
-        {isPlaying && media.isNativeVideo ? (
+        {media.isNativeVideo ? (
           <video
             ref={videoRef}
             src={media.videoUrl}
+            poster={media.imageUrl || undefined}
             muted={card.muted ?? true}
             loop={card.loop ?? true}
             playsInline
             preload="metadata"
+            onEnded={() => setIsPlaying(false)}
           />
         ) : isPlaying && media.isVideo ? (
           <iframe
@@ -138,8 +140,6 @@ const InfluencerCard = ({ card }) => {
           />
         ) : media.imageUrl ? (
           <img src={media.imageUrl} alt={name || designation || 'Influencer'} loading="lazy" />
-        ) : media.isNativeVideo ? (
-          <video src={media.videoUrl} muted playsInline preload="metadata" />
         ) : (
           <div className="influencer-placeholder" aria-hidden="true" />
         )}
