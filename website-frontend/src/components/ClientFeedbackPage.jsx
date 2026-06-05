@@ -236,7 +236,7 @@ export default function ClientFeedbackPage({ data = {} }) {
           left: 0;
           right: 0;
           bottom: 0;
-          height: 154px;
+          height: 400px;
           background-image: url(${shapeImage});
           background-size: 100% 100%;
           background-repeat: no-repeat;
@@ -246,8 +246,8 @@ export default function ClientFeedbackPage({ data = {} }) {
 
         .cf-client-image {
           position: absolute;
-          right: 62px;
-          bottom: 94px;
+          right: 60px;
+          bottom: 90px;
           z-index: 4;
           width: 64px;
           height: 64px;
@@ -295,7 +295,7 @@ export default function ClientFeedbackPage({ data = {} }) {
 
         .cf-bottom p {
           font-family: 'Lato', sans-serif;
-          font-size: 8px;
+          font-size: 10px;
           line-height: 1.25;
           color: rgba(255,255,255,0.9);
           margin: 0 0 2px;
