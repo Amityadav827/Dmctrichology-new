@@ -241,7 +241,7 @@ export default function OurTeamPage({ data = {} }) {
         @media (max-width: 767px) {
           .our-team-hero {
             margin-top: 0;
-            padding: 156px 16px 42px;
+            padding: 56px 16px 42px;
           }
 
           .our-team-hero h1 {

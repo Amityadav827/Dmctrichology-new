@@ -60,7 +60,14 @@ const DEFAULT_HERO = {
 
 const DEFAULT_CARD = {
   id: '',
+  image: '',
+  name: '',
+  designation: '',
   videoUrl: '',
+  instagram: '',
+  youtube: '',
+  facebook: '',
+  linkedin: '',
   autoplay: false,
   muted: true,
   loop: true,
@@ -195,6 +202,25 @@ export default function InfluencerCMS() {
       }
     } catch (err) {
       toast.error('Upload failed or endpoint not ready. Using direct URL instead.', { id: 'upload-video' });
+    }
+  };
+
+  const handleCardImageUpload = async (e, index) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      toast.loading('Uploading image...', { id: 'upload-image' });
+      const res = await axios.post('/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      if (res.data.success) {
+        updateCard(index, 'image', res.data.url);
+        toast.success('Uploaded successfully', { id: 'upload-image' });
+      }
+    } catch (err) {
+      toast.error('Image upload failed', { id: 'upload-image' });
     }
   };
 
@@ -430,12 +456,52 @@ export default function InfluencerCMS() {
               </div>
 
               <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Field label="Influencer Name">
+                    <input
+                      type="text"
+                      value={card.name || ''}
+                      onChange={(e) => updateCard(index, 'name', e.target.value)}
+                      placeholder="Influencer name"
+                      className={inputCls}
+                    />
+                  </Field>
+
+                  <Field label="Subtitle / Designation">
+                    <input
+                      type="text"
+                      value={card.designation || ''}
+                      onChange={(e) => updateCard(index, 'designation', e.target.value)}
+                      placeholder="Creator category or designation"
+                      className={inputCls}
+                    />
+                  </Field>
+                </div>
+
+                <Field label="Influencer Image">
+                  <div className="space-y-4">
+                    <ImgPreview src={card.image} className="w-full h-48 object-cover rounded-2xl" />
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={card.image || ''}
+                        onChange={(e) => updateCard(index, 'image', e.target.value)}
+                        placeholder="Image URL"
+                        className={`${inputCls} flex-1`}
+                      />
+                      <label className="flex items-center justify-center px-4 bg-slate-100 text-slate-700 rounded-xl cursor-pointer hover:bg-slate-200 transition-colors font-bold text-sm shrink-0">
+                        <ImageIcon size={16} className="mr-2" /> Upload
+                        <input type="file" className="hidden" accept="image/*" onChange={(e) => handleCardImageUpload(e, index)} />
+                      </label>
+                    </div>
+                  </div>
+                </Field>
                 
                 <Field label="Media URL (Upload .mp4 OR Paste YouTube/Vimeo/IG Link)">
                   <div className="flex gap-2">
                       <input
                         type="text"
-                        value={card.videoUrl}
+                        value={card.videoUrl || ''}
                         onChange={(e) => updateCard(index, 'videoUrl', e.target.value)}
                         placeholder="Direct URL or YouTube/Vimeo Link"
                         className={`${inputCls} flex-1`}
@@ -446,6 +512,45 @@ export default function InfluencerCMS() {
                       </label>
                   </div>
                 </Field>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Field label="Instagram Link">
+                    <input
+                      type="text"
+                      value={card.instagram || ''}
+                      onChange={(e) => updateCard(index, 'instagram', e.target.value)}
+                      placeholder="https://instagram.com/..."
+                      className={inputCls}
+                    />
+                  </Field>
+                  <Field label="Youtube Link">
+                    <input
+                      type="text"
+                      value={card.youtube || ''}
+                      onChange={(e) => updateCard(index, 'youtube', e.target.value)}
+                      placeholder="https://youtube.com/..."
+                      className={inputCls}
+                    />
+                  </Field>
+                  <Field label="Facebook Link">
+                    <input
+                      type="text"
+                      value={card.facebook || ''}
+                      onChange={(e) => updateCard(index, 'facebook', e.target.value)}
+                      placeholder="https://facebook.com/..."
+                      className={inputCls}
+                    />
+                  </Field>
+                  <Field label="Linkedin Link">
+                    <input
+                      type="text"
+                      value={card.linkedin || ''}
+                      onChange={(e) => updateCard(index, 'linkedin', e.target.value)}
+                      placeholder="https://linkedin.com/in/..."
+                      className={inputCls}
+                    />
+                  </Field>
+                </div>
 
                 <div className="flex gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
                     <label className="flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer">
