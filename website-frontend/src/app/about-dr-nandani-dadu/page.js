@@ -4,7 +4,7 @@ import AboutDrNandaniClient from './AboutDrNandaniClient';
 const staticFallback = {
   hero: {
     backgroundImage: "",
-    doctorImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
+    doctorImage: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
     mainHeading: "BEST HAIR TRANSPLANT SURGEON IN DELHI",
     doctorName: "Dr. Nandani Dadu",
     degreeText: "MD (Dermatology)",
@@ -105,8 +105,8 @@ const staticFallback = {
     experienceTabLabel: "Experience",
     educationTabLabel: "Education",
     credentialsTabLabel: "Credentials",
-    topImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
-    bottomImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png",
+    topImage: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
+    bottomImage: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
     educationItems: [
       {
         degree: "MBBS",
@@ -148,7 +148,7 @@ const staticFallback = {
     ]
   },
   credentialsSection: {
-    bannerImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
+    bannerImage: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
     overlayOpacity: 0.35,
     heading: "Credentials",
     credentialsList: [
@@ -166,7 +166,7 @@ const staticFallback = {
   trustSection: {
     eyebrow: "TRUSTED CARE SERVICES",
     heading: "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?",
-    image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png",
+    image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
     imageAlt: "Hair transplant treatment planning",
     imageMaxWidth: "100%",
     trustPoints: [
@@ -202,7 +202,7 @@ const staticFallback = {
       { title: "Collagen & other Injectable Wrinkle Fillers.etc." }
     ],
     conclusionParagraph: "For more information contact the **best hair specialist in Delhi** at DMC Trichology. We have our centres located at Vasant Vihar (South Delhi) & Rajouri Garden (West Delhi).",
-    image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
+    image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
     imageAlt: "Other Specialities",
     backgroundColor: "#ffffff",
     cardBackgroundColor: "#ffffff",

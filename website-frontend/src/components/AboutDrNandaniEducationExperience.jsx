@@ -101,8 +101,8 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
   }, [data, credentialsData]);
 
   const active = tabs.find(tab => tab.id === activeTab) || tabs[0];
-  const topImage = data.topImage || "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png";
-  const bottomImage = data.bottomImage || "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png";
+  const topImage = data.topImage || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
+  const bottomImage = data.bottomImage || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
 
   return (
     <EditableSection sectionId="about-nandani-education" label="Experience Education Credentials">

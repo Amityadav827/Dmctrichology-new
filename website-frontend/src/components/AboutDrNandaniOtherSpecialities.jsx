@@ -13,7 +13,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
       { title: "Collagen & other Injectable Wrinkle Fillers.etc." }
     ],
     conclusionParagraph = "For more information contact the **best hair specialist in Delhi** at DMC Trichology. We have our centres located at Vasant Vihar (South Delhi) & Rajouri Garden (West Delhi).",
-    image = "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
+    image = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
     imageAlt = "Other Specialities"
   } = data;
 
@@ -32,7 +32,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
         <div className="dr-nandani-other-specialities-card">
           <div className="dr-nandani-other-image-card">
             <img
-              src={image || "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png"}
+              src={image || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp"}
               alt={imageAlt || "Other Specialities"}
             />
           </div>

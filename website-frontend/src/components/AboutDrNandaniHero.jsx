@@ -541,8 +541,11 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
         }
         @media (max-width: 767px) {
           .dr-nandani-page-hero {
-            margin-top: 112px;
+            margin-top: 0;
             padding: 56px 16px 42px;
+          }
+          .dr-nandani-page-hero-inner {
+            margin-top: 100px;
           }
           .dr-nandani-hero-title-block h1 {
             font-size: clamp(30px, 9vw, 40px);
@@ -555,9 +558,7 @@ export default function AboutDrNandaniHero({ data = {}, breadcrumbData = {}, for
             gap: 16px;
           }
           .dr-nandani-gallery-side {
-            grid-template-columns: 1fr;
-            grid-template-rows: none;
-            gap: 16px;
+            display: none;
           }
           .dr-nandani-gallery-main,
           .dr-nandani-gallery-small {

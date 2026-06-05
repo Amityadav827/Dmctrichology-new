@@ -300,7 +300,9 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
           }
           .dmc-testimonial-nav {
             top: 12px;
-            right: 18px;
+            right: auto;
+            left: 50%;
+            transform: translateX(-50%);
             gap: 10px;
           }
           .dmc-testimonial-nav button {

@@ -5,7 +5,7 @@ import EditableText from './Editable/EditableText';
 
 export default function AboutDrNandaniCredentials({ data = {} }) {
   const {
-    bannerImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
+    bannerImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
     overlayOpacity = 0.35,
     heading = "Credentials",
     credentialsList = [
