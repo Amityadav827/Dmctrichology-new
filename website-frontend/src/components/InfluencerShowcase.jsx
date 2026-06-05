@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import EditableSection from './Editable/EditableSection';
 
 const VIDEO_RE = /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i;
@@ -24,7 +24,6 @@ const getMedia = (card = {}) => {
 
 const InfluencerShowcase = ({ cards: initialCards = [] }) => {
   const [cards, setCards] = useState(initialCards);
-  const [activeVideo, setActiveVideo] = useState(null);
 
   useEffect(() => {
     setCards(initialCards);
@@ -62,7 +61,6 @@ const InfluencerShowcase = ({ cards: initialCards = [] }) => {
                   <InfluencerCard
                     key={card.id || `${card.name || card.videoUrl || idx}`}
                     card={card}
-                    onVideoOpen={setActiveVideo}
                   />
                 ))}
               </div>
@@ -70,26 +68,6 @@ const InfluencerShowcase = ({ cards: initialCards = [] }) => {
           </div>
         </section>
       </EditableSection>
-
-      {activeVideo && (
-        <div className="influencer-video-modal" role="dialog" aria-modal="true" onClick={() => setActiveVideo(null)}>
-          <button className="influencer-video-close" type="button" aria-label="Close video" onClick={() => setActiveVideo(null)}>
-            &times;
-          </button>
-          <div className="influencer-video-frame" onClick={(e) => e.stopPropagation()}>
-            {VIDEO_RE.test(activeVideo) ? (
-              <video src={activeVideo} controls autoPlay playsInline />
-            ) : (
-              <iframe
-                src={toEmbedUrl(activeVideo)}
-                title="Influencer video"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-              />
-            )}
-          </div>
-        </div>
-      )}
 
       <InfluencerStyles />
     </>
@@ -113,16 +91,52 @@ const socialFields = [
   ['linkedin', 'In'],
 ];
 
-const InfluencerCard = ({ card, onVideoOpen }) => {
+const InfluencerCard = ({ card }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
   const media = getMedia(card);
   const name = card.name || card.title || '';
   const designation = card.designation || card.subtitle || card.category || card.role || '';
   const hasSocials = socialFields.some(([field]) => card[field]);
 
+  useEffect(() => {
+    if (!media.isNativeVideo || !videoRef.current) return;
+
+    if (isPlaying) {
+      videoRef.current.play().catch(() => setIsPlaying(false));
+    } else {
+      videoRef.current.pause();
+    }
+  }, [isPlaying, media.isNativeVideo]);
+
+  const togglePlayback = () => {
+    if (!media.isVideo) return;
+    setIsPlaying((current) => !current);
+  };
+
   return (
-    <article className="influencer-card">
+    <article
+      className={`influencer-card ${media.isVideo ? 'has-video' : ''} ${isPlaying ? 'is-playing' : ''}`}
+      onClick={togglePlayback}
+    >
       <div className="influencer-media">
-        {media.imageUrl ? (
+        {isPlaying && media.isNativeVideo ? (
+          <video
+            ref={videoRef}
+            src={media.videoUrl}
+            muted={card.muted ?? true}
+            loop={card.loop ?? true}
+            playsInline
+            preload="metadata"
+          />
+        ) : isPlaying && media.isVideo ? (
+          <iframe
+            src={toEmbedUrl(media.videoUrl)}
+            title={name || 'Influencer video'}
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowFullScreen
+          />
+        ) : media.imageUrl ? (
           <img src={media.imageUrl} alt={name || designation || 'Influencer'} loading="lazy" />
         ) : media.isNativeVideo ? (
           <video src={media.videoUrl} muted playsInline preload="metadata" />
@@ -137,10 +151,13 @@ const InfluencerCard = ({ card, onVideoOpen }) => {
         <button
           className="influencer-play"
           type="button"
-          aria-label="Play influencer video"
-          onClick={() => onVideoOpen(media.videoUrl)}
+          aria-label={isPlaying ? 'Pause influencer video' : 'Play influencer video'}
+          onClick={(e) => {
+            e.stopPropagation();
+            togglePlayback();
+          }}
         >
-          <span />
+          {isPlaying ? <i /> : <span />}
         </button>
       )}
 
@@ -201,6 +218,10 @@ const InfluencerStyles = () => (
       transition: transform 0.35s ease, box-shadow 0.35s ease;
     }
 
+    .influencer-card.has-video {
+      cursor: pointer;
+    }
+
     .influencer-card:hover {
       transform: translateY(-8px);
       box-shadow: 0 30px 62px rgba(17, 17, 17, 0.16);
@@ -209,6 +230,7 @@ const InfluencerStyles = () => (
     .influencer-media,
     .influencer-media img,
     .influencer-media video,
+    .influencer-media iframe,
     .influencer-placeholder {
       position: absolute;
       inset: 0;
@@ -217,15 +239,22 @@ const InfluencerStyles = () => (
     }
 
     .influencer-media img,
-    .influencer-media video {
+    .influencer-media video,
+    .influencer-media iframe {
       object-fit: cover;
       display: block;
       transition: transform 0.45s ease;
+      border: 0;
     }
 
     .influencer-card:hover .influencer-media img,
-    .influencer-card:hover .influencer-media video {
+    .influencer-card:hover .influencer-media video,
+    .influencer-card:hover .influencer-media iframe {
       transform: scale(1.055);
+    }
+
+    .influencer-media iframe {
+      pointer-events: none;
     }
 
     .influencer-placeholder {
@@ -328,6 +357,11 @@ const InfluencerStyles = () => (
       opacity: 1;
     }
 
+    .influencer-card.is-playing .influencer-play {
+      opacity: 1;
+      background: rgba(255,255,255,0.92);
+    }
+
     .influencer-play:hover {
       transform: translate(-50%, -50%) scale(1.08);
     }
@@ -341,6 +375,32 @@ const InfluencerStyles = () => (
       margin-left: 3px;
     }
 
+    .influencer-play i {
+      width: 14px;
+      height: 17px;
+      display: inline-block;
+      position: relative;
+    }
+
+    .influencer-play i::before,
+    .influencer-play i::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 5px;
+      height: 17px;
+      border-radius: 3px;
+      background: #3B5998;
+    }
+
+    .influencer-play i::before {
+      left: 1px;
+    }
+
+    .influencer-play i::after {
+      right: 1px;
+    }
+
     .influencers-empty {
       text-align: center;
       padding: 80px 40px;
@@ -348,50 +408,6 @@ const InfluencerStyles = () => (
       border-radius: 24px;
       color: #777777;
       font-family: 'Lato', sans-serif;
-    }
-
-    .influencer-video-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: rgba(17, 17, 17, 0.78);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .influencer-video-frame {
-      width: min(960px, 100%);
-      aspect-ratio: 16 / 9;
-      background: #000000;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 28px 80px rgba(0,0,0,0.35);
-    }
-
-    .influencer-video-frame iframe,
-    .influencer-video-frame video {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-    }
-
-    .influencer-video-close {
-      position: fixed;
-      top: 22px;
-      right: 24px;
-      width: 44px;
-      height: 44px;
-      border: 0;
-      border-radius: 50%;
-      background: #ffffff;
-      color: #111111;
-      font-size: 28px;
-      line-height: 1;
-      cursor: pointer;
-      box-shadow: 0 14px 34px rgba(0,0,0,0.22);
     }
 
     @media (max-width: 1199px) {
