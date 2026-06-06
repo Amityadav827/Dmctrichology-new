@@ -255,7 +255,7 @@ export default function Footer({ siteSettings }) {
                     {col.title}
                   </EditableText>
                 </h4>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                <ul className="footer-link-list" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                   {(col.links || []).map((link, lIdx) => (
                     <li key={lIdx} style={{ marginBottom: '12px' }}>
                       <a href={link.url} style={{ color: '#444', textDecoration: 'none', fontSize: '14px', transition: 'color 0.3s ease' }}>
@@ -335,7 +335,7 @@ export default function Footer({ siteSettings }) {
             <div className="footer-newsletter-wrap" style={{
               flex: '1',
               minWidth: '350px',
-              maxWidth: '750px',
+              maxWidth: '820px',
               marginTop: '-160px',
               zIndex: '10'
             }}>
@@ -484,6 +484,9 @@ export default function Footer({ siteSettings }) {
           }
           .premium-footer-link {
             transition: color 0.2s ease-in-out;
+          }
+          .footer-link-list li {
+            margin-left: 0 !important;
           }
           .premium-footer-link:hover {
             color: #C8A45D !important;
