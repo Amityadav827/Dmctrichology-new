@@ -3,8 +3,7 @@ const uploadToSupabase = require('../utils/uploadToSupabase');
 
 const CMS_KEY = 'real_results';
 
-const beforeImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/dh6webh6x4l7qfrlzxtl.png';
-const afterImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/bif89jyygbycclg8qa92.png';
+const resultImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/bif89jyygbycclg8qa92.png';
 
 const defaultCards = [
   ['Korean Facial Illumination', 'After 6 sessions'],
@@ -18,8 +17,7 @@ const defaultCards = [
 ].map(([treatmentName, sessionsText], index) => ({
   treatmentName,
   title: treatmentName,
-  beforeImage,
-  afterImage,
+  image: resultImage,
   sessionsText,
   sortOrder: (index + 1) * 10,
   isActive: true
@@ -41,8 +39,7 @@ const fallbackData = {
 const normalizeCard = (card = {}, index = 0) => ({
   treatmentName: card.treatmentName || card.title || '',
   title: card.title || card.treatmentName || '',
-  beforeImage: card.beforeImage || '',
-  afterImage: card.afterImage || '',
+  image: card.image || card.resultImage || card.afterImage || card.beforeImage || '',
   sessionsText: card.sessionsText || card.sessions || card.description || '',
   sessions: card.sessions || card.sessionsText || card.description || '',
   sortOrder: Number.isFinite(Number(card.sortOrder)) ? Number(card.sortOrder) : (index + 1) * 10,

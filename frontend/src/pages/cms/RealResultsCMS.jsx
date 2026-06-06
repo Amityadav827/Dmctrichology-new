@@ -3,8 +3,7 @@ import axios from "../../api/client";
 import toast from "react-hot-toast";
 import { Activity, Eye, Image as ImageIcon, Loader2, Plus, Save, Settings, Trash2 } from "lucide-react";
 
-const beforeImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/dh6webh6x4l7qfrlzxtl.png";
-const afterImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/bif89jyygbycclg8qa92.png";
+const resultImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/bif89jyygbycclg8qa92.png";
 
 const defaultCards = [
   ["Korean Facial Illumination", "After 6 sessions"],
@@ -18,8 +17,7 @@ const defaultCards = [
 ].map(([treatmentName, sessionsText], index) => ({
   treatmentName,
   title: treatmentName,
-  beforeImage,
-  afterImage,
+  image: resultImage,
   sessionsText,
   sessions: sessionsText,
   sortOrder: (index + 1) * 10,
@@ -46,8 +44,7 @@ function normalizeCard(card = {}, index = 0) {
   return {
     treatmentName: card.treatmentName || card.title || "",
     title: card.title || card.treatmentName || "",
-    beforeImage: card.beforeImage || "",
-    afterImage: card.afterImage || "",
+    image: card.image || card.resultImage || card.afterImage || card.beforeImage || "",
     sessionsText: card.sessionsText || card.sessions || "",
     sessions: card.sessions || card.sessionsText || "",
     sortOrder: card.sortOrder ?? ((index + 1) * 10),
@@ -112,8 +109,7 @@ export default function RealResultsCMS() {
           ...(prev.resultsSection?.cards || []),
           normalizeCard({
             treatmentName: "",
-            beforeImage,
-            afterImage,
+            image: resultImage,
             sessionsText: "",
             sortOrder: ((prev.resultsSection?.cards || []).length + 1) * 10,
             isActive: true
@@ -232,7 +228,7 @@ export default function RealResultsCMS() {
             </div>
             <div>
               <h1 className="text-xl font-black text-slate-800 tracking-tight">Real Results CMS</h1>
-              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Hero and before-after result cards</p>
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Hero and result cards</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -320,21 +316,19 @@ export default function RealResultsCMS() {
                     <span className="text-sm font-black text-slate-700">Active</span>
                   </label>
 
-                  {["beforeImage", "afterImage"].map((field) => (
-                    <div key={field} className="space-y-4">
-                      <label className={labelClass}>{field === "beforeImage" ? "Before Image" : "After Image"}</label>
-                      <div className="flex gap-4 items-center">
-                        <input value={card[field] || ""} onChange={e => updateCard(index, field, e.target.value)} placeholder={`${field === "beforeImage" ? "Before" : "After"} Image URL`} className={`${inputClass} flex-1`} />
-                        <label className="cursor-pointer shrink-0">
-                          <input type="file" className="hidden" accept="image/*" onChange={e => handleImageUpload(e, index, field)} disabled={!!uploadingIndex} />
-                          <span className="flex items-center gap-2 px-5 py-4 bg-indigo-50 text-indigo-700 rounded-2xl font-bold text-sm border border-indigo-100">
-                            {uploadingIndex === `${index}-${field}` ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={16} />} Upload
-                          </span>
-                        </label>
-                      </div>
-                      {card[field] && <img src={card[field]} alt="" className="w-full max-w-xs h-40 object-cover rounded-2xl border border-slate-200" />}
+                  <div className="space-y-4 md:col-span-2">
+                    <label className={labelClass}>Result Image</label>
+                    <div className="flex gap-4 items-center">
+                      <input value={card.image || ""} onChange={e => updateCard(index, "image", e.target.value)} placeholder="Result Image URL" className={`${inputClass} flex-1`} />
+                      <label className="cursor-pointer shrink-0">
+                        <input type="file" className="hidden" accept="image/*" onChange={e => handleImageUpload(e, index, "image")} disabled={!!uploadingIndex} />
+                        <span className="flex items-center gap-2 px-5 py-4 bg-indigo-50 text-indigo-700 rounded-2xl font-bold text-sm border border-indigo-100">
+                          {uploadingIndex === `${index}-image` ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={16} />} Upload
+                        </span>
+                      </label>
                     </div>
-                  ))}
+                    {card.image && <img src={card.image} alt="" className="w-full max-w-xs h-40 object-cover rounded-2xl border border-slate-200" />}
+                  </div>
                 </div>
               </div>
             ))}

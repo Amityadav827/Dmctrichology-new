@@ -1,6 +1,6 @@
 import AboutDrNiveditaClient from './AboutDrNiveditaClient';
 
-export const metadata = {
+const fallbackMetadata = {
   title: 'Dr. Nivedita Dadu | Expert Dermatologist & Trichologist in Delhi | DMC Trichology',
   description: 'Consult Dr. Nivedita Dadu, renowned Dermatologist and Trichologist at DMC Trichology Delhi. Expert in advanced hair restoration, scalp treatments, and comprehensive dermatological care.',
   alternates: {
@@ -203,6 +203,26 @@ async function getHomeFaqData() {
     console.error('SSR Fetch Error (Home FAQ for Dr. Nivedita page):', error);
     return null;
   }
+}
+
+export async function generateMetadata() {
+  const data = await getPageData();
+  const seo = data.seo || {};
+  const title = seo.metaTitle || fallbackMetadata.title;
+  const description = seo.metaDescription || fallbackMetadata.description;
+  const ogImage = seo.ogImage || data.hero?.doctorImage || '';
+
+  return {
+    ...fallbackMetadata,
+    title,
+    description,
+    openGraph: {
+      ...fallbackMetadata.openGraph,
+      title,
+      description,
+      ...(ogImage ? { images: [{ url: ogImage }] } : {})
+    }
+  };
 }
 
 export default async function AboutDrNiveditaPage() {

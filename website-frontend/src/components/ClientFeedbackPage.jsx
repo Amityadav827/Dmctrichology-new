@@ -57,7 +57,6 @@ function FeedbackCard({ card }) {
       <div className="cf-bottom">
         <div>
           <h2>{card.clientName}</h2>
-          <p>* Opinions/Results May Vary From Person To Person.</p>
           {hasText(card.location) && <p>{card.location}</p>}
         </div>
         <div className="cf-rating" aria-label={`${rating} star rating`}>
@@ -192,7 +191,7 @@ export default function ClientFeedbackPage({ data = {} }) {
 
         .cf-card {
           position: relative;
-          min-height: 356px;
+          min-height: 420px;
           border-radius: 30px;
           overflow: hidden;
           background: #e8eaf6;
@@ -221,10 +220,10 @@ export default function ClientFeedbackPage({ data = {} }) {
           position: relative;
           z-index: 3;
           max-width: 286px;
-          min-height: 128px;
+          min-height: 213px;
           margin: 0 auto;
           font-family: 'Marcellus', serif;
-          font-size: 19px;
+          font-size: 14px;
           line-height: 1.48;
           color: #111111;
           text-align: center;

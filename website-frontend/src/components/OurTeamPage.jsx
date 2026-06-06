@@ -190,7 +190,7 @@ export default function OurTeamPage({ data = {} }) {
 
         .our-team-card h2 {
           font-family: 'Marcellus', serif;
-          font-size: 18px;
+          font-size: 30px;
           line-height: 1.28;
           font-weight: 400;
           color: #111111;
@@ -200,7 +200,7 @@ export default function OurTeamPage({ data = {} }) {
         .our-team-designation {
           font-family: 'Lato', sans-serif;
           color: #3B5998;
-          font-size: 12px;
+          font-size: 16px;
           line-height: 1.35;
           font-weight: 700;
           margin: 0 0 14px;
@@ -209,7 +209,7 @@ export default function OurTeamPage({ data = {} }) {
         .our-team-qualification {
           font-family: 'Lato', sans-serif;
           color: #111111;
-          font-size: 11px;
+          font-size: 12px;
           line-height: 1.5;
           font-weight: 700;
           margin: 0 0 12px;
@@ -218,7 +218,7 @@ export default function OurTeamPage({ data = {} }) {
         .our-team-description {
           font-family: 'Lato', sans-serif;
           color: #111111;
-          font-size: 11px;
+          font-size: 14px;
           line-height: 1.55;
           margin: 0;
           max-width: 270px;

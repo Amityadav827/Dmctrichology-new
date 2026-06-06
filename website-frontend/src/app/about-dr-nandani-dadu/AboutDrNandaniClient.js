@@ -162,6 +162,10 @@ export default function AboutDrNandaniClient({ initialData, initialFaqData = nul
     return () => window.removeEventListener('cms-update', handleCmsUpdate);
   }, [isEditing]);
 
+  const faqData = pageData?.faqSection?.categories?.length || pageData?.faqSection?.faqItems?.length
+    ? pageData.faqSection
+    : initialFaqData;
+
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
       <AboutDrNandaniHero
@@ -178,7 +182,7 @@ export default function AboutDrNandaniClient({ initialData, initialFaqData = nul
       />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection || {}} />
       <AboutDrNandaniTestimonials data={pageData.testimonialsSection || {}} />
-      <FaqSection initialData={initialFaqData} />
+      <FaqSection initialData={faqData} />
     </main>
   );
 }

@@ -62,6 +62,7 @@ import VisualLiveBuilder from "./pages/cms/VisualLiveBuilder";
 import AboutDrNandaniCMS from "./pages/cms/AboutDrNandaniCMS";
 import AboutDrNiveditaCMS from "./pages/cms/AboutDrNiveditaCMS";
 import AboutDmcTrichologyCMS from "./pages/cms/AboutDmcTrichologyCMS";
+import HairTransplantClinicCMS from "./pages/cms/HairTransplantClinicCMS";
 import OurTeamCMS from "./pages/cms/OurTeamCMS";
 import FaqsPageCMS from "./pages/cms/FaqsPageCMS";
 import ClientFeedbackCMS from "./pages/cms/ClientFeedbackCMS";
@@ -264,6 +265,14 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <AboutDmcTrichologyCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/hair-transplant-clinic"
+          element={
+            <ProtectedRoute permission="cms">
+              <HairTransplantClinicCMS />
             </ProtectedRoute>
           }
         />

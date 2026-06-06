@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
-const beforeImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/dh6webh6x4l7qfrlzxtl.png';
-const afterImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/bif89jyygbycclg8qa92.png';
+const resultImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/bif89jyygbycclg8qa92.png';
 
 const defaultCards = [
   ['Korean Facial Illumination', 'After 6 sessions'],
@@ -14,8 +13,7 @@ const defaultCards = [
   ['Golden Touch Result', 'After 6 sessions']
 ].map(([treatmentName, sessionsText], index) => ({
   treatmentName,
-  beforeImage,
-  afterImage,
+  image: resultImage,
   sessionsText,
   sortOrder: (index + 1) * 10,
   isActive: true
@@ -43,23 +41,21 @@ function RealResultsHero({ data = {} }) {
 function normalizeCard(card = {}, index = 0) {
   return {
     treatmentName: card.treatmentName || card.title || '',
-    beforeImage: card.beforeImage || '',
-    afterImage: card.afterImage || '',
+    image: card.image || card.resultImage || card.afterImage || card.beforeImage || '',
     sessionsText: card.sessionsText || card.sessions || card.description || '',
     sortOrder: Number.isFinite(Number(card.sortOrder)) ? Number(card.sortOrder) : (index + 1) * 10,
     isActive: card.isActive !== false
   };
 }
 
-function ResultImage({ src, label, title }) {
+function ResultImage({ src, title }) {
   return (
     <div className="rr-image-wrap">
       {hasText(src) ? (
-        <img src={src} alt={`${title} ${label}`} loading="lazy" />
+        <img src={src} alt={title || 'Real result'} loading="lazy" />
       ) : (
-        <span className="rr-image-placeholder">{label}</span>
+        <span className="rr-image-placeholder">Result Image</span>
       )}
-      <span className="rr-image-label">{label}</span>
     </div>
   );
 }
@@ -67,11 +63,8 @@ function ResultImage({ src, label, title }) {
 function ResultCard({ card }) {
   return (
     <article className="rr-card">
-      <h2>{card.treatmentName}</h2>
-      <div className="rr-images">
-        <ResultImage src={card.beforeImage} label="Before" title={card.treatmentName} />
-        <ResultImage src={card.afterImage} label="After" title={card.treatmentName} />
-      </div>
+      {hasText(card.treatmentName) && <h2>{card.treatmentName}</h2>}
+      <ResultImage src={card.image} title={card.treatmentName} />
       {hasText(card.sessionsText) && <p>{card.sessionsText}</p>}
     </article>
   );
@@ -83,7 +76,10 @@ function ResultsGrid({ data = {} }) {
   const sourceCards = Array.isArray(data.cards) && data.cards.length > 0 ? data.cards : defaultCards;
   const cards = sourceCards
     .map(normalizeCard)
-    .filter(card => card.isActive !== false && hasText(card.treatmentName))
+    .filter(card => (
+      card.isActive !== false
+      && (hasText(card.treatmentName) || hasText(card.image) || hasText(card.sessionsText))
+    ))
     .sort((a, b) => Number(a.sortOrder || 0) - Number(b.sortOrder || 0));
 
   if (cards.length === 0) return null;
@@ -184,15 +180,10 @@ export default function RealResultsPage({ data = {} }) {
           min-height: 24px;
         }
 
-        .rr-images {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 8px;
-        }
-
         .rr-image-wrap {
           position: relative;
-          aspect-ratio: 0.76 / 1;
+          width: 100%;
+          aspect-ratio: 1.48 / 1;
           border-radius: 12px;
           overflow: hidden;
           background: #d9dbe8;
@@ -205,17 +196,6 @@ export default function RealResultsPage({ data = {} }) {
           display: block;
         }
 
-        .rr-image-wrap::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          height: 42%;
-          background: linear-gradient(180deg, transparent, rgba(0,0,0,0.46));
-          pointer-events: none;
-        }
-
         .rr-image-placeholder {
           width: 100%;
           height: 100%;
@@ -224,19 +204,6 @@ export default function RealResultsPage({ data = {} }) {
           justify-content: center;
           font-family: 'Lato', sans-serif;
           color: #666666;
-        }
-
-        .rr-image-label {
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 9px;
-          z-index: 2;
-          text-align: center;
-          font-family: 'Lato', sans-serif;
-          font-size: 13px;
-          line-height: 1;
-          color: #ffffff;
         }
 
         .rr-card p {

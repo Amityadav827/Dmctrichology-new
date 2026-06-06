@@ -110,15 +110,18 @@ async function getHomeFaqData() {
 
 export async function generateMetadata() {
   const data = await getPageData();
-  const title = data.hero?.mainHeading || 'About DMC Trichology';
-  const description = data.hero?.description
-    ? String(data.hero.description).replace(/<[^>]+>/g, '').slice(0, 160)
-    : 'About DMC Trichology';
+  const seo = data.seo || {};
+  const title = seo.metaTitle || data.hero?.doctorName || data.hero?.mainHeading || 'About DMC Trichology';
+  const heroDescription = data.hero?.descriptionParagraph || data.hero?.description || '';
+  const description = seo.metaDescription || (heroDescription
+    ? String(heroDescription).replace(/<[^>]+>/g, '').slice(0, 160)
+    : 'About DMC Trichology');
+  const ogImage = seo.ogImage || data.hero?.doctorImage || data.hero?.heroImage || data.hero?.leftImage || '';
 
   return {
     title,
     description,
-    openGraph: data.hero?.heroImage ? { images: [{ url: data.hero.heroImage }] } : {}
+    openGraph: ogImage ? { title, description, images: [{ url: ogImage }] } : { title, description }
   };
 }
 

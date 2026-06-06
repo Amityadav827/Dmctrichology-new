@@ -42,6 +42,13 @@ function normalizeDaduData(pageData = {}) {
   const expertise = pageData.ourExpertise || {};
   const expertiseDetails = pageData.expertiseDetails || {};
   const infrastructure = pageData.infrastructure || {};
+  const directSpecialist = pageData.specialist || {};
+  const directTimeline = pageData.timeline || {};
+  const directTrust = pageData.trustSection || {};
+  const directEducation = pageData.educationExperience || {};
+  const directCredentials = pageData.credentialsSection || {};
+  const directOther = pageData.otherSpecialitiesSection || {};
+  const directTestimonials = pageData.testimonialsSection || {};
   const primaryImage = pickImage(pageData);
   const gallery = Array.isArray(infrastructure.gallery) ? infrastructure.gallery : [];
   const topImage = gallery[0]?.image || gallery[0]?.url || holistic.image || primaryImage;
@@ -64,12 +71,13 @@ function normalizeDaduData(pageData = {}) {
 
   return {
     hero: {
-      mainHeading: hero.badgeText || 'ABOUT DMC TRICHOLOGY',
-      doctorName: hero.mainHeading || 'About DMC Trichology',
-      degreeText: hero.subtitle || "INDIA'S PREMIUM HAIR & SCALP SPECIALIST SOLUTION",
-      descriptionParagraph: introDescription || 'DMC Trichology provides advanced skin and hair treatment procedures with a patient-first clinical approach.',
-      doctorImage: primaryImage,
-      galleryImage: primaryImage,
+      ...hero,
+      mainHeading: hero.mainHeading || hero.badgeText || 'ABOUT DMC TRICHOLOGY',
+      doctorName: hero.doctorName || hero.heading || hero.mainHeading || 'About DMC Trichology',
+      degreeText: hero.degreeText || hero.subtitle || "INDIA'S PREMIUM HAIR & SCALP SPECIALIST SOLUTION",
+      descriptionParagraph: hero.descriptionParagraph || introDescription || 'DMC Trichology provides advanced skin and hair treatment procedures with a patient-first clinical approach.',
+      doctorImage: hero.doctorImage || hero.leftImage || hero.heroImage || primaryImage,
+      galleryImage: hero.galleryImage || hero.leftImage || hero.heroImage || primaryImage,
       submitButtonText: hero.submitButtonText || 'Schedule Your Visit'
     },
     breadcrumb: {
@@ -79,16 +87,19 @@ function normalizeDaduData(pageData = {}) {
       currentPageText: hero.mainHeading || 'About DMC Trichology'
     },
     formSettings: {
-      title: hero.formTitle || 'Request Private Consultation',
-      subtitle: hero.subtitle || 'Reserve your DMC Trichology consultation session.',
-      successMessage: 'Your consultation request has been successfully submitted. Our team will reach out to you shortly.'
+      ...(pageData.formSettings || {}),
+      title: pageData.formSettings?.title || hero.formTitle || 'Request Private Consultation',
+      subtitle: pageData.formSettings?.subtitle || hero.subtitle || 'Reserve your DMC Trichology consultation session.',
+      successMessage: pageData.formSettings?.successMessage || 'Your consultation request has been successfully submitted. Our team will reach out to you shortly.'
     },
     specialist: {
+      ...directSpecialist,
       heading: 'Why Choose Dadu Medical Centre',
-      description1: hairCentreText || 'DMC Trichology focuses on scalp and hair health with advanced clinical science and patient-centred care.',
-      description2: holisticText || 'Our trichology experts evaluate hair loss concerns in detail and recommend personalized treatment plans.',
-      highlightedText: 'DMC Trichology offers advanced hair and scalp solutions including:',
-      bullets,
+      heading: directSpecialist.heading || 'Why Choose Dadu Medical Centre',
+      description1: directSpecialist.description1 || hairCentreText || 'DMC Trichology focuses on scalp and hair health with advanced clinical science and patient-centred care.',
+      description2: directSpecialist.description2 || holisticText || 'Our trichology experts evaluate hair loss concerns in detail and recommend personalized treatment plans.',
+      highlightedText: directSpecialist.highlightedText || 'DMC Trichology offers advanced hair and scalp solutions including:',
+      bullets: directSpecialist.bullets?.length ? directSpecialist.bullets : bullets,
       featureCards: [
         { title: 'Advanced Hair Restoration' },
         { title: 'Holistic Scalp Diagnosis' },
@@ -99,10 +110,12 @@ function normalizeDaduData(pageData = {}) {
       cardBgColor: '#3b5998'
     },
     timeline: {
+      ...directTimeline,
       eyebrow: 'TRUSTED CARE SERVICES',
-      heading: 'Key Highlights Section',
+      eyebrow: directTimeline.eyebrow || 'TRUSTED CARE SERVICES',
+      heading: directTimeline.heading || 'Key Highlights Section',
       sectionBgColor: '#FFFFFF',
-      steps: [
+      steps: directTimeline.steps?.length ? directTimeline.steps : [
         {
           title: 'Holistic & Integrative Approach',
           description: holisticText || 'Comprehensive analysis of hair loss concerns through clinical evaluation and advanced trichology protocols.'
@@ -122,11 +135,13 @@ function normalizeDaduData(pageData = {}) {
       ]
     },
     trustSection: {
+      ...directTrust,
       eyebrow: 'TRUSTED CARE SERVICES',
-      heading: 'Trust & Expertise Section',
-      image: holistic.image || primaryImage,
-      imageAlt: holistic.imageAlt || 'DMC Trichology clinical care',
-      trustPoints: [
+      eyebrow: directTrust.eyebrow || 'TRUSTED CARE SERVICES',
+      heading: directTrust.heading || 'Trust & Expertise Section',
+      image: directTrust.image || holistic.image || primaryImage,
+      imageAlt: directTrust.imageAlt || holistic.imageAlt || 'DMC Trichology clinical care',
+      trustPoints: directTrust.trustPoints?.length ? directTrust.trustPoints : [
         {
           title: 'Hair Treatment Centre In Delhi',
           description: hairCentreText || 'A professional-grade one-stop solution for hair and scalp health in New Delhi.'
@@ -144,15 +159,16 @@ function normalizeDaduData(pageData = {}) {
           description: expertiseText || 'The centre combines advanced doctors, modern techniques, and DMC-Golden Touch hair restoration expertise.'
         }
       ],
-      conclusionParagraph: stripHtml(expertiseDetails.description) || 'DMC Trichology takes pride in offering advanced technologies, expert doctors, and personalized care for hair and scalp concerns.'
+      conclusionParagraph: directTrust.conclusionParagraph || stripHtml(expertiseDetails.description) || 'DMC Trichology takes pride in offering advanced technologies, expert doctors, and personalized care for hair and scalp concerns.'
     },
     educationExperience: {
-      experienceTabLabel: 'Experience',
-      educationTabLabel: 'Care Systems',
-      credentialsTabLabel: 'Credentials',
-      topImage,
-      bottomImage,
-      experienceItems: [
+      ...directEducation,
+      experienceTabLabel: directEducation.experienceTabLabel || 'Experience',
+      educationTabLabel: directEducation.educationTabLabel || 'Care Systems',
+      credentialsTabLabel: directEducation.credentialsTabLabel || 'Credentials',
+      topImage: directEducation.topImage || topImage,
+      bottomImage: directEducation.bottomImage || bottomImage,
+      experienceItems: directEducation.experienceItems?.length ? directEducation.experienceItems : [
         {
           role: 'DMC Trichology Clinical Expertise',
           hospital: 'Dadu Medical Centre, New Delhi',
@@ -169,7 +185,7 @@ function normalizeDaduData(pageData = {}) {
           duration: 'Ongoing'
         }
       ],
-      educationItems: [
+      educationItems: directEducation.educationItems?.length ? directEducation.educationItems : [
         {
           degree: 'Comprehensive Trichology Systems',
           institution: 'Clinical analysis, scalp diagnosis, and lifestyle evaluation',
@@ -183,20 +199,23 @@ function normalizeDaduData(pageData = {}) {
       ]
     },
     credentialsSection: {
-      heading: 'Credentials',
-      credentialsList: bullets.map(text => ({ text }))
+      ...directCredentials,
+      heading: directCredentials.heading || 'Credentials',
+      credentialsList: directCredentials.credentialsList?.length ? directCredentials.credentialsList : bullets.map(text => ({ text }))
     },
     otherSpecialitiesSection: {
-      heading: 'Additional Services / Specialities Section',
-      introParagraph: stripHtml(expertiseDetails.description) || 'DMC Trichology offers a professional-grade range of trichology and cosmetic treatment procedures.',
-      specialitiesList: bullets.map(title => ({ title })),
-      conclusionParagraph: patientFirstText || 'For more information contact DMC Trichology at Vasant Vihar (South Delhi) and Rajouri Garden (West Delhi).',
-      image: intro.image || primaryImage,
-      imageAlt: 'DMC Trichology additional services'
+      ...directOther,
+      heading: directOther.heading || 'Additional Services / Specialities Section',
+      introParagraph: directOther.introParagraph || stripHtml(expertiseDetails.description) || 'DMC Trichology offers a professional-grade range of trichology and cosmetic treatment procedures.',
+      specialitiesList: directOther.specialitiesList?.length ? directOther.specialitiesList : bullets.map(title => ({ title })),
+      conclusionParagraph: directOther.conclusionParagraph || patientFirstText || 'For more information contact DMC Trichology at Vasant Vihar (South Delhi) and Rajouri Garden (West Delhi).',
+      image: directOther.image || intro.image || primaryImage,
+      imageAlt: directOther.imageAlt || 'DMC Trichology additional services'
     },
     testimonialsSection: {
-      heading: 'Patient Testimonials',
-      testimonials: [
+      ...directTestimonials,
+      heading: directTestimonials.heading || 'Patient Testimonials',
+      testimonials: directTestimonials.testimonials?.length ? directTestimonials.testimonials : [
         {
           text: 'DMC Trichology placeholder testimonial for the About Dadu Medical Centre page. Replace this with a real patient testimonial when available from the dashboard.',
           patientName: 'DMC Patient',
@@ -222,12 +241,16 @@ function normalizeDaduData(pageData = {}) {
           stars: 5
         }
       ]
-    }
+    },
+    faqSection: pageData.faqSection || null
   };
 }
 
 export default function AboutDaduMedicalCentreClient({ initialData, initialFaqData = null }) {
   const templateData = useMemo(() => normalizeDaduData(initialData), [initialData]);
+  const faqData = templateData?.faqSection?.categories?.length || templateData?.faqSection?.faqItems?.length
+    ? templateData.faqSection
+    : initialFaqData;
 
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
@@ -251,7 +274,7 @@ export default function AboutDaduMedicalCentreClient({ initialData, initialFaqDa
       />
       <AboutDrNandaniOtherSpecialities data={templateData.otherSpecialitiesSection} />
       <AboutDrNandaniTestimonials data={templateData.testimonialsSection} />
-      <FaqSection initialData={initialFaqData} />
+      <FaqSection initialData={faqData} />
     </main>
   );
 }

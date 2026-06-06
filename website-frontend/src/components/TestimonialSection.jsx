@@ -259,14 +259,14 @@ const TestimonialSection = () => {
           </div>
           
           <div style={{ textAlign: 'center', marginTop: '60px' }}>
-            <button className="view-all-testimonials-btn" style={{ padding: '7px 7px 7px 24px', borderRadius: '999px', border: '1px solid #1C1C1C', backgroundColor: '#fff', color: '#1C1C1C', fontSize: '14px', fontWeight: '500', cursor: 'pointer', transition: 'all 0.3s ease', display: 'inline-flex', alignItems: 'center', gap: '18px', fontFamily: "'Marcellus', serif" }}>
+            <a href="/clients-feedback" className="view-all-testimonials-btn" style={{ padding: '7px 7px 7px 24px', borderRadius: '999px', border: '1px solid #1C1C1C', backgroundColor: '#fff', color: '#1C1C1C', fontSize: '14px', fontWeight: '500', cursor: 'pointer', transition: 'all 0.3s ease', display: 'inline-flex', alignItems: 'center', gap: '18px', fontFamily: "'Marcellus', serif", textDecoration: 'none' }}>
               <span>View All</span>
               <span className="view-all-testimonials-arrow" aria-hidden="true">
                 <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-            </button>
+            </a>
           </div>
         </div>
 

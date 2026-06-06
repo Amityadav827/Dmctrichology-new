@@ -100,6 +100,7 @@ exports.getSettings = async (req, res) => {
 exports.updateSettings = async (req, res) => {
   try {
     const payload = {
+      ...(req.body || {}),
       hero: { ...fallbackData.hero, ...(req.body?.hero || {}) },
       intro: {
         ...fallbackData.intro,

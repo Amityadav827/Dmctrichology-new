@@ -265,7 +265,7 @@ export default function FaqsPage({ data = {} }) {
 
         .faqs-page-card-copy p {
           font-family: 'Lato', sans-serif;
-          font-size: 11px;
+          font-size: 16px;
           line-height: 1.45;
           color: #111111;
           margin: 0;

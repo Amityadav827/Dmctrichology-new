@@ -57,7 +57,9 @@ export default function FaqSection({ initialData = null }) {
 
   const badgeText = data?.badgeText || "TRUSTED CARE SERVICES";
   const heading = data?.heading || "Frequently Asked Question?";
-  const categories = data?.categories || [];
+  const categories = data?.categories?.length
+    ? data.categories
+    : (data?.faqItems?.length ? [{ title: 'General', faqs: data.faqItems }] : []);
   const activeCategory = categories.find(c => c.title === activeTab) || categories[0];
   const buttonText = data?.buttonText || "View All Questions";
 

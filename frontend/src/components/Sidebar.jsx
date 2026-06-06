@@ -33,7 +33,8 @@ function Sidebar() {
   const [isPagesOpen, setIsPagesOpen] = React.useState(() =>
     window.location.pathname.startsWith("/pages") ||
     window.location.pathname.startsWith("/cms/about-dr") ||
-    window.location.pathname.startsWith("/cms/about-dmc-trichology")
+    window.location.pathname.startsWith("/cms/about-dmc-trichology") ||
+    window.location.pathname.startsWith("/cms/hair-transplant-clinic")
   );
   const [isAboutUsOpen, setIsAboutUsOpen] = React.useState(() =>
     window.location.pathname.startsWith("/cms/about-dr-nandani") ||
@@ -219,6 +220,9 @@ function Sidebar() {
             )}
             <NavLink to="/cms/about-dmc-trichology" className={getNavClass}>
               <Globe size={16} /> About DMC Trichology®
+            </NavLink>
+            <NavLink to="/cms/hair-transplant-clinic" className={getNavClass}>
+              <Scissors size={16} /> Hair Transplant Clinic
             </NavLink>
             <NavLink to="/cms/our-team" className={getNavClass}>
               <Users size={16} /> Our Team

@@ -195,7 +195,8 @@ function normalizeNiveditaData(pageData = {}) {
           stars: 5
         }
       ]
-    }
+    },
+    faqSection: pageData.faqSection || null
   };
 }
 
@@ -251,6 +252,9 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
   }, [isEditing]);
 
   const templateData = useMemo(() => normalizeNiveditaData(pageData), [pageData]);
+  const faqData = templateData?.faqSection?.categories?.length || templateData?.faqSection?.faqItems?.length
+    ? templateData.faqSection
+    : initialFaqData;
 
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
@@ -274,7 +278,7 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
       />
       <AboutDrNandaniOtherSpecialities data={templateData.otherSpecialitiesSection} />
       <AboutDrNandaniTestimonials data={templateData.testimonialsSection} />
-      <FaqSection initialData={initialFaqData} />
+      <FaqSection initialData={faqData} />
     </main>
   );
 }

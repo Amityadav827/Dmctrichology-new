@@ -1,5 +1,7 @@
 import HairTransplantClinicClient from './HairTransplantClinicClient';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
 const clinicImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp';
 const transplantImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780555354716-797376172.png';
 const clinicReceptionImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780555295549-140347372.png';
@@ -242,16 +244,51 @@ const faqData = {
   ]
 };
 
-export const metadata = {
-  title: 'Hair Transplant Clinic In Delhi | DMC Trichology',
-  description: 'Explore DMC Trichology, a premium hair transplant clinic in Delhi for FUE, FUT, beard transplant, eyebrow restoration, PRP, mesotherapy and advanced scalp care.',
-  openGraph: {
-    title: 'Hair Transplant Clinic In Delhi | DMC Trichology',
-    description: 'Premium hair restoration, FUE, FUT, beard transplant and scalp care treatments at DMC Trichology in Delhi.',
-    images: [{ url: transplantImage }]
-  }
-};
+function mergeDeep(base, source) {
+  if (Array.isArray(base)) return Array.isArray(source) && source.length > 0 ? source : base;
+  if (!base || typeof base !== 'object') return source ?? base;
+  const output = { ...base, ...(source && typeof source === 'object' ? source : {}) };
+  Object.keys(base).forEach((key) => {
+    output[key] = mergeDeep(base[key], source?.[key]);
+  });
+  return output;
+}
 
-export default function HairTransplantClinicPage() {
-  return <HairTransplantClinicClient pageData={pageData} faqData={faqData} />;
+async function getClinicData() {
+  try {
+    const response = await fetch(`${API_URL}/hair-transplant-clinic?t=${Date.now()}`, {
+      cache: 'no-store',
+      next: { revalidate: 0 }
+    });
+    const result = await response.json();
+    if (result?.success && result.data) {
+      return mergeDeep(pageData, result.data);
+    }
+  } catch (error) {
+    console.error('Failed to fetch Hair Transplant Clinic page CMS data:', error);
+  }
+  return pageData;
+}
+
+export async function generateMetadata() {
+  const data = await getClinicData();
+  const seo = data.seo || {};
+  const title = seo.metaTitle || 'Hair Transplant Clinic In Delhi | DMC Trichology';
+  const description = seo.metaDescription || 'Explore DMC Trichology, a premium hair transplant clinic in Delhi for FUE, FUT, beard transplant, eyebrow restoration, PRP, mesotherapy and advanced scalp care.';
+  const ogImage = seo.ogImage || data.trustSection?.image || transplantImage;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [{ url: ogImage }]
+    }
+  };
+}
+
+export default async function HairTransplantClinicPage() {
+  const cmsData = await getClinicData();
+  return <HairTransplantClinicClient pageData={cmsData} faqData={cmsData.faqSection || faqData} />;
 }
