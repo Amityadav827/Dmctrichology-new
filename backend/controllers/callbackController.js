@@ -1,4 +1,5 @@
 const supabase = require("../config/supabase");
+const { sendLeadToTelecrm } = require("../services/telecrmService");
 
 // Helper to map DB status to Frontend status
 const mapDbToFrontendStatus = (status) => {
@@ -32,6 +33,14 @@ const createCallback = async (req, res, next) => {
       .single();
 
     if (error) return res.status(500).json({ success: false, message: error.message });
+
+    sendLeadToTelecrm({
+      name: data.name,
+      mobile: data.mobile,
+      source: "Homepage Callback Form"
+    }).catch((crmError) => {
+      console.error("TeleCRM callback lead sync failed:", crmError.response?.data || crmError.message);
+    });
 
     return res.status(201).json({
       success: true,
