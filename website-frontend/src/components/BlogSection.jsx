@@ -164,9 +164,11 @@ export default function BlogSection() {
                   lineHeight: '1.3',
                   flexGrow: 1
                 }}>
-                  <EditableText sectionId="blogs-home-section" fieldPath={`blogs.${index}.title`} tag="span">
-                    {blog.title}
-                  </EditableText>
+                  <Link className="home-blog-title-link" href={blog.buttonLink || '/blog'}>
+                    <EditableText sectionId="blogs-home-section" fieldPath={`blogs.${index}.title`} tag="span">
+                      {blog.title}
+                    </EditableText>
+                  </Link>
                 </h3>
 
                 <Link 
@@ -230,6 +232,7 @@ export default function BlogSection() {
 
           .home-blog-card:hover .home-blog-author,
           .home-blog-card:hover .home-blog-title,
+          .home-blog-card:hover .home-blog-title-link,
           .home-blog-card:hover .home-blog-link {
             color: #fff !important;
           }
@@ -242,6 +245,19 @@ export default function BlogSection() {
           .home-blog-card:hover .home-blog-link,
           .home-blog-card:hover .home-blog-link span {
             color: #fff !important;
+          }
+
+          :global(.home-blog-card:hover .home-blog-link),
+          :global(.home-blog-card:hover .home-blog-link span),
+          :global(.home-blog-card:hover .home-blog-title-link),
+          :global(.home-blog-card:hover .home-blog-title-link span) {
+            color: #fff !important;
+          }
+
+          .home-blog-title-link {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
           }
 
           .blog-section-line {
@@ -317,7 +333,7 @@ export default function BlogSection() {
 
           .view-all-blogs-btn:hover .blog-btn-arrow-wrap {
             background-color: #fff;
-            transform: rotate(0deg);
+            transform: rotate(0deg) translateX(2px);
           }
 
           .blog-btn-arrow {
@@ -327,6 +343,15 @@ export default function BlogSection() {
 
           .view-all-blogs-btn:hover .blog-btn-arrow {
             filter: brightness(0) saturate(100%) invert(34%) sepia(19%) saturate(1704%) hue-rotate(183deg) brightness(92%) contrast(89%);
+          }
+
+          :global(.view-all-blogs-btn:hover .blog-btn-arrow-wrap) {
+            background-color: #fff !important;
+            transform: rotate(0deg) translateX(2px) !important;
+          }
+
+          :global(.view-all-blogs-btn:hover .blog-btn-arrow) {
+            filter: brightness(0) saturate(100%) invert(34%) sepia(19%) saturate(1704%) hue-rotate(183deg) brightness(92%) contrast(89%) !important;
           }
 
           @media (max-width: 1199px) {
