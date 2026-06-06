@@ -328,30 +328,20 @@ export default function BlogSection() {
             align-items: center;
             justify-content: center;
             transform: rotate(-45deg);
-            transition: transform 0.3s ease, background-color 0.3s ease;
-          }
-
-          .view-all-blogs-btn:hover .blog-btn-arrow-wrap {
-            background-color: #fff;
-            transform: rotate(0deg) translateX(2px);
+            transition: transform 0.3s ease;
           }
 
           .blog-btn-arrow {
             filter: brightness(0) invert(1);
-            transition: filter 0.3s ease;
+            transition: transform 0.3s ease;
           }
 
           .view-all-blogs-btn:hover .blog-btn-arrow {
-            filter: brightness(0) saturate(100%) invert(34%) sepia(19%) saturate(1704%) hue-rotate(183deg) brightness(92%) contrast(89%);
-          }
-
-          :global(.view-all-blogs-btn:hover .blog-btn-arrow-wrap) {
-            background-color: #fff !important;
-            transform: rotate(0deg) translateX(2px) !important;
+            transform: translateX(2px);
           }
 
           :global(.view-all-blogs-btn:hover .blog-btn-arrow) {
-            filter: brightness(0) saturate(100%) invert(34%) sepia(19%) saturate(1704%) hue-rotate(183deg) brightness(92%) contrast(89%) !important;
+            transform: translateX(2px) !important;
           }
 
           @media (max-width: 1199px) {
