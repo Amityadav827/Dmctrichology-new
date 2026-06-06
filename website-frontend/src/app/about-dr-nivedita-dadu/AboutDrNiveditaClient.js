@@ -271,7 +271,11 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
       />
       <AboutDrNandaniSpecialist data={templateData.specialist} />
       <AboutDrNandaniTimeline data={templateData.timeline} />
-      <AboutDrNandaniTrust data={templateData.trustSection} />
+      <AboutDrNandaniTrust
+        data={templateData.trustSection}
+        sectionId="about-nivedita-trust"
+        label="Why Patients Trust Dr. Nivedita"
+      />
       <AboutDrNandaniEducationExperience
         data={templateData.educationExperience}
         credentialsData={templateData.credentialsSection}

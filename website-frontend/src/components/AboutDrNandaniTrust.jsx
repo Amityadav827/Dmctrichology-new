@@ -23,7 +23,32 @@ const defaultTrustPoints = [
   }
 ];
 
-export default function AboutDrNandaniTrust({ data = {} }) {
+function escapeHtml(value = '') {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function richTextHtml(value = '') {
+  const text = String(value || '').trim();
+  if (!text) return '';
+  const hasHtml = /<\/?[a-z][\s\S]*>/i.test(text);
+  if (hasHtml) return text;
+
+  return text
+    .split(/\n{2,}/)
+    .map(paragraph => `<p>${escapeHtml(paragraph).replace(/\n/g, '<br />')}</p>`)
+    .join('');
+}
+
+export default function AboutDrNandaniTrust({
+  data = {},
+  sectionId = "about-nandani-trust",
+  label = "Why Patients Trust Dr. Nandani"
+}) {
   const eyebrow = data.eyebrow || "TRUSTED CARE SERVICES";
   const heading = data.heading || "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?";
   const image = data.image || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
@@ -32,12 +57,12 @@ export default function AboutDrNandaniTrust({ data = {} }) {
   const conclusion = data.conclusionParagraph || "Dr. Nandani Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandani Dadu now!";
 
   return (
-    <EditableSection sectionId="about-nandani-trust" label="Why Patients Trust Dr. Nandani">
+    <EditableSection sectionId={sectionId} label={label}>
       <section className="nandani-patient-trust-section">
         <div className="nandani-patient-trust-inner">
           <div className="nandani-patient-trust-image">
             <EditableImage
-              sectionId="about-nandani-trust"
+              sectionId={sectionId}
               fieldPath="trustSection.image"
               src={image}
               alt={imageAlt}
@@ -47,13 +72,13 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           <div className="nandani-patient-trust-content">
             <div className="nandani-section-eyebrow">
               <span />
-              <EditableText sectionId="about-nandani-trust" fieldPath="trustSection.eyebrow" tag="small">
+              <EditableText sectionId={sectionId} fieldPath="trustSection.eyebrow" tag="small">
                 {eyebrow}
               </EditableText>
             </div>
 
             <h2>
-              <EditableText sectionId="about-nandani-trust" fieldPath="trustSection.heading" tag="span">
+              <EditableText sectionId={sectionId} fieldPath="trustSection.heading" tag="span">
                 {heading}
               </EditableText>
             </h2>
@@ -62,25 +87,23 @@ export default function AboutDrNandaniTrust({ data = {} }) {
               {trustPoints.map((point, idx) => (
                 <article key={idx}>
                   <h3>
-                    <EditableText sectionId="about-nandani-trust" fieldPath={`trustSection.trustPoints.${idx}.title`} tag="span">
+                    <EditableText sectionId={sectionId} fieldPath={`trustSection.trustPoints.${idx}.title`} tag="span">
                       {point.title}
                     </EditableText>
                   </h3>
-                  <p>
-                    <EditableText sectionId="about-nandani-trust" fieldPath={`trustSection.trustPoints.${idx}.description`} tag="span">
-                      {point.description}
-                    </EditableText>
-                  </p>
+                  <div
+                    className="nandani-trust-description"
+                    dangerouslySetInnerHTML={{ __html: richTextHtml(point.description) }}
+                  />
                 </article>
               ))}
             </div>
 
             {conclusion && (
-              <p className="nandani-trust-conclusion">
-                <EditableText sectionId="about-nandani-trust" fieldPath="trustSection.conclusionParagraph" tag="span">
-                  {conclusion}
-                </EditableText>
-              </p>
+              <div
+                className="nandani-trust-conclusion"
+                dangerouslySetInnerHTML={{ __html: richTextHtml(conclusion) }}
+              />
             )}
           </div>
         </div>
@@ -177,13 +200,56 @@ export default function AboutDrNandaniTrust({ data = {} }) {
           margin: 0 0 10px;
         }
 
-        .nandani-trust-blocks article p,
+        .nandani-trust-description,
+        .nandani-trust-description :global(p),
         .nandani-trust-conclusion {
           font-family: 'Lato', sans-serif;
           font-size: 15px;
           line-height: 1.75;
           color: #333333;
           margin: 0;
+        }
+
+        .nandani-trust-description :global(p),
+        .nandani-trust-conclusion :global(p) {
+          margin: 0 0 16px;
+        }
+
+        .nandani-trust-description :global(p:last-child),
+        .nandani-trust-conclusion :global(p:last-child) {
+          margin-bottom: 0;
+        }
+
+        .nandani-trust-conclusion :global(h1),
+        .nandani-trust-conclusion :global(h2),
+        .nandani-trust-conclusion :global(h3) {
+          font-family: 'Marcellus', serif;
+          font-weight: 400;
+          color: #111111;
+          line-height: 1.22;
+          margin: 22px 0 12px;
+        }
+
+        .nandani-trust-conclusion :global(h1) {
+          font-size: 32px;
+        }
+
+        .nandani-trust-conclusion :global(h2) {
+          font-size: 28px;
+        }
+
+        .nandani-trust-conclusion :global(h3) {
+          font-size: 24px;
+        }
+
+        .nandani-trust-conclusion :global(ul),
+        .nandani-trust-conclusion :global(ol) {
+          margin: 0 0 16px 22px;
+          padding: 0;
+        }
+
+        .nandani-trust-conclusion :global(li) {
+          margin-bottom: 8px;
         }
 
         .nandani-trust-conclusion {

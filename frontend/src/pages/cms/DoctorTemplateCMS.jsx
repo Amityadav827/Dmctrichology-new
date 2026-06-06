@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
-import { Eye, Image as ImageIcon, Loader2, Plus, Save, Trash2 } from "lucide-react";
+import { AlignCenter, AlignLeft, AlignRight, Bold, Eye, Heading1, Heading2, Heading3, Image as ImageIcon, Italic, List, ListOrdered, Loader2, Pilcrow, Plus, Save, Trash2, Underline } from "lucide-react";
+import { getFrontendPreviewUrl } from "../../utils/config";
 
 const fallbackImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
 
@@ -63,6 +64,67 @@ function setDeepValue(source, path, value) {
 
 function getDeepValue(source, path, fallback = "") {
   return path.split(".").reduce((acc, part) => acc?.[part], source) ?? fallback;
+}
+
+function RichTextEditor({ label, value = "", onChange }) {
+  const editorRef = useRef(null);
+
+  useEffect(() => {
+    if (editorRef.current && editorRef.current.innerHTML !== value) {
+      editorRef.current.innerHTML = value || "";
+    }
+  }, [value]);
+
+  const runCommand = (command, commandValue = null) => {
+    editorRef.current?.focus();
+    document.execCommand(command, false, commandValue);
+    onChange(editorRef.current?.innerHTML || "");
+  };
+
+  const buttons = [
+    { label: "Paragraph", icon: <Pilcrow size={15} />, action: () => runCommand("formatBlock", "P") },
+    { label: "H1", icon: <Heading1 size={15} />, action: () => runCommand("formatBlock", "H1") },
+    { label: "H2", icon: <Heading2 size={15} />, action: () => runCommand("formatBlock", "H2") },
+    { label: "H3", icon: <Heading3 size={15} />, action: () => runCommand("formatBlock", "H3") },
+    { label: "Bold", icon: <Bold size={15} />, action: () => runCommand("bold") },
+    { label: "Italic", icon: <Italic size={15} />, action: () => runCommand("italic") },
+    { label: "Underline", icon: <Underline size={15} />, action: () => runCommand("underline") },
+    { label: "Bullet List", icon: <List size={15} />, action: () => runCommand("insertUnorderedList") },
+    { label: "Numbered List", icon: <ListOrdered size={15} />, action: () => runCommand("insertOrderedList") },
+    { label: "Align Left", icon: <AlignLeft size={15} />, action: () => runCommand("justifyLeft") },
+    { label: "Align Center", icon: <AlignCenter size={15} />, action: () => runCommand("justifyCenter") },
+    { label: "Align Right", icon: <AlignRight size={15} />, action: () => runCommand("justifyRight") }
+  ];
+
+  return (
+    <div className="dt-field dt-rich-field">
+      <label>{label}</label>
+      <div className="dt-rich-toolbar" aria-label={`${label} formatting toolbar`}>
+        {buttons.map(button => (
+          <button
+            key={button.label}
+            type="button"
+            title={button.label}
+            aria-label={button.label}
+            onMouseDown={event => {
+              event.preventDefault();
+              button.action();
+            }}
+          >
+            {button.icon}
+          </button>
+        ))}
+      </div>
+      <div
+        ref={editorRef}
+        className="dt-rich-editor"
+        contentEditable
+        suppressContentEditableWarning
+        onInput={event => onChange(event.currentTarget.innerHTML)}
+        onBlur={event => onChange(event.currentTarget.innerHTML)}
+      />
+    </div>
+  );
 }
 
 export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, previewPath }) {
@@ -210,6 +272,8 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
 
   if (loading) return <div className="dt-loading"><Loader2 className="spin" /> Loading...</div>;
 
+  const previewSlug = previewPath.replace(/^\/+/, "");
+
   const tabs = [
     ["hero", "Hero"],
     ["specialist", "Specialist"],
@@ -230,7 +294,7 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
           <h1>{title}</h1>
         </div>
         <div className="dt-actions">
-          <a href={`${import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"}${previewPath}`} target="_blank" rel="noreferrer"><Eye size={15} /> Preview</a>
+          <a href={getFrontendPreviewUrl(previewSlug, false)} target="_blank" rel="noreferrer"><Eye size={15} /> Preview</a>
           <button type="button" onClick={save} disabled={saving}>{saving ? <Loader2 size={15} className="spin" /> : <Save size={15} />} Save Changes</button>
         </div>
       </div>
@@ -295,7 +359,11 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
             <Field label="Eyebrow" path="trustSection.eyebrow" />
             <Field label="Heading" path="trustSection.heading" />
             <Field label="Image Alt Text" path="trustSection.imageAlt" />
-            <Field label="Conclusion Paragraph" path="trustSection.conclusionParagraph" multiline />
+            <RichTextEditor
+              label="Conclusion Paragraph"
+              value={getDeepValue(data, "trustSection.conclusionParagraph")}
+              onChange={value => update("trustSection.conclusionParagraph", value)}
+            />
             <ImageField label="Section Image" path="trustSection.image" />
           </div>
           <Repeater title="Trust Content Blocks" path="trustSection.trustPoints" fields={[
@@ -398,6 +466,13 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
         .dt-field label{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:8px}
         .dt-field input,.dt-field textarea,.dt-inline input{width:100%;box-sizing:border-box;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;font:inherit;outline:none;background:#f8fafc}
         .dt-field textarea{resize:vertical}
+        .dt-rich-field{grid-column:span 1}
+        .dt-rich-toolbar{display:flex;flex-wrap:wrap;gap:6px;border:1px solid #e2e8f0;border-bottom:0;border-radius:12px 12px 0 0;background:#f8fafc;padding:8px}
+        .dt-rich-toolbar button{width:32px;height:32px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;color:#334155;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+        .dt-rich-toolbar button:hover{background:#eef2ff;color:#3b5998;border-color:#c7d2fe}
+        .dt-rich-editor{width:100%;min-height:230px;box-sizing:border-box;border:1px solid #e2e8f0;border-radius:0 0 12px 12px;padding:12px 14px;font:inherit;outline:none;background:#f8fafc;overflow:auto}
+        .dt-rich-editor h1,.dt-rich-editor h2,.dt-rich-editor h3,.dt-rich-editor p{margin:0 0 12px}
+        .dt-rich-editor ul,.dt-rich-editor ol{margin:0 0 12px 22px;padding:0}
         .dt-upload-row,.dt-inline,.dt-row-title{display:flex;align-items:center;gap:10px}
         .dt-upload-row input,.dt-inline input{flex:1}
         .dt-upload-btn{display:inline-flex;align-items:center;gap:8px;background:#eef2ff;color:#3b5998;border-radius:12px;padding:12px 14px;font-weight:900;cursor:pointer;white-space:nowrap}

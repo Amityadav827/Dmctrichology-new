@@ -4,8 +4,8 @@
 const isLocal = typeof window !== 'undefined' && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
 
 // The active frontend deployment domain (Next.js website)
-export const FRONTEND_URL = (import.meta.env && (import.meta.env.VITE_FRONTEND_URL || import.meta.env.NEXT_PUBLIC_SITE_URL)) 
-  ? (import.meta.env.VITE_FRONTEND_URL || import.meta.env.NEXT_PUBLIC_SITE_URL) 
+export const FRONTEND_URL = (import.meta.env && (import.meta.env.VITE_WEBSITE_URL || import.meta.env.VITE_FRONTEND_URL || import.meta.env.NEXT_PUBLIC_SITE_URL))
+  ? (import.meta.env.VITE_WEBSITE_URL || import.meta.env.VITE_FRONTEND_URL || import.meta.env.NEXT_PUBLIC_SITE_URL)
   : (isLocal ? "http://localhost:3000" : "https://dmctrichology-mkm4.vercel.app");
 
 /**
