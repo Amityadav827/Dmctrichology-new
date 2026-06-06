@@ -12,7 +12,7 @@ const staticFallback = {
     subtitle: "INDIA'S PREMIUM HAIR & SCALP SPECIALIST SOLUTION",
     description: '',
     formTitle: '',
-    submitButtonText: 'Submit',
+    submitButtonText: 'Schedule Your Visit',
     primaryCtaText: '',
     primaryCtaLink: '',
     secondaryCtaText: '',

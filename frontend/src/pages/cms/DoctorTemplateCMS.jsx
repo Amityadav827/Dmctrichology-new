@@ -15,9 +15,6 @@ const defaultData = {
     descriptionParagraph: "",
     namePlaceholder: "Name*",
     phonePlaceholder: "Mobile Number*",
-    emailPlaceholder: "E-Mail Address*",
-    datePlaceholder: "Select Preferred Date*",
-    messagePlaceholder: "Enter Your Message Here",
     captchaPlaceholder: "Code*",
     submitButtonText: "Schedule Your Visit"
   },

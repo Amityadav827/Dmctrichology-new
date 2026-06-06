@@ -20,9 +20,6 @@ const fallbackData = {
     ],
     namePlaceholder: "Name*",
     phonePlaceholder: "Mobile Number*",
-    emailPlaceholder: "E-Mail Address*",
-    datePlaceholder: "Select Preferred Date*",
-    messagePlaceholder: "Enter Your Message Here",
     captchaPlaceholder: "Code*",
     submitButtonText: "Schedule Your Visit",
     backgroundColor: "#3b5998",
@@ -207,16 +204,10 @@ exports.uploadImage = async (req, res) => {
 
 exports.createLead = async (req, res, next) => {
   try {
-    const { name, email, mobile, service, appointmentDate, message } = req.body;
+    const { name, mobile, service } = req.body;
 
     if (!name || !name.trim()) {
       return res.status(400).json({ success: false, message: "Please enter your name." });
-    }
-    if (!email || !email.trim()) {
-      return res.status(400).json({ success: false, message: "Please enter your email address." });
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      return res.status(400).json({ success: false, message: "Please enter a valid email address." });
     }
     if (!mobile || !mobile.trim()) {
       return res.status(400).json({ success: false, message: "Please enter your mobile number." });
@@ -225,9 +216,6 @@ exports.createLead = async (req, res, next) => {
     const trimmedMobile = mobile.trim().replace(/\s+/g, '');
     if (!/^\d{10}$/.test(trimmedMobile)) {
       return res.status(400).json({ success: false, message: "Please enter a valid 10-digit mobile number." });
-    }
-    if (!appointmentDate) {
-      return res.status(400).json({ success: false, message: "Please select a preferred appointment date." });
     }
 
     // Duplicate prevention: same mobile in last 2 minutes
@@ -250,11 +238,8 @@ exports.createLead = async (req, res, next) => {
       .from('science_consultation_leads')
       .insert({
         name: name.trim(),
-        email: email.trim().toLowerCase(),
         mobile: trimmedMobile,
         service: service ? service.trim() : "Dr. Nandani Dadu Consultation",
-        appointment_date: new Date(appointmentDate).toISOString(),
-        message: message ? message.trim() : "",
         status: "new"
       })
       .select()

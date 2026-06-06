@@ -221,7 +221,7 @@ export default function AboutDrNandaniCMS() {
 
           <div className="flex items-center gap-3">
             <button
-              onClick={() => window.open('/about-dr-nandani-dadu', '_blank')}
+              onClick={() => window.open(`${import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"}/about-dr-nandani-dadu`, '_blank')}
               className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all shadow-sm"
             >
               <Eye size={16} />
@@ -557,29 +557,11 @@ export default function AboutDrNandaniCMS() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Email Input Placeholder</label>
-                  <input 
-                    type="text" 
-                    value={data.hero?.emailPlaceholder || ""} 
-                    onChange={e => updateSectionField("hero", "emailPlaceholder", e.target.value)} 
-                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
-                  />
-                </div>
-                <div>
                   <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Mobile Number Input Placeholder</label>
                   <input 
                     type="text" 
                     value={data.hero?.phonePlaceholder || ""} 
                     onChange={e => updateSectionField("hero", "phonePlaceholder", e.target.value)} 
-                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Preferred Date Input Placeholder</label>
-                  <input 
-                    type="text" 
-                    value={data.hero?.datePlaceholder || ""} 
-                    onChange={e => updateSectionField("hero", "datePlaceholder", e.target.value)} 
                     className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
                   />
                 </div>
@@ -598,15 +580,6 @@ export default function AboutDrNandaniCMS() {
                     type="text" 
                     value={data.hero?.submitButtonText || ""} 
                     onChange={e => updateSectionField("hero", "submitButtonText", e.target.value)} 
-                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Message Input Placeholder</label>
-                  <input 
-                    type="text" 
-                    value={data.hero?.messagePlaceholder || ""} 
-                    onChange={e => updateSectionField("hero", "messagePlaceholder", e.target.value)} 
                     className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
                   />
                 </div>

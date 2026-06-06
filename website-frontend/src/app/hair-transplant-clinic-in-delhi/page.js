@@ -17,9 +17,6 @@ const pageData = {
     descriptionParagraph: 'DMC Trichology is a premium hair transplant clinic in Delhi offering advanced hair restoration, FUE, FUT, beard transplant, eyebrow restoration, PRP, mesotherapy, and customized scalp care programs. Every treatment plan is designed after detailed diagnosis, hairline planning, donor-area assessment, and long-term restoration goals.',
     namePlaceholder: 'Your Name',
     phonePlaceholder: 'Mobile Number *',
-    emailPlaceholder: 'E-Mail Address *',
-    datePlaceholder: 'Select Preferred Date *',
-    messagePlaceholder: 'Tell us about your hair concerns...',
     captchaPlaceholder: 'Enter Code',
     submitButtonText: 'Schedule Your Visit'
   },

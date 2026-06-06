@@ -23,9 +23,6 @@ export default function AboutDrNandaniHero({
     descriptionParagraph = "Dr. Nandini Dadu, MBBS, a Board-Certified Trichologist, has been studying hair and scalp treatments for over ten years. Throughout her career, she has successfully treated severe cases with excellent outcomes and has attained the title of the best hair transplant surgeon in Delhi.",
     namePlaceholder = "Name*",
     phonePlaceholder = "Mobile Number*",
-    emailPlaceholder = "E-Mail Address*",
-    datePlaceholder = "Select Preferred Date*",
-    messagePlaceholder = "Enter Your Message Here",
     captchaPlaceholder = "Code*",
     submitButtonText = "Schedule Your Visit"
   } = data;
@@ -46,10 +43,7 @@ export default function AboutDrNandaniHero({
 
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
     mobile: '',
-    appointmentDate: '',
-    message: '',
     captchaInput: ''
   });
   const [captcha, setCaptcha] = useState('');
@@ -77,15 +71,11 @@ export default function AboutDrNandaniHero({
     setSuccess(false);
 
     if (!formData.name.trim()) return setError('Please enter your name.');
-    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      return setError('Please enter a valid email address.');
-    }
 
     const trimmedMobile = formData.mobile.replace(/\s+/g, '');
     if (!trimmedMobile || !/^\d{10}$/.test(trimmedMobile)) {
       return setError('Please enter a valid 10-digit mobile number.');
     }
-    if (!formData.appointmentDate) return setError('Please select a preferred date.');
     if (!formData.captchaInput.trim() || formData.captchaInput.trim() !== captcha) {
       return setError('Invalid verification code.');
     }
@@ -94,20 +84,14 @@ export default function AboutDrNandaniHero({
     try {
       await api.post(leadEndpoint, {
         name: formData.name.trim(),
-        email: formData.email.trim().toLowerCase(),
         mobile: trimmedMobile,
-        appointmentDate: formData.appointmentDate,
-        message: formData.message.trim(),
         service: leadService
       });
 
       setSuccess(true);
       setFormData({
         name: '',
-        email: '',
         mobile: '',
-        appointmentDate: '',
-        message: '',
         captchaInput: ''
       });
       generateCaptcha();
@@ -201,14 +185,11 @@ export default function AboutDrNandaniHero({
 
                 <div className="dr-nandani-form-grid">
                   <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder={namePlaceholder} disabled={loading} required />
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder={emailPlaceholder} disabled={loading} required />
                   <input type="tel" name="mobile" value={formData.mobile} onChange={handleChange} placeholder={phonePlaceholder} disabled={loading} required />
-                  <input type="date" name="appointmentDate" value={formData.appointmentDate} onChange={handleChange} aria-label={datePlaceholder} disabled={loading} required />
                   <div className="dr-nandani-captcha-row">
                     <button type="button" onClick={generateCaptcha} title="Click to regenerate captcha">{captcha}</button>
                     <input type="text" name="captchaInput" value={formData.captchaInput} onChange={handleChange} placeholder={captchaPlaceholder} disabled={loading} required />
                   </div>
-                  <textarea name="message" value={formData.message} onChange={handleChange} placeholder={messagePlaceholder} disabled={loading} />
                 </div>
 
                 <button className="dr-nandani-submit-btn" type="submit" disabled={loading}>
@@ -421,8 +402,7 @@ export default function AboutDrNandaniHero({
           grid-template-columns: 1fr 1fr;
           gap: 14px;
         }
-        .dr-nandani-form-grid input,
-        .dr-nandani-form-grid textarea {
+        .dr-nandani-form-grid input {
           width: 100%;
           min-height: 42px;
           border: 1px solid #111111;
@@ -435,16 +415,10 @@ export default function AboutDrNandaniHero({
           font-size: 13px;
           transition: all .25s ease;
         }
-        .dr-nandani-form-grid input:focus,
-        .dr-nandani-form-grid textarea:focus {
+        .dr-nandani-form-grid input:focus {
           border-color: #3B5998;
           box-shadow: 0 0 0 4px rgba(59, 89, 152, 0.08);
           background: #ffffff;
-        }
-        .dr-nandani-form-grid textarea {
-          grid-column: 1 / -1;
-          min-height: 72px;
-          resize: none;
         }
         .dr-nandani-captcha-row {
           grid-column: 1 / -1;

@@ -8,22 +8,22 @@ const createContact = async (req, res, next) => {
     if (!name || !name.trim()) {
       return res.status(400).json({ success: false, message: "Please enter your name." });
     }
-    if (!email || !email.trim()) {
-      return res.status(400).json({ success: false, message: "Please enter your email address." });
-    }
     // Basic email format check
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+    if (email && email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       return res.status(400).json({ success: false, message: "Please enter a valid email address." });
     }
 
     const trimmedMobile = mobile ? mobile.trim().replace(/\s+/g, '') : "0000000000";
+    const normalizedEmail = email && email.trim()
+      ? email.trim().toLowerCase()
+      : `${trimmedMobile || "no-mobile"}@no-email.dmc-trichology.local`;
 
     // Attempt to insert with full columns
     const { data, error } = await supabase
       .from('contacts')
       .insert([{ 
         name: name.trim(), 
-        email: email.trim().toLowerCase(), 
+        email: normalizedEmail, 
         mobile: trimmedMobile, 
         message: message ? message.trim() : "No message provided.", 
         status: 'new',
@@ -44,7 +44,7 @@ const createContact = async (req, res, next) => {
           .from('contacts')
           .insert([{
             name: name.trim(), 
-            email: email.trim().toLowerCase(), 
+            email: normalizedEmail, 
             mobile: trimmedMobile, 
             message: formattedMsg.trim(), 
             status: 'new',
