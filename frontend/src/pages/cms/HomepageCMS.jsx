@@ -15,10 +15,12 @@ import {
   Users,
   FlaskConical,
   Home,
+  Type,
 } from "lucide-react";
 
 // Lazy-load each section's CMS form to keep initial bundle small
 const HeroCMS = lazy(() => import("./HeroCMS"));
+const HomepageAboutUsCMS = lazy(() => import("./HomepageAboutUsCMS"));
 const MarqueeFeaturesCMS = lazy(() => import("./MarqueeFeaturesCMS"));
 const WhyChooseUsCMS = lazy(() => import("./WhyChooseUsCMS"));
 const SurgeonsCMS = lazy(() => import("./SurgeonsCMS"));
@@ -36,6 +38,7 @@ const BlogsHomeCMS = lazy(() => import("./BlogsHomeCMS"));
 
 const TABS = [
   { id: "hero", label: "Hero Banner", icon: ImageIcon, Component: HeroCMS },
+  { id: "welcome", label: "Welcome Section", icon: Type, Component: HomepageAboutUsCMS },
   { id: "marquee", label: "Marquee", icon: Activity, Component: MarqueeFeaturesCMS },
   { id: "why-choose-us", label: "Why Choose Us", icon: Star, Component: WhyChooseUsCMS },
   { id: "surgeons", label: "Surgeons", icon: Scissors, Component: SurgeonsCMS },
