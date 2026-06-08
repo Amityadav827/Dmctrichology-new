@@ -40,31 +40,13 @@ const fallbackData = {
     sectionBgColor: "#FFFFFF"
   },
   timeline: {
-    eyebrow: "TRUSTED CARE SERVICES",
-    heading: "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?",
+    image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
+    imageAlt: "Dr. Nandani Dadu hair restoration care",
     sectionBgColor: "#FFFFFF",
-    steps: [
-      {
-        title: "Compassionate Approach",
-        description: "Empathy towards patients makes them feel comfortable and informed.",
-        icon: ""
-      },
-      {
-        title: "Artistic Skills",
-        description: "Expert knowledge and artistic approach ensure the latest and most effective treatments.",
-        icon: ""
-      },
-      {
-        title: "Customized Treatment Plan",
-        description: "Provide tailored treatments for every unique individual and their needs.",
-        icon: ""
-      },
-      {
-        title: "Advanced Technologies",
-        description: "Uses specialized techniques and equipment to achieve maximum results.",
-        icon: ""
-      }
-    ]
+    contentMaxWidth: "1220px",
+    maxHeight: "340px",
+    paddingTop: "56px",
+    paddingBottom: "56px"
   },
   trustSection: {
     eyebrow: "TRUSTED CARE SERVICES",

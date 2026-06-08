@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useBuilder } from '../../context/BuilderContext';
 import AboutDrNandaniHero from '../../components/AboutDrNandaniHero';
 import AboutDrNandaniSpecialist from '../../components/AboutDrNandaniSpecialist';
-import AboutDrNandaniTimeline from '../../components/AboutDrNandaniTimeline';
+import AboutDrNandaniLandscapeImage from '../../components/AboutDrNandaniLandscapeImage';
 import AboutDrNandaniEducationExperience from '../../components/AboutDrNandaniEducationExperience';
 import AboutDrNandaniTrust from '../../components/AboutDrNandaniTrust';
 import AboutDrNandaniOtherSpecialities from '../../components/AboutDrNandaniOtherSpecialities';
@@ -174,7 +174,10 @@ export default function AboutDrNandaniClient({ initialData, initialFaqData = nul
         formSettings={pageData.formSettings || {}}
       />
       <AboutDrNandaniSpecialist data={pageData.specialist || {}} />
-      <AboutDrNandaniTimeline data={pageData.timeline || {}} />
+      <AboutDrNandaniLandscapeImage
+        data={pageData.timeline || {}}
+        fallbackSrc={pageData.trustSection?.image || pageData.hero?.doctorImage}
+      />
       <AboutDrNandaniTrust data={pageData.trustSection || {}} />
       <AboutDrNandaniEducationExperience
         data={pageData.educationExperience || {}}

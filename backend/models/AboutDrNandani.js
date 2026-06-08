@@ -86,18 +86,13 @@ const AboutDrNandaniSchema = new mongoose.Schema({
   },
 
   timeline: {
-    eyebrow: { type: String, default: "TRUSTED CARE SERVICES" },
-    heading: { type: String, default: "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?" },
+    image: { type: String, default: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp" },
+    imageAlt: { type: String, default: "Dr. Nandani Dadu hair restoration care" },
     sectionBgColor: { type: String, default: "#FFFFFF" },
-    sectionImage: { type: String, default: "" },
-    steps: [{
-      title: { type: String },
-      description: { type: String },
-      icon: { type: String },
-      numberLabel: { type: String },
-      colorMode: { type: String, enum: ['gold', 'navy'], default: 'gold' },
-      iconName: { type: String }
-    }]
+    contentMaxWidth: { type: String, default: "1220px" },
+    maxHeight: { type: String, default: "340px" },
+    paddingTop: { type: String, default: "56px" },
+    paddingBottom: { type: String, default: "56px" }
   },
 
   educationExperience: {
@@ -176,7 +171,7 @@ const AboutDrNandaniSchema = new mongoose.Schema({
       stars: { type: Number, default: 5 }
     }],
     viewMoreText: { type: String, default: "VIEW MORE" },
-    viewMoreUrl: { type: String, default: "https://dmctrichology-mkm4.vercel.app/clients-feedback" },
+    viewMoreUrl: { type: String, default: "https://dmctrichology-new.vercel.app/clients-feedback" },
     backgroundColor: { type: String, default: "#ffffff" },
     cardBackgroundColor: { type: String, default: "#000000" },
     contentMaxWidth: { type: String, default: "1400px" },

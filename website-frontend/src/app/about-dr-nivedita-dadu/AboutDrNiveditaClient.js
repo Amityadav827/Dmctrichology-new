@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import { useBuilder } from '../../context/BuilderContext';
 import AboutDrNandaniHero from '../../components/AboutDrNandaniHero';
 import AboutDrNandaniSpecialist from '../../components/AboutDrNandaniSpecialist';
-import AboutDrNandaniTimeline from '../../components/AboutDrNandaniTimeline';
 import AboutDrNandaniEducationExperience from '../../components/AboutDrNandaniEducationExperience';
 import AboutDrNandaniTrust from '../../components/AboutDrNandaniTrust';
 import AboutDrNandaniOtherSpecialities from '../../components/AboutDrNandaniOtherSpecialities';
@@ -270,7 +269,6 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
         }}
       />
       <AboutDrNandaniSpecialist data={templateData.specialist} />
-      <AboutDrNandaniTimeline data={templateData.timeline} />
       <AboutDrNandaniTrust
         data={templateData.trustSection}
         sectionId="about-nivedita-trust"

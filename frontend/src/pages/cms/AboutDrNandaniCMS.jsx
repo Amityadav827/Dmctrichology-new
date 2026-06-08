@@ -59,16 +59,13 @@ export default function AboutDrNandaniCMS() {
           },
           timeline: {
             ...(res.data.timeline || {}),
-            eyebrow: res.data.timeline?.eyebrow || "TRUSTED CARE SERVICES",
-            heading: res.data.timeline?.heading || "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?",
-            steps: (res.data.timeline?.steps || []).length > 0
-              ? res.data.timeline.steps
-              : [
-                  { title: "Compassionate Approach", description: "Empathy towards patients makes them feel comfortable and informed.", icon: "" },
-                  { title: "Artistic Skills", description: "Expert knowledge and artistic approach ensure the latest and most effective treatments.", icon: "" },
-                  { title: "Customized Treatment Plan", description: "Provide tailored treatments for every unique individual and their needs.", icon: "" },
-                  { title: "Advanced Technologies", description: "Uses specialized techniques and equipment to achieve maximum results.", icon: "" }
-                ]
+            image: res.data.timeline?.image || res.data.trustSection?.image || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
+            imageAlt: res.data.timeline?.imageAlt || "Dr. Nandani Dadu hair restoration care",
+            sectionBgColor: res.data.timeline?.sectionBgColor || "#FFFFFF",
+            contentMaxWidth: res.data.timeline?.contentMaxWidth || "1220px",
+            maxHeight: res.data.timeline?.maxHeight || "340px",
+            paddingTop: res.data.timeline?.paddingTop || "56px",
+            paddingBottom: res.data.timeline?.paddingBottom || "56px"
           },
           trustSection: {
             ...(res.data.trustSection || {}),
@@ -252,7 +249,7 @@ export default function AboutDrNandaniCMS() {
           <SectionTab id="breadcrumb" label="BREADCRUMB CONFIG" icon={Sliders} />
           <SectionTab id="form" label="CONSULTATION FORM DESIGN" icon={ShieldCheck} />
           <SectionTab id="specialist" label="SPECIALIST INFO" icon={Sparkles} />
-          <SectionTab id="timeline" label="SECTION 4 FEATURES" icon={Sliders} />
+          <SectionTab id="timeline" label="SECTION 4 IMAGE" icon={ImageIcon} />
           <SectionTab id="trust" label="SECTION 5 TRUST" icon={ShieldCheck} />
           <SectionTab id="education" label="SECTION 6 TABS" icon={Award} />
           <SectionTab id="credentials" label="CREDENTIALS ITEMS" icon={Award} />
@@ -755,34 +752,45 @@ export default function AboutDrNandaniCMS() {
           </div>
         )}
 
-        {/* TIMELINE FLOW */}
+        {/* LANDSCAPE IMAGE SECTION */}
         {activeSection === "timeline" && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
             <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
               <h3 className="text-lg font-black mb-8 text-slate-800 flex items-center gap-3">
                 <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600">
-                  <Sliders size={18} />
+                  <ImageIcon size={18} />
                 </div>
-                Section 4 Feature List Config
+                Section 4 Landscape Image Config
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Section Eyebrow</label>
-                  <input 
-                    type="text" 
-                    value={data.timeline?.eyebrow || ""} 
-                    onChange={e => updateNestedField("timeline.eyebrow", e.target.value)} 
-                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
-                  />
-                </div>
                 <div className="md:col-span-2">
-                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Section Heading</label>
-                  <input 
-                    type="text" 
-                    value={data.timeline?.heading || ""} 
-                    onChange={e => updateNestedField("timeline.heading", e.target.value)} 
-                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Landscape Image URL</label>
+                  <div className="flex gap-4 items-center">
+                    <input
+                      type="text"
+                      value={data.timeline?.image || ""}
+                      onChange={e => updateNestedField("timeline.image", e.target.value)}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                    />
+                    <label className="flex items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl cursor-pointer transition-all aspect-square shrink-0">
+                      {uploadingImage ? <Loader2 size={20} className="animate-spin" /> : <ImageIcon size={20} />}
+                      <input type="file" className="hidden" accept="image/*" onChange={e => handleNestedImageUpload(e, "timeline.image")} disabled={uploadingImage} />
+                    </label>
+                  </div>
+                </div>
+                {data.timeline?.image && (
+                  <div className="md:col-span-2 rounded-3xl overflow-hidden border border-slate-100 bg-slate-50">
+                    <img src={data.timeline.image} alt={data.timeline?.imageAlt || "Landscape preview"} className="w-full h-[220px] object-cover" />
+                  </div>
+                )}
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Image Alt Text</label>
+                  <input
+                    type="text"
+                    value={data.timeline?.imageAlt || ""}
+                    onChange={e => updateNestedField("timeline.imageAlt", e.target.value)}
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
                   />
                 </div>
                 <div>
@@ -802,81 +810,47 @@ export default function AboutDrNandaniCMS() {
                     />
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Steps Config List */}
-            <div className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-black text-slate-800">Feature Rows</h3>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const currentSteps = data.timeline?.steps || [];
-                    updateNestedField("timeline.steps", [...currentSteps, { icon: "", title: "New Feature", description: "Feature description goes here." }]);
-                  }}
-                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm"
-                >
-                  + Add Feature
-                </button>
-              </div>
-              {(data.timeline?.steps || []).map((step, idx) => (
-                <div key={idx} className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
-                  <div className="flex justify-between gap-4 items-center mb-6">
-                    <h4 className="text-sm font-black text-slate-700 flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold">{idx + 1}</span>
-                      Feature Row: {step.title || `Feature ${idx+1}`}
-                    </h4>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const filtered = (data.timeline?.steps || []).filter((_, sIdx) => sIdx !== idx);
-                        updateNestedField("timeline.steps", filtered);
-                      }}
-                      className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
-                      title="Remove feature"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Icon Upload / URL</label>
-                      <div className="flex gap-4 items-center">
-                        <input 
-                          type="text" 
-                          value={step.icon || ""} 
-                          onChange={e => updateNestedField(`timeline.steps.${idx}.icon`, e.target.value)} 
-                          className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
-                        />
-                        <label className="flex items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl cursor-pointer transition-all aspect-square shrink-0">
-                          {uploadingImage ? <Loader2 size={20} className="animate-spin" /> : <ImageIcon size={20} />}
-                          <input type="file" className="hidden" accept="image/*" onChange={e => handleNestedImageUpload(e, `timeline.steps.${idx}.icon`)} disabled={uploadingImage} />
-                        </label>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Feature Title</label>
-                      <input 
-                        type="text" 
-                        value={step.title || ""} 
-                        onChange={e => updateNestedField(`timeline.steps.${idx}.title`, e.target.value)} 
-                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Feature Description</label>
-                      <input 
-                        type="text" 
-                        value={step.description || ""} 
-                        onChange={e => updateNestedField(`timeline.steps.${idx}.description`, e.target.value)} 
-                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
-                      />
-                    </div>
-                  </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Max Image Height</label>
+                  <input
+                    type="text"
+                    value={data.timeline?.maxHeight || ""}
+                    onChange={e => updateNestedField("timeline.maxHeight", e.target.value)}
+                    placeholder="340px"
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
                 </div>
-              ))}
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Content Max Width</label>
+                  <input
+                    type="text"
+                    value={data.timeline?.contentMaxWidth || ""}
+                    onChange={e => updateNestedField("timeline.contentMaxWidth", e.target.value)}
+                    placeholder="1220px"
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Padding Top</label>
+                  <input
+                    type="text"
+                    value={data.timeline?.paddingTop || ""}
+                    onChange={e => updateNestedField("timeline.paddingTop", e.target.value)}
+                    placeholder="56px"
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Padding Bottom</label>
+                  <input
+                    type="text"
+                    value={data.timeline?.paddingBottom || ""}
+                    onChange={e => updateNestedField("timeline.paddingBottom", e.target.value)}
+                    placeholder="56px"
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         )}
