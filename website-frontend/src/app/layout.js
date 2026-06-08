@@ -3,7 +3,6 @@ import { BuilderProvider } from '../context/BuilderContext';
 import { fetchSiteSettings, fetchHeader, fetchTopBar } from '../services/api';
 import GlobalLayoutWrapper from '../components/GlobalLayoutWrapper';
 import CustomScriptsInjector from '../components/CustomScriptsInjector';
-import Preloader from '../components/Preloader';
 import { Suspense } from 'react';
 import Script from 'next/script';
 
@@ -66,7 +65,6 @@ export default async function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Marcellus&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <Preloader />
         <CustomScriptsInjector headScripts={headScripts} bodyStartScripts={bodyStartScripts} />
         {shouldInjectGtm && (
           <noscript dangerouslySetInnerHTML={{ __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }} />

@@ -2029,34 +2029,3 @@ ul li {
   }
 }
 
-/* ============================================================
-   Global page preloader (dark overlay + centered logo)
-   Shows on initial page load, fades out when the page is ready.
-   ============================================================ */
-.site-preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 999999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #0e1730;
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.55s ease, visibility 0.55s ease;
-}
-.site-preloader.is-hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-.site-preloader-logo {
-  width: clamp(120px, 32vw, 160px);
-  height: auto;
-  animation: sitePreloaderPulse 1.4s ease-in-out infinite;
-}
-@keyframes sitePreloaderPulse {
-  0%, 100% { transform: scale(0.92); opacity: 0.85; }
-  50% { transform: scale(1.06); opacity: 1; }
-}
-
