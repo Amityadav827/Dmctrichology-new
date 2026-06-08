@@ -320,7 +320,7 @@ export default function FaqSection({ initialData = null }) {
               margin-bottom: 34px !important;
             }
             section .section-title {
-              font-size: clamp(30px, 8.5vw, 40px) !important;
+              font-size: 26px !important;
             }
             .faq-grid {
               grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)) !important;

@@ -166,8 +166,9 @@ const AboutUsCare = () => {
               gap: 28px !important;
             }
             .about-us-care .section-title {
-              font-size: clamp(30px, 8.5vw, 40px) !important;
-              line-height: 1.12 !important;
+              font-size: 26px !important;
+              line-height: 1.2 !important;
+              margin-bottom: 14px !important;
             }
             .about-us-care div[style*="background-color: rgb(59, 89, 152)"],
             .about-us-care div[style*="backgroundColor: '#3B5998'"] {

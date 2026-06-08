@@ -366,7 +366,9 @@ export default function BlogSection() {
               margin-bottom: 34px !important;
             }
             section .section-title {
-              font-size: clamp(30px, 8.5vw, 40px) !important;
+              font-size: 26px !important;
+              line-height: 1.2 !important;
+              margin-bottom: 12px !important;
             }
             div[style*="gridTemplateColumns"] {
               grid-template-columns: 1fr !important;

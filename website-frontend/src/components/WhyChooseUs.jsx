@@ -38,7 +38,7 @@ const WhyChooseUs = () => {
   const title = data ? (data.title || '') : 'Why DMC Trichology Is The Best Hair Transplant Clinic In Delhi';
   const subtitle = data ? (data.subtitle || '') : 'Best Hair Graft Clinic';
   const fallbackCentralImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777550637/dmc-trichology/mprq5pm7g2utm2olrnj1.png';
-  const mobileCentralImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780667061631-3356311.png';
+  const mobileCentralImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/graft-clinic-mobile.png';
   const centralImage = data?.centralImage?.trim() || fallbackCentralImage;
 
   // Always safe — never crash on .map
@@ -240,7 +240,7 @@ const WhyChooseUs = () => {
             padding-bottom: 48px !important;
           }
           .why-choose-us .section-title {
-            font-size: clamp(30px, 8.5vw, 40px) !important;
+            font-size: 26px !important;
             line-height: 1.12 !important;
             margin-bottom: 32px !important;
           }

@@ -775,7 +775,9 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
               gap: 26px !important;
             }
             .enquiry-section .section-title {
-              font-size: clamp(30px, 8.5vw, 40px) !important;
+              font-size: 26px !important;
+              line-height: 1.2 !important;
+              margin-bottom: 14px !important;
             }
             .enquiry-section form {
               grid-template-columns: 1fr !important;

@@ -185,8 +185,8 @@ export default function ServiceSlider() {
               padding: 48px 16px !important;
             }
             .service-slider-section h2 {
-              font-size: clamp(30px, 9vw, 42px) !important;
-              line-height: 1.1 !important;
+              font-size: 26px !important;
+              line-height: 1.25 !important;
               text-align: center;
             }
             .service-slider-section a[style*="position: absolute"] {

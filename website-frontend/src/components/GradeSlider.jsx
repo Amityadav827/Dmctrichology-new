@@ -282,7 +282,7 @@ export default function GradeSlider() {
               margin-bottom: 28px !important;
             }
             .grade-section .section-title {
-              font-size: clamp(30px, 8.5vw, 40px) !important;
+              font-size: 26px !important;
             }
             .flip-card {
               height: 280px !important;

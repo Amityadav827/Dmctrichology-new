@@ -124,25 +124,29 @@ const AboutUs = () => {
               padding: 52px 16px !important;
             }
             .welcome-section .section-title {
-              font-size: clamp(30px, 8.5vw, 40px) !important;
+              font-size: 26px !important;
+              line-height: 1.25 !important;
             }
             .welcome-section > div > p {
-              font-size: clamp(22px, 7vw, 30px) !important;
-              line-height: 1.25 !important;
-              margin-bottom: 38px !important;
+              font-size: 18px !important;
+              line-height: 1.6 !important;
+              margin-bottom: 32px !important;
             }
             .stats-grid { grid-template-columns: 1fr 1fr !important; }
             .stats-grid h3 {
-              font-size: 34px !important;
+              font-size: 28px !important;
+            }
+            .stats-grid > div > p {
+              font-size: 13px !important;
             }
             .stats-grid p {
               overflow-wrap: anywhere;
             }
           }
           @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr !important; }
+            .stats-grid { grid-template-columns: 1fr 1fr !important; }
             .stats-grid {
-              gap: 28px !important;
+              gap: 26px 14px !important;
             }
           }
         `}</style>

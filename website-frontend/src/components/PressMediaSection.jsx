@@ -203,9 +203,9 @@ export default function PressMediaSection() {
                       pauseOnMouseEnter: true
                     }}
                     breakpoints={{
-                      320: { slidesPerView: 1, spaceBetween: 20 },
-                      480: { slidesPerView: 1.5, spaceBetween: 25 },
-                      768: { slidesPerView: 2, spaceBetween: 30 },
+                      320: { slidesPerView: 2, spaceBetween: 12 },
+                      480: { slidesPerView: 2.5, spaceBetween: 14 },
+                      768: { slidesPerView: 3, spaceBetween: 20 },
                       1024: { slidesPerView: 2.5, spaceBetween: 30 }
                     }}
                     style={{ width: '100%' }}
@@ -281,7 +281,7 @@ export default function PressMediaSection() {
             .press-media-title {
               text-align: center !important;
               margin-bottom: 28px !important;
-              font-size: clamp(28px, 8vw, 36px) !important;
+              font-size: 26px !important;
             }
             div[style*="alignItems: center"] { justify-content: center !important; }
             div[style*="marginTop: 40px"] { margin-top: 20px !important; }

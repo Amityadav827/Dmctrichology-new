@@ -928,7 +928,8 @@ a {
   }
 
   .slide-desc {
-    font-size: 0.95rem;
+    font-size: 16px !important;
+    line-height: 1.6;
     max-width: 100%;
   }
 
@@ -1244,14 +1245,15 @@ a {
   }
 
   .slide-content .section-title {
-    font-size: clamp(32px, 6.2vw, 48px) !important;
-    line-height: 1.08;
+    font-size: 30px !important;
+    line-height: 1.2;
     margin-bottom: 12px !important;
   }
 
   .slide-content .section-subtitle {
     justify-content: center;
     flex-wrap: wrap;
+    font-size: 12px !important;
   }
 
   .slide-desc {
@@ -1357,12 +1359,12 @@ a {
   }
 
   .slide-content .section-title {
-    font-size: clamp(28px, 9vw, 36px) !important;
+    font-size: 30px !important;
   }
 
   .slide-desc {
-    font-size: 0.92rem !important;
-    line-height: 1.55;
+    font-size: 16px !important;
+    line-height: 1.6;
   }
 
   .hero-right {
@@ -1409,7 +1411,7 @@ a {
   }
 
   .slide-content .section-title {
-    font-size: 27px !important;
+    font-size: 30px !important;
   }
 
   .form-container {
@@ -2007,5 +2009,23 @@ ul li {
 /* Respect reduced-motion preference */
 @media (prefers-reduced-motion: reduce) {
   .sr { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* ============================================================
+   HOMEPAGE-ONLY mobile typography (scoped to .home-page)
+   Does NOT affect service/about/other pages.
+   ============================================================ */
+@media (max-width: 992px) {
+  .home-page .section-title {
+    font-size: 26px !important;
+    line-height: 1.25;
+  }
+  .home-page .section-subtitle {
+    font-size: 12px !important;
+  }
+  /* Hero title stays larger (higher specificity wins over the rule above) */
+  .home-page .slide-content .section-title {
+    font-size: 30px !important;
+  }
 }
 

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { fetchFooter } from "../services/api";
 import EditableSection from "./Editable/EditableSection";
 import EditableText from "./Editable/EditableText";
@@ -31,6 +32,10 @@ export default function Footer({ siteSettings }) {
   const [subscribeToUpdates, setSubscribeToUpdates] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+
+  // Footer link columns: accordion on mobile (first column open by default)
+  const [openCols, setOpenCols] = useState({ 0: true });
+  const toggleCol = (key) => setOpenCols((p) => ({ ...p, [key]: !p[key] }));
 
   // Success/Error toast auto-hide timer after 4 seconds
   useEffect(() => {
@@ -249,11 +254,16 @@ export default function Footer({ siteSettings }) {
             
             {/* Dynamic Columns */}
             {columns.map((col, cIdx) => (
-              <div key={cIdx}>
-                <h4 style={{ fontSize: '18px', color: '#1C1C1C', fontFamily: "'Marcellus', serif", marginBottom: '25px', fontWeight: '400' }}>
+              <div key={cIdx} className={`footer-col${openCols[cIdx] ? ' open' : ''}`}>
+                <h4 className="footer-col-title" onClick={() => toggleCol(cIdx)} style={{ fontSize: '18px', color: '#1C1C1C', fontFamily: "'Marcellus', serif", marginBottom: '25px', fontWeight: '400' }}>
                   <EditableText sectionId="footer-section" fieldPath={`columns.${cIdx}.title`} tag="span">
                     {col.title}
                   </EditableText>
+                  <span className="footer-col-chevron" aria-hidden="true">
+                    {openCols[cIdx]
+                      ? <ChevronUp size={20} strokeWidth={2.5} />
+                      : <ChevronDown size={20} strokeWidth={2.5} />}
+                  </span>
                 </h4>
                 <ul className="footer-link-list" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                   {(col.links || []).map((link, lIdx) => (
@@ -270,13 +280,18 @@ export default function Footer({ siteSettings }) {
             ))}
 
             {/* Contact Column */}
-            <div style={{ position: 'relative' }}>
-              <h4 style={{ fontSize: '18px', color: '#1C1C1C', fontFamily: "'Marcellus', serif", marginBottom: '25px', fontWeight: '400' }}>
+            <div className={`footer-col${openCols['contact'] ? ' open' : ''}`} style={{ position: 'relative' }}>
+              <h4 className="footer-col-title" onClick={() => toggleCol('contact')} style={{ fontSize: '18px', color: '#1C1C1C', fontFamily: "'Marcellus', serif", marginBottom: '25px', fontWeight: '400' }}>
                 <EditableText sectionId="footer-section" fieldPath="contact.heading" tag="span">
                   {contact.heading}
                 </EditableText>
+                <span className="footer-col-chevron" aria-hidden="true">
+                  {openCols['contact']
+                    ? <ChevronUp size={20} strokeWidth={2.5} />
+                    : <ChevronDown size={20} strokeWidth={2.5} />}
+                </span>
               </h4>
-              <div style={{ color: '#444', fontSize: '14px', lineHeight: '1.8' }}>
+              <div className="footer-col-content" style={{ color: '#444', fontSize: '14px', lineHeight: '1.8' }}>
                 <p style={{ marginBottom: '15px' }}>
                   <EditableText sectionId="footer-section" fieldPath="contact.address1" tag="span">{contact.address1}</EditableText>
                 </p>
@@ -517,6 +532,10 @@ export default function Footer({ siteSettings }) {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
           }
+
+          /* Footer accordion chevron — hidden on desktop (links always visible) */
+          .footer-col-chevron { display: none; }
+
           @media (max-width: 992px) {
             .footer-top {
               padding: 56px 5% 72px !important;
@@ -561,11 +580,45 @@ export default function Footer({ siteSettings }) {
             }
             .footer-top-grid {
               grid-template-columns: 1fr !important;
-              gap: 30px !important;
+              gap: 0 !important;
             }
             .footer-top a,
             .footer-top p {
               overflow-wrap: anywhere;
+            }
+            /* ---- Footer accordion (mobile) ---- */
+            .footer-col {
+              border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+              text-align: left;
+            }
+            .footer-col .footer-col-title {
+              cursor: pointer;
+              display: flex !important;
+              align-items: center;
+              justify-content: space-between;
+              gap: 12px;
+              margin-bottom: 0 !important;
+              padding: 15px 2px !important;
+              text-align: left;
+            }
+            .footer-col-chevron {
+              display: inline-block;
+              color: #3B5998;
+              flex-shrink: 0;
+            }
+            .footer-col .footer-link-list,
+            .footer-col .footer-col-content {
+              max-height: 0 !important;
+              overflow: hidden !important;
+              transition: max-height 0.32s ease;
+            }
+            .footer-col.open .footer-link-list,
+            .footer-col.open .footer-col-content {
+              max-height: 1200px !important;
+              padding-bottom: 14px !important;
+            }
+            .footer-col .footer-link-list li {
+              text-align: left;
             }
             .footer-bottom {
               padding: 0 16px 36px !important;
@@ -596,8 +649,12 @@ export default function Footer({ siteSettings }) {
               border-radius: 26px !important;
             }
             .footer-newsletter-card h2 {
-              font-size: clamp(26px, 8vw, 32px) !important;
-              line-height: 1.12 !important;
+              font-size: 26px !important;
+              line-height: 1.25 !important;
+              margin-bottom: 14px !important;
+            }
+            .footer-newsletter-card h2 + p {
+              font-size: 16px !important;
             }
             .footer-newsletter-input-row {
               flex-direction: column;

@@ -268,7 +268,7 @@ const SurgeonsSection = () => {
               margin-bottom: 32px !important;
             }
             .surgeons-section .section-title {
-              font-size: clamp(30px, 8.5vw, 40px) !important;
+              font-size: 26px !important;
             }
             .surgeon-tab {
               padding: 18px 20px !important;

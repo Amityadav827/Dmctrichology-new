@@ -261,7 +261,7 @@ export default function ResultsSlider() {
               margin-bottom: 28px !important;
             }
             .results-section .section-title {
-              font-size: clamp(30px, 8.5vw, 40px) !important;
+              font-size: 26px !important;
               line-height: 1.12 !important;
             }
             .result-card {

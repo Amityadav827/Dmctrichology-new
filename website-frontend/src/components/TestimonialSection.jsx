@@ -314,7 +314,7 @@ const TestimonialSection = () => {
               margin-bottom: 36px !important;
             }
             .testimonials-grid-section .section-title {
-              font-size: clamp(30px, 8.5vw, 40px) !important;
+              font-size: 26px !important;
             }
             .testimonials-grid-section div[style*="justify-content: center"] {
               flex-wrap: wrap;

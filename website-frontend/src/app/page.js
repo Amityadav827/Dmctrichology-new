@@ -17,7 +17,7 @@ import GradeSlider from '@/components/GradeSlider';
 
 export default function Home() {
   return (
-    <>
+    <div className="home-page">
       <div style={{ position: 'relative' }}>
         <HeroSlider />
         <div className="hero-right">
@@ -40,6 +40,6 @@ export default function Home() {
       <BlogSection />
       <PressMediaSection />
 
-    </>
+    </div>
   );
 }
