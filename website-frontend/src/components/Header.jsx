@@ -53,7 +53,7 @@ export default function Header({ initialHeader, siteSettings }) {
             </Link>
           </div>
 
-          <Navbar cmsMenu={headerData?.menuItems} />
+          <Navbar cmsMenu={headerData?.menuItems} logoUrl={logoUrl} />
 
           <div className="header-right" style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
             <a

@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { fetchMenu } from '../services/api';
 import { ChevronDown, Menu as MenuIcon, X } from 'lucide-react';
 
-export default function Navbar({ cmsMenu }) {
+export default function Navbar({ cmsMenu, logoUrl }) {
   const [defaultMenuItems] = useState([
     { label: 'Home', link: '/' },
     { label: 'About Us', link: '/about', dropdown: [{label: 'Dr. Nandani Dadu', link: '/about/dr-nandani'}] },
@@ -82,17 +82,21 @@ export default function Navbar({ cmsMenu }) {
 
       {/* Desktop + Mobile Nav */}
       <nav className={`navbar ${isOpen ? 'open' : ''}`}>
-        <button
-          className="mobile-menu-close"
-          type="button"
-          onClick={() => {
-            setIsOpen(false);
-            setOpenDropdown(null);
-          }}
-          aria-label="Close menu"
-        >
-          <X size={24} />
-        </button>
+        {/* Mobile menu top bar: logo + close (hidden on desktop) */}
+        <div className="mobile-menu-header">
+          {logoUrl && <img className="mobile-menu-logo" src={logoUrl} alt="Logo" />}
+          <button
+            className="mobile-menu-close"
+            type="button"
+            onClick={() => {
+              setIsOpen(false);
+              setOpenDropdown(null);
+            }}
+            aria-label="Close menu"
+          >
+            <X size={24} />
+          </button>
+        </div>
         {menuItems.map((item, i) => (
           <div key={i} className={`nav-item ${openDropdown === i ? 'dropdown-open' : ''}`} style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
             <a
