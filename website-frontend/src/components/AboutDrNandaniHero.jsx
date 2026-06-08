@@ -568,7 +568,17 @@ export default function AboutDrNandaniHero({
             margin-top: 100px;
           }
           .dr-nandani-hero-title-block h1 {
-            font-size: clamp(30px, 9vw, 40px);
+            font-size: 30px;
+          }
+          .dr-nandani-doctor-copy h2 {
+            font-size: 26px;
+            line-height: 1.25;
+          }
+          .dr-nandani-description {
+            font-size: 16px;
+          }
+          .dr-nandani-form-heading h3 {
+            font-size: 20px;
           }
           .dr-nandani-intro-form-section {
             padding: 64px 16px;

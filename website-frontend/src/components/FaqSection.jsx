@@ -137,7 +137,7 @@ export default function FaqSection({ initialData = null }) {
               const isSecondRightFaqCard = index === 3;
               const isThirdLeftFaqCard = index === 4;
               const isThirdRightFaqCard = index === 5;
-              const iconSrc = isFirstFaqCard
+              const defaultIconSrc = isFirstFaqCard
                 ? '/icons/faq-first-icon.svg'
                 : isFirstRightFaqCard
                   ? '/icons/faq-first-right-icon.svg'
@@ -150,6 +150,10 @@ export default function FaqSection({ initialData = null }) {
                   : isThirdRightFaqCard
                     ? '/icons/faq-third-right-icon.svg'
                   : faq.icon;
+              // Custom icon from the dashboard takes priority; otherwise the
+              // existing default icon is used (so nothing changes until one is set).
+              const hasCustomIcon = Boolean(faq.icon);
+              const iconSrc = hasCustomIcon ? faq.icon : defaultIconSrc;
               return (
                 <div
                   key={index}
@@ -168,7 +172,7 @@ export default function FaqSection({ initialData = null }) {
                 >
                   <div className="faq-icon-circle" style={{ flexShrink: 0 }}>
                     <img 
-                      className={`faq-icon-img ${isFirstFaqCard ? 'faq-first-icon-img' : ''} ${isFirstRightFaqCard ? 'faq-first-right-icon-img' : ''} ${isSecondLeftFaqCard ? 'faq-second-left-icon-img' : ''} ${isSecondRightFaqCard ? 'faq-second-right-icon-img' : ''} ${isThirdLeftFaqCard ? 'faq-third-left-icon-img' : ''} ${isThirdRightFaqCard ? 'faq-third-right-icon-img' : ''}`}
+                      className={`faq-icon-img ${hasCustomIcon ? 'faq-icon-custom' : `${isFirstFaqCard ? 'faq-first-icon-img' : ''} ${isFirstRightFaqCard ? 'faq-first-right-icon-img' : ''} ${isSecondLeftFaqCard ? 'faq-second-left-icon-img' : ''} ${isSecondRightFaqCard ? 'faq-second-right-icon-img' : ''} ${isThirdLeftFaqCard ? 'faq-third-left-icon-img' : ''} ${isThirdRightFaqCard ? 'faq-third-right-icon-img' : ''}`}`}
                       src={iconSrc} 
                       alt="icon" 
                       style={{ width: '50px', height: '50px', objectFit: 'contain' }} 
@@ -257,10 +261,16 @@ export default function FaqSection({ initialData = null }) {
             filter: brightness(0) invert(1);
           }
 
+          .faq-icon-custom {
+            width: 30px !important;
+            height: 30px !important;
+          }
+
           .faq-card:hover .faq-icon-circle {
             background-color: #fff;
           }
 
+          .faq-card:hover .faq-icon-custom,
           .faq-card:hover .faq-first-icon-img,
           .faq-card:hover .faq-first-right-icon-img,
           .faq-card:hover .faq-second-left-icon-img,

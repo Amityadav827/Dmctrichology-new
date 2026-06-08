@@ -2122,6 +2122,35 @@ export default function AboutDrNandaniCMS() {
                         className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-sm font-semibold text-slate-800 focus:border-indigo-300 transition-all outline-none resize-none"
                       />
                     </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Icon (optional — overrides the default icon)</label>
+                      <div className="flex items-center gap-3 flex-wrap">
+                        {faq.icon ? (
+                          <div className="w-12 h-12 rounded-xl bg-[#3B5998] flex items-center justify-center shrink-0">
+                            <img src={faq.icon} alt="icon" className="w-6 h-6 object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+                          </div>
+                        ) : (
+                          <div className="w-12 h-12 rounded-xl bg-slate-200 flex items-center justify-center shrink-0 text-slate-400">
+                            <ImageIcon size={18} />
+                          </div>
+                        )}
+                        <label className="px-4 py-2.5 bg-indigo-600 text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-indigo-700 transition-all flex items-center gap-2">
+                          {uploadingImage ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={16} />}
+                          Upload Icon
+                          <input type="file" accept="image/*" className="hidden" onChange={e => handleNestedImageUpload(e, `faqSection.faqItems.${idx}.icon`)} />
+                        </label>
+                        {faq.icon && (
+                          <button onClick={() => updateNestedField(`faqSection.faqItems.${idx}.icon`, "")} className="text-xs font-bold text-rose-500 hover:underline">Remove</button>
+                        )}
+                      </div>
+                      <input
+                        type="text"
+                        value={faq.icon || ""}
+                        onChange={e => updateNestedField(`faqSection.faqItems.${idx}.icon`, e.target.value)}
+                        placeholder="Or paste an icon URL"
+                        className="mt-2 w-full px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-xs font-semibold text-slate-600 focus:border-indigo-300 transition-all outline-none"
+                      />
+                    </div>
                   </div>
                 ))}
                 {(data.faqSection?.faqItems || []).length === 0 && (
