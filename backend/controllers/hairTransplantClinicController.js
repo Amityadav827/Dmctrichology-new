@@ -31,8 +31,8 @@ const fallbackData = {
     heading: "Why Choose DMC Trichology?",
     description1: "DMC Trichology combines medical expertise, clinical precision, and a refined aesthetic approach to deliver natural-looking hair restoration outcomes.",
     description2: "From FUE and FUT hair transplants to beard transplant, eyebrow restoration, PRP therapy, mesotherapy, and advanced scalp rejuvenation, DMC Trichology provides a complete ecosystem for hair and scalp care.",
-    highlightedText: "Our advanced hair and scalp care solutions include:",
-    bullets: ["FUE HAIR TRANSPLANT", "FUT HAIR TRANSPLANT", "BEARD TRANSPLANT", "EYEBROW RESTORATION", "PRP & MESOTHERAPY"]
+    highlightedText: "",
+    bullets: []
   },
   timeline: {
     eyebrow: "TRUSTED CARE SERVICES",

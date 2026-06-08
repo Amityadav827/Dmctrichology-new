@@ -36,14 +36,8 @@ const pageData = {
     heading: 'Why Choose DMC Trichology?',
     description1: 'DMC Trichology combines medical expertise, clinical precision, and a refined aesthetic approach to deliver natural-looking hair restoration outcomes. The clinic focuses on identifying the cause of hair loss, protecting donor site health, and planning each procedure around the patient’s facial balance, density goals, and long-term scalp condition.',
     description2: 'From FUE and FUT hair transplants to beard transplant, eyebrow restoration, PRP therapy, mesotherapy, and advanced scalp rejuvenation, DMC Trichology provides a complete ecosystem for hair and scalp care under one premium clinical setting.',
-    highlightedText: 'Our advanced hair and scalp care solutions include:',
-    bullets: [
-      'FUE HAIR TRANSPLANT',
-      'FUT HAIR TRANSPLANT',
-      'BEARD TRANSPLANT',
-      'EYEBROW RESTORATION',
-      'PRP & MESOTHERAPY'
-    ]
+    highlightedText: '',
+    bullets: []
   },
   timeline: {
     eyebrow: 'TRUSTED CARE SERVICES',
@@ -253,7 +247,7 @@ const faqData = {
 };
 
 function mergeDeep(base, source) {
-  if (Array.isArray(base)) return Array.isArray(source) && source.length > 0 ? source : base;
+  if (Array.isArray(base)) return Array.isArray(source) ? source : base;
   if (!base || typeof base !== 'object') return source ?? base;
   const output = { ...base, ...(source && typeof source === 'object' ? source : {}) };
   Object.keys(base).forEach((key) => {

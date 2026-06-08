@@ -19,6 +19,11 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
     ]
   } = data;
 
+  const visibleBullets = Array.isArray(bullets)
+    ? bullets.filter(bullet => String(typeof bullet === 'object' ? bullet?.title || bullet?.text || '' : bullet || '').trim())
+    : [];
+  const hasTreatmentContent = Boolean(String(highlightedText || '').trim()) || visibleBullets.length > 0;
+
   return (
     <EditableSection sectionId="about-nandani-specialist" label="Why Choose Dr Nandani">
       <section className="dr-nandani-specialist-section">
@@ -36,27 +41,33 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
             <RichTextContent value={description1} className="dr-nandani-specialist-rich" />
             <RichTextContent value={description2} className="dr-nandani-specialist-rich" />
 
-            <div className="dr-nandani-treatment-block">
-              <h3>
-                <EditableText sectionId="about-nandani-specialist" fieldPath="specialist.highlightedText" tag="span">
-                  {highlightedText}
-                </EditableText>
-              </h3>
-              <div className="dr-nandani-treatment-grid">
-                {bullets.map((bullet, idx) => (
-                  <div className="dr-nandani-treatment-card" key={`${bullet}-${idx}`}>
-                    <span>
-                      <svg width="14" height="14" viewBox="0 0 24 24">
-                        <path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
-                    <EditableText sectionId="about-nandani-specialist" fieldPath={`specialist.bullets.${idx}`} tag="p">
-                      {bullet}
+            {hasTreatmentContent && (
+              <div className="dr-nandani-treatment-block">
+                {String(highlightedText || '').trim() && (
+                  <h3>
+                    <EditableText sectionId="about-nandani-specialist" fieldPath="specialist.highlightedText" tag="span">
+                      {highlightedText}
                     </EditableText>
+                  </h3>
+                )}
+                {visibleBullets.length > 0 && (
+                  <div className="dr-nandani-treatment-grid">
+                    {visibleBullets.map((bullet, idx) => (
+                      <div className="dr-nandani-treatment-card" key={`${bullet}-${idx}`}>
+                        <span>
+                          <svg width="14" height="14" viewBox="0 0 24 24">
+                            <path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </span>
+                        <EditableText sectionId="about-nandani-specialist" fieldPath={`specialist.bullets.${idx}`} tag="p">
+                          {typeof bullet === 'object' ? bullet.title || bullet.text || '' : bullet}
+                        </EditableText>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
