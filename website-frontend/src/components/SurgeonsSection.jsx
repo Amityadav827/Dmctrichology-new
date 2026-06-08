@@ -22,6 +22,18 @@ const SurgeonsSection = () => {
     });
   }, []);
 
+  // Preload every surgeon image so switching tabs swaps the photo instantly
+  // (otherwise the text updates first and the new image loads a moment later).
+  useEffect(() => {
+    const surgeons = Array.isArray(data?.surgeons) ? data.surgeons : [];
+    surgeons.forEach((s) => {
+      if (s?.image) {
+        const img = new window.Image();
+        img.src = s.image;
+      }
+    });
+  }, [data]);
+
   if (data && data.enabled === false) return null;
 
   const heading = data ? (data.heading || '') : 'Meet Our Hair Transplant Surgeons';
