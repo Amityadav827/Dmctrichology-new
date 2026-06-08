@@ -7,11 +7,17 @@ const CountUpStat = ({ value, duration = 2000 }) => {
   const countRef = useRef(null);
   const hasAnimated = useRef(false);
 
-  // Parse value
-  const isK = value.toString().toLowerCase().includes('k');
-  const isPlus = value.toString().includes('+');
-  const numericValue = parseFloat(value.toString().replace(/[k+]/gi, '')) * (isK ? 1000 : 1);
-  const isDecimal = value.toString().includes('.');
+  const originalValue = value == null ? '' : String(value);
+  const match = originalValue.match(/^([^0-9.-]*)([-+]?\d*\.?\d+)(.*)$/);
+  const prefix = match?.[1] || '';
+  const numericToken = match?.[2] || '';
+  const suffix = match?.[3] || '';
+  const hasNumericValue = Boolean(match);
+  const usesThousandSuffix = /^k/i.test(suffix.trim());
+  const decimalPlaces = numericToken.includes('.') ? numericToken.split('.')[1].length : 0;
+  const numericValue = hasNumericValue
+    ? parseFloat(numericToken) * (usesThousandSuffix ? 1000 : 1)
+    : 0;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -58,18 +64,29 @@ const CountUpStat = ({ value, duration = 2000 }) => {
   }, [isVisible, numericValue, duration]);
 
   const formatValue = (val) => {
-    if (isK && val >= 1000) {
-      return (val / 1000).toFixed(val % 1000 === 0 ? 0 : 1) + 'k';
+    if (!hasNumericValue) {
+      return originalValue;
     }
-    if (isDecimal) {
-      return val.toFixed(1);
-    }
-    return Math.floor(val).toString();
+
+    const displayNumber = usesThousandSuffix ? val / 1000 : val;
+    const rounded = decimalPlaces > 0
+      ? displayNumber.toFixed(decimalPlaces)
+      : Math.floor(displayNumber).toString();
+
+    return `${prefix}${rounded}${suffix}`;
   };
+
+  const displayValue = isVisible || hasAnimated.current ? formatValue(count) : originalValue;
+
+  useEffect(() => {
+    if (!hasNumericValue) {
+      hasAnimated.current = true;
+    }
+  }, [hasNumericValue]);
 
   return (
     <span ref={countRef}>
-      {formatValue(count)}{isPlus ? '+' : ''}
+      {displayValue}
     </span>
   );
 };
