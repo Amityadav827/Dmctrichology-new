@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ServiceSearchSelector from "../../components/ServiceSearchSelector";
+import { FRONTEND_URL } from "../../utils/config";
 
 const HAIR_COST_DELHI_SLUGS = ["hair-transplant-cost-in-delhi", "hair-transplant-cost-in-india"];
 
@@ -2045,7 +2046,7 @@ export default function ServiceDetailCMS() {
            </button>
            {selectedSlug && (
              <a
-               href={`${import.meta.env.VITE_WEBSITE_URL || import.meta.env.VITE_FRONTEND_URL || 'http://localhost:3000'}/details/${selectedSlug}`}
+               href={`${FRONTEND_URL}/details/${selectedSlug}`}
                target="_blank" rel="noopener noreferrer"
                className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-700 transition-all"
              >

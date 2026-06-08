@@ -3,8 +3,28 @@ import React, { useState, useEffect } from 'react';
 import { fetchHomeFAQ } from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
+import RichTextContent from './RichTextContent';
 
 const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
+
+function getFaqCategories(source = {}) {
+  const categories = Array.isArray(source?.categories)
+    ? source.categories
+        .map(category => ({
+          title: category.title || category.category || 'General',
+          faqs: Array.isArray(category.faqs) ? category.faqs : []
+        }))
+        .filter(category => category.faqs.length > 0)
+    : [];
+
+  if (categories.length > 0) return categories;
+
+  const flatFaqs = Array.isArray(source?.faqItems) && source.faqItems.length > 0
+    ? source.faqItems
+    : (Array.isArray(source?.faqs) ? source.faqs : []);
+
+  return flatFaqs.length > 0 ? [{ title: 'General', faqs: flatFaqs }] : [];
+}
 
 export default function FaqSection({ initialData = null }) {
   const [data, setData] = useState(initialData);
@@ -13,8 +33,9 @@ export default function FaqSection({ initialData = null }) {
   useEffect(() => {
     if (initialData) {
       setData(initialData);
-      if (initialData.categories?.length > 0) {
-        setActiveTab(initialData.categories[0].title);
+      const normalized = getFaqCategories(initialData);
+      if (normalized.length > 0) {
+        setActiveTab(normalized[0].title);
       }
       return;
     }
@@ -53,13 +74,11 @@ export default function FaqSection({ initialData = null }) {
     return () => window.removeEventListener('cms-update', handleCmsUpdate);
   }, [initialData]);
 
-  if (!data?.enabled && data !== null) return null;
+  if ((data?.enabled === false || data?.isEnabled === false) && data !== null) return null;
 
   const badgeText = data?.badgeText || "TRUSTED CARE SERVICES";
   const heading = data?.heading || "Frequently Asked Question?";
-  const categories = data?.categories?.length
-    ? data.categories
-    : (data?.faqItems?.length ? [{ title: 'General', faqs: data.faqItems }] : []);
+  const categories = getFaqCategories(data);
   const activeCategory = categories.find(c => c.title === activeTab) || categories[0];
   const buttonText = data?.buttonText || "View All Questions";
 
@@ -161,11 +180,7 @@ export default function FaqSection({ initialData = null }) {
                         {faq.question}
                       </EditableText>
                     </h3>
-                    <p style={{ fontSize: '14px', color: '#000000', fontFamily: "'Marcellus', serif", lineHeight: '1.6' }}>
-                      <EditableText sectionId="faq-section" fieldPath={`categories.${catIndex}.faqs.${index}.answer`} tag="span">
-                        {faq.answer}
-                      </EditableText>
-                    </p>
+                    <RichTextContent value={faq.answer} className="faq-answer-rich" />
                   </div>
                 </div>
               );
@@ -195,8 +210,35 @@ export default function FaqSection({ initialData = null }) {
           }
 
           .faq-card:hover h3,
-          .faq-card:hover p {
+          .faq-card:hover p,
+          .faq-card:hover .faq-answer-rich,
+          .faq-card:hover .faq-answer-rich :global(p),
+          .faq-card:hover .faq-answer-rich :global(li) {
             color: #fff !important;
+          }
+
+          .faq-answer-rich,
+          .faq-answer-rich :global(p),
+          .faq-answer-rich :global(li) {
+            font-size: 14px;
+            color: #000000;
+            font-family: 'Marcellus', serif;
+            line-height: 1.6;
+            margin: 0;
+          }
+
+          .faq-answer-rich :global(p) {
+            margin: 0 0 10px;
+          }
+
+          .faq-answer-rich :global(p:last-child) {
+            margin-bottom: 0;
+          }
+
+          .faq-answer-rich :global(ul),
+          .faq-answer-rich :global(ol) {
+            margin: 0 0 10px 20px;
+            padding: 0;
           }
 
           .faq-icon-circle {

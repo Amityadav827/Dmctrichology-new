@@ -21,7 +21,7 @@ const FooterSchema = new mongoose.Schema({
     address2: { type: String, default: "Delhi, 110052" },
     phone1: { type: String, default: "+91 91191 19011" },
     phone2: { type: String, default: "+91 91191 19012" },
-    email: { type: String, default: "info@dmctrichology-mkm4.vercel.app" }
+    email: { type: String, default: "info@dmctrichology.com" }
   },
   disclaimer: { type: String, default: "Disclaimer: All treatments and results vary for each individual. Please consult our experts for personalized advice." },
   newsletter: {

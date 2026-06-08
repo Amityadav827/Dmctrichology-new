@@ -2,6 +2,7 @@
 import React from 'react';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
+import RichTextContent from './RichTextContent';
 
 export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
   const {
@@ -16,15 +17,6 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
     image = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
     imageAlt = "Other Specialities"
   } = data;
-
-  const renderFormattedText = (text) => {
-    if (!text) return "";
-    const processed = String(text)
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/<strong>(.*?)<\/strong>/g, '<strong>$1</strong>');
-
-    return <span dangerouslySetInnerHTML={{ __html: processed }} />;
-  };
 
   return (
     <EditableSection sectionId="about-nandani-other-specialities" label="Other Specialities Section">
@@ -52,11 +44,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
               </EditableText>
             </h2>
 
-            <p className="dr-nandani-other-intro">
-              <EditableText sectionId="about-nandani-other-specialities" fieldPath="otherSpecialitiesSection.introParagraph">
-                {renderFormattedText(introParagraph)}
-              </EditableText>
-            </p>
+            <RichTextContent value={introParagraph} className="dr-nandani-other-intro" />
 
             <div className="dr-nandani-other-list">
               {specialitiesList.map((bullet, idx) => (
@@ -75,11 +63,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
               ))}
             </div>
 
-            <p className="dr-nandani-other-conclusion">
-              <EditableText sectionId="about-nandani-other-specialities" fieldPath="otherSpecialitiesSection.conclusionParagraph">
-                {renderFormattedText(conclusionParagraph)}
-              </EditableText>
-            </p>
+            <RichTextContent value={conclusionParagraph} className="dr-nandani-other-conclusion" />
           </div>
         </div>
       </section>
@@ -143,13 +127,32 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
           margin: 0 0 18px;
         }
         .dr-nandani-other-intro,
-        .dr-nandani-other-conclusion {
+        .dr-nandani-other-conclusion,
+        .dr-nandani-other-intro :global(p),
+        .dr-nandani-other-conclusion :global(p),
+        .dr-nandani-other-intro :global(li),
+        .dr-nandani-other-conclusion :global(li) {
           font-family: 'Lato', sans-serif;
           font-size: 13px;
           line-height: 1.7;
           color: #2b2b2b;
           margin: 0;
           max-width: 760px;
+        }
+        .dr-nandani-other-intro :global(p),
+        .dr-nandani-other-conclusion :global(p) {
+          margin: 0 0 12px;
+        }
+        .dr-nandani-other-intro :global(p:last-child),
+        .dr-nandani-other-conclusion :global(p:last-child) {
+          margin-bottom: 0;
+        }
+        .dr-nandani-other-intro :global(ul),
+        .dr-nandani-other-intro :global(ol),
+        .dr-nandani-other-conclusion :global(ul),
+        .dr-nandani-other-conclusion :global(ol) {
+          margin: 0 0 12px 20px;
+          padding: 0;
         }
         .dr-nandani-other-list {
           display: flex;

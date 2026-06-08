@@ -12,6 +12,14 @@ import AboutDrNandaniOtherSpecialities from '../../components/AboutDrNandaniOthe
 import AboutDrNandaniTestimonials from '../../components/AboutDrNandaniTestimonials';
 import FaqSection from '../../components/FaqSection';
 
+function hasFaqContent(faqSection) {
+  return Boolean(
+    faqSection?.categories?.some(category => Array.isArray(category.faqs) && category.faqs.length > 0) ||
+    faqSection?.faqItems?.length ||
+    faqSection?.faqs?.length
+  );
+}
+
 export default function AboutDrNandaniClient({ initialData, initialFaqData = null }) {
   const [pageData, setPageData] = useState(initialData);
   const { isEditMode, siteConfig } = useBuilder();
@@ -162,7 +170,7 @@ export default function AboutDrNandaniClient({ initialData, initialFaqData = nul
     return () => window.removeEventListener('cms-update', handleCmsUpdate);
   }, [isEditing]);
 
-  const faqData = pageData?.faqSection?.categories?.length || pageData?.faqSection?.faqItems?.length
+  const faqData = hasFaqContent(pageData?.faqSection)
     ? pageData.faqSection
     : initialFaqData;
 

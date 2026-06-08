@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
+import RichTextContent from './RichTextContent';
 
 const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
 
@@ -39,7 +40,17 @@ export default function AboutDrNandaniHero({
   const formTitle = formSettings?.title || "Request Private Consultation";
   const formSubtitle = formSettings?.subtitle || "Reserve your bespoke scalp assessment and consultation session.";
   const successMessage = formSettings?.successMessage || "Your consultation request has been successfully submitted. Our concierge team will reach out to you shortly.";
-  const galleryImage = data.galleryImage || data.doctorImage || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
+  const imageValue = (key, fallback = "") => {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      return typeof data[key] === 'string' ? data[key].trim() : "";
+    }
+    return typeof fallback === 'string' ? fallback.trim() : "";
+  };
+  const galleryImage = imageValue('galleryImage', data.doctorImage);
+  const doctorImage = imageValue('doctorImage', galleryImage);
+  const secondaryImage = imageValue('secondaryImage', doctorImage || galleryImage);
+  const sideImages = [doctorImage, secondaryImage].filter(Boolean);
+  const hasHeroImages = Boolean(galleryImage || sideImages.length);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -134,21 +145,26 @@ export default function AboutDrNandaniHero({
       <EditableSection sectionId={heroSectionId} label="Doctor Intro And Lead Form">
         <section className="dr-nandani-intro-form-section">
           <div className="dr-nandani-intro-grid">
-            <div className="dr-nandani-image-column">
-              <div className="dr-nandani-gallery-grid">
-                <div className="dr-nandani-gallery-main">
-                  <img src={galleryImage} alt={`${doctorName} clinic introduction`} />
-                </div>
-                <div className="dr-nandani-gallery-side">
-                  <div className="dr-nandani-gallery-small">
-                    <img src={galleryImage} alt={`${doctorName} treatment space`} />
-                  </div>
-                  <div className="dr-nandani-gallery-small">
-                    <img src={galleryImage} alt={`${doctorName} consultation space`} />
-                  </div>
+            {hasHeroImages && (
+              <div className="dr-nandani-image-column">
+                <div className={`dr-nandani-gallery-grid ${galleryImage && sideImages.length ? '' : 'single-column'}`}>
+                  {galleryImage && (
+                    <div className="dr-nandani-gallery-main">
+                      <img src={galleryImage} alt={`${doctorName} clinic introduction`} />
+                    </div>
+                  )}
+                  {sideImages.length > 0 && (
+                    <div className={`dr-nandani-gallery-side ${sideImages.length === 1 ? 'single-side' : ''}`}>
+                      {sideImages.map((src, index) => (
+                        <div className="dr-nandani-gallery-small" key={`${src}-${index}`}>
+                          <img src={src} alt={`${doctorName} ${index === 0 ? 'treatment space' : 'consultation space'}`} />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
+            )}
 
             <div className="dr-nandani-info-form-column">
               <div className="dr-nandani-doctor-copy">
@@ -167,11 +183,10 @@ export default function AboutDrNandaniHero({
                     {degreeText}
                   </EditableText>
                 </p>
-                <p className="dr-nandani-description">
-                  <EditableText sectionId={heroSectionId} fieldPath="descriptionParagraph" tag="span">
-                    {descriptionParagraph}
-                  </EditableText>
-                </p>
+                <RichTextContent
+                  value={descriptionParagraph}
+                  className="dr-nandani-description"
+                />
               </div>
 
               <form className="dr-nandani-lead-card" onSubmit={handleSubmit}>
@@ -296,6 +311,9 @@ export default function AboutDrNandaniHero({
           gap: 20px;
           width: 100%;
         }
+        .dr-nandani-gallery-grid.single-column {
+          grid-template-columns: 1fr;
+        }
         .dr-nandani-gallery-main,
         .dr-nandani-gallery-small {
           background: #d8d8d8;
@@ -310,6 +328,12 @@ export default function AboutDrNandaniHero({
           display: grid;
           grid-template-rows: 1fr 1fr;
           gap: 20px;
+        }
+        .dr-nandani-gallery-side.single-side {
+          grid-template-rows: 1fr;
+        }
+        .dr-nandani-gallery-grid.single-column .dr-nandani-gallery-small {
+          min-height: 440px;
         }
         .dr-nandani-gallery-main img,
         .dr-nandani-gallery-small img {
@@ -374,6 +398,18 @@ export default function AboutDrNandaniHero({
           margin: 0;
           font-weight: 700;
           max-width: 640px;
+        }
+        .dr-nandani-description :global(p),
+        .dr-nandani-description :global(div) {
+          margin: 0 0 14px;
+        }
+        .dr-nandani-description :global(p:last-child),
+        .dr-nandani-description :global(div:last-child) {
+          margin-bottom: 0;
+        }
+        .dr-nandani-description :global(strong),
+        .dr-nandani-description :global(b) {
+          font-weight: 900;
         }
         .dr-nandani-lead-card {
           padding: 24px 0 0;

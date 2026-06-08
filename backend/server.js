@@ -84,7 +84,6 @@ const app = express();
 // ========================
 const allowedOrigins = [
   "https://dmctrichology.vercel.app",
-  "https://dmctrichology-mkm4.vercel.app",
   "https://dmctrichology-new.vercel.app",
   "https://dmctrichology-dashboard.vercel.app",
   "http://localhost:3000",

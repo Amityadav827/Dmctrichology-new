@@ -21,6 +21,28 @@ const getImgUrl = (path) => {
   return `${base}${normalizedPath}`;
 };
 
+const getMediaFilename = (itemOrPath) => {
+  const rawPath = typeof itemOrPath === "string"
+    ? itemOrPath
+    : itemOrPath?.originalName || itemOrPath?.filename || itemOrPath?.fileName || itemOrPath?.image || itemOrPath?.imageUrl || itemOrPath?.url || "";
+
+  if (!rawPath) return "No filename";
+
+  const cleanPath = rawPath.split("?")[0].split("#")[0];
+  const filename = cleanPath.substring(cleanPath.lastIndexOf("/") + 1);
+
+  try {
+    return decodeURIComponent(filename || cleanPath);
+  } catch {
+    return filename || cleanPath;
+  }
+};
+
+const getMediaDisplayName = (item) => {
+  const title = item?.title?.trim?.();
+  return title || getMediaFilename(item);
+};
+
 const CustomDropdown = ({ value, onChange, options, label, icon: Icon, placeholder = "Select...", className = "" }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selected = options.find(opt => opt.value === value);
@@ -131,14 +153,14 @@ export default function Gallery() {
   const filtered = useMemo(() => {
     let list = [...items];
     if (search.trim()) {
-      list = list.filter(i => (i.title || "").toLowerCase().includes(search.toLowerCase()));
+      list = list.filter(i => getMediaDisplayName(i).toLowerCase().includes(search.toLowerCase()));
     }
     if (statusFilter !== "all") {
       list = list.filter(i => i.status === statusFilter);
     }
     if (sortBy === "newest") list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     else if (sortBy === "oldest") list.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-    else if (sortBy === "name") list.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+    else if (sortBy === "name") list.sort((a, b) => getMediaDisplayName(a).localeCompare(getMediaDisplayName(b)));
     return list;
   }, [items, search, statusFilter, sortBy]);
 
@@ -532,12 +554,10 @@ export default function Gallery() {
                     <button onClick={e => { e.stopPropagation(); handleDelete(item._id); }} disabled={actionId === item._id} title="Delete" style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(239,68,68,0.9)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#fff" }}><Trash2 size={14} /></button>
                   </div>
 
-                  {/* Title */}
-                  {item.title && (
-                    <div style={{ padding: "0.4rem 0.6rem", fontSize: "0.75rem", fontWeight: 500, color: "#374151", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      {item.title}
-                    </div>
-                  )}
+                  {/* Filename / title */}
+                  <div title={getMediaDisplayName(item)} style={{ padding: "0.4rem 0.6rem", fontSize: "0.75rem", fontWeight: 600, color: "#374151", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {getMediaDisplayName(item)}
+                  </div>
                 </div>
               )})}
             </div>
@@ -580,6 +600,10 @@ export default function Gallery() {
               {/* Upload date */}
               <p style={{ fontSize: "0.75rem", color: "#94A3B8", margin: "0 0 1rem 0" }}>
                 Uploaded: {selected.createdAt ? new Date(selected.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) : "—"}
+              </p>
+
+              <p title={getMediaFilename(selected)} style={{ fontSize: "0.75rem", color: "#334155", margin: "0 0 0.5rem 0", fontWeight: 700, wordBreak: "break-all" }}>
+                Filename: {getMediaFilename(selected)}
               </p>
 
               {/* Fields */}

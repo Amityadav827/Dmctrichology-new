@@ -11,6 +11,7 @@ const pageData = {
   hero: {
     galleryImage: clinicImage,
     doctorImage: clinicImage,
+    secondaryImage: clinicImage,
     mainHeading: 'BEST HAIR TRANSPLANT CLINIC IN DELHI',
     doctorName: 'DMC Trichology',
     degreeText: 'Advanced Hair Restoration & Scalp Care Centre',
@@ -133,12 +134,21 @@ const pageData = {
     ]
   },
   credentialsSection: {
+    heading: 'Technology',
     credentialsList: [
       { text: 'Digital scalp and hairline assessment' },
       { text: 'Advanced graft preservation protocols' },
       { text: 'High-density placement planning' },
       { text: 'Customized post-transplant care guidance' }
-    ]
+    ],
+    leftHeading: 'Expertise',
+    leftText: 'DMC Trichology combines medical planning, donor-area evaluation, and natural hairline design to create responsible restoration plans for every patient.',
+    rightHeading: 'Commitment',
+    rightText: 'Every treatment is supported by consultation, procedure planning, post-care guidance, and follow-up so patients understand each step clearly.',
+    bannerImage: transplantImage,
+    overlayOpacity: 0.25,
+    paddingTop: '',
+    paddingBottom: ''
   },
   otherSpecialitiesSection: {
     heading: 'Other Specialities',
@@ -251,6 +261,14 @@ function mergeDeep(base, source) {
   return output;
 }
 
+function hasFaqContent(faqSection) {
+  return Boolean(
+    faqSection?.categories?.some(category => Array.isArray(category.faqs) && category.faqs.length > 0) ||
+    faqSection?.faqItems?.length ||
+    faqSection?.faqs?.length
+  );
+}
+
 async function getClinicData() {
   try {
     const response = await fetch(`${API_URL}/hair-transplant-clinic?t=${Date.now()}`, {
@@ -287,5 +305,5 @@ export async function generateMetadata() {
 
 export default async function HairTransplantClinicPage() {
   const cmsData = await getClinicData();
-  return <HairTransplantClinicClient pageData={cmsData} faqData={cmsData.faqSection || faqData} />;
+  return <HairTransplantClinicClient pageData={cmsData} faqData={hasFaqContent(cmsData.faqSection) ? cmsData.faqSection : faqData} />;
 }

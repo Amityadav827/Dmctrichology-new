@@ -3,6 +3,7 @@ import React from 'react';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import EditableImage from './Editable/EditableImage';
+import RichTextContent from './RichTextContent';
 
 const defaultTrustPoints = [
   {
@@ -22,27 +23,6 @@ const defaultTrustPoints = [
     description: "When it comes to hair transplants, the key factor is that the results should look natural. Dr. Dadu utilises her artistic abilities to provide a natural hairline. It gives patients confidence and leaves no proof that they underwent a hair transplant."
   }
 ];
-
-function escapeHtml(value = '') {
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function richTextHtml(value = '') {
-  const text = String(value || '').trim();
-  if (!text) return '';
-  const hasHtml = /<\/?[a-z][\s\S]*>/i.test(text);
-  if (hasHtml) return text;
-
-  return text
-    .split(/\n{2,}/)
-    .map(paragraph => `<p>${escapeHtml(paragraph).replace(/\n/g, '<br />')}</p>`)
-    .join('');
-}
 
 export default function AboutDrNandaniTrust({
   data = {},
@@ -91,19 +71,13 @@ export default function AboutDrNandaniTrust({
                       {point.title}
                     </EditableText>
                   </h3>
-                  <div
-                    className="nandani-trust-description"
-                    dangerouslySetInnerHTML={{ __html: richTextHtml(point.description) }}
-                  />
+                  <RichTextContent value={point.description} className="nandani-trust-description" />
                 </article>
               ))}
             </div>
 
             {conclusion && (
-              <div
-                className="nandani-trust-conclusion"
-                dangerouslySetInnerHTML={{ __html: richTextHtml(conclusion) }}
-              />
+              <RichTextContent value={conclusion} className="nandani-trust-conclusion" />
             )}
           </div>
         </div>

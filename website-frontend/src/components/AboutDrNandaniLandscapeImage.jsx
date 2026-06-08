@@ -5,10 +5,12 @@ import EditableSection from "./Editable/EditableSection";
 import EditableImage from "./Editable/EditableImage";
 import EditableText from "./Editable/EditableText";
 
-const fallbackImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
+const legacyFallbackImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
+const fallbackImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780906825092-79561886.webp";
 
 export default function AboutDrNandaniLandscapeImage({ data = {}, fallbackSrc = "" }) {
-  const image = data.image || fallbackSrc || fallbackImage;
+  const sourceImage = data.image || fallbackSrc || fallbackImage;
+  const image = sourceImage === legacyFallbackImage ? fallbackImage : sourceImage;
   const imageAlt = data.imageAlt || "Dr. Nandani Dadu hair restoration care";
   const eyebrow = data.eyebrow || "TRUSTED CARE SERVICES";
   const heading = data.heading || "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?";
@@ -45,7 +47,6 @@ export default function AboutDrNandaniLandscapeImage({ data = {}, fallbackSrc = 
             alt={imageAlt}
             className="nandani-landscape-image-frame"
             imgClassName="nandani-landscape-image"
-            style={{ maxHeight }}
           />
         </div>
       </section>
@@ -109,15 +110,15 @@ export default function AboutDrNandaniLandscapeImage({ data = {}, fallbackSrc = 
         :global(.nandani-landscape-image-frame) {
           width: 100%;
           border-radius: 0;
-          overflow: hidden;
-          border: 1px solid rgba(17, 17, 17, 0.08);
+          overflow: visible;
+          border: 0px solid rgba(17, 17, 17, 0.08);
           background: #f3f4f6;
         }
 
         :global(.nandani-landscape-image) {
           width: 100%;
-          height: clamp(190px, 28vw, 340px);
-          object-fit: cover;
+          height: auto;
+          max-height: unset;
           display: block;
         }
 
@@ -128,7 +129,8 @@ export default function AboutDrNandaniLandscapeImage({ data = {}, fallbackSrc = 
           }
 
           :global(.nandani-landscape-image) {
-            height: 190px;
+            height: auto;
+            max-height: unset;
           }
 
           .nandani-landscape-title {

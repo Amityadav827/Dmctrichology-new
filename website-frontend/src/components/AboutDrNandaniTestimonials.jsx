@@ -2,32 +2,37 @@
 import React, { useMemo, useState } from 'react';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
+import RichTextContent from './RichTextContent';
 
 const backgroundImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780628617563-236798553.png";
-const patientImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780567033792-259164490.png";
+const defaultPatientImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780711038023-933757138.webp";
 
 const defaultTestimonials = [
   {
     text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
     patientName: "Sanadhan Chaima",
+    image: defaultPatientImage,
     disclaimer: "*Opinions/Results May Vary From Person To Person.",
     stars: 5
   },
   {
     text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
     patientName: "Sanadhan Chaima",
+    image: defaultPatientImage,
     disclaimer: "*Opinions/Results May Vary From Person To Person.",
     stars: 5
   },
   {
     text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
     patientName: "Sanadhan Chaima",
+    image: defaultPatientImage,
     disclaimer: "*Opinions/Results May Vary From Person To Person.",
     stars: 5
   },
   {
     text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
     patientName: "Sanadhan Chaima",
+    image: defaultPatientImage,
     disclaimer: "*Opinions/Results May Vary From Person To Person.",
     stars: 5
   }
@@ -48,6 +53,7 @@ function StarRating({ count = 5 }) {
 export default function AboutDrNandaniTestimonials({ data = {} }) {
   const {
     heading = "Patient Testimonials",
+    patientImage = defaultPatientImage,
     testimonials = defaultTestimonials
   } = data;
 
@@ -64,6 +70,7 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const activeSlide = slides[activeIndex] || defaultTestimonials[0];
+  const activePatientImage = activeSlide.image || patientImage || defaultPatientImage;
 
   const goPrev = () => {
     setActiveIndex((current) => (current === 0 ? slides.length - 1 : current - 1));
@@ -102,13 +109,12 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
               </EditableText>
             </h2>
 
-            <img className="dmc-testimonial-patient" src={patientImage} alt={activeSlide.patientName || "Patient testimonial"} />
+            <img className="dmc-testimonial-patient" src={activePatientImage} alt={activeSlide.patientName || "Patient testimonial"} />
 
-            <p className="dmc-testimonial-text">
-              <EditableText sectionId="about-nandani-testimonials" fieldPath={`testimonialsSection.testimonials.${activeIndex}.text`}>
-                {activeSlide.text || defaultTestimonials[0].text}
-              </EditableText>
-            </p>
+            <RichTextContent
+              value={activeSlide.text || defaultTestimonials[0].text}
+              className="dmc-testimonial-text"
+            />
 
             <StarRating count={activeSlide.stars || 5} />
 
@@ -233,7 +239,8 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
           display: block;
           margin: 0 auto 30px;
         }
-        .dmc-testimonial-text {
+        .dmc-testimonial-text,
+        .dmc-testimonial-text :global(p) {
           font-family: 'Marcellus', serif;
           font-size: clamp(19px, 1.9vw, 26px);
           line-height: 1.48;
@@ -241,6 +248,9 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
           color: #ffffff;
           margin: 0 auto 20px;
           max-width: 820px;
+        }
+        .dmc-testimonial-text :global(p:last-child) {
+          margin-bottom: 0;
         }
         .dmc-testimonial-stars {
           display: flex;

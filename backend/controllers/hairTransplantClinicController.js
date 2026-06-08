@@ -9,6 +9,7 @@ const fallbackData = {
   hero: {
     galleryImage: fallbackImage,
     doctorImage: fallbackImage,
+    secondaryImage: fallbackImage,
     mainHeading: "BEST HAIR TRANSPLANT CLINIC IN DELHI",
     doctorName: "DMC Trichology",
     degreeText: "Advanced Hair Restoration & Scalp Care Centre",
@@ -36,7 +37,18 @@ const fallbackData = {
   timeline: { eyebrow: "TRUSTED CARE SERVICES", heading: "What Makes DMC Trichology A Trusted Hair Transplant Clinic In Delhi?", steps: [] },
   trustSection: { eyebrow: "TRUSTED CARE SERVICES", heading: "Clinical Expertise For Hair Restoration, Scalp Health And Natural Results", image: fallbackImage, imageAlt: "DMC Trichology hair transplant planning", trustPoints: [], conclusionParagraph: "" },
   educationExperience: { experienceTabLabel: "Experience", educationTabLabel: "Facilities", credentialsTabLabel: "Technology", topImage: fallbackImage, bottomImage: fallbackImage, experienceItems: [], educationItems: [] },
-  credentialsSection: { heading: "Credentials", credentialsList: [] },
+  credentialsSection: {
+    heading: "Credentials",
+    credentialsList: [],
+    bannerImage: "",
+    overlayOpacity: 0.35,
+    leftHeading: "",
+    leftText: "",
+    rightHeading: "",
+    rightText: "",
+    paddingTop: "",
+    paddingBottom: ""
+  },
   otherSpecialitiesSection: { heading: "Other Specialities", introParagraph: "", specialitiesList: [], conclusionParagraph: "", image: fallbackImage, imageAlt: "DMC Trichology clinic care" },
   testimonialsSection: { heading: "Patient Testimonials", testimonials: [] },
   faqSection: { enabled: true, badgeText: "TRUSTED CARE SERVICES", heading: "Frequently Asked Question?", buttonText: "View All Questions", categories: [] },

@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import EditableImage from './Editable/EditableImage';
+import RichTextContent from './RichTextContent';
 
 const defaultExperience = [
   {
@@ -103,6 +104,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
   const active = tabs.find(tab => tab.id === activeTab) || tabs[0];
   const topImage = data.topImage || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
   const bottomImage = data.bottomImage || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
+  const hasEditorialContent = credentialsData.leftHeading || credentialsData.leftText || credentialsData.rightHeading || credentialsData.rightText;
 
   return (
     <EditableSection sectionId="about-nandani-education" label="Experience Education Credentials">
@@ -172,6 +174,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
                 fieldPath="educationExperience.topImage"
                 src={topImage}
                 alt="Dr. Nandani Dadu credentials top"
+                className="nandani-tabs-editable-image"
               />
             </div>
             <div className="nandani-tabs-image-card">
@@ -180,10 +183,37 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
                 fieldPath="educationExperience.bottomImage"
                 src={bottomImage}
                 alt="Dr. Nandani Dadu credentials bottom"
+                className="nandani-tabs-editable-image"
               />
             </div>
           </div>
         </div>
+
+        {hasEditorialContent && (
+          <div className="nandani-credentials-editorial">
+            <article>
+              {credentialsData.leftHeading && (
+                <h3>
+                  <EditableText sectionId="about-nandani-credentials" fieldPath="credentialsSection.leftHeading" tag="span">
+                    {credentialsData.leftHeading}
+                  </EditableText>
+                </h3>
+              )}
+              <RichTextContent value={credentialsData.leftText} className="nandani-credentials-rich" />
+            </article>
+
+            <article>
+              {credentialsData.rightHeading && (
+                <h3>
+                  <EditableText sectionId="about-nandani-credentials" fieldPath="credentialsSection.rightHeading" tag="span">
+                    {credentialsData.rightHeading}
+                  </EditableText>
+                </h3>
+              )}
+              <RichTextContent value={credentialsData.rightText} className="nandani-credentials-rich" />
+            </article>
+          </div>
+        )}
       </section>
 
       <style jsx>{`
@@ -280,16 +310,67 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
           border-radius: 28px;
           overflow: hidden;
           background: #d7d7d7;
-          min-height: 240px;
+          height: 240px;
           box-shadow: 0 22px 42px rgba(17, 17, 17, 0.08);
         }
 
         .nandani-tabs-image-card :global(img) {
           width: 100%;
           height: 100%;
-          min-height: 240px;
           object-fit: cover;
           display: block;
+        }
+
+        .nandani-tabs-image-card :global(.nandani-tabs-editable-image) {
+          width: 100%;
+          height: 100%;
+        }
+
+        .nandani-credentials-editorial {
+          max-width: 1300px;
+          margin: 54px auto 0;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 48px;
+          border-top: 0;
+          padding-top: 42px;
+        }
+
+        .nandani-credentials-editorial article h3 {
+          font-family: 'Marcellus', serif;
+          font-size: clamp(25px, 2.4vw, 34px);
+          line-height: 1.18;
+          font-weight: 400;
+          color: #111111;
+          margin: 0 0 18px;
+        }
+
+        :global(.nandani-credentials-rich),
+        :global(.nandani-credentials-rich p),
+        :global(.nandani-credentials-rich li) {
+          font-family: 'Lato', sans-serif;
+          font-size: 15px;
+          line-height: 1.78;
+          color: #333333;
+        }
+
+        :global(.nandani-credentials-rich p) {
+          margin: 0 0 22px;
+        }
+
+        :global(.nandani-credentials-rich p:last-child) {
+          margin-bottom: 0;
+        }
+
+        :global(.nandani-credentials-rich strong) {
+          font-weight: 800;
+          color: #111111;
+        }
+
+        :global(.nandani-credentials-rich ul),
+        :global(.nandani-credentials-rich ol) {
+          margin: 0 0 22px 22px;
+          padding: 0;
         }
 
         @media (max-width: 980px) {
@@ -301,6 +382,11 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
           .nandani-tabs-images {
             grid-template-columns: repeat(2, minmax(0, 1fr));
             padding-top: 0;
+          }
+
+          .nandani-credentials-editorial {
+            grid-template-columns: 1fr;
+            gap: 32px;
           }
         }
 

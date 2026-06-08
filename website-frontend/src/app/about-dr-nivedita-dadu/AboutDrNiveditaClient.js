@@ -47,8 +47,12 @@ function applyDeepPath(obj, fieldPath, value) {
   current[parts[parts.length - 1]] = value;
 }
 
-function stripHtml(html = '') {
-  return String(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+function hasFaqContent(faqSection) {
+  return Boolean(
+    faqSection?.categories?.some(category => Array.isArray(category.faqs) && category.faqs.length > 0) ||
+    faqSection?.faqItems?.length ||
+    faqSection?.faqs?.length
+  );
 }
 
 function normalizeNiveditaData(pageData = {}) {
@@ -60,9 +64,9 @@ function normalizeNiveditaData(pageData = {}) {
   const patientCare = pageData.patientCareSection || {};
   const otherSpecialities = pageData.otherSpecialitiesSection || {};
 
-  const careIntro = stripHtml(patientCare.leftCardContent);
-  const careProfessional = stripHtml(patientCare.rightCardContent);
-  const expertiseIntro = stripHtml(credentials.leftText);
+  const careIntro = patientCare.leftCardContent || '';
+  const careProfessional = patientCare.rightCardContent || '';
+  const expertiseIntro = credentials.leftText || '';
 
   return {
     hero: {
@@ -159,7 +163,11 @@ function normalizeNiveditaData(pageData = {}) {
         { text: 'Fellowship In Aesthetic Dermatology' },
         { text: 'Fellowship In Hair Science' },
         { text: 'Member - IADVL (Indian Association of Dermatologists)' }
-      ]
+      ],
+      leftHeading: credentials.leftHeading || patientCare.leftCardTitle || 'Expertise',
+      leftText: credentials.leftText || careIntro,
+      rightHeading: credentials.rightHeading || patientCare.rightCardTitle || 'Commitment',
+      rightText: credentials.rightText || careProfessional
     },
     otherSpecialitiesSection: {
       ...otherSpecialities,
@@ -251,7 +259,7 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
   }, [isEditing]);
 
   const templateData = useMemo(() => normalizeNiveditaData(pageData), [pageData]);
-  const faqData = templateData?.faqSection?.categories?.length || templateData?.faqSection?.faqItems?.length
+  const faqData = hasFaqContent(templateData?.faqSection)
     ? templateData.faqSection
     : initialFaqData;
 

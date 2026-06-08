@@ -170,6 +170,16 @@ const staticFallback = {
   }
 };
 
+function mergeDeep(base, source) {
+  if (Array.isArray(base)) return Array.isArray(source) ? source : base;
+  if (!base || typeof base !== 'object') return source ?? base;
+  const output = { ...base, ...(source && typeof source === 'object' ? source : {}) };
+  Object.keys(base).forEach((key) => {
+    output[key] = mergeDeep(base[key], source?.[key]);
+  });
+  return output;
+}
+
 
 
 async function getPageData() {
@@ -180,7 +190,7 @@ async function getPageData() {
     });
     if (!response.ok) return staticFallback;
     const result = await response.json();
-    return result.success ? result.data : staticFallback;
+    return result.success ? mergeDeep(staticFallback, result.data || {}) : staticFallback;
   } catch (error) {
     console.error('SSR Fetch Error (Dr. Nivedita page):', error);
     return staticFallback;

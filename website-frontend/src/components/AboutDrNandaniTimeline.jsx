@@ -2,6 +2,7 @@
 import React from 'react';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
+import RichTextContent from './RichTextContent';
 
 const defaultSteps = [
   {
@@ -76,11 +77,7 @@ export default function AboutDrNandaniTimeline({ data = {} }) {
                   </EditableText>
                 </h3>
 
-                <p>
-                  <EditableText sectionId="about-nandani-timeline" fieldPath={`timeline.steps.${idx}.description`} tag="span">
-                    {step.description}
-                  </EditableText>
-                </p>
+                <RichTextContent value={step.description} className="nandani-feature-description" />
               </article>
             ))}
           </div>
@@ -185,12 +182,20 @@ export default function AboutDrNandaniTimeline({ data = {} }) {
           margin: 0;
         }
 
-        .nandani-feature-row p {
+        .nandani-feature-row p,
+        .nandani-feature-description,
+        .nandani-feature-description :global(p),
+        .nandani-feature-description :global(li) {
           font-family: 'Lato', sans-serif;
           font-size: 15px;
           line-height: 1.8;
           color: #333333;
           margin: 0;
+        }
+        .nandani-feature-description :global(ul),
+        .nandani-feature-description :global(ol) {
+          margin: 0 0 0 20px;
+          padding: 0;
         }
 
         @media (max-width: 900px) {

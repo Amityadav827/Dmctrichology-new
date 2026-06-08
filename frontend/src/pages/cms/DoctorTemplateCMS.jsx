@@ -10,6 +10,7 @@ const defaultData = {
   hero: {
     galleryImage: fallbackImage,
     doctorImage: fallbackImage,
+    secondaryImage: fallbackImage,
     mainHeading: "",
     doctorName: "",
     degreeText: "",
@@ -33,7 +34,18 @@ const defaultData = {
     experienceItems: [],
     educationItems: []
   },
-  credentialsSection: { heading: "Credentials", credentialsList: [] },
+  credentialsSection: {
+    heading: "Credentials",
+    credentialsList: [],
+    bannerImage: "",
+    overlayOpacity: 0.35,
+    leftHeading: "",
+    leftText: "",
+    rightHeading: "",
+    rightText: "",
+    paddingTop: "",
+    paddingBottom: ""
+  },
   otherSpecialitiesSection: { heading: "Other Specialities", introParagraph: "", specialitiesList: [], conclusionParagraph: "", image: fallbackImage, imageAlt: "" },
   testimonialsSection: { heading: "Patient Testimonials", testimonials: [] },
   faqSection: { enabled: true, badgeText: "TRUSTED CARE SERVICES", heading: "Frequently Asked Question?", buttonText: "View All Questions", categories: [] },
@@ -81,19 +93,39 @@ function RichTextEditor({ label, value = "", onChange }) {
     onChange(editorRef.current?.innerHTML || "");
   };
 
+  const addLink = () => {
+    const url = window.prompt("Enter link URL");
+    if (!url) return;
+    runCommand("createLink", url);
+  };
+
+  const addImage = () => {
+    const url = window.prompt("Enter image URL");
+    if (!url) return;
+    runCommand("insertImage", url);
+  };
+
   const buttons = [
     { label: "Paragraph", icon: <Pilcrow size={15} />, action: () => runCommand("formatBlock", "P") },
     { label: "H1", icon: <Heading1 size={15} />, action: () => runCommand("formatBlock", "H1") },
     { label: "H2", icon: <Heading2 size={15} />, action: () => runCommand("formatBlock", "H2") },
     { label: "H3", icon: <Heading3 size={15} />, action: () => runCommand("formatBlock", "H3") },
+    { label: "H4", icon: <span>H4</span>, action: () => runCommand("formatBlock", "H4") },
     { label: "Bold", icon: <Bold size={15} />, action: () => runCommand("bold") },
     { label: "Italic", icon: <Italic size={15} />, action: () => runCommand("italic") },
     { label: "Underline", icon: <Underline size={15} />, action: () => runCommand("underline") },
+    { label: "Strike", icon: <span>S</span>, action: () => runCommand("strikeThrough") },
+    { label: "Quote", icon: <span>&quot;</span>, action: () => runCommand("formatBlock", "BLOCKQUOTE") },
     { label: "Bullet List", icon: <List size={15} />, action: () => runCommand("insertUnorderedList") },
     { label: "Numbered List", icon: <ListOrdered size={15} />, action: () => runCommand("insertOrderedList") },
     { label: "Align Left", icon: <AlignLeft size={15} />, action: () => runCommand("justifyLeft") },
     { label: "Align Center", icon: <AlignCenter size={15} />, action: () => runCommand("justifyCenter") },
-    { label: "Align Right", icon: <AlignRight size={15} />, action: () => runCommand("justifyRight") }
+    { label: "Align Right", icon: <AlignRight size={15} />, action: () => runCommand("justifyRight") },
+    { label: "Link", icon: <span>Link</span>, action: addLink },
+    { label: "Remove Link", icon: <span>Unlink</span>, action: () => runCommand("unlink") },
+    { label: "Image", icon: <ImageIcon size={15} />, action: addImage },
+    { label: "Undo", icon: <span>Undo</span>, action: () => runCommand("undo") },
+    { label: "Redo", icon: <span>Redo</span>, action: () => runCommand("redo") }
   ];
 
   return (
@@ -190,16 +222,28 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
   };
   const removeItem = (path, index) => update(path, getDeepValue(data, path, []).filter((_, idx) => idx !== index));
 
-  const Field = ({ label, path, multiline = false }) => (
-    <div className="dt-field">
-      <label>{label}</label>
-      {multiline ? (
-        <textarea value={getDeepValue(data, path)} onChange={e => update(path, e.target.value)} rows={4} />
-      ) : (
-        <input value={getDeepValue(data, path)} onChange={e => update(path, e.target.value)} />
-      )}
-    </div>
-  );
+  const Field = ({ label, path, multiline = false, rich = false }) => {
+    if (rich) {
+      return (
+        <RichTextEditor
+          label={label}
+          value={getDeepValue(data, path)}
+          onChange={value => update(path, value)}
+        />
+      );
+    }
+
+    return (
+      <div className="dt-field">
+        <label>{label}</label>
+        {multiline ? (
+          <textarea value={getDeepValue(data, path)} onChange={e => update(path, e.target.value)} rows={4} />
+        ) : (
+          <input value={getDeepValue(data, path)} onChange={e => update(path, e.target.value)} />
+        )}
+      </div>
+    );
+  };
 
   const ImageField = ({ label, path }) => (
     <div className="dt-field">
@@ -216,11 +260,17 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
     </div>
   );
 
+  const newTextListItem = (path) => {
+    if (path.includes("credentials")) return { text: "" };
+    if (path.includes("specialities")) return { title: "" };
+    return "";
+  };
+
   const TextList = ({ title: listTitle, path, itemLabel = "Item" }) => (
     <div className="dt-card">
       <div className="dt-row-title">
         <h3>{listTitle}</h3>
-        <button type="button" onClick={() => addItem(path, path.includes("credentials") || path.includes("specialities") ? { text: "" } : "")}><Plus size={14} /> Add</button>
+        <button type="button" onClick={() => addItem(path, newTextListItem(path))}><Plus size={14} /> Add</button>
       </div>
       {getDeepValue(data, path, []).map((item, index) => {
         const objectItem = typeof item === "object";
@@ -257,7 +307,13 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
             {fields.map(field => (
               <div className="dt-field" key={field.name}>
                 <label>{field.label}</label>
-                {field.multiline ? (
+                {field.rich ? (
+                  <RichTextEditor
+                    label={field.label}
+                    value={item[field.name] || ""}
+                    onChange={value => updateItem(path, index, field.name, value)}
+                  />
+                ) : field.multiline ? (
                   <textarea value={item[field.name] || ""} onChange={e => updateItem(path, index, field.name, e.target.value)} rows={3} />
                 ) : (
                   <input value={item[field.name] || ""} onChange={e => updateItem(path, index, field.name, e.target.value)} />
@@ -312,11 +368,12 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
             <Field label="Page Title" path="breadcrumb.title" />
             <Field label="Breadcrumb Current Text" path="breadcrumb.currentPageText" />
             <Field label="Submit Button Text" path="hero.submitButtonText" />
-            <Field label="Description" path="hero.descriptionParagraph" multiline />
+            <Field label="Description" path="hero.descriptionParagraph" rich />
           </div>
           <div className="dt-card dt-grid">
             <ImageField label="Large Gallery Image" path="hero.galleryImage" />
             <ImageField label="Doctor / Main Image" path="hero.doctorImage" />
+            <ImageField label="Third Gallery Image" path="hero.secondaryImage" />
           </div>
           <div className="dt-card dt-grid">
             <Field label="Form Title" path="formSettings.title" />
@@ -331,8 +388,8 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
           <div className="dt-card dt-grid">
             <Field label="Heading" path="specialist.heading" />
             <Field label="Highlighted Text" path="specialist.highlightedText" />
-            <Field label="Description 1" path="specialist.description1" multiline />
-            <Field label="Description 2" path="specialist.description2" multiline />
+            <Field label="Description 1" path="specialist.description1" rich />
+            <Field label="Description 2" path="specialist.description2" rich />
           </div>
           <TextList title="Treatment Bullet List" path="specialist.bullets" itemLabel="Bullet" />
           <Repeater title="Feature Cards" path="specialist.featureCards" fields={[{ name: "title", label: "Title" }]} newItem={{ title: "" }} />
@@ -348,7 +405,7 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
           <Repeater title="Timeline / Feature Rows" path="timeline.steps" fields={[
             { name: "icon", label: "Icon URL" },
             { name: "title", label: "Title" },
-            { name: "description", label: "Description", multiline: true }
+            { name: "description", label: "Description", rich: true }
           ]} newItem={{ icon: "", title: "", description: "" }} />
         </>
       )}
@@ -368,7 +425,7 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
           </div>
           <Repeater title="Trust Content Blocks" path="trustSection.trustPoints" fields={[
             { name: "title", label: "Title" },
-            { name: "description", label: "Description", multiline: true }
+            { name: "description", label: "Description", rich: true }
           ]} newItem={{ title: "", description: "" }} />
         </>
       )}
@@ -393,6 +450,17 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
             { name: "year", label: "Date / Label" }
           ]} newItem={{ degree: "", institution: "", year: "" }} />
           <TextList title="Credentials List" path="credentialsSection.credentialsList" itemLabel="Credential" />
+          <div className="dt-card dt-grid">
+            <Field label="Credentials Main Heading" path="credentialsSection.heading" />
+            <ImageField label="Credentials Banner Image" path="credentialsSection.bannerImage" />
+            <Field label="Banner Overlay Opacity" path="credentialsSection.overlayOpacity" />
+            <Field label="Padding Top" path="credentialsSection.paddingTop" />
+            <Field label="Padding Bottom" path="credentialsSection.paddingBottom" />
+            <Field label="Left Heading" path="credentialsSection.leftHeading" />
+            <Field label="Left Editorial Content" path="credentialsSection.leftText" rich />
+            <Field label="Right Heading" path="credentialsSection.rightHeading" />
+            <Field label="Right Editorial Content" path="credentialsSection.rightText" rich />
+          </div>
         </>
       )}
 
@@ -401,8 +469,8 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
           <div className="dt-card dt-grid">
             <Field label="Heading" path="otherSpecialitiesSection.heading" />
             <Field label="Image Alt Text" path="otherSpecialitiesSection.imageAlt" />
-            <Field label="Intro Paragraph" path="otherSpecialitiesSection.introParagraph" multiline />
-            <Field label="Conclusion Paragraph" path="otherSpecialitiesSection.conclusionParagraph" multiline />
+            <Field label="Intro Paragraph" path="otherSpecialitiesSection.introParagraph" rich />
+            <Field label="Conclusion Paragraph" path="otherSpecialitiesSection.conclusionParagraph" rich />
             <ImageField label="Section Image" path="otherSpecialitiesSection.image" />
           </div>
           <TextList title="Specialities List" path="otherSpecialitiesSection.specialitiesList" itemLabel="Speciality" />
@@ -414,7 +482,7 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
           <div className="dt-card"><Field label="Section Heading" path="testimonialsSection.heading" /></div>
           <Repeater title="Testimonials" path="testimonialsSection.testimonials" fields={[
             { name: "image", label: "Patient Image URL" },
-            { name: "text", label: "Text", multiline: true },
+            { name: "text", label: "Text", rich: true },
             { name: "patientName", label: "Patient Name" },
             { name: "disclaimer", label: "Disclaimer" },
             { name: "stars", label: "Stars" }
@@ -435,7 +503,7 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
           {getDeepValue(data, "faqSection.categories", []).map((cat, catIndex) => (
             <Repeater key={catIndex} title={`${cat.title || "Category"} FAQs`} path={`faqSection.categories.${catIndex}.faqs`} fields={[
               { name: "question", label: "Question" },
-              { name: "answer", label: "Answer", multiline: true }
+              { name: "answer", label: "Answer", rich: true }
             ]} newItem={{ question: "", answer: "" }} />
           ))}
         </>
@@ -467,12 +535,15 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
         .dt-field input,.dt-field textarea,.dt-inline input{width:100%;box-sizing:border-box;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;font:inherit;outline:none;background:#f8fafc}
         .dt-field textarea{resize:vertical}
         .dt-rich-field{grid-column:span 1}
-        .dt-rich-toolbar{display:flex;flex-wrap:wrap;gap:6px;border:1px solid #e2e8f0;border-bottom:0;border-radius:12px 12px 0 0;background:#f8fafc;padding:8px}
+        .dt-rich-toolbar{position:sticky;top:0;z-index:10;display:flex;flex-wrap:wrap;gap:6px;border:1px solid #e2e8f0;border-bottom:0;border-radius:12px 12px 0 0;background:#f8fafc;padding:8px}
         .dt-rich-toolbar button{width:32px;height:32px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;color:#334155;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+        .dt-rich-toolbar button span{font-size:10px;font-weight:900;line-height:1}
         .dt-rich-toolbar button:hover{background:#eef2ff;color:#3b5998;border-color:#c7d2fe}
         .dt-rich-editor{width:100%;min-height:230px;box-sizing:border-box;border:1px solid #e2e8f0;border-radius:0 0 12px 12px;padding:12px 14px;font:inherit;outline:none;background:#f8fafc;overflow:auto}
-        .dt-rich-editor h1,.dt-rich-editor h2,.dt-rich-editor h3,.dt-rich-editor p{margin:0 0 12px}
+        .dt-rich-editor h1,.dt-rich-editor h2,.dt-rich-editor h3,.dt-rich-editor h4,.dt-rich-editor p{margin:0 0 12px}
         .dt-rich-editor ul,.dt-rich-editor ol{margin:0 0 12px 22px;padding:0}
+        .dt-rich-editor blockquote{margin:0 0 12px;padding-left:14px;border-left:3px solid #3b5998;color:#475569}
+        .dt-rich-editor img{max-width:100%;height:auto;border-radius:10px}
         .dt-upload-row,.dt-inline,.dt-row-title{display:flex;align-items:center;gap:10px}
         .dt-upload-row input,.dt-inline input{flex:1}
         .dt-upload-btn{display:inline-flex;align-items:center;gap:8px;background:#eef2ff;color:#3b5998;border-radius:12px;padding:12px 14px;font-weight:900;cursor:pointer;white-space:nowrap}

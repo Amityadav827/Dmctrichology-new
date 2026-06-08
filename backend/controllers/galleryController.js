@@ -63,7 +63,7 @@ const createGalleryItem = async (req, res, next) => {
       const storedAltText = isVideo ? `[video]${altText}` : altText;
       itemsToInsert.push({
         image_url: publicUrl,
-        title,
+        title: title || file.originalname || "",
         alt_text: storedAltText,
         description,
         order: Number.isFinite(Number(req.body.order)) ? Number(req.body.order) + i : i,

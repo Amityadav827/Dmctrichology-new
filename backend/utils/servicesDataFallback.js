@@ -211,7 +211,7 @@ const generateServiceData = (title, slug, type) => {
     googleReviewCta: {
       title: "Google Review",
       buttonText: "VIEW MORE",
-      buttonLink: "https://dmctrichology-mkm4.vercel.app/service",
+      buttonLink: "https://dmctrichology-new.vercel.app/service",
       backgroundColor: "",
       isVisible: true
     },
@@ -245,7 +245,7 @@ const generateServiceData = (title, slug, type) => {
         }
       ],
       buttonText: "VIEW ALL",
-      buttonLink: "https://dmctrichology-mkm4.vercel.app/service",
+      buttonLink: "https://dmctrichology-new.vercel.app/service",
       isVisible: true
     },
     videosSection: {
@@ -268,7 +268,7 @@ const generateServiceData = (title, slug, type) => {
         }
       ],
       buttonText: "VIEW MORE",
-      buttonLink: "https://dmctrichology-mkm4.vercel.app/service",
+      buttonLink: "https://dmctrichology-new.vercel.app/service",
       isVisible: true
     },
     enquirySection: {

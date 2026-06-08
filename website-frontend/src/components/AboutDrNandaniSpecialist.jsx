@@ -2,6 +2,7 @@
 import React from 'react';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
+import RichTextContent from './RichTextContent';
 
 export default function AboutDrNandaniSpecialist({ data = {} }) {
   const {
@@ -32,16 +33,8 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
                 {heading}
               </EditableText>
             </h2>
-            <p>
-              <EditableText sectionId="about-nandani-specialist" fieldPath="specialist.description1" tag="span">
-                {description1}
-              </EditableText>
-            </p>
-            <p>
-              <EditableText sectionId="about-nandani-specialist" fieldPath="specialist.description2" tag="span">
-                {description2}
-              </EditableText>
-            </p>
+            <RichTextContent value={description1} className="dr-nandani-specialist-rich" />
+            <RichTextContent value={description2} className="dr-nandani-specialist-rich" />
 
             <div className="dr-nandani-treatment-block">
               <h3>
@@ -118,13 +111,28 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
           color: #ffffff;
           margin: 0 0 24px;
         }
-        .dr-nandani-specialist-copy > p {
+        .dr-nandani-specialist-copy > p,
+        :global(.dr-nandani-specialist-rich),
+        :global(.dr-nandani-specialist-rich p),
+        :global(.dr-nandani-specialist-rich li) {
           font-family: 'Lato', sans-serif;
           font-size: 14px;
           line-height: 1.72;
           color: rgba(255, 255, 255, 0.85);
           margin: 0 0 18px;
           max-width: 1120px;
+        }
+        :global(.dr-nandani-specialist-rich p:last-child) {
+          margin-bottom: 0;
+        }
+        :global(.dr-nandani-specialist-rich ul),
+        :global(.dr-nandani-specialist-rich ol) {
+          margin: 0 0 18px 22px;
+          padding: 0;
+        }
+        :global(.dr-nandani-specialist-rich strong) {
+          color: #ffffff;
+          font-weight: 800;
         }
         .dr-nandani-treatment-block {
           margin-top: 34px;

@@ -71,7 +71,7 @@ const staticFallback = {
   timeline: {
     eyebrow: "TRUSTED CARE SERVICES",
     heading: "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?",
-    image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
+    image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780906825092-79561886.webp",
     imageAlt: "Dr. Nandani Dadu hair restoration care",
     sectionBgColor: "#FFFFFF",
     contentMaxWidth: "1220px",
@@ -194,22 +194,26 @@ const staticFallback = {
   },
   testimonialsSection: {
     heading: "Patient Testimonials",
+    patientImage: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780711038023-933757138.webp",
     testimonials: [
       {
         text: "Dr. Nandani Dadu is an excellent hair specialist in Delhi. I visited her clinic for hair loss treatment, and the results have been outstanding. She is very knowledgeable and patient, taking time to explain everything clearly.",
         patientName: "Sanadhan Chaima",
+        image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780711038023-933757138.webp",
         disclaimer: "* Opinions/Results may vary from person to person.",
         stars: 5
       },
       {
         text: "Dr. Nandani Dadu is the best hair transplant surgeon in Delhi. I underwent a hair transplant procedure at her clinic, and the results have been amazing. She uses advanced techniques and ensures a comfortable procedure.",
         patientName: "Akhilesh Singh",
+        image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780711038023-933757138.webp",
         disclaimer: "* Opinions/Results may vary from person to person.",
         stars: 5
       },
       {
         text: "Dr. Nandani Dadu is undoubtedly the best hair specialist in Delhi. She helped me regain confidence with her effective treatment for hair thinning. Her approach is personalized, focusing on understanding the root cause of hair problems.",
         patientName: "Naveen Yadav",
+        image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780711038023-933757138.webp",
         disclaimer: "* Opinions/Results may vary from person to person.",
         stars: 5
       }
@@ -246,6 +250,16 @@ const staticFallback = {
   }
 };
 
+function mergeDeep(base, source) {
+  if (Array.isArray(base)) return Array.isArray(source) ? source : base;
+  if (!base || typeof base !== 'object') return source ?? base;
+  const output = { ...base, ...(source && typeof source === 'object' ? source : {}) };
+  Object.keys(base).forEach((key) => {
+    output[key] = mergeDeep(base[key], source?.[key]);
+  });
+  return output;
+}
+
 async function getPageData() {
   try {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
@@ -255,7 +269,7 @@ async function getPageData() {
     
     if (!response.ok) return staticFallback;
     const result = await response.json();
-    return result.success ? result.data : staticFallback;
+    return result.success ? mergeDeep(staticFallback, result.data || {}) : staticFallback;
   } catch (error) {
     console.error('SSR Fetch Error (Dr. Nandani page):', error);
     return staticFallback;

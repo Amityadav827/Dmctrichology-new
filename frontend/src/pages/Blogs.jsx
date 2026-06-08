@@ -47,6 +47,28 @@ const getImageUrl = (path) => {
   return `${base}${normalizedPath}`;
 };
 
+const getMediaFilename = (itemOrPath) => {
+  const rawPath = typeof itemOrPath === "string"
+    ? itemOrPath
+    : itemOrPath?.originalName || itemOrPath?.filename || itemOrPath?.fileName || itemOrPath?.image || itemOrPath?.imageUrl || itemOrPath?.url || "";
+
+  if (!rawPath) return "No filename";
+
+  const cleanPath = rawPath.split("?")[0].split("#")[0];
+  const filename = cleanPath.substring(cleanPath.lastIndexOf("/") + 1);
+
+  try {
+    return decodeURIComponent(filename || cleanPath);
+  } catch {
+    return filename || cleanPath;
+  }
+};
+
+const getMediaDisplayName = (item) => {
+  const title = item?.title?.trim?.();
+  return title || getMediaFilename(item);
+};
+
 const FilterDropdown = ({ value, onChange, options, label, icon: Icon }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selected = options.find(opt => opt.value === value);
@@ -733,8 +755,8 @@ function Blogs() {
     if (!file) return;
     
     const upData = new FormData();
-    upData.append("image", file);
-    upData.append("title", file.name.split('.')[0]);
+    upData.append("media", file);
+    upData.append("title", file.name);
     upData.append("status", "Active");
 
     try {
@@ -764,8 +786,8 @@ function Blogs() {
   const handleGalleryItemClick = (item) => {
     setSelectedGalleryItem(item);
     setGalleryDetailForm({
-      title: item.title || "",
-      altText: item.altText || item.title || "",
+      title: getMediaDisplayName(item),
+      altText: item.altText || getMediaDisplayName(item),
       linkUrl: "",
       openInNewTab: false
     });
@@ -782,8 +804,8 @@ function Blogs() {
     const normalizedPath = item.image.startsWith("/") ? item.image : `/${item.image}`;
     const fullUrl = item.image.startsWith("http") ? item.image : `${base}${normalizedPath}`;
 
-    const alt = galleryDetailForm.altText || item.altText || item.title || "";
-    const title = galleryDetailForm.title || item.title || "";
+    const alt = galleryDetailForm.altText || item.altText || getMediaDisplayName(item);
+    const title = galleryDetailForm.title || getMediaDisplayName(item);
     const linkUrl = galleryDetailForm.linkUrl || "";
     const openInNewTab = galleryDetailForm.openInNewTab;
     
@@ -1110,7 +1132,7 @@ function Blogs() {
                   Full Description <span style={{ color: "#EF4444" }}>*</span>
                 </label>
               </div>
-              <div style={{ background: "#FFFFFF", borderRadius: "12px", overflow: "hidden", border: "1px solid #E2E8F0" }} onDoubleClick={handleEditorDoubleClick} onPasteCapture={handleFullDescriptionPasteCapture}>
+              <div className="blog-full-description-editor" style={{ background: "#FFFFFF", borderRadius: "12px", overflow: "visible", border: "1px solid #E2E8F0" }} onDoubleClick={handleEditorDoubleClick} onPasteCapture={handleFullDescriptionPasteCapture}>
                 <ReactQuill 
                   onFocus={() => {
                     const editor = quillRef.current.getEditor();
@@ -1122,7 +1144,7 @@ function Blogs() {
                   onChange={(val) => handleQuillChange("fullDescription", val)}
                   modules={fullDescModules}
                   placeholder="Start writing your editorial masterpiece..."
-                  style={{ height: "500px", border: "none" }}
+                  style={{ border: "none" }}
                 />
               </div>
             </div>
@@ -1271,12 +1293,12 @@ function Blogs() {
               <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                 <div>
                   <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 500, color: "#374151", marginBottom: "0.5rem" }}>Blog Image</label>
-                  <div style={{ position: "relative", overflow: "hidden", borderRadius: "10px", border: "2px dashed #CBD5E1", background: "#F8FAFC", display: "flex", justifyContent: "center", alignItems: "center", height: "130px", cursor: "pointer" }}>
+                  <label style={{ position: "relative", overflow: "hidden", borderRadius: "10px", border: "2px dashed #CBD5E1", background: "#F8FAFC", display: "flex", justifyContent: "center", alignItems: "center", height: "130px", cursor: "pointer" }}>
                     <input 
                       type="file" 
                       accept="image/*" 
                       onChange={(e) => handleFileChange(e, 'blog')} 
-                      style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer", zIndex: 10 }} 
+                      style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none" }} 
                     />
                     {blogImagePreview ? (
                       <img src={blogImagePreview} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -1286,16 +1308,34 @@ function Blogs() {
                         <span style={{ fontSize: "0.8rem", fontWeight: 500 }}>Click to upload</span>
                       </div>
                     )}
+                  </label>
+                  <div style={{ marginTop: "0.625rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.68rem", fontWeight: 800, color: "#64748B", textTransform: "uppercase", marginBottom: "0.2rem" }}>Current Filename</label>
+                      <p title={blogImage?.name || getMediaFilename(blogImagePreview || "")} style={{ margin: 0, fontSize: "0.76rem", fontWeight: 700, color: "#0F172A", wordBreak: "break-all" }}>
+                        {blogImage?.name || getMediaFilename(blogImagePreview || "")}
+                      </p>
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.68rem", fontWeight: 800, color: "#64748B", textTransform: "uppercase", marginBottom: "0.2rem" }}>Current Image URL</label>
+                      <p title={blogImagePreview || "No image selected"} style={{ margin: 0, fontSize: "0.72rem", fontWeight: 600, color: "#475569", wordBreak: "break-all" }}>
+                        {blogImagePreview || "No image selected"}
+                      </p>
+                    </div>
+                    <label className="btn-secondary" style={{ justifyContent: "center", cursor: "pointer", fontSize: "0.8rem" }}>
+                      <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, 'blog')} style={{ display: "none" }} />
+                      Replace Image
+                    </label>
                   </div>
                 </div>
                 <div>
                   <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 500, color: "#374151", marginBottom: "0.5rem" }}>Banner Image</label>
-                  <div style={{ position: "relative", overflow: "hidden", borderRadius: "10px", border: "2px dashed #CBD5E1", background: "#F8FAFC", display: "flex", justifyContent: "center", alignItems: "center", height: "90px", cursor: "pointer" }}>
+                  <label style={{ position: "relative", overflow: "hidden", borderRadius: "10px", border: "2px dashed #CBD5E1", background: "#F8FAFC", display: "flex", justifyContent: "center", alignItems: "center", height: "90px", cursor: "pointer" }}>
                     <input 
                       type="file" 
                       accept="image/*" 
                       onChange={(e) => handleFileChange(e, 'banner')} 
-                      style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer", zIndex: 10 }} 
+                      style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none" }} 
                     />
                     {bannerImagePreview ? (
                       <img src={bannerImagePreview} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -1304,6 +1344,24 @@ function Blogs() {
                         <span style={{ fontSize: "0.8rem", fontWeight: 500 }}>Upload Banner</span>
                       </div>
                     )}
+                  </label>
+                  <div style={{ marginTop: "0.625rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.68rem", fontWeight: 800, color: "#64748B", textTransform: "uppercase", marginBottom: "0.2rem" }}>Current Filename</label>
+                      <p title={bannerImage?.name || getMediaFilename(bannerImagePreview || "")} style={{ margin: 0, fontSize: "0.76rem", fontWeight: 700, color: "#0F172A", wordBreak: "break-all" }}>
+                        {bannerImage?.name || getMediaFilename(bannerImagePreview || "")}
+                      </p>
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.68rem", fontWeight: 800, color: "#64748B", textTransform: "uppercase", marginBottom: "0.2rem" }}>Current Image URL</label>
+                      <p title={bannerImagePreview || "No image selected"} style={{ margin: 0, fontSize: "0.72rem", fontWeight: 600, color: "#475569", wordBreak: "break-all" }}>
+                        {bannerImagePreview || "No image selected"}
+                      </p>
+                    </div>
+                    <label className="btn-secondary" style={{ justifyContent: "center", cursor: "pointer", fontSize: "0.8rem" }}>
+                      <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, 'banner')} style={{ display: "none" }} />
+                      Replace Image
+                    </label>
                   </div>
                 </div>
                 <div>
@@ -1464,6 +1522,13 @@ function Blogs() {
                       />
                     </div>
 
+                    <div style={{ padding: "0.75rem 1rem", background: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: "10px" }}>
+                      <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 800, color: "#64748B", textTransform: "uppercase", marginBottom: "0.25rem" }}>Current Filename</label>
+                      <p title={getMediaFilename(selectedGalleryItem)} style={{ margin: 0, fontSize: "0.8rem", fontWeight: 700, color: "#0F172A", wordBreak: "break-all" }}>
+                        {getMediaFilename(selectedGalleryItem)}
+                      </p>
+                    </div>
+
                     <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                       <div>
                         <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#475569", textTransform: "uppercase", marginBottom: "0.5rem" }}>Image Title</label>
@@ -1518,7 +1583,7 @@ function Blogs() {
                 ) : (
                   /* GRID VIEW */
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "1rem" }}>
-                    {galleryItems.filter(item => (item.title || "").toLowerCase().includes(gallerySearch.toLowerCase())).map((item) => (
+                    {galleryItems.filter(item => getMediaDisplayName(item).toLowerCase().includes(gallerySearch.toLowerCase())).map((item) => (
                       <div 
                         key={item._id} 
                         onClick={() => handleGalleryItemClick(item)}
@@ -1542,13 +1607,13 @@ function Blogs() {
                         <div style={{ aspectRatio: "1/1", overflow: "hidden" }}>
                           <img 
                             src={item.image.startsWith('http') ? item.image : `${(import.meta.env.VITE_API_URL || "https://dmctrichology-1.onrender.com/api").replace(/\/api$/, "")}${item.image.startsWith('/') ? '' : '/'}${item.image}`} 
-                            alt={item.title} 
+                            alt={getMediaDisplayName(item)} 
                             style={{ width: "100%", height: "100%", objectFit: "cover" }} 
                           />
                         </div>
                         <div style={{ padding: "0.5rem" }}>
-                          <p style={{ fontSize: "0.75rem", fontWeight: 600, color: "#1E293B", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                            {item.title || "Untitled"}
+                          <p title={getMediaDisplayName(item)} style={{ fontSize: "0.75rem", fontWeight: 600, color: "#1E293B", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                            {getMediaDisplayName(item)}
                           </p>
                         </div>
                       </div>

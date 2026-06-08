@@ -76,6 +76,16 @@ const staticFallback = {
   }
 };
 
+function mergeDeep(base, source) {
+  if (Array.isArray(base)) return Array.isArray(source) ? source : base;
+  if (!base || typeof base !== 'object') return source ?? base;
+  const output = { ...base, ...(source && typeof source === 'object' ? source : {}) };
+  Object.keys(base).forEach((key) => {
+    output[key] = mergeDeep(base[key], source?.[key]);
+  });
+  return output;
+}
+
 async function getPageData() {
   try {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
@@ -85,7 +95,7 @@ async function getPageData() {
 
     if (!response.ok) return staticFallback;
     const result = await response.json();
-    return result.success ? { ...staticFallback, ...(result.data || {}) } : staticFallback;
+    return result.success ? mergeDeep(staticFallback, result.data || {}) : staticFallback;
   } catch (error) {
     console.error('SSR Fetch Error (About DMC Trichology page):', error);
     return staticFallback;

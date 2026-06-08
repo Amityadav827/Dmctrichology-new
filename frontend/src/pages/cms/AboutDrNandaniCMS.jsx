@@ -19,6 +19,9 @@ import {
 import { FRONTEND_URL } from "../../utils/config";
 
 export default function AboutDrNandaniCMS() {
+  const legacyTimelineImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
+  const defaultTimelineImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780906825092-79561886.webp";
+  const defaultTestimonialPatientImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780711038023-933757138.webp";
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -33,6 +36,12 @@ export default function AboutDrNandaniCMS() {
     try {
       const { data: res } = await axios.get("/about-dr-nandani");
       if (res.success && res.data) {
+        const testimonialItems = Array.isArray(res.data.testimonialsSection?.testimonials)
+          ? res.data.testimonialsSection.testimonials
+          : [];
+        const normalizedPatientImage = res.data.testimonialsSection?.patientImage
+          || testimonialItems.find(item => item?.image)?.image
+          || defaultTestimonialPatientImage;
         setData({
           ...res.data,
           hero: {
@@ -61,7 +70,7 @@ export default function AboutDrNandaniCMS() {
             ...(res.data.timeline || {}),
             eyebrow: res.data.timeline?.eyebrow || "TRUSTED CARE SERVICES",
             heading: res.data.timeline?.heading || "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?",
-            image: res.data.timeline?.image || res.data.trustSection?.image || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
+            image: (res.data.timeline?.image === legacyTimelineImage ? defaultTimelineImage : (res.data.timeline?.image || res.data.trustSection?.image || defaultTimelineImage)),
             imageAlt: res.data.timeline?.imageAlt || "Dr. Nandani Dadu hair restoration care",
             sectionBgColor: res.data.timeline?.sectionBgColor || "#FFFFFF",
             contentMaxWidth: res.data.timeline?.contentMaxWidth || "1220px",
@@ -82,6 +91,15 @@ export default function AboutDrNandaniCMS() {
             credentialsTabLabel: res.data.educationExperience?.credentialsTabLabel || "Credentials",
             topImage: res.data.educationExperience?.topImage || "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
             bottomImage: res.data.educationExperience?.bottomImage || "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png"
+          },
+          testimonialsSection: {
+            ...(res.data.testimonialsSection || {}),
+            heading: res.data.testimonialsSection?.heading || "Patient Testimonials",
+            patientImage: normalizedPatientImage,
+            testimonials: testimonialItems.map(item => ({
+              ...item,
+              image: item?.image || normalizedPatientImage
+            }))
           }
         });
       }
@@ -801,7 +819,7 @@ export default function AboutDrNandaniCMS() {
                 </div>
                 {data.timeline?.image && (
                   <div className="md:col-span-2 rounded-3xl overflow-hidden border border-slate-100 bg-slate-50">
-                    <img src={data.timeline.image} alt={data.timeline?.imageAlt || "Landscape preview"} className="w-full h-[220px] object-cover" />
+                    <img src={data.timeline.image} alt={data.timeline?.imageAlt || "Landscape preview"} className="w-full h-auto max-h-[260px] object-contain bg-slate-50" />
                   </div>
                 )}
                 <div>
@@ -1765,6 +1783,26 @@ export default function AboutDrNandaniCMS() {
                   />
                 </div>
 
+                <div className="md:col-span-2">
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Default Patient Image URL</label>
+                  <div className="flex gap-4 items-center">
+                    <input
+                      type="text"
+                      value={data.testimonialsSection?.patientImage || ""}
+                      onChange={e => updateNestedField("testimonialsSection.patientImage", e.target.value)}
+                      className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                      placeholder="https://..."
+                    />
+                    <label className="flex items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl cursor-pointer transition-all aspect-square shrink-0">
+                      {uploadingImage ? <Loader2 size={20} className="animate-spin" /> : <ImageIcon size={20} />}
+                      <input type="file" className="hidden" accept="image/*" onChange={e => handleNestedImageUpload(e, "testimonialsSection.patientImage")} disabled={uploadingImage} />
+                    </label>
+                  </div>
+                  {(data.testimonialsSection?.patientImage) && (
+                    <img src={data.testimonialsSection.patientImage} alt="Default patient preview" className="mt-4 w-24 h-24 object-cover rounded-full border border-slate-200" />
+                  )}
+                </div>
+
                 <div>
                   <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">View More Button Text</label>
                   <input
@@ -1876,7 +1914,7 @@ export default function AboutDrNandaniCMS() {
                 <button
                   onClick={() => {
                     const current = data.testimonialsSection?.testimonials || [];
-                    updateNestedField("testimonialsSection.testimonials", [...current, { text: "New testimonial text here...", patientName: "Patient Name", disclaimer: "* Opinions/Results may vary from person to person.", stars: 5 }]);
+                    updateNestedField("testimonialsSection.testimonials", [...current, { image: data.testimonialsSection?.patientImage || defaultTestimonialPatientImage, text: "New testimonial text here...", patientName: "Patient Name", disclaimer: "* Opinions/Results may vary from person to person.", stars: 5 }]);
                   }}
                   className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm"
                 >
@@ -1926,6 +1964,23 @@ export default function AboutDrNandaniCMS() {
                           onChange={e => updateNestedField(`testimonialsSection.testimonials.${idx}.disclaimer`, e.target.value)}
                           className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-sm font-bold text-slate-800 focus:border-indigo-300 transition-all outline-none"
                         />
+                      </div>
+                      <div className="md:col-span-3">
+                        <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Patient Image URL</label>
+                        <div className="flex gap-4 items-center">
+                          <input
+                            type="text"
+                            value={t.image || ""}
+                            onChange={e => updateNestedField(`testimonialsSection.testimonials.${idx}.image`, e.target.value)}
+                            className="w-full px-4 py-3 bg-white border border-slate-100 rounded-xl text-sm font-bold text-slate-800 focus:border-indigo-300 transition-all outline-none"
+                            placeholder="https://..."
+                          />
+                          <label className="flex items-center justify-center p-3 bg-white border border-slate-100 hover:bg-slate-50 text-slate-600 rounded-xl cursor-pointer transition-all aspect-square shrink-0">
+                            {uploadingImage ? <Loader2 size={18} className="animate-spin" /> : <ImageIcon size={18} />}
+                            <input type="file" className="hidden" accept="image/*" onChange={e => handleNestedImageUpload(e, `testimonialsSection.testimonials.${idx}.image`)} disabled={uploadingImage} />
+                          </label>
+                        </div>
+                        {t.image && <img src={t.image} alt={`${t.patientName || "Patient"} preview`} className="mt-3 w-20 h-20 object-cover rounded-full border border-slate-200" />}
                       </div>
                       <div className="md:col-span-3">
                         <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest">Testimonial Text</label>
