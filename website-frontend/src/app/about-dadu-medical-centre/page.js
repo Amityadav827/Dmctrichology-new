@@ -74,6 +74,10 @@ const staticFallback = {
     gallery: [],
     buttonText: 'VIEW MORE',
     buttonLink: '/virtual-tour'
+  },
+  testimonialsSection: {
+    heading: 'Patient Testimonials',
+    testimonials: []
   }
 };
 

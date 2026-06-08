@@ -162,32 +162,7 @@ const pageData = {
   },
   testimonialsSection: {
     heading: 'Patient Testimonials',
-    testimonials: [
-      {
-        text: 'DMC Trichology made the consultation very clear and comfortable. The team explained my donor area, hairline design, and treatment options in detail before recommending the right plan.',
-        patientName: 'Rohit Sharma',
-        disclaimer: '* Opinions/Results may vary from person to person.',
-        stars: 5
-      },
-      {
-        text: 'I visited the clinic for hair thinning and scalp concerns. The diagnosis was detailed, the treatment plan was practical, and the follow-up care felt very professional.',
-        patientName: 'Amit Verma',
-        disclaimer: '* Opinions/Results may vary from person to person.',
-        stars: 5
-      },
-      {
-        text: 'The clinic has a premium and hygienic setup. I appreciated how carefully the team discussed FUE, recovery time, and what results I could realistically expect.',
-        patientName: 'Karan Mehta',
-        disclaimer: '* Opinions/Results may vary from person to person.',
-        stars: 5
-      },
-      {
-        text: 'My beard restoration consultation was handled with patience and precision. The team helped me understand density, placement, and aftercare before the procedure.',
-        patientName: 'Nikhil Arora',
-        disclaimer: '* Opinions/Results may vary from person to person.',
-        stars: 5
-      }
-    ]
+    testimonials: []
   }
 };
 

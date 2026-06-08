@@ -74,6 +74,10 @@ const fallbackData = {
     gallery: [],
     buttonText: 'VIEW MORE',
     buttonLink: '/virtual-tour'
+  },
+  testimonialsSection: {
+    heading: 'Patient Testimonials',
+    testimonials: []
   }
 };
 
@@ -121,6 +125,11 @@ exports.updateSettings = async (req, res) => {
         ...fallbackData.infrastructure,
         ...(req.body?.infrastructure || {}),
         gallery: Array.isArray(req.body?.infrastructure?.gallery) ? req.body.infrastructure.gallery : []
+      },
+      testimonialsSection: {
+        ...fallbackData.testimonialsSection,
+        ...(req.body?.testimonialsSection || {}),
+        testimonials: Array.isArray(req.body?.testimonialsSection?.testimonials) ? req.body.testimonialsSection.testimonials : []
       }
     };
 

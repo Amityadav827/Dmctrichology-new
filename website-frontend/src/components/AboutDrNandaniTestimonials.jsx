@@ -50,15 +50,21 @@ function StarRating({ count = 5 }) {
   );
 }
 
-export default function AboutDrNandaniTestimonials({ data = {} }) {
+export default function AboutDrNandaniTestimonials({ data = {}, useDefaultTestimonials = true }) {
   const {
     heading = "Patient Testimonials",
     patientImage = defaultPatientImage,
-    testimonials = defaultTestimonials
+    testimonials
   } = data;
 
   const slides = useMemo(() => {
-    const source = Array.isArray(testimonials) && testimonials.length > 0 ? testimonials : defaultTestimonials;
+    const cmsTestimonials = Array.isArray(testimonials) ? testimonials.filter(Boolean) : [];
+    const source = cmsTestimonials.length > 0
+      ? cmsTestimonials
+      : (useDefaultTestimonials ? defaultTestimonials : []);
+
+    if (source.length === 0) return [];
+
     const repeated = [...source];
 
     while (repeated.length < 4) {
@@ -66,10 +72,11 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
     }
 
     return repeated.slice(0, Math.max(repeated.length, 4));
-  }, [testimonials]);
+  }, [testimonials, useDefaultTestimonials]);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeSlide = slides[activeIndex] || defaultTestimonials[0];
+  const fallbackSlide = useDefaultTestimonials ? defaultTestimonials[0] : {};
+  const activeSlide = slides[activeIndex] || fallbackSlide;
   const activePatientImage = activeSlide.image || patientImage || defaultPatientImage;
 
   const goPrev = () => {
@@ -79,6 +86,8 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
   const goNext = () => {
     setActiveIndex((current) => (current + 1) % slides.length);
   };
+
+  if (slides.length === 0) return null;
 
   return (
     <EditableSection sectionId="about-nandani-testimonials" label="Patient Testimonials Section">
@@ -112,7 +121,7 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
             <img className="dmc-testimonial-patient" src={activePatientImage} alt={activeSlide.patientName || "Patient testimonial"} />
 
             <RichTextContent
-              value={activeSlide.text || defaultTestimonials[0].text}
+              value={activeSlide.text || fallbackSlide.text || ""}
               className="dmc-testimonial-text"
             />
 
@@ -120,13 +129,13 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
 
             <p className="dmc-testimonial-name">
               <EditableText sectionId="about-nandani-testimonials" fieldPath={`testimonialsSection.testimonials.${activeIndex}.patientName`}>
-                {activeSlide.patientName || defaultTestimonials[0].patientName}
+                {activeSlide.patientName || fallbackSlide.patientName || ""}
               </EditableText>
             </p>
 
             <p className="dmc-testimonial-disclaimer">
               <EditableText sectionId="about-nandani-testimonials" fieldPath={`testimonialsSection.testimonials.${activeIndex}.disclaimer`}>
-                {activeSlide.disclaimer || defaultTestimonials[0].disclaimer}
+                {activeSlide.disclaimer || fallbackSlide.disclaimer || ""}
               </EditableText>
             </p>
           </div>

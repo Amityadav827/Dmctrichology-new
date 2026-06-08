@@ -220,32 +220,7 @@ function normalizeDaduData(pageData = {}) {
     testimonialsSection: {
       ...directTestimonials,
       heading: directTestimonials.heading || 'Patient Testimonials',
-      testimonials: directTestimonials.testimonials?.length ? directTestimonials.testimonials : [
-        {
-          text: 'DMC Trichology placeholder testimonial for the About Dadu Medical Centre page. Replace this with a real patient testimonial when available from the dashboard.',
-          patientName: 'DMC Patient',
-          disclaimer: '* Temporary placeholder. Opinions/Results may vary from person to person.',
-          stars: 5
-        },
-        {
-          text: 'DMC Trichology placeholder testimonial for the About Dadu Medical Centre page. Replace this with a real patient testimonial when available from the dashboard.',
-          patientName: 'DMC Patient',
-          disclaimer: '* Temporary placeholder. Opinions/Results may vary from person to person.',
-          stars: 5
-        },
-        {
-          text: 'DMC Trichology placeholder testimonial for the About Dadu Medical Centre page. Replace this with a real patient testimonial when available from the dashboard.',
-          patientName: 'DMC Patient',
-          disclaimer: '* Temporary placeholder. Opinions/Results may vary from person to person.',
-          stars: 5
-        },
-        {
-          text: 'DMC Trichology placeholder testimonial for the About Dadu Medical Centre page. Replace this with a real patient testimonial when available from the dashboard.',
-          patientName: 'DMC Patient',
-          disclaimer: '* Temporary placeholder. Opinions/Results may vary from person to person.',
-          stars: 5
-        }
-      ]
+      testimonials: Array.isArray(directTestimonials.testimonials) ? directTestimonials.testimonials : []
     },
     faqSection: pageData.faqSection || null
   };
@@ -278,7 +253,7 @@ export default function AboutDaduMedicalCentreClient({ initialData, initialFaqDa
         credentialsData={templateData.credentialsSection}
       />
       <AboutDrNandaniOtherSpecialities data={templateData.otherSpecialitiesSection} />
-      <AboutDrNandaniTestimonials data={templateData.testimonialsSection} />
+      <AboutDrNandaniTestimonials data={templateData.testimonialsSection} useDefaultTestimonials={false} />
       <FaqSection initialData={faqData} />
     </main>
   );

@@ -32,7 +32,7 @@ export default function HairTransplantClinicClient({ pageData, faqData }) {
         credentialsData={pageData.credentialsSection}
       />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection} />
-      <AboutDrNandaniTestimonials data={pageData.testimonialsSection} />
+      <AboutDrNandaniTestimonials data={pageData.testimonialsSection} useDefaultTestimonials={false} />
       <FaqSection initialData={faqData} />
     </main>
   );
