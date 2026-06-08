@@ -174,7 +174,7 @@ export default function PressMediaSection() {
                   <div className="arrow-container" style={{
                     width: '45px',
                     height: '45px',
-                    backgroundColor: '#486A91',
+                    backgroundColor: '#3B5998',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
