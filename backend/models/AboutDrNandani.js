@@ -86,6 +86,8 @@ const AboutDrNandaniSchema = new mongoose.Schema({
   },
 
   timeline: {
+    eyebrow: { type: String, default: "TRUSTED CARE SERVICES" },
+    heading: { type: String, default: "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?" },
     image: { type: String, default: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp" },
     imageAlt: { type: String, default: "Dr. Nandani Dadu hair restoration care" },
     sectionBgColor: { type: String, default: "#FFFFFF" },

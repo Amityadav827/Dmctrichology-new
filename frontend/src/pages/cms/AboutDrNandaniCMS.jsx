@@ -59,6 +59,8 @@ export default function AboutDrNandaniCMS() {
           },
           timeline: {
             ...(res.data.timeline || {}),
+            eyebrow: res.data.timeline?.eyebrow || "TRUSTED CARE SERVICES",
+            heading: res.data.timeline?.heading || "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?",
             image: res.data.timeline?.image || res.data.trustSection?.image || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
             imageAlt: res.data.timeline?.imageAlt || "Dr. Nandani Dadu hair restoration care",
             sectionBgColor: res.data.timeline?.sectionBgColor || "#FFFFFF",
@@ -764,6 +766,24 @@ export default function AboutDrNandaniCMS() {
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Section Eyebrow</label>
+                  <input
+                    type="text"
+                    value={data.timeline?.eyebrow || ""}
+                    onChange={e => updateNestedField("timeline.eyebrow", e.target.value)}
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Section Heading</label>
+                  <input
+                    type="text"
+                    value={data.timeline?.heading || ""}
+                    onChange={e => updateNestedField("timeline.heading", e.target.value)}
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none"
+                  />
+                </div>
                 <div className="md:col-span-2">
                   <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Landscape Image URL</label>
                   <div className="flex gap-4 items-center">

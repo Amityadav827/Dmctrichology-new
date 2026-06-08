@@ -69,6 +69,8 @@ const staticFallback = {
     cardBgColor: "#3b5998"
   },
   timeline: {
+    eyebrow: "TRUSTED CARE SERVICES",
+    heading: "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?",
     image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
     imageAlt: "Dr. Nandani Dadu hair restoration care",
     sectionBgColor: "#FFFFFF",
