@@ -46,6 +46,7 @@ export default function AboutDrNandaniCMS() {
           ...res.data,
           hero: {
             ...(res.data.hero || {}),
+            mainImage: res.data.hero?.mainImage || res.data.hero?.galleryImage || res.data.hero?.doctorImage || res.data.hero?.backgroundImage || "",
             pageEyebrow: res.data.hero?.pageEyebrow || "About DMC Trichology",
             statsCards: (res.data.hero?.statsCards || []).length > 0
               ? res.data.hero.statsCards
@@ -356,17 +357,17 @@ export default function AboutDrNandaniCMS() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Doctor Portrait Image</label>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Hero Main Image</label>
                   <div className="flex gap-4 items-center">
                     <input 
                       type="text" 
-                      value={data.hero?.doctorImage || ""} 
-                      onChange={e => updateSectionField("hero", "doctorImage", e.target.value)} 
+                      value={data.hero?.mainImage || ""} 
+                      onChange={e => updateSectionField("hero", "mainImage", e.target.value)} 
                       className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none" 
                     />
                     <label className="flex items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl cursor-pointer transition-all aspect-square shrink-0">
                       {uploadingImage ? <Loader2 size={20} className="animate-spin" /> : <ImageIcon size={20} />}
-                      <input type="file" className="hidden" accept="image/*" onChange={e => handleImageUpload(e, "hero", "doctorImage")} disabled={uploadingImage} />
+                      <input type="file" className="hidden" accept="image/*" onChange={e => handleImageUpload(e, "hero", "mainImage")} disabled={uploadingImage} />
                     </label>
                   </div>
                 </div>

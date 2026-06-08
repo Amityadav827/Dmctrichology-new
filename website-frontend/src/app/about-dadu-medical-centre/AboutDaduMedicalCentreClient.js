@@ -76,6 +76,7 @@ function normalizeDaduData(pageData = {}) {
       doctorName: hero.doctorName || hero.heading || hero.mainHeading || 'About DMC Trichology',
       degreeText: hero.degreeText || hero.subtitle || "INDIA'S PREMIUM HAIR & SCALP SPECIALIST SOLUTION",
       descriptionParagraph: hero.descriptionParagraph || introDescription || 'DMC Trichology provides advanced skin and hair treatment procedures with a patient-first clinical approach.',
+      mainImage: hero.mainImage || hero.galleryImage || hero.doctorImage || hero.leftImage || hero.heroImage || hero.backgroundImage || primaryImage,
       doctorImage: hero.doctorImage || hero.leftImage || hero.heroImage || primaryImage,
       galleryImage: hero.galleryImage || hero.leftImage || hero.heroImage || primaryImage,
       submitButtonText: hero.submitButtonText || 'Schedule Your Visit'

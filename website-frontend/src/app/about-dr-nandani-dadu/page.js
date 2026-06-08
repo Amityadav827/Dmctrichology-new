@@ -4,6 +4,7 @@ import AboutDrNandaniClient from './AboutDrNandaniClient';
 const staticFallback = {
   hero: {
     backgroundImage: "",
+    mainImage: "",
     doctorImage: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp",
     mainHeading: "BEST HAIR TRANSPLANT SURGEON IN DELHI",
     doctorName: "Dr. Nandani Dadu",

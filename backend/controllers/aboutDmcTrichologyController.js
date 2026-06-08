@@ -5,6 +5,7 @@ const CMS_KEY = 'about_dmc_trichology';
 
 const fallbackData = {
   hero: {
+    mainImage: '',
     backgroundImage: '',
     leftImage: '',
     badgeText: '',

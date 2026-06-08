@@ -46,11 +46,14 @@ export default function AboutDrNandaniHero({
     }
     return typeof fallback === 'string' ? fallback.trim() : "";
   };
-  const galleryImage = imageValue('galleryImage', data.doctorImage);
-  const doctorImage = imageValue('doctorImage', galleryImage);
-  const secondaryImage = imageValue('secondaryImage', doctorImage || galleryImage);
-  const sideImages = [doctorImage, secondaryImage].filter(Boolean);
-  const hasHeroImages = Boolean(galleryImage || sideImages.length);
+  const heroMainImage = imageValue('mainImage')
+    || imageValue('heroMainImage')
+    || imageValue('galleryImage')
+    || imageValue('doctorImage')
+    || imageValue('leftImage')
+    || imageValue('heroImage')
+    || imageValue('backgroundImage');
+  const hasHeroImage = Boolean(heroMainImage);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -145,23 +148,12 @@ export default function AboutDrNandaniHero({
       <EditableSection sectionId={heroSectionId} label="Doctor Intro And Lead Form">
         <section className="dr-nandani-intro-form-section">
           <div className="dr-nandani-intro-grid">
-            {hasHeroImages && (
+            {hasHeroImage && (
               <div className="dr-nandani-image-column">
-                <div className={`dr-nandani-gallery-grid ${galleryImage && sideImages.length ? '' : 'single-column'}`}>
-                  {galleryImage && (
-                    <div className="dr-nandani-gallery-main">
-                      <img src={galleryImage} alt={`${doctorName} clinic introduction`} />
-                    </div>
-                  )}
-                  {sideImages.length > 0 && (
-                    <div className={`dr-nandani-gallery-side ${sideImages.length === 1 ? 'single-side' : ''}`}>
-                      {sideImages.map((src, index) => (
-                        <div className="dr-nandani-gallery-small" key={`${src}-${index}`}>
-                          <img src={src} alt={`${doctorName} ${index === 0 ? 'treatment space' : 'consultation space'}`} />
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                <div className="dr-nandani-gallery-grid single-column">
+                  <div className="dr-nandani-gallery-main">
+                    <img src={heroMainImage} alt={`${doctorName} clinic introduction`} />
+                  </div>
                 </div>
               </div>
             )}
@@ -307,15 +299,12 @@ export default function AboutDrNandaniHero({
         }
         .dr-nandani-gallery-grid {
           display: grid;
-          grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
-          gap: 20px;
           width: 100%;
         }
         .dr-nandani-gallery-grid.single-column {
           grid-template-columns: 1fr;
         }
-        .dr-nandani-gallery-main,
-        .dr-nandani-gallery-small {
+        .dr-nandani-gallery-main {
           background: #d8d8d8;
           border-radius: 24px;
           overflow: hidden;
@@ -324,19 +313,7 @@ export default function AboutDrNandaniHero({
         .dr-nandani-gallery-main {
           min-height: 440px;
         }
-        .dr-nandani-gallery-side {
-          display: grid;
-          grid-template-rows: 1fr 1fr;
-          gap: 20px;
-        }
-        .dr-nandani-gallery-side.single-side {
-          grid-template-rows: 1fr;
-        }
-        .dr-nandani-gallery-grid.single-column .dr-nandani-gallery-small {
-          min-height: 440px;
-        }
-        .dr-nandani-gallery-main img,
-        .dr-nandani-gallery-small img {
+        .dr-nandani-gallery-main img {
           width: 100%;
           height: 100%;
           object-fit: cover;
@@ -604,18 +581,12 @@ export default function AboutDrNandaniHero({
           }
           .dr-nandani-gallery-grid {
             grid-template-columns: 1fr;
-            gap: 16px;
           }
-          .dr-nandani-gallery-side {
-            display: none;
-          }
-          .dr-nandani-gallery-main,
-          .dr-nandani-gallery-small {
+          .dr-nandani-gallery-main {
             min-height: auto;
             border-radius: 24px;
           }
-          .dr-nandani-gallery-main img,
-          .dr-nandani-gallery-small img {
+          .dr-nandani-gallery-main img {
             height: auto;
             object-fit: contain;
           }

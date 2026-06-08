@@ -71,6 +71,7 @@ function normalizeNiveditaData(pageData = {}) {
   return {
     hero: {
       ...hero,
+      mainImage: hero.mainImage || hero.galleryImage || hero.doctorImage || hero.backgroundImage || DEFAULT_IMAGE,
       doctorImage: hero.doctorImage || DEFAULT_IMAGE,
       galleryImage: hero.galleryImage || hero.doctorImage || DEFAULT_IMAGE,
       doctorName: hero.doctorName || 'Dr. Nivedita Dadu',

@@ -8,9 +8,10 @@ const fallbackImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/objec
 
 const defaultData = {
   hero: {
-    galleryImage: fallbackImage,
-    doctorImage: fallbackImage,
-    secondaryImage: fallbackImage,
+    mainImage: "",
+    galleryImage: "",
+    doctorImage: "",
+    secondaryImage: "",
     mainHeading: "",
     doctorName: "",
     degreeText: "",
@@ -170,7 +171,17 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
     let mounted = true;
     axios.get(endpoint)
       .then(({ data: res }) => {
-        if (mounted && res?.success) setData(mergeDefaults(defaultData, res.data || {}));
+        if (mounted && res?.success) {
+          const merged = mergeDefaults(defaultData, res.data || {});
+          const hero = merged.hero || {};
+          setData({
+            ...merged,
+            hero: {
+              ...hero,
+              mainImage: hero.mainImage || hero.galleryImage || hero.doctorImage || hero.leftImage || hero.heroImage || hero.backgroundImage || ""
+            }
+          });
+        }
       })
       .catch(() => toast.error(`Failed to load ${title}`))
       .finally(() => mounted && setLoading(false));
@@ -184,7 +195,15 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
     try {
       const { data: res } = await axios.put(endpoint, data);
       if (res?.success) {
-        setData(mergeDefaults(defaultData, res.data || data));
+        const merged = mergeDefaults(defaultData, res.data || data);
+        const hero = merged.hero || {};
+        setData({
+          ...merged,
+          hero: {
+            ...hero,
+            mainImage: hero.mainImage || hero.galleryImage || hero.doctorImage || hero.leftImage || hero.heroImage || hero.backgroundImage || ""
+          }
+        });
         toast.success(`${title} saved successfully`);
       }
     } catch (error) {
@@ -371,9 +390,7 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
             <Field label="Description" path="hero.descriptionParagraph" rich />
           </div>
           <div className="dt-card dt-grid">
-            <ImageField label="Large Gallery Image" path="hero.galleryImage" />
-            <ImageField label="Doctor / Main Image" path="hero.doctorImage" />
-            <ImageField label="Third Gallery Image" path="hero.secondaryImage" />
+            <ImageField label="Hero Main Image" path="hero.mainImage" />
           </div>
           <div className="dt-card dt-grid">
             <Field label="Form Title" path="formSettings.title" />

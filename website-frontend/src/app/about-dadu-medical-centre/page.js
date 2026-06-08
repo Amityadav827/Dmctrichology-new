@@ -5,6 +5,7 @@ export const revalidate = 0;
 
 const staticFallback = {
   hero: {
+    mainImage: '',
     backgroundImage: '',
     leftImage: '',
     badgeText: 'ABOUT DMC TRICHOLOGY®',

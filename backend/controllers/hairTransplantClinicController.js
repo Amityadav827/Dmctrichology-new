@@ -7,6 +7,7 @@ const fallbackImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/objec
 
 const fallbackData = {
   hero: {
+    mainImage: "",
     galleryImage: fallbackImage,
     doctorImage: fallbackImage,
     secondaryImage: fallbackImage,

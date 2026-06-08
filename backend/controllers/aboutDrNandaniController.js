@@ -8,6 +8,7 @@ const CMS_KEY = 'about_dr_nandani';
 const fallbackData = {
   hero: {
     backgroundImage: "",
+    mainImage: "",
     doctorImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
     mainHeading: "BEST HAIR TRANSPLANT SURGEON IN DELHI",
     doctorName: "Dr. Nandani Dadu",

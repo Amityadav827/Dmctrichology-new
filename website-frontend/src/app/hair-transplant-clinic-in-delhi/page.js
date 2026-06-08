@@ -9,6 +9,7 @@ const hairlineImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/objec
 
 const pageData = {
   hero: {
+    mainImage: '',
     galleryImage: clinicImage,
     doctorImage: clinicImage,
     secondaryImage: clinicImage,

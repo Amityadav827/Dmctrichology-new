@@ -18,6 +18,7 @@ const fallbackMetadata = {
 const staticFallback = {
   hero: {
     backgroundImage: '',
+    mainImage: '',
     doctorImage: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png',
     mainHeading: 'EXPERT DERMATOLOGIST & TRICHOLOGIST IN DELHI',
     doctorName: 'Dr. Nivedita Dadu',

@@ -7,6 +7,7 @@ const CMS_KEY = 'about_dr_nivedita';
 const fallbackData = {
   hero: {
     backgroundImage: '',
+    mainImage: '',
     doctorImage: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png',
     mainHeading: 'EXPERT DERMATOLOGIST & TRICHOLOGIST IN DELHI',
     doctorName: 'Dr. Nivedita Dadu',
