@@ -127,7 +127,7 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
         :global(.dr-nandani-specialist-rich p),
         :global(.dr-nandani-specialist-rich li) {
           font-family: 'Lato', sans-serif;
-          font-size: 14px;
+          font-size: 16px;
           line-height: 1.72;
           color: rgba(255, 255, 255, 0.85);
           margin: 0 0 18px;
