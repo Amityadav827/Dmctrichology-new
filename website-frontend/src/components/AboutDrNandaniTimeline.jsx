@@ -38,9 +38,10 @@ function DefaultFeatureIcon() {
   );
 }
 
-export default function AboutDrNandaniTimeline({ data = {} }) {
+export default function AboutDrNandaniTimeline({ data = {}, showDescription = false }) {
   const eyebrow = data.eyebrow || "TRUSTED CARE SERVICES";
   const heading = data.heading || "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?";
+  const description = data.description || "";
   const steps = (data.steps && data.steps.length > 0) ? data.steps : defaultSteps;
 
   return (
@@ -59,6 +60,10 @@ export default function AboutDrNandaniTimeline({ data = {} }) {
               {heading}
             </EditableText>
           </h2>
+
+          {showDescription && description && (
+            <RichTextContent value={description} className="nandani-feature-list-description" />
+          )}
 
           <div className="nandani-feature-rows">
             {steps.map((step, idx) => (
@@ -137,8 +142,42 @@ export default function AboutDrNandaniTimeline({ data = {} }) {
           line-height: 1.18;
           font-weight: 400;
           color: #111111;
-          margin: 0 0 34px;
+          margin: 0 0 24px;
           max-width: 1120px;
+        }
+
+        .nandani-feature-list-description,
+        .nandani-feature-list-description :global(p),
+        .nandani-feature-list-description :global(li) {
+          font-family: 'Lato', sans-serif;
+          font-size: 16px;
+          line-height: 1.8;
+          color: #333333;
+          font-weight: 400;
+        }
+
+        .nandani-feature-list-description {
+          max-width: 980px;
+          margin: 0 0 34px;
+        }
+
+        .nandani-feature-list-description :global(p) {
+          margin: 0 0 14px;
+        }
+
+        .nandani-feature-list-description :global(p:last-child) {
+          margin-bottom: 0;
+        }
+
+        .nandani-feature-list-description :global(ul),
+        .nandani-feature-list-description :global(ol) {
+          margin: 0 0 14px 22px;
+          padding: 0;
+        }
+
+        .nandani-feature-list-description :global(a) {
+          color: #3b5998;
+          text-decoration: underline;
         }
 
         .nandani-feature-rows {

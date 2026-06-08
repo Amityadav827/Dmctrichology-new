@@ -25,7 +25,7 @@ export default function HairTransplantClinicClient({ pageData, faqData }) {
         }}
       />
       <AboutDrNandaniSpecialist data={pageData.specialist} />
-      <AboutDrNandaniTimeline data={pageData.timeline} />
+      <AboutDrNandaniTimeline data={pageData.timeline} showDescription />
       <AboutDrNandaniTrust data={pageData.trustSection} />
       <AboutDrNandaniEducationExperience
         data={pageData.educationExperience}

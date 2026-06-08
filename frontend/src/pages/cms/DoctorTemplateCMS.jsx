@@ -23,7 +23,7 @@ const defaultData = {
   breadcrumb: { title: "", parentLabel: "Home", parentUrl: "/", currentPageText: "" },
   formSettings: { title: "", subtitle: "", successMessage: "" },
   specialist: { heading: "", description1: "", description2: "", highlightedText: "", bullets: [], featureCards: [] },
-  timeline: { eyebrow: "TRUSTED CARE SERVICES", heading: "", steps: [] },
+  timeline: { eyebrow: "TRUSTED CARE SERVICES", heading: "", description: "", steps: [] },
   trustSection: { eyebrow: "TRUSTED CARE SERVICES", heading: "", image: fallbackImage, imageAlt: "", trustPoints: [], conclusionParagraph: "" },
   educationExperience: {
     experienceTabLabel: "Experience",
@@ -159,7 +159,7 @@ function RichTextEditor({ label, value = "", onChange }) {
   );
 }
 
-export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, previewPath }) {
+export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, previewPath, enableTimelineDescription = false }) {
   const [data, setData] = useState(defaultData);
   const [active, setActive] = useState("hero");
   const [loading, setLoading] = useState(true);
@@ -401,6 +401,9 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
           <div className="dt-card dt-grid">
             <Field label="Eyebrow" path="timeline.eyebrow" />
             <Field label="Heading" path="timeline.heading" />
+            {enableTimelineDescription && (
+              <Field label="Description" path="timeline.description" rich />
+            )}
           </div>
           <Repeater title="Timeline / Feature Rows" path="timeline.steps" fields={[
             { name: "icon", label: "Icon URL" },

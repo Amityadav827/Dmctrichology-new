@@ -48,6 +48,7 @@ const pageData = {
   timeline: {
     eyebrow: 'TRUSTED CARE SERVICES',
     heading: 'What Makes DMC Trichology A Trusted Hair Transplant Clinic In Delhi?',
+    description: '',
     steps: [
       {
         title: 'Advanced Hair Restoration',

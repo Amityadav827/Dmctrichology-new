@@ -34,7 +34,12 @@ const fallbackData = {
     highlightedText: "Our advanced hair and scalp care solutions include:",
     bullets: ["FUE HAIR TRANSPLANT", "FUT HAIR TRANSPLANT", "BEARD TRANSPLANT", "EYEBROW RESTORATION", "PRP & MESOTHERAPY"]
   },
-  timeline: { eyebrow: "TRUSTED CARE SERVICES", heading: "What Makes DMC Trichology A Trusted Hair Transplant Clinic In Delhi?", steps: [] },
+  timeline: {
+    eyebrow: "TRUSTED CARE SERVICES",
+    heading: "What Makes DMC Trichology A Trusted Hair Transplant Clinic In Delhi?",
+    description: "",
+    steps: []
+  },
   trustSection: { eyebrow: "TRUSTED CARE SERVICES", heading: "Clinical Expertise For Hair Restoration, Scalp Health And Natural Results", image: fallbackImage, imageAlt: "DMC Trichology hair transplant planning", trustPoints: [], conclusionParagraph: "" },
   educationExperience: { experienceTabLabel: "Experience", educationTabLabel: "Facilities", credentialsTabLabel: "Technology", topImage: fallbackImage, bottomImage: fallbackImage, experienceItems: [], educationItems: [] },
   credentialsSection: {

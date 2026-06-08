@@ -8,6 +8,7 @@ export default function HairTransplantClinicCMS() {
       uploadEndpoint="/hair-transplant-clinic/upload-image"
       title="Hair Transplant Clinic In Delhi CMS"
       previewPath="/hair-transplant-clinic-in-delhi"
+      enableTimelineDescription
     />
   );
 }
