@@ -48,7 +48,7 @@ const defaultData = {
     paddingBottom: ""
   },
   otherSpecialitiesSection: { heading: "Other Specialities", introParagraph: "", specialitiesList: [], conclusionParagraph: "", image: fallbackImage, imageAlt: "" },
-  testimonialsSection: { heading: "Patient Testimonials", testimonials: [] },
+  testimonialsSection: { enabled: true, heading: "Patient Testimonials", testimonials: [] },
   faqSection: { enabled: true, badgeText: "TRUSTED CARE SERVICES", heading: "Frequently Asked Question?", buttonText: "View All Questions", categories: [] },
   seo: { metaTitle: "", metaDescription: "", ogImage: "" }
 };
@@ -160,7 +160,15 @@ function RichTextEditor({ label, value = "", onChange }) {
   );
 }
 
-export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, previewPath, enableTimelineDescription = false }) {
+export default function DoctorTemplateCMS({
+  endpoint,
+  uploadEndpoint,
+  title,
+  previewPath,
+  enableTimelineDescription = false,
+  enableTestimonialsVisibility = false,
+  enableFaqVisibility = false
+}) {
   const [data, setData] = useState(defaultData);
   const [active, setActive] = useState("hero");
   const [loading, setLoading] = useState(true);
@@ -277,6 +285,20 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
       </div>
       {getDeepValue(data, path) && <img className="dt-preview" src={getDeepValue(data, path)} alt="" />}
     </div>
+  );
+
+  const VisibilityToggle = ({ label, path, helpText }) => (
+    <label className="dt-visibility-toggle">
+      <input
+        type="checkbox"
+        checked={getDeepValue(data, path, true) !== false}
+        onChange={e => update(path, e.target.checked)}
+      />
+      <span>
+        <strong>{label}</strong>
+        {helpText && <small>{helpText}</small>}
+      </span>
+    </label>
   );
 
   const newTextListItem = (path) => {
@@ -499,7 +521,16 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
 
       {active === "testimonials" && (
         <>
-          <div className="dt-card"><Field label="Section Heading" path="testimonialsSection.heading" /></div>
+          <div className="dt-card">
+            {enableTestimonialsVisibility && (
+              <VisibilityToggle
+                label="Show Testimonials Section"
+                path="testimonialsSection.enabled"
+                helpText="Turn off to hide this section on the Dr. Nivedita frontend page."
+              />
+            )}
+            <Field label="Section Heading" path="testimonialsSection.heading" />
+          </div>
           <Repeater title="Testimonials" path="testimonialsSection.testimonials" fields={[
             { name: "image", label: "Patient Image URL" },
             { name: "text", label: "Text", rich: true },
@@ -513,6 +544,15 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
       {active === "faq" && (
         <>
           <div className="dt-card dt-grid">
+            {enableFaqVisibility && (
+              <div className="md:col-span-2">
+                <VisibilityToggle
+                  label="Show FAQ Section"
+                  path="faqSection.enabled"
+                  helpText="Turn off to hide this section on the Dr. Nivedita frontend page."
+                />
+              </div>
+            )}
             <Field label="Badge Text" path="faqSection.badgeText" />
             <Field label="Heading" path="faqSection.heading" />
             <Field label="Button Text" path="faqSection.buttonText" />
@@ -554,6 +594,10 @@ export default function DoctorTemplateCMS({ endpoint, uploadEndpoint, title, pre
         .dt-field label{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:8px}
         .dt-field input,.dt-field textarea,.dt-inline input{width:100%;box-sizing:border-box;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;font:inherit;outline:none;background:#f8fafc}
         .dt-field textarea{resize:vertical}
+        .dt-visibility-toggle{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;margin-bottom:18px;border:1px solid #dbeafe;border-radius:14px;background:#eff6ff;color:#1e3a8a;cursor:pointer}
+        .dt-visibility-toggle input{width:18px;height:18px;margin-top:2px;accent-color:#2563eb;flex:0 0 auto}
+        .dt-visibility-toggle strong{display:block;font-size:13px;font-weight:900;letter-spacing:.02em}
+        .dt-visibility-toggle small{display:block;margin-top:3px;color:#475569;font-size:12px;font-weight:700;line-height:1.4}
         .dt-rich-field{grid-column:span 1}
         .dt-rich-toolbar{position:sticky;top:0;z-index:10;display:flex;flex-wrap:wrap;gap:6px;border:1px solid #e2e8f0;border-bottom:0;border-radius:12px 12px 0 0;background:#f8fafc;padding:8px}
         .dt-rich-toolbar button{width:32px;height:32px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;color:#334155;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}

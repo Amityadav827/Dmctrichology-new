@@ -260,6 +260,10 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
   }, [isEditing]);
 
   const templateData = useMemo(() => normalizeNiveditaData(pageData), [pageData]);
+  const testimonialsHidden = templateData?.testimonialsSection?.enabled === false
+    || templateData?.testimonialsSection?.isEnabled === false;
+  const faqHidden = templateData?.faqSection?.enabled === false
+    || templateData?.faqSection?.isEnabled === false;
   const faqData = hasFaqContent(templateData?.faqSection)
     ? templateData.faqSection
     : initialFaqData;
@@ -288,8 +292,8 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
         credentialsData={templateData.credentialsSection}
       />
       <AboutDrNandaniOtherSpecialities data={templateData.otherSpecialitiesSection} />
-      <AboutDrNandaniTestimonials data={templateData.testimonialsSection} />
-      <FaqSection initialData={faqData} />
+      {!testimonialsHidden && <AboutDrNandaniTestimonials data={templateData.testimonialsSection} />}
+      {!faqHidden && <FaqSection initialData={faqData} />}
     </main>
   );
 }

@@ -8,6 +8,8 @@ export default function AboutDrNiveditaCMS() {
       uploadEndpoint="/about-dr-nivedita/upload-image"
       title="About Dr. Nivedita Dadu CMS"
       previewPath="/about-dr-nivedita-dadu"
+      enableTestimonialsVisibility
+      enableFaqVisibility
     />
   );
 }
