@@ -243,55 +243,44 @@ export default function AboutDrNandaniTimeline({ data = {}, showDescription = fa
         }
 
         .clinic-compact-timeline .nandani-feature-row {
-          grid-template-columns: minmax(0, 1fr) 46px;
-          gap: 10px 28px;
+          grid-template-columns: minmax(0, 1fr);
+          gap: 10px;
           align-items: center;
           min-height: 112px;
           padding: 22px 0;
         }
 
         .clinic-compact-timeline .nandani-feature-icon {
-          grid-column: 2;
-          grid-row: 1 / span 2;
-          justify-self: end;
-          width: 46px;
-          height: 46px;
-          background: #3b5998;
-          box-shadow: 0 12px 24px rgba(59, 89, 152, 0.18);
-        }
-
-        .clinic-compact-timeline .nandani-feature-icon svg {
-          width: 20px;
-          height: 20px;
-        }
-
-        .clinic-compact-timeline .nandani-feature-icon img {
-          width: 22px;
-          height: 22px;
+          display: none;
         }
 
         .clinic-compact-timeline .nandani-feature-row h3 {
           grid-column: 1;
           display: flex;
           align-items: flex-start;
-          gap: 12px;
+          gap: 16px;
           font-size: clamp(24px, 2.35vw, 34px);
           line-height: 1.22;
         }
 
         .clinic-compact-timeline .nandani-feature-row h3::before {
           content: "";
-          flex: 0 0 8px;
-          width: 8px;
-          height: 8px;
+          flex: 0 0 32px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
-          background: #3b5998;
-          margin-top: 0.62em;
+          background-color: #3b5998;
+          background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9 5l7 7-7 7' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: 18px 18px;
+          box-shadow: 0 12px 24px rgba(59, 89, 152, 0.18);
+          margin-top: 0.08em;
         }
 
         .clinic-compact-timeline .nandani-feature-description {
           grid-column: 1;
-          padding-left: 20px;
+          padding-left: 48px;
           max-width: 980px;
         }
 
@@ -321,14 +310,9 @@ export default function AboutDrNandaniTimeline({ data = {}, showDescription = fa
           }
 
           .clinic-compact-timeline .nandani-feature-row {
-            grid-template-columns: minmax(0, 1fr) 44px;
-            gap: 10px 18px;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 10px;
             padding: 22px;
-          }
-
-          .clinic-compact-timeline .nandani-feature-icon {
-            width: 44px;
-            height: 44px;
           }
 
           .clinic-compact-timeline .nandani-feature-row h3 {
@@ -356,15 +340,11 @@ export default function AboutDrNandaniTimeline({ data = {}, showDescription = fa
           }
 
           .clinic-compact-timeline .nandani-feature-icon {
-            grid-column: 1;
-            grid-row: auto;
-            justify-self: start;
-            width: 42px;
-            height: 42px;
+            display: none;
           }
 
           .clinic-compact-timeline .nandani-feature-description {
-            padding-left: 20px;
+            padding-left: 48px;
           }
         }
       `}</style>
