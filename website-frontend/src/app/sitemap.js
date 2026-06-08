@@ -1,7 +1,7 @@
 import { fetchBlogs } from '../services/api';
 
 export default async function sitemap() {
-  const siteUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://dmctrichology-mkm4.vercel.app';
+  const siteUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://dmctrichology-new.vercel.app';
 
   // 1. Fetch all blogs
   const blogsRes = await fetchBlogs({ limit: 1000, status: 'Published' });

@@ -6,7 +6,7 @@ const isLocal = typeof window !== 'undefined' && (window.location.hostname === "
 // The active frontend deployment domain (Next.js website)
 export const FRONTEND_URL = (import.meta.env && (import.meta.env.VITE_WEBSITE_URL || import.meta.env.VITE_FRONTEND_URL || import.meta.env.NEXT_PUBLIC_SITE_URL))
   ? (import.meta.env.VITE_WEBSITE_URL || import.meta.env.VITE_FRONTEND_URL || import.meta.env.NEXT_PUBLIC_SITE_URL)
-  : (isLocal ? "http://localhost:3000" : "https://dmctrichology-mkm4.vercel.app");
+  : (isLocal ? "http://localhost:3000" : "https://dmctrichology-new.vercel.app");
 
 /**
  * Generates a preview URL for a given page slug

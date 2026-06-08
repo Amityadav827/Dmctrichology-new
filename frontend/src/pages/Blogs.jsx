@@ -382,7 +382,7 @@ const processEditorialHtml = (html) => {
   // Professional Link SEO: Auto nofollow for external links
   const internalDomains = [
     'dmctrichology.com',
-    'dmctrichology-mkm4.vercel.app',
+    'dmctrichology-new.vercel.app',
     'localhost'
   ];
 

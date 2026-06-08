@@ -16,6 +16,7 @@ import {
   Plus,
   Trash2
 } from "lucide-react";
+import { FRONTEND_URL } from "../../utils/config";
 
 export default function AboutDrNandaniCMS() {
   const [data, setData] = useState(null);
@@ -221,7 +222,7 @@ export default function AboutDrNandaniCMS() {
 
           <div className="flex items-center gap-3">
             <button
-              onClick={() => window.open(`${import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"}/about-dr-nandani-dadu`, '_blank')}
+              onClick={() => window.open(`${FRONTEND_URL}/about-dr-nandani-dadu`, '_blank')}
               className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all shadow-sm"
             >
               <Eye size={16} />

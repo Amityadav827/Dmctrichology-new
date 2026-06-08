@@ -5908,7 +5908,7 @@
   line-height: 1.35;
   color: #555555;
   margin: 0 auto;
-  max-width: 180px;
+  max-width: 100%;
 }
 
 .service-global-carousel-arrow {

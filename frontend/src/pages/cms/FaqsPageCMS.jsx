@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
 import { Eye, HelpCircle, Image as ImageIcon, Loader2, Plus, Save, Settings, Trash2 } from "lucide-react";
+import { FRONTEND_URL } from "../../utils/config";
 
 const defaultFaqs = [
   { isEnabled: true, category: "General", question: "What Is The DMC-Golden Touch Technique?", answer: "The DMC-Golden Touch Technique is our signature method that combines precision hair transplantation with advanced healing protocols for natural results.", sortOrder: 10 },
@@ -142,7 +143,7 @@ export default function FaqsPageCMS() {
     }
   };
 
-  const previewUrl = `${import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"}/faqs`;
+  const previewUrl = `${FRONTEND_URL}/faqs`;
 
   const SectionTab = ({ id, label }) => (
     <button

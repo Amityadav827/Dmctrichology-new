@@ -4,6 +4,7 @@ import { Trash2, Check, X, MessageSquare, ExternalLink } from "lucide-react";
 import Loader from "../components/Loader";
 import Table from "../components/Table";
 import api from "../api/client";
+import { FRONTEND_URL } from "../utils/config";
 
 const formatDate = (dateString) => {
   if (!dateString) return "—";
@@ -101,7 +102,7 @@ const Comments = () => {
                 </div>
                 <div style={{ fontSize: "0.75rem", color: "#94A3B8", marginTop: "4px" }}>
                   <a 
-                    href={`${import.meta.env.VITE_FRONTEND_URL || 'https://dmctrichology-mkm4.vercel.app'}/blog/${comment.blog_slug}`} 
+                    href={`${FRONTEND_URL}/blog/${comment.blog_slug}`} 
                     target="_blank" 
                     rel="noreferrer"
                     style={{ display: "flex", alignItems: "center", gap: "4px", color: "inherit" }}

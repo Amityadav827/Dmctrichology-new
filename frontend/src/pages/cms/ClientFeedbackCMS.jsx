@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
 import { Eye, Image as ImageIcon, Loader2, MessageSquare, Plus, Save, Settings, Trash2 } from "lucide-react";
+import { FRONTEND_URL } from "../../utils/config";
 
 const emptyData = {
   hero: {
@@ -180,7 +181,7 @@ export default function ClientFeedbackCMS() {
     }
   };
 
-  const previewUrl = `${import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"}/clients-feedback`;
+  const previewUrl = `${FRONTEND_URL}/clients-feedback`;
 
   if (loading) {
     return (

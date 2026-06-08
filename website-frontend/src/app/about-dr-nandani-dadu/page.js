@@ -231,7 +231,7 @@ const staticFallback = {
       }
     ],
     viewMoreText: "VIEW MORE",
-    viewMoreUrl: "https://dmctrichology-mkm4.vercel.app/clients-feedback",
+    viewMoreUrl: "https://dmctrichology-new.vercel.app/clients-feedback",
     backgroundColor: "#3b5998",
     cardBackgroundColor: "#000000",
     contentMaxWidth: "1400px",

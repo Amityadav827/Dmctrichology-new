@@ -1064,15 +1064,15 @@ export default function ServiceDetailCMS() {
             fetchedData.notCandidatesSection = { ...(fetchedData.notCandidatesSection || {}), isVisible: false };
           }
           if (!fetchedData.googleReviewCta) {
-            fetchedData.googleReviewCta = { title: "Google Review", buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", backgroundColor: "", isVisible: true };
+            fetchedData.googleReviewCta = { title: "Google Review", buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-new.vercel.app/service", backgroundColor: "", isVisible: true };
           }
           if (!fetchedData.resultsSection) {
-            fetchedData.resultsSection = { subtitle: "BEFORE AND AFTER", title: "RESULTS THAT SPEAK FOR THEMSELVES", cards: [], buttonText: "VIEW ALL", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", isVisible: true };
+            fetchedData.resultsSection = { subtitle: "BEFORE AND AFTER", title: "RESULTS THAT SPEAK FOR THEMSELVES", cards: [], buttonText: "VIEW ALL", buttonLink: "https://dmctrichology-new.vercel.app/service", isVisible: true };
           } else if (!fetchedData.resultsSection.cards) {
             fetchedData.resultsSection.cards = [];
           }
           if (!fetchedData.videosSection) {
-            fetchedData.videosSection = { title: "VIDEOS", videos: [], buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", showOnCostPage: false, isVisible: true };
+            fetchedData.videosSection = { title: "VIDEOS", videos: [], buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-new.vercel.app/service", showOnCostPage: false, isVisible: true };
           } else if (!fetchedData.videosSection.videos) {
             fetchedData.videosSection.videos = [];
           }
@@ -1154,9 +1154,9 @@ export default function ServiceDetailCMS() {
               servicePlaceholder: "Type Of Service Enquiry*",
               datePlaceholder: "Select Date & Time*"
             },
-            googleReviewCta: { title: "Google Review", buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", backgroundColor: "", isVisible: true },
-            resultsSection: { subtitle: "BEFORE AND AFTER", title: "RESULTS THAT SPEAK FOR THEMSELVES", cards: [], buttonText: "VIEW ALL", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", isVisible: true },
-            videosSection: { title: "VIDEOS", videos: [], buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-mkm4.vercel.app/service", showOnCostPage: false, isVisible: true },
+            googleReviewCta: { title: "Google Review", buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-new.vercel.app/service", backgroundColor: "", isVisible: true },
+            resultsSection: { subtitle: "BEFORE AND AFTER", title: "RESULTS THAT SPEAK FOR THEMSELVES", cards: [], buttonText: "VIEW ALL", buttonLink: "https://dmctrichology-new.vercel.app/service", isVisible: true },
+            videosSection: { title: "VIDEOS", videos: [], buttonText: "VIEW MORE", buttonLink: "https://dmctrichology-new.vercel.app/service", showOnCostPage: false, isVisible: true },
             enquirySection: {
               title: isCostFallback ? consultationHeading : "Enquire About This Treatment",
               description: isCostFallback ? consultationDescription : "Schedule your visit for this specialized treatment.",
@@ -2045,7 +2045,7 @@ export default function ServiceDetailCMS() {
            </button>
            {selectedSlug && (
              <a
-               href={`${import.meta.env.VITE_FRONTEND_URL || 'http://localhost:3000'}/details/${selectedSlug}`}
+               href={`${import.meta.env.VITE_WEBSITE_URL || import.meta.env.VITE_FRONTEND_URL || 'http://localhost:3000'}/details/${selectedSlug}`}
                target="_blank" rel="noopener noreferrer"
                className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-700 transition-all"
              >
@@ -4853,7 +4853,7 @@ export default function ServiceDetailCMS() {
                           googleReviewCta: { ...prev.googleReviewCta, buttonLink: e.target.value }
                         }))} 
                         className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" 
-                        placeholder="e.g. https://dmctrichology-mkm4.vercel.app/service"
+                        placeholder="e.g. https://dmctrichology-new.vercel.app/service"
                       />
                     </div>
                     <div className="md:col-span-2">
@@ -4952,7 +4952,7 @@ export default function ServiceDetailCMS() {
                           resultsSection: { ...prev.resultsSection, buttonLink: e.target.value }
                         }))} 
                         className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" 
-                        placeholder="e.g. https://dmctrichology-mkm4.vercel.app/service"
+                        placeholder="e.g. https://dmctrichology-new.vercel.app/service"
                       />
                     </div>
                   </div>
@@ -5092,7 +5092,7 @@ export default function ServiceDetailCMS() {
                           videosSection: { ...prev.videosSection, buttonLink: e.target.value }
                         }))} 
                         className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" 
-                        placeholder="e.g. https://dmctrichology-mkm4.vercel.app/blog"
+                        placeholder="e.g. https://dmctrichology-new.vercel.app/blog"
                       />
                     </div>
                   </div>

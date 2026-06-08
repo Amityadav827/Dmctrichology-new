@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
 import { Activity, Eye, Image as ImageIcon, Loader2, Plus, Save, Settings, Trash2 } from "lucide-react";
+import { FRONTEND_URL } from "../../utils/config";
 
 const resultImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/bif89jyygbycclg8qa92.png";
 
@@ -195,7 +196,7 @@ export default function RealResultsCMS() {
     }
   };
 
-  const previewUrl = `${import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"}/results`;
+  const previewUrl = `${FRONTEND_URL}/results`;
 
   if (loading) {
     return (

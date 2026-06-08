@@ -4,12 +4,12 @@ const fallbackMetadata = {
   title: 'Dr. Nivedita Dadu | Expert Dermatologist & Trichologist in Delhi | DMC Trichology',
   description: 'Consult Dr. Nivedita Dadu, renowned Dermatologist and Trichologist at DMC Trichology Delhi. Expert in advanced hair restoration, scalp treatments, and comprehensive dermatological care.',
   alternates: {
-    canonical: 'https://dmctrichology-mkm4.vercel.app/about-dr-nivedita-dadu'
+    canonical: 'https://dmctrichology-new.vercel.app/about-dr-nivedita-dadu'
   },
   openGraph: {
     title: 'Dr. Nivedita Dadu | Expert Dermatologist & Trichologist',
     description: 'Consult Dr. Nivedita Dadu at DMC Trichology. Expert dermatologist and trichologist in Delhi.',
-    url: 'https://dmctrichology-mkm4.vercel.app/about-dr-nivedita-dadu',
+    url: 'https://dmctrichology-new.vercel.app/about-dr-nivedita-dadu',
     siteName: 'DMC Trichology',
     type: 'website'
   }

@@ -239,7 +239,9 @@ export default function AboutDrNandaniTrust({
         }
 
         .nandani-trust-conclusion :global(h3) {
-          font-size: 24px;
+          font-size: 22px;
+          line-height: 1.28;
+          margin: 0 0 10px;
         }
 
         .nandani-trust-conclusion :global(ul),

@@ -81,7 +81,7 @@ export async function generateMetadata({ params }) {
   const blogRes = await fetchBlogBySlug(slug);
   const blog = blogRes?.data;
   
-  const siteUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://dmctrichology-mkm4.vercel.app';
+  const siteUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://dmctrichology-new.vercel.app';
   
   // SEO overrides from dashboard
   const title = blog?.metaTitle || (blog ? `${blog.title} | DMC Trichology` : 'Blog Detail | DMC Trichology');
