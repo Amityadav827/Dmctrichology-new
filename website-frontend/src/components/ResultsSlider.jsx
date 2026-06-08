@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { fetchResultsSlider } from '../services/api';
+import Link from 'next/link';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
@@ -95,7 +96,8 @@ export default function ResultsSlider() {
                 const realIndex = index % baseItems.length;
                 return (
                   <SwiperSlide key={index}>
-                    <div className="result-card" style={{ 
+                    <Link href="/results" style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}>
+                    <div className="result-card" style={{
                       backgroundColor: '#A8B7CA', 
                       borderRadius: '16px', 
                       padding: '24px',
@@ -179,6 +181,7 @@ export default function ResultsSlider() {
                         </EditableText>
                       </p>
                     </div>
+                    </Link>
                   </SwiperSlide>
                 );
               })}

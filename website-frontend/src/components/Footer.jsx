@@ -476,13 +476,12 @@ export default function Footer({ siteSettings }) {
 
                 {/* Card Footer Links */}
                 <div className="footer-legal-row" style={{ borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#777' }}>
-                  <span><EditableText sectionId="footer-section" fieldPath="bottomFooter.copyright" tag="span">{resolvedBottomFooter.copyright}</EditableText></span>
-                  <div style={{ display: 'flex', gap: '15px' }}>
-                    <a href={resolvedBottomFooter.termsLink} style={{ color: '#1C1C1C', textDecoration: 'none' }}>
+                  <span style={{ whiteSpace: 'nowrap' }}><EditableText sectionId="footer-section" fieldPath="bottomFooter.copyright" tag="span">{resolvedBottomFooter.copyright}</EditableText></span>
+                  <div className="footer-legal-links" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+                    <a href={resolvedBottomFooter.termsLink} style={{ color: '#1C1C1C', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                       <EditableText sectionId="footer-section" fieldPath="bottomFooter.termsText" tag="span">{resolvedBottomFooter.termsText}</EditableText>
                     </a>
-                    <span>|</span>
-                    <a href={resolvedBottomFooter.privacyLink} style={{ color: '#1C1C1C', textDecoration: 'none' }}>
+                    <a href={resolvedBottomFooter.privacyLink} style={{ color: '#1C1C1C', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                       <EditableText sectionId="footer-section" fieldPath="bottomFooter.privacyText" tag="span">{resolvedBottomFooter.privacyText}</EditableText>
                     </a>
                   </div>
@@ -697,6 +696,9 @@ export default function Footer({ siteSettings }) {
             .footer-legal-row > div {
               justify-content: center;
               flex-wrap: wrap;
+            }
+            .footer-legal-links {
+              align-items: center !important;
             }
           }
           @media (max-width: 360px) {
