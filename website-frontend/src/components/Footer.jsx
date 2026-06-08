@@ -463,13 +463,13 @@ export default function Footer({ siteSettings }) {
                   </a>
                   <span className="footer-contact-separator" style={{ color: '#1C1C1C', fontSize: '16px', fontWeight: '600' }}>|</span>
                   <a href="mailto:info@dadumedicalcentre.com" className="premium-footer-pill" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', cursor: 'pointer', transition: 'transform 0.2s ease-in-out' }}>
-                    <span style={{ fontSize: '14px', fontWeight: '600', color: '#1C1C1C' }}>Info@dadumedicalcentre.com</span>
+                    <span style={{ fontSize: '14px', fontWeight: '600', color: '#1C1C1C' }}>info@dadumedicalcentre.com</span>
                   </a>
                 </div>
 
                 {/* Disclaimer Area - Moved Inside Card Footer to prevent overlap */}
                 <div style={{ borderTop: '1px solid rgba(0,0,0,0.1)', padding: '20px 0', margin: '20px 0' }}>
-                  <p style={{ fontSize: '12px', color: '#666', lineHeight: '1.6', textAlign: 'center' }}>
+                  <p style={{ fontSize: '12px', color: '#666', lineHeight: '1.6', textAlign: 'center', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                     <strong>Disclaimer:</strong> <EditableText sectionId="footer-section" fieldPath="disclaimer" tag="span">{disclaimer}</EditableText>
                   </p>
                 </div>
