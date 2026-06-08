@@ -38,15 +38,16 @@ function DefaultFeatureIcon() {
   );
 }
 
-export default function AboutDrNandaniTimeline({ data = {}, showDescription = false }) {
+export default function AboutDrNandaniTimeline({ data = {}, showDescription = false, layoutVariant = "default" }) {
   const eyebrow = data.eyebrow || "TRUSTED CARE SERVICES";
   const heading = data.heading || "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?";
   const description = data.description || "";
   const steps = (data.steps && data.steps.length > 0) ? data.steps : defaultSteps;
+  const isClinicCompact = layoutVariant === "clinicCompact";
 
   return (
     <EditableSection sectionId="about-nandani-timeline" label="Dr Nandani Feature List">
-      <section className="nandani-feature-list-section">
+      <section className={`nandani-feature-list-section ${isClinicCompact ? "clinic-compact-timeline" : ""}`}>
         <div className="nandani-feature-list-inner">
           <div className="nandani-section-eyebrow">
             <span />
@@ -237,6 +238,63 @@ export default function AboutDrNandaniTimeline({ data = {}, showDescription = fa
           padding: 0;
         }
 
+        .clinic-compact-timeline .nandani-feature-rows {
+          border-top: 1px solid rgba(17, 17, 17, 0.16);
+        }
+
+        .clinic-compact-timeline .nandani-feature-row {
+          grid-template-columns: minmax(0, 1fr) 46px;
+          gap: 10px 28px;
+          align-items: center;
+          min-height: 112px;
+          padding: 22px 0;
+        }
+
+        .clinic-compact-timeline .nandani-feature-icon {
+          grid-column: 2;
+          grid-row: 1 / span 2;
+          justify-self: end;
+          width: 46px;
+          height: 46px;
+          background: #3b5998;
+          box-shadow: 0 12px 24px rgba(59, 89, 152, 0.18);
+        }
+
+        .clinic-compact-timeline .nandani-feature-icon svg {
+          width: 20px;
+          height: 20px;
+        }
+
+        .clinic-compact-timeline .nandani-feature-icon img {
+          width: 22px;
+          height: 22px;
+        }
+
+        .clinic-compact-timeline .nandani-feature-row h3 {
+          grid-column: 1;
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          font-size: clamp(24px, 2.35vw, 34px);
+          line-height: 1.22;
+        }
+
+        .clinic-compact-timeline .nandani-feature-row h3::before {
+          content: "";
+          flex: 0 0 8px;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #3b5998;
+          margin-top: 0.62em;
+        }
+
+        .clinic-compact-timeline .nandani-feature-description {
+          grid-column: 1;
+          padding-left: 20px;
+          max-width: 980px;
+        }
+
         @media (max-width: 900px) {
           .nandani-feature-list-section {
             padding: 72px 5%;
@@ -261,6 +319,21 @@ export default function AboutDrNandaniTimeline({ data = {}, showDescription = fa
           .nandani-feature-row h3 {
             font-size: 25px;
           }
+
+          .clinic-compact-timeline .nandani-feature-row {
+            grid-template-columns: minmax(0, 1fr) 44px;
+            gap: 10px 18px;
+            padding: 22px;
+          }
+
+          .clinic-compact-timeline .nandani-feature-icon {
+            width: 44px;
+            height: 44px;
+          }
+
+          .clinic-compact-timeline .nandani-feature-row h3 {
+            font-size: 25px;
+          }
         }
 
         @media (max-width: 480px) {
@@ -276,6 +349,22 @@ export default function AboutDrNandaniTimeline({ data = {}, showDescription = fa
           .nandani-feature-icon {
             width: 52px;
             height: 52px;
+          }
+
+          .clinic-compact-timeline .nandani-feature-row {
+            grid-template-columns: minmax(0, 1fr);
+          }
+
+          .clinic-compact-timeline .nandani-feature-icon {
+            grid-column: 1;
+            grid-row: auto;
+            justify-self: start;
+            width: 42px;
+            height: 42px;
+          }
+
+          .clinic-compact-timeline .nandani-feature-description {
+            padding-left: 20px;
           }
         }
       `}</style>
