@@ -2040,7 +2040,9 @@ ul li {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0e1730;
+  background: rgba(14, 23, 48, 0.78);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   opacity: 1;
   visibility: visible;
   transition: opacity 0.55s ease, visibility 0.55s ease;
