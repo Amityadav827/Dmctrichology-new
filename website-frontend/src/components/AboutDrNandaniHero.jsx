@@ -440,64 +440,83 @@ export default function AboutDrNandaniHero({
         }
         .dr-nandani-form-grid input {
           width: 100%;
-          min-height: 42px;
+          min-height: 50px;
           border: 1px solid #111111;
-          border-radius: 4px;
-          background: #ffffff;
-          padding: 10px 16px;
+          border-radius: 12px;
+          background: transparent;
+          padding: 12px 18px;
           outline: none;
-          color: #111111;
+          color: #333333;
           font-family: 'Lato', sans-serif;
-          font-size: 13px;
+          font-size: 14px;
           transition: all .25s ease;
+        }
+        .dr-nandani-form-grid input::placeholder {
+          text-transform: uppercase;
+          color: #888888;
+          letter-spacing: 0.3px;
         }
         .dr-nandani-form-grid input:focus {
           border-color: #3B5998;
           box-shadow: 0 0 0 4px rgba(59, 89, 152, 0.08);
-          background: #ffffff;
         }
         .dr-nandani-captcha-row {
           grid-column: 1 / -1;
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 100px 1fr;
           gap: 0;
           border: 1px solid #111111;
-          border-radius: 4px;
+          border-radius: 12px;
           overflow: hidden;
         }
         .dr-nandani-captcha-row button {
-          min-height: 42px;
+          min-height: 50px;
           border: 0;
+          border-right: 1px solid #111111;
           border-radius: 0;
-          background: #ffffff;
-          color: #111111;
+          background: transparent;
+          color: #888888;
           font-family: 'Lato', sans-serif;
           font-size: 16px;
-          font-weight: 900;
-          letter-spacing: 5px;
+          font-weight: 700;
+          letter-spacing: 4px;
           cursor: pointer;
+        }
+        .dr-nandani-captcha-row input,
+        .dr-nandani-captcha-row input:focus {
+          border: 0;
+          border-radius: 0;
+          box-shadow: none;
+        }
+        .dr-nandani-captcha-row input::placeholder {
+          text-transform: uppercase;
+          color: #888888;
         }
         .dr-nandani-submit-btn {
           width: 100%;
-          min-height: 42px;
-          margin-top: 18px;
+          min-height: 56px;
+          margin-top: 24px;
+          position: relative;
           border: 0;
-          border-radius: 999px;
+          border-radius: 50px;
           background: #3B5998;
           color: #ffffff;
           font-family: 'Marcellus', serif;
-          font-size: 16px;
+          font-size: 1.1rem;
           font-weight: 600;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 14px;
+          gap: 0;
+          padding: 0 24px;
           cursor: pointer;
           transition: all .25s ease;
         }
         .dr-nandani-submit-btn span:last-child {
-          width: 34px;
-          height: 34px;
+          position: absolute;
+          right: 10px;
+          width: 40px;
+          height: 40px;
           border-radius: 50%;
           background: #ffffff;
           display: inline-flex;
@@ -607,7 +626,7 @@ export default function AboutDrNandaniHero({
             grid-template-columns: 1fr;
           }
           .dr-nandani-captcha-row {
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 100px 1fr;
           }
         }
       `}</style>

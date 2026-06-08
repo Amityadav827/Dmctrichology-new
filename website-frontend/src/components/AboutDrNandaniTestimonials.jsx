@@ -5,7 +5,7 @@ import EditableText from './Editable/EditableText';
 import RichTextContent from './RichTextContent';
 
 const backgroundImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780628617563-236798553.png";
-const defaultPatientImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780711038023-933757138.webp";
+const defaultPatientImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/testimonial-google-icon.png";
 
 const defaultTestimonials = [
   {
@@ -232,10 +232,10 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
           margin: 0 0 46px;
         }
         .dmc-testimonial-patient {
-          width: 90px;
-          height: 90px;
+          width: 48px;
+          height: 48px;
           border-radius: 50%;
-          object-fit: cover;
+          object-fit: contain;
           display: block;
           margin: 0 auto 30px;
         }
@@ -324,8 +324,8 @@ export default function AboutDrNandaniTestimonials({ data = {} }) {
             margin-bottom: 36px;
           }
           .dmc-testimonial-patient {
-            width: 82px;
-            height: 82px;
+            width: 42px;
+            height: 42px;
             margin-bottom: 26px;
           }
           .dmc-testimonial-text {

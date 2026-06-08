@@ -1,5 +1,6 @@
 const supabase = require('../config/supabase');
 const uploadToSupabase = require('../utils/uploadToSupabase');
+const { sendLeadToTelecrm } = require('../services/telecrmService');
 
 const CMS_KEY = 'about_dr_nandani';
 
@@ -243,6 +244,14 @@ exports.createLead = async (req, res, next) => {
       .single();
 
     if (error) throw error;
+
+    sendLeadToTelecrm({
+      name: lead.name,
+      mobile: lead.mobile,
+      source: "Dr. Nandani Consultation Form"
+    }).catch((crmError) => {
+      console.error("TeleCRM Dr. Nandani lead sync failed:", crmError.response?.data || crmError.message);
+    });
 
     return res.status(201).json({
       success: true,
