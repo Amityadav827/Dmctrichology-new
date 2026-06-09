@@ -22,47 +22,51 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
     <EditableSection sectionId="about-nandani-other-specialities" label="Other Specialities Section">
       <section className="dr-nandani-other-specialities-wrapper">
         <div className="dr-nandani-other-specialities-card">
-          <div className="dr-nandani-other-image-card">
-            <img
-              src={image || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp"}
-              alt={imageAlt || "Other Specialities"}
-            />
+          <div className="dr-nandani-other-top">
+            <div className="dr-nandani-other-image-card">
+              <img
+                src={image || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp"}
+                alt={imageAlt || "Other Specialities"}
+              />
+            </div>
+
+            <div className="dr-nandani-other-content">
+              <div className="dr-nandani-other-icon" aria-hidden="true">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 20V7" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                  <path d="M12 12C8.9 11.4 7 9.4 6.2 6.2c3.2.4 5.1 2.2 5.8 5.8Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                  <path d="M12 14c3.2-.6 5.1-2.6 5.8-5.8-3.2.4-5.1 2.2-5.8 5.8Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                </svg>
+              </div>
+
+              <h2>
+                <EditableText sectionId="about-nandani-other-specialities" fieldPath="otherSpecialitiesSection.heading">
+                  {heading}
+                </EditableText>
+              </h2>
+
+              <RichTextContent value={introParagraph} className="dr-nandani-other-intro" />
+
+              <div className="dr-nandani-other-list">
+                {specialitiesList.map((bullet, idx) => (
+                  <div className="dr-nandani-other-list-item" key={`${bullet.title}-${idx}`}>
+                    <span aria-hidden="true">
+                      <svg width="10" height="10" viewBox="0 0 24 24">
+                        <path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                    <p>
+                      <EditableText sectionId="about-nandani-other-specialities" fieldPath={`otherSpecialitiesSection.specialitiesList.${idx}.title`}>
+                        {bullet.title}
+                      </EditableText>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
-          <div className="dr-nandani-other-content">
-            <div className="dr-nandani-other-icon" aria-hidden="true">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                <path d="M12 20V7" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-                <path d="M12 12C8.9 11.4 7 9.4 6.2 6.2c3.2.4 5.1 2.2 5.8 5.8Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-                <path d="M12 14c3.2-.6 5.1-2.6 5.8-5.8-3.2.4-5.1 2.2-5.8 5.8Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-              </svg>
-            </div>
-
-            <h2>
-              <EditableText sectionId="about-nandani-other-specialities" fieldPath="otherSpecialitiesSection.heading">
-                {heading}
-              </EditableText>
-            </h2>
-
-            <RichTextContent value={introParagraph} className="dr-nandani-other-intro" />
-
-            <div className="dr-nandani-other-list">
-              {specialitiesList.map((bullet, idx) => (
-                <div className="dr-nandani-other-list-item" key={`${bullet.title}-${idx}`}>
-                  <span aria-hidden="true">
-                    <svg width="10" height="10" viewBox="0 0 24 24">
-                      <path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
-                  <p>
-                    <EditableText sectionId="about-nandani-other-specialities" fieldPath={`otherSpecialitiesSection.specialitiesList.${idx}.title`}>
-                      {bullet.title}
-                    </EditableText>
-                  </p>
-                </div>
-              ))}
-            </div>
-
+          <div className="dr-nandani-other-bottom">
             <RichTextContent value={conclusionParagraph} className="dr-nandani-other-conclusion" />
           </div>
         </div>
@@ -86,16 +90,19 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
           background: #EEF0FA;
           box-sizing: border-box;
         }
-        .dr-nandani-other-specialities-card::after {
-          content: "";
-          display: block;
-          clear: both;
+        .dr-nandani-other-top {
+          display: grid;
+          grid-template-columns: minmax(280px, 0.4fr) minmax(0, 0.6fr);
+          gap: 40px;
+          align-items: stretch;
+        }
+        .dr-nandani-other-bottom {
+          margin-top: 26px;
         }
         .dr-nandani-other-image-card {
-          float: left;
-          width: 360px;
-          height: 430px;
-          margin: 6px 36px 24px 0;
+          width: 100%;
+          height: 100%;
+          min-height: 360px;
           border-radius: 20px;
           overflow: hidden;
           background: #d9d9d9;
@@ -157,11 +164,10 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
           padding: 0;
         }
         .dr-nandani-other-list {
-          clear: left;
           display: flex;
           flex-direction: column;
           gap: 13px;
-          margin: 28px 0 26px;
+          margin: 22px 0 26px;
         }
         .dr-nandani-other-list-item {
           display: flex;
@@ -189,16 +195,17 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
         .dr-nandani-other-conclusion strong {
           font-weight: 700;
         }
+        .dr-nandani-other-conclusion {
+          padding-top: 18px;
+        }
         @media (max-width: 1024px) {
+          .dr-nandani-other-top {
+            grid-template-columns: 1fr;
+            gap: 30px;
+          }
           .dr-nandani-other-image-card {
-            float: none;
-            width: 100%;
             height: auto;
             min-height: 420px;
-            margin: 0 0 28px;
-          }
-          .dr-nandani-other-list {
-            clear: none;
           }
         }
         @media (max-width: 767px) {
