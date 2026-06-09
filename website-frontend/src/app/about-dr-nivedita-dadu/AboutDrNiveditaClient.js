@@ -276,7 +276,7 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
         data={templateData.educationExperience}
         credentialsData={templateData.credentialsSection}
         showCredentialsTab={false}
-        showSecondImage={false}
+        showImages={false}
       />
       <AboutDrNandaniOtherSpecialities data={templateData.otherSpecialitiesSection} />
       {!testimonialsHidden && <AboutDrNandaniTestimonials data={templateData.testimonialsSection} />}
