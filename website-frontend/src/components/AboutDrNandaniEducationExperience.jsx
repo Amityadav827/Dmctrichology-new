@@ -348,10 +348,10 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 0;
-          background: #26345c;
+          background: #3b5998;
           border-radius: 28px;
           padding: 64px 70px;
-          box-shadow: 0 30px 60px rgba(38, 52, 92, 0.22);
+          box-shadow: 0 30px 60px #26345c38;
         }
 
         .nandani-credentials-editorial article {
