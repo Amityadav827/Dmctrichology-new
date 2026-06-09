@@ -475,16 +475,17 @@ export default function Footer({ siteSettings }) {
                 </div>
 
                 {/* Card Footer Links */}
-                <div className="footer-legal-row" style={{ borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#777' }}>
-                  <span style={{ whiteSpace: 'nowrap' }}><EditableText sectionId="footer-section" fieldPath="bottomFooter.copyright" tag="span">{resolvedBottomFooter.copyright}</EditableText></span>
-                  <div className="footer-legal-links" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+                <div className="footer-legal-row" style={{ borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', textAlign: 'center', fontSize: '13px', color: '#777' }}>
+                  <div className="footer-legal-links" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px' }}>
                     <a href={resolvedBottomFooter.termsLink} style={{ color: '#1C1C1C', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                       <EditableText sectionId="footer-section" fieldPath="bottomFooter.termsText" tag="span">{resolvedBottomFooter.termsText}</EditableText>
                     </a>
+                    <span aria-hidden="true" style={{ color: '#cbd5e1' }}>|</span>
                     <a href={resolvedBottomFooter.privacyLink} style={{ color: '#1C1C1C', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                       <EditableText sectionId="footer-section" fieldPath="bottomFooter.privacyText" tag="span">{resolvedBottomFooter.privacyText}</EditableText>
                     </a>
                   </div>
+                  <span style={{ whiteSpace: 'nowrap' }}><EditableText sectionId="footer-section" fieldPath="bottomFooter.copyright" tag="span">{resolvedBottomFooter.copyright}</EditableText></span>
                 </div>
               </div>
             </div>
