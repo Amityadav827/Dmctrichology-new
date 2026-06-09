@@ -824,6 +824,10 @@ a {
     display: none;
   }
 
+  .header-appointment-btn {
+    display: none !important;
+  }
+
   .header {
     padding: 12px 4%;
     top: 24px;
