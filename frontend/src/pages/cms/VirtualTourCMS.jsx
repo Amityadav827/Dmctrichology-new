@@ -18,6 +18,7 @@ import {
   Monitor,
   Star,
 } from 'lucide-react';
+import SeoMetadataSection from '../../components/cms/SeoMetadataSection';
 
 // ─── Image preview helper ──────────────────────────────────────────────────────
 const ImgPreview = ({ src, className = '' }) => {
@@ -70,7 +71,7 @@ const DEFAULT_CARD = {
 };
 
 export default function VirtualTourCMS() {
-  const [data, setData] = useState({ hero: { ...DEFAULT_HERO }, tourCards: [] });
+  const [data, setData] = useState({ hero: { ...DEFAULT_HERO }, tourCards: [], seo: { metaTitle: '', metaDescription: '', ogImage: '' } });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('hero');
@@ -83,6 +84,7 @@ export default function VirtualTourCMS() {
         setData({
           hero: { ...DEFAULT_HERO, ...(res.data.data.hero || {}) },
           tourCards: Array.isArray(res.data.data.tourCards) ? res.data.data.tourCards : [],
+          seo: { metaTitle: '', metaDescription: '', ogImage: '', ...(res.data.data.seo || {}) },
         });
       }
     } catch (err) {
@@ -103,6 +105,7 @@ export default function VirtualTourCMS() {
       const payload = {
         hero: data.hero,
         tourCards: data.tourCards.map((c, i) => ({ ...c, order: i })),
+        seo: data.seo || {},
       };
       await axios.put('/virtual-tour', payload);
       toast.success('Saved successfully');
@@ -120,6 +123,13 @@ export default function VirtualTourCMS() {
     setData((prev) => ({
       ...prev,
       hero: { ...prev.hero, [field]: value },
+    }));
+  };
+
+  const updateSeo = (field, value) => {
+    setData((prev) => ({
+      ...prev,
+      seo: { ...(prev.seo || {}), [field]: value },
     }));
   };
 
@@ -239,6 +249,7 @@ export default function VirtualTourCMS() {
         {[
           { id: 'hero', icon: Layout, label: 'Hero Banner' },
           { id: 'cards', icon: Layers, label: 'Tour Gallery' },
+          { id: 'seo', icon: Settings, label: 'SEO' },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -522,6 +533,10 @@ export default function VirtualTourCMS() {
             )}
           </div>
         </div>
+      )}
+
+      {activeTab === 'seo' && (
+        <SeoMetadataSection seo={data.seo || {}} onChange={updateSeo} />
       )}
     </div>
   );

@@ -18,6 +18,7 @@ import {
   Monitor,
   Star,
 } from 'lucide-react';
+import SeoMetadataSection from '../../components/cms/SeoMetadataSection';
 
 // ─── Image preview helper ──────────────────────────────────────────────────────
 const ImgPreview = ({ src, className = '' }) => {
@@ -75,6 +76,12 @@ const DEFAULT_LOGO = {
   order: 0,
 };
 
+const DEFAULT_SEO = {
+  metaTitle: '',
+  metaDescription: '',
+  ogImage: '',
+};
+
 // ─── Main component ────────────────────────────────────────────────────────────
 export default function PressMediaCMS() {
   const [data, setData] = useState(null);
@@ -97,6 +104,7 @@ export default function PressMediaCMS() {
           // Ensure mediaCards exists
           if (!d.mediaCards) d.mediaCards = [];
           if (!d.mediaLogos) d.mediaLogos = [];
+          if (!d.seo) d.seo = { ...DEFAULT_SEO };
           setData(d);
         }
       } catch {
@@ -126,6 +134,13 @@ export default function PressMediaCMS() {
     setData(prev => ({
       ...prev,
       hero: { ...prev.hero, [field]: value },
+    }));
+  }, []);
+
+  const updateSeo = useCallback((field, value) => {
+    setData(prev => ({
+      ...prev,
+      seo: { ...(prev.seo || {}), [field]: value },
     }));
   }, []);
 
@@ -276,6 +291,7 @@ export default function PressMediaCMS() {
           { id: 'hero',  icon: <Layout size={13} />,  label: 'Hero Banner' },
           { id: 'cards', icon: <Layers size={13} />,  label: `Media Cards (${data.mediaCards.length})` },
           { id: 'logos', icon: <ImageIcon size={13} />, label: `Homepage Marquee Logos (${(data.mediaLogos || []).length})` },
+          { id: 'seo', icon: <Settings size={13} />, label: 'SEO' },
         ].map(tab => (
           <button
             key={tab.id}
@@ -823,6 +839,10 @@ export default function PressMediaCMS() {
             </div>
           )}
         </div>
+      )}
+
+      {activeTab === 'seo' && (
+        <SeoMetadataSection seo={data.seo || {}} onChange={updateSeo} />
       )}
     </div>
   );

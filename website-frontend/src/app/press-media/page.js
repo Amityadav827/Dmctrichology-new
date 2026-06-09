@@ -1,15 +1,10 @@
 import PressMediaHero from '../../components/PressMediaHero';
 import PressMediaShowcase from '../../components/PressMediaShowcase';
+import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 import '../service.css';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-
-export const metadata = {
-  title: 'Press & Media | DMC Trichology',
-  description:
-    'Explore DMC Trichology\'s press and media coverage. See how leading publications feature our award-winning hair transplant and trichology expertise.',
-};
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
@@ -25,6 +20,16 @@ async function fetchPressMediaData() {
   } catch {
     return null;
   }
+}
+
+export async function generateMetadata() {
+  const data = await fetchPressMediaData();
+  return buildCmsMetadata({
+    data,
+    titleFallback: data?.hero?.title || 'Press & Media | DMC Trichology',
+    descriptionFallback: 'Explore DMC Trichology\'s press and media coverage. See how leading publications feature our award-winning hair transplant and trichology expertise.',
+    imageFallback: data?.hero?.bannerImage || data?.mediaCards?.[0]?.mediaImage || ''
+  });
 }
 
 export default async function PressMediaPage() {

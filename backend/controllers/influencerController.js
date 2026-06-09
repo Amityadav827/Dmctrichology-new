@@ -24,6 +24,7 @@ exports.updateInfluencers = async (req, res) => {
 
     if (u.hero !== undefined) merged.hero = { ...(current.hero || {}), ...u.hero };
     if (u.influencerCards !== undefined) merged.influencerCards = u.influencerCards;
+    if (u.seo !== undefined) merged.seo = { ...(current.seo || {}), ...u.seo };
 
     const { error } = await supabase.from('cms_sections')
       .upsert({ key: CMS_KEY, data: merged, updated_at: new Date() }, { onConflict: 'key' });

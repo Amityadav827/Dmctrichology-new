@@ -3,6 +3,7 @@ import axios from "../../api/client";
 import toast from "react-hot-toast";
 import { Eye, HelpCircle, Image as ImageIcon, Loader2, Plus, Save, Settings, Trash2 } from "lucide-react";
 import { FRONTEND_URL } from "../../utils/config";
+import SeoMetadataSection from "../../components/cms/SeoMetadataSection";
 
 const defaultFaqs = [
   { isEnabled: true, category: "General", question: "What Is The DMC-Golden Touch Technique?", answer: "The DMC-Golden Touch Technique is our signature method that combines precision hair transplantation with advanced healing protocols for natural results.", sortOrder: 10 },
@@ -27,6 +28,11 @@ const emptyData = {
   faqSection: {
     isEnabled: true,
     faqs: defaultFaqs
+  },
+  seo: {
+    metaTitle: "",
+    metaDescription: "",
+    ogImage: ""
   }
 };
 
@@ -59,7 +65,8 @@ export default function FaqsPageCMS() {
                   sortOrder: faq.sortOrder ?? ((index + 1) * 10)
                 }))
               : []
-          }
+          },
+          seo: { ...emptyData.seo, ...(res.data?.seo || {}) }
         });
       }
     } catch (error) {
@@ -192,6 +199,7 @@ export default function FaqsPageCMS() {
         <div className="max-w-[1600px] mx-auto px-4 flex flex-wrap items-center gap-1 border-t border-slate-100 bg-white py-1">
           <SectionTab id="hero" label="HERO SECTION" />
           <SectionTab id="faqs" label="FAQ MANAGEMENT" />
+          <SectionTab id="seo" label="SEO & METADATA" />
         </div>
       </div>
 
@@ -271,6 +279,13 @@ export default function FaqsPageCMS() {
               </div>
             ))}
           </div>
+        )}
+
+        {activeSection === "seo" && (
+          <SeoMetadataSection
+            seo={data.seo || {}}
+            onChange={(field, value) => updateSectionField("seo", field, value)}
+          />
         )}
       </div>
     </div>

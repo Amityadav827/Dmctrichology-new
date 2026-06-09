@@ -24,6 +24,7 @@ exports.updateVirtualTour = async (req, res) => {
 
     if (u.hero !== undefined) merged.hero = { ...(current.hero || {}), ...u.hero };
     if (u.tourCards !== undefined) merged.tourCards = u.tourCards;
+    if (u.seo !== undefined) merged.seo = { ...(current.seo || {}), ...u.seo };
 
     const { error } = await supabase.from('cms_sections')
       .upsert({ key: CMS_KEY, data: merged, updated_at: new Date() }, { onConflict: 'key' });

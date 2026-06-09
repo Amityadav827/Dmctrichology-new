@@ -14,6 +14,7 @@ import {
   Plus,
   Trash2
 } from "lucide-react";
+import SeoMetadataSection from "../../components/cms/SeoMetadataSection";
 
 export default function ContactPageCMS() {
   const [data, setData] = useState({
@@ -43,6 +44,11 @@ export default function ContactPageCMS() {
       cardBackground: "#2D4A8A",
       iconColor: "#C8102E",
       textColor: "#FFFFFF"
+    },
+    seo: {
+      metaTitle: "",
+      metaDescription: "",
+      ogImage: ""
     }
   });
   const [loading, setLoading] = useState(true);
@@ -53,7 +59,14 @@ export default function ContactPageCMS() {
     axios.get("/contact-page")
       .then(res => {
         if (res.data?.data) {
-          setData(res.data.data);
+          setData(prev => ({
+            ...prev,
+            ...res.data.data,
+            hero: { ...prev.hero, ...(res.data.data.hero || {}) },
+            consultation: { ...prev.consultation, ...(res.data.data.consultation || {}) },
+            map: { ...prev.map, ...(res.data.data.map || {}) },
+            seo: { ...prev.seo, ...(res.data.data.seo || {}) }
+          }));
         }
       })
       .catch(() => toast.error("Failed to load contact page data"))
@@ -116,6 +129,7 @@ export default function ContactPageCMS() {
         <button onClick={() => setActiveTab("hero")} className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'hero' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>Hero Banner</button>
         <button onClick={() => setActiveTab("consultation")} className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'consultation' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>Consultation Form</button>
         <button onClick={() => setActiveTab("map")} className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'map' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>Location Map</button>
+        <button onClick={() => setActiveTab("seo")} className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'seo' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>SEO</button>
       </div>
 
       <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -305,6 +319,13 @@ export default function ContactPageCMS() {
               </div>
             </div>
           </div>
+        )}
+
+        {activeTab === 'seo' && (
+          <SeoMetadataSection
+            seo={data.seo || {}}
+            onChange={(field, value) => updateSectionField("seo", field, value)}
+          />
         )}
       </div>
     </div>

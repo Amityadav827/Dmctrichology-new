@@ -18,6 +18,7 @@ import {
   Video,
   Link as LinkIcon
 } from 'lucide-react';
+import SeoMetadataSection from '../../components/cms/SeoMetadataSection';
 
 // ─── Image preview helper ──────────────────────────────────────────────────────
 const ImgPreview = ({ src, className = '' }) => {
@@ -76,7 +77,7 @@ const DEFAULT_CARD = {
 };
 
 export default function InfluencerCMS() {
-  const [data, setData] = useState({ hero: { ...DEFAULT_HERO }, influencerCards: [] });
+  const [data, setData] = useState({ hero: { ...DEFAULT_HERO }, influencerCards: [], seo: { metaTitle: '', metaDescription: '', ogImage: '' } });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('hero');
@@ -89,6 +90,7 @@ export default function InfluencerCMS() {
         setData({
           hero: { ...DEFAULT_HERO, ...(res.data.data.hero || {}) },
           influencerCards: Array.isArray(res.data.data.influencerCards) ? res.data.data.influencerCards : [],
+          seo: { metaTitle: '', metaDescription: '', ogImage: '', ...(res.data.data.seo || {}) },
         });
       }
     } catch (err) {
@@ -109,6 +111,7 @@ export default function InfluencerCMS() {
       const payload = {
         hero: data.hero,
         influencerCards: data.influencerCards.map((c, i) => ({ ...c, order: i })),
+        seo: data.seo || {},
       };
       await axios.put('/influencers', payload);
       toast.success('Saved successfully');
@@ -205,6 +208,13 @@ export default function InfluencerCMS() {
     }
   };
 
+  const updateSeo = (field, value) => {
+    setData((prev) => ({
+      ...prev,
+      seo: { ...(prev.seo || {}), [field]: value },
+    }));
+  };
+
   const handleCardImageUpload = async (e, index) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -264,6 +274,7 @@ export default function InfluencerCMS() {
         {[
           { id: 'hero', icon: Layout, label: 'Hero Banner' },
           { id: 'cards', icon: Users, label: 'Influencer Reels' },
+          { id: 'seo', icon: Settings, label: 'SEO' },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -597,6 +608,10 @@ export default function InfluencerCMS() {
             )}
           </div>
         </div>
+      )}
+
+      {activeTab === 'seo' && (
+        <SeoMetadataSection seo={data.seo || {}} onChange={updateSeo} />
       )}
     </div>
   );

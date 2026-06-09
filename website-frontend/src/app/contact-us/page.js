@@ -1,6 +1,7 @@
 import ContactHero from '../../components/ContactHero';
 import EnquirySection from '../../components/EnquirySection';
 import MapSection from '../../components/MapSection';
+import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 import '../service.css';
 
 export const dynamic = 'force-dynamic';
@@ -19,6 +20,16 @@ async function fetchContactPage() {
   } catch {
     return null;
   }
+}
+
+export async function generateMetadata() {
+  const data = await fetchContactPage();
+  return buildCmsMetadata({
+    data,
+    titleFallback: data?.hero?.title || 'Contact Us',
+    descriptionFallback: data?.consultation?.heading || data?.consultation?.subtitle || 'Contact DMC Trichology for consultation and clinic details.',
+    imageFallback: data?.hero?.bannerImage || data?.consultation?.beforeImage || ''
+  });
 }
 
 export default async function ContactPage() {

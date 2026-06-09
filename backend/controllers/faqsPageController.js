@@ -81,6 +81,11 @@ const fallbackData = {
   faqSection: {
     isEnabled: true,
     faqs: defaultFaqs
+  },
+  seo: {
+    metaTitle: '',
+    metaDescription: '',
+    ogImage: ''
   }
 };
 
@@ -100,6 +105,10 @@ const normalizePayload = (source = fallbackData) => ({
     faqs: Array.isArray(source.faqSection?.faqs) && source.faqSection.faqs.length > 0
       ? source.faqSection.faqs.map(normalizeFaq)
       : defaultFaqs.map(normalizeFaq)
+  },
+  seo: {
+    ...fallbackData.seo,
+    ...(source.seo || {})
   }
 });
 

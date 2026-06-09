@@ -31,6 +31,7 @@ exports.updatePressMedia = async (req, res) => {
     if (u.mediaLogos !== undefined) merged.mediaLogos = u.mediaLogos;
     if (u.hero !== undefined) merged.hero = { ...(current.hero || {}), ...u.hero };
     if (u.mediaCards !== undefined) merged.mediaCards = u.mediaCards;
+    if (u.seo !== undefined) merged.seo = { ...(current.seo || {}), ...u.seo };
 
     const { error } = await supabase.from('cms_sections')
       .upsert({ key: CMS_KEY, data: merged, updated_at: new Date() }, { onConflict: 'key' });

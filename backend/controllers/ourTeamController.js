@@ -14,6 +14,11 @@ const fallbackData = {
   teamMembers: {
     isEnabled: true,
     members: []
+  },
+  seo: {
+    metaTitle: '',
+    metaDescription: '',
+    ogImage: ''
   }
 };
 
@@ -36,6 +41,10 @@ const normalizePayload = (source = fallbackData) => ({
     members: Array.isArray(source.teamMembers?.members)
       ? source.teamMembers.members.map(normalizeMember)
       : []
+  },
+  seo: {
+    ...fallbackData.seo,
+    ...(source.seo || {})
   }
 });
 

@@ -1,4 +1,5 @@
 import OurTeamPage from '../../components/OurTeamPage';
+import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -35,10 +36,13 @@ async function getPageData() {
 
 export async function generateMetadata() {
   const data = await getPageData();
-  return {
-    title: data.hero?.pageTitle || 'Our Team',
-    description: 'Meet the DMC Trichology team.'
-  };
+  const firstMember = data.teamMembers?.members?.find(member => member?.name || member?.description || member?.shortDescription);
+  return buildCmsMetadata({
+    data,
+    titleFallback: data.hero?.pageTitle || 'Our Team',
+    descriptionFallback: firstMember?.shortDescription || firstMember?.description || 'Meet the DMC Trichology team.',
+    imageFallback: data.hero?.backgroundImage || firstMember?.image || ''
+  });
 }
 
 export default async function TeamOfDmcRoute() {

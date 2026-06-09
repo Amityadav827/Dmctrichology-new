@@ -1,4 +1,5 @@
 import FaqsPage from '../../components/FaqsPage';
+import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -35,10 +36,13 @@ async function getPageData() {
 
 export async function generateMetadata() {
   const data = await getPageData();
-  return {
-    title: data.hero?.pageTitle || 'Frequently Asked Question',
-    description: 'Frequently asked questions about DMC Trichology.'
-  };
+  const firstFaq = data.faqSection?.faqs?.find(faq => faq?.isEnabled !== false);
+  return buildCmsMetadata({
+    data,
+    titleFallback: data.hero?.pageTitle || 'Frequently Asked Question',
+    descriptionFallback: firstFaq?.answer || 'Frequently asked questions about DMC Trichology.',
+    imageFallback: data.hero?.backgroundImage || ''
+  });
 }
 
 export default async function FaqsRoute() {

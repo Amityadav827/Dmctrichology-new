@@ -38,8 +38,12 @@ exports.updateContactPage = async (req, res) => {
       merged.map = { ...(current.map || {}), ...req.body.map };
     }
 
+    if (req.body.seo) {
+      merged.seo = { ...(current.seo || {}), ...req.body.seo };
+    }
+
     // If no specific sub-keys, merge entire body
-    if (!req.body.hero && !req.body.consultation && !req.body.map) {
+    if (!req.body.hero && !req.body.consultation && !req.body.map && !req.body.seo) {
       Object.assign(merged, req.body);
     }
 

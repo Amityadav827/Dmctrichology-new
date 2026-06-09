@@ -1,15 +1,10 @@
 import VirtualTourHero from '../../components/VirtualTourHero';
 import VirtualTourGallery from '../../components/VirtualTourGallery';
+import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 import '../service.css';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-
-export const metadata = {
-  title: 'Virtual Tour | DMC Trichology',
-  description:
-    'Take a 360° virtual tour of DMC Trichology clinic. Explore our premium reception, consultation, and treatment rooms.',
-};
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
@@ -25,6 +20,16 @@ async function fetchVirtualTourData() {
   } catch {
     return null;
   }
+}
+
+export async function generateMetadata() {
+  const data = await fetchVirtualTourData();
+  return buildCmsMetadata({
+    data,
+    titleFallback: data?.hero?.title || 'Virtual Tour | DMC Trichology',
+    descriptionFallback: 'Take a 360 virtual tour of DMC Trichology clinic. Explore our premium reception, consultation, and treatment rooms.',
+    imageFallback: data?.hero?.bannerImage || data?.tourCards?.[0]?.image || ''
+  });
 }
 
 export default async function VirtualTourPage() {
