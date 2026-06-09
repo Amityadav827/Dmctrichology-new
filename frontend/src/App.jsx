@@ -75,6 +75,8 @@ import BeforeAfterCMS from "./pages/cms/BeforeAfterCMS";
 import FaqEnquiryCMS from "./pages/cms/FaqEnquiryCMS";
 import IdealFrequencyCMS from "./pages/cms/IdealFrequencyCMS";
 import ContactPageCMS from "./pages/cms/ContactPageCMS";
+import TermsConditionsCMS from "./pages/cms/TermsConditionsCMS";
+import PrivacyPolicyCMS from "./pages/cms/PrivacyPolicyCMS";
 import BlogHeroCMS from "./pages/cms/BlogHeroCMS";
 import ServiceDetailCMS from "./pages/cms/ServiceDetailCMS";
 import Comments from "./pages/Comments";
@@ -560,6 +562,22 @@ function App() {
           element={
             <ProtectedRoute permission="cms">
               <ContactPageCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/terms-conditions"
+          element={
+            <ProtectedRoute permission="cms">
+              <TermsConditionsCMS />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="cms/privacy-policy"
+          element={
+            <ProtectedRoute permission="cms">
+              <PrivacyPolicyCMS />
             </ProtectedRoute>
           }
         />

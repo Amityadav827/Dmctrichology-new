@@ -73,6 +73,8 @@ const ourTeamRoutes = require("./routes/ourTeamRoutes");
 const faqsPageRoutes = require("./routes/faqsPageRoutes");
 const clientFeedbackRoutes = require("./routes/clientFeedbackRoutes");
 const realResultsRoutes = require("./routes/realResultsRoutes");
+const termsConditionsRoutes = require("./routes/termsConditionsRoutes");
+const privacyPolicyRoutes = require("./routes/privacyPolicyRoutes");
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const redirectMiddleware = require("./middleware/redirectMiddleware");
@@ -219,6 +221,8 @@ app.use("/api/clients-feedback", clientFeedbackRoutes);
 app.use("/api/client-feedback", clientFeedbackRoutes);
 app.use("/api/results-page", realResultsRoutes);
 app.use("/api/real-results", realResultsRoutes);
+app.use("/api/terms-conditions", termsConditionsRoutes);
+app.use("/api/privacy-policy", privacyPolicyRoutes);
 
 
 // SEO

@@ -214,7 +214,7 @@ export default function Footer({ siteSettings }) {
   const newsletter = data?.newsletter || {
     heading: "Stay Connected With Expert Care Support",
     description: "We're Here For You Monday To Friday With Tailored Treatments, Hands And A Commitment To Your Recovery Every Step Of The Way.",
-    placeholder: "Your Email Adress",
+    placeholder: "Your Email Address",
     buttonText: "Submit",
     checkboxLabel: "Subscribe For Health Tips & Updates"
   };
@@ -228,9 +228,9 @@ export default function Footer({ siteSettings }) {
   const bottomFooter = data?.bottomFooter || {
     copyright: "© 2024 . All Rights Reserved.",
     termsText: "Terms And Condition",
-    termsLink: "#",
+    termsLink: "/terms-conditions",
     privacyText: "Privacy Policy",
-    privacyLink: "#"
+    privacyLink: "/privacy-policy"
   };
 
   const settingSocials = getSettingsSocials(siteSettings?.socialLinks);

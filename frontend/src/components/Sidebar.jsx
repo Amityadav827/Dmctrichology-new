@@ -156,6 +156,12 @@ function Sidebar() {
             <NavLink to="/cms/contact-page" className={getNavClass}>
               <Mail size={16} /> Contact Page
             </NavLink>
+            <NavLink to="/cms/terms-conditions" className={getNavClass}>
+              <FileText size={16} /> Terms &amp; Conditions
+            </NavLink>
+            <NavLink to="/cms/privacy-policy" className={getNavClass}>
+              <FileText size={16} /> Privacy Policy
+            </NavLink>
             <NavLink to="/cms/blog-page" className={getNavClass}>
               <FileText size={16} /> Blog Page
             </NavLink>
