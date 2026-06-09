@@ -189,7 +189,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
         .dr-nandani-other-list-item p {
           margin: 0;
           font-family: 'Lato', sans-serif;
-          font-size: 13px;
+          font-size: 16px;
           line-height: 1.4;
           color: #111111;
         }
@@ -233,7 +233,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
           .dr-nandani-other-intro,
           .dr-nandani-other-conclusion,
           .dr-nandani-other-list-item p {
-            font-size: 13px;
+            font-size: 16px;
           }
         }
       `}</style>
