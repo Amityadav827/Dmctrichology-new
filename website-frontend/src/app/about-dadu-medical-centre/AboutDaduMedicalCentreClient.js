@@ -247,7 +247,7 @@ export default function AboutDaduMedicalCentreClient({ initialData, initialFaqDa
       />
       <AboutDrNandaniSpecialist data={templateData.specialist} />
       <AboutDrNandaniTimeline data={templateData.timeline} />
-      <AboutDrNandaniTrust data={templateData.trustSection} />
+      <AboutDrNandaniTrust data={templateData.trustSection} splitLayout />
       <AboutDrNandaniEducationExperience
         data={templateData.educationExperience}
         credentialsData={templateData.credentialsSection}

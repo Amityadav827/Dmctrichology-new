@@ -27,7 +27,8 @@ const defaultTrustPoints = [
 export default function AboutDrNandaniTrust({
   data = {},
   sectionId = "about-nandani-trust",
-  label = "Why Patients Trust Dr. Nandani"
+  label = "Why Patients Trust Dr. Nandani",
+  splitLayout = false
 }) {
   const eyebrow = data.eyebrow || "TRUSTED CARE SERVICES";
   const heading = data.heading || "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?";
@@ -36,54 +37,109 @@ export default function AboutDrNandaniTrust({
   const trustPoints = (data.trustPoints && data.trustPoints.length > 0) ? data.trustPoints : defaultTrustPoints;
   const conclusion = data.conclusionParagraph || "Dr. Nandani Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandani Dadu now!";
 
+  const splitTrust = Boolean(splitLayout) && trustPoints.length > 1;
+  // Balance the two columns by total text length (conclusion sits in section 2)
+  const splitMid = (() => {
+    const blockLen = (p) => String(p?.description || '').length + String(p?.title || '').length;
+    const total = trustPoints.reduce((s, p) => s + blockLen(p), 0) + String(conclusion || '').length;
+    let acc = 0;
+    for (let i = 0; i < trustPoints.length; i++) {
+      acc += blockLen(trustPoints[i]);
+      if (acc >= total / 2) return i + 1;
+    }
+    return trustPoints.length;
+  })();
+
+  const trustImage = (
+    <div className="nandani-patient-trust-image">
+      <EditableImage
+        sectionId={sectionId}
+        fieldPath="trustSection.image"
+        src={image}
+        alt={imageAlt}
+      />
+    </div>
+  );
+
+  const eyebrowBlock = (
+    <div className="nandani-section-eyebrow">
+      <span />
+      <EditableText sectionId={sectionId} fieldPath="trustSection.eyebrow" tag="small">
+        {eyebrow}
+      </EditableText>
+    </div>
+  );
+
+  const headingBlock = (
+    <h2>
+      <EditableText sectionId={sectionId} fieldPath="trustSection.heading" tag="span">
+        {heading}
+      </EditableText>
+    </h2>
+  );
+
+  const renderPoints = (points, offset = 0) => (
+    <div className="nandani-trust-blocks">
+      {points.map((point, i) => {
+        const idx = i + offset;
+        return (
+          <article key={idx}>
+            <h3>
+              <EditableText sectionId={sectionId} fieldPath={`trustSection.trustPoints.${idx}.title`} tag="span">
+                {point.title}
+              </EditableText>
+            </h3>
+            <RichTextContent value={point.description} className="nandani-trust-description" />
+          </article>
+        );
+      })}
+    </div>
+  );
+
   return (
     <EditableSection sectionId={sectionId} label={label}>
-      <section className="nandani-patient-trust-section">
-        <div className="nandani-patient-trust-inner">
-          <div className="nandani-patient-trust-image">
-            <EditableImage
-              sectionId={sectionId}
-              fieldPath="trustSection.image"
-              src={image}
-              alt={imageAlt}
-            />
-          </div>
-
-          <div className="nandani-patient-trust-content">
-            <div className="nandani-section-eyebrow">
-              <span />
-              <EditableText sectionId={sectionId} fieldPath="trustSection.eyebrow" tag="small">
-                {eyebrow}
-              </EditableText>
+      {splitTrust ? (
+        <>
+          <section className="nandani-patient-trust-section">
+            <div className="nandani-patient-trust-inner nandani-trust-inner-split">
+              {trustImage}
+              <div className="nandani-patient-trust-content">
+                {eyebrowBlock}
+                {headingBlock}
+                {renderPoints(trustPoints.slice(0, splitMid), 0)}
+              </div>
             </div>
+          </section>
 
-            <h2>
-              <EditableText sectionId={sectionId} fieldPath="trustSection.heading" tag="span">
-                {heading}
-              </EditableText>
-            </h2>
-
-            <div className="nandani-trust-blocks">
-              {trustPoints.map((point, idx) => (
-                <article key={idx}>
-                  <h3>
-                    <EditableText sectionId={sectionId} fieldPath={`trustSection.trustPoints.${idx}.title`} tag="span">
-                      {point.title}
-                    </EditableText>
-                  </h3>
-                  <RichTextContent value={point.description} className="nandani-trust-description" />
-                </article>
-              ))}
+          <section className="nandani-patient-trust-section nandani-trust-section-2">
+            <div className="nandani-patient-trust-inner nandani-trust-inner-reverse">
+              <div className="nandani-patient-trust-content">
+                {renderPoints(trustPoints.slice(splitMid), splitMid)}
+                {conclusion && (
+                  <RichTextContent value={conclusion} className="nandani-trust-conclusion" />
+                )}
+              </div>
+              {trustImage}
             </div>
-
-            {conclusion && (
-              <RichTextContent value={conclusion} className="nandani-trust-conclusion" />
-            )}
+          </section>
+        </>
+      ) : (
+        <section className="nandani-patient-trust-section">
+          <div className="nandani-patient-trust-inner">
+            {trustImage}
+            <div className="nandani-patient-trust-content">
+              {eyebrowBlock}
+              {headingBlock}
+              {renderPoints(trustPoints, 0)}
+              {conclusion && (
+                <RichTextContent value={conclusion} className="nandani-trust-conclusion" />
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <style jsx>{`
+      <style jsx global>{`
         .nandani-patient-trust-section {
           width: 100%;
           background: #e8eaf6;
@@ -153,7 +209,7 @@ export default function AboutDrNandaniTrust({
 
         .nandani-patient-trust-content h2 {
           font-family: 'Marcellus', serif;
-          font-size: clamp(33px, 4vw, 48px);
+          font-size: 44px;
           line-height: 1.17;
           font-weight: 400;
           color: #111111;
@@ -162,31 +218,31 @@ export default function AboutDrNandaniTrust({
 
         .nandani-trust-blocks {
           display: grid;
-          gap: 26px;
+          gap: 30px;
         }
 
         .nandani-trust-blocks article h3 {
           font-family: 'Marcellus', serif;
-          font-size: 22px;
-          line-height: 1.28;
+          font-size: 23px;
+          line-height: 1.35;
           font-weight: 400;
           color: #111111;
-          margin: 0 0 10px;
+          margin: 0 0 6px;
         }
 
         .nandani-trust-description,
         .nandani-trust-description :global(p),
         .nandani-trust-conclusion {
           font-family: 'Lato', sans-serif;
-          font-size: 15px;
-          line-height: 1.75;
+          font-size: 16px;
+          line-height: 1.7;
           color: #333333;
           margin: 0;
         }
 
         .nandani-trust-description :global(p),
         .nandani-trust-conclusion :global(p) {
-          margin: 0 0 16px;
+          margin: 0 0 18px;
         }
 
         .nandani-trust-description :global(p:last-child),
@@ -213,9 +269,9 @@ export default function AboutDrNandaniTrust({
         }
 
         .nandani-trust-conclusion :global(h3) {
-          font-size: 22px;
-          line-height: 1.28;
-          margin: 0 0 10px;
+          font-size: 23px;
+          line-height: 1.35;
+          margin: 26px 0 6px;
         }
 
         .nandani-trust-conclusion :global(ul),
@@ -234,15 +290,60 @@ export default function AboutDrNandaniTrust({
           padding-top: 28px;
         }
 
+        .nandani-trust-section-2 {
+          padding-top: 0;
+        }
+
+        .nandani-trust-inner-reverse {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+        }
+
+        .nandani-trust-inner-reverse .nandani-trust-conclusion {
+          border-top: none;
+          margin-top: 0;
+          padding-top: 0;
+        }
+
+        .nandani-trust-inner-split .nandani-patient-trust-image,
+        .nandani-trust-inner-reverse .nandani-patient-trust-image {
+          position: sticky;
+          top: 24px;
+          align-self: start;
+        }
+
         @media (max-width: 980px) {
           .nandani-patient-trust-inner {
             grid-template-columns: 1fr;
             gap: 42px;
           }
+          .nandani-trust-inner-reverse .nandani-patient-trust-image {
+            order: -1;
+            position: static;
+          }
+          .nandani-trust-inner-split .nandani-patient-trust-image {
+            position: static;
+          }
 
           .nandani-patient-trust-image,
           .nandani-patient-trust-image :global(img) {
             min-height: 420px;
+          }
+        }
+
+        @media (max-width: 767px) {
+          .nandani-patient-trust-content h2 {
+            font-size: 26px;
+            line-height: 1.25;
+          }
+          .nandani-trust-blocks article h3,
+          .nandani-trust-conclusion :global(h3) {
+            font-size: 20px;
+          }
+          .nandani-trust-description,
+          .nandani-trust-description :global(p),
+          .nandani-trust-conclusion,
+          .nandani-trust-conclusion :global(p) {
+            font-size: 16px;
           }
         }
 

@@ -286,6 +286,7 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
         data={templateData.trustSection}
         sectionId="about-nivedita-trust"
         label="Why Patients Trust Dr. Nivedita"
+        splitLayout
       />
       <AboutDrNandaniEducationExperience
         data={templateData.educationExperience}

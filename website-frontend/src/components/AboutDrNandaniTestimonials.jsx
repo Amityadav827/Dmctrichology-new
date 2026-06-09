@@ -246,7 +246,7 @@ export default function AboutDrNandaniTestimonials({ data = {}, useDefaultTestim
           border-radius: 50%;
           object-fit: contain;
           display: block;
-          margin: 0 auto 30px;
+          margin: 0 auto 44px;
         }
         .dmc-testimonial-text,
         .dmc-testimonial-text :global(p) {
@@ -266,7 +266,7 @@ export default function AboutDrNandaniTestimonials({ data = {}, useDefaultTestim
           align-items: center;
           justify-content: center;
           gap: 3px;
-          margin-bottom: 14px;
+          margin-bottom: 20px;
           color: #FFD22E;
           font-size: 24px;
           line-height: 1;
@@ -277,7 +277,7 @@ export default function AboutDrNandaniTestimonials({ data = {}, useDefaultTestim
           font-size: 15px;
           line-height: 1.2;
           color: #ffffff;
-          margin: 0 0 4px;
+          margin: 0 0 12px;
         }
         .dmc-testimonial-disclaimer {
           font-family: 'Lato', sans-serif;
@@ -335,7 +335,7 @@ export default function AboutDrNandaniTestimonials({ data = {}, useDefaultTestim
           .dmc-testimonial-patient {
             width: 42px;
             height: 42px;
-            margin-bottom: 26px;
+            margin-bottom: 36px;
           }
           .dmc-testimonial-text {
             font-size: 18px;

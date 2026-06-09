@@ -311,12 +311,13 @@ export default function AboutDrNandaniHero({
           border: 0;
         }
         .dr-nandani-gallery-main {
-          min-height: 440px;
+          height: 560px;
         }
         .dr-nandani-gallery-main img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: center top;
           display: block;
         }
         .dr-nandani-info-form-column {
