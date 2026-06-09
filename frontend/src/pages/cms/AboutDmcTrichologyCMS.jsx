@@ -23,8 +23,15 @@ function richParagraphs(value = "") {
     .join("");
 }
 
+function normalizeFormText(value = "", fallback = "", legacyValues = []) {
+  const text = String(value || "").trim();
+  if (!text || legacyValues.includes(text)) return fallback;
+  return text;
+}
+
 function normalizeAboutDmcData(source = {}) {
   const hero = source.hero || {};
+  const formSettings = source.formSettings || {};
   const timeline = source.timeline || {};
   const educationExperience = source.educationExperience || {};
   const credentialsSection = source.credentialsSection || {};
@@ -104,6 +111,11 @@ function normalizeAboutDmcData(source = {}) {
       ...(source.breadcrumb || {}),
       title: source.breadcrumb?.title || hero.mainHeading || hero.badgeText || "",
       currentPageText: source.breadcrumb?.currentPageText || hero.mainHeading || hero.badgeText || ""
+    },
+    formSettings: {
+      ...formSettings,
+      title: normalizeFormText(formSettings.title || hero.formTitle, "Request Private Consultation", ["About DMC Trichology®", "About DMC Trichology"]),
+      subtitle: normalizeFormText(formSettings.subtitle || hero.subtitle, "Reserve your bespoke scalp assessment and consultation session.", ["INDIA'S PREMIUM HAIR & SCALP SPECIALIST SOLUTION"])
     },
     timeline: {
       ...timeline,

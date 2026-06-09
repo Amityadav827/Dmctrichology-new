@@ -30,6 +30,11 @@ const fallbackData = {
     image: '',
     highlights: []
   },
+  formSettings: {
+    title: 'Request Private Consultation',
+    subtitle: 'Reserve your bespoke scalp assessment and consultation session.',
+    successMessage: ''
+  },
   hairTreatmentCentre: {
     isEnabled: true,
     sectionBadge: 'DMC TRICHOLOGY',
@@ -149,6 +154,7 @@ exports.updateSettings = async (req, res) => {
         ...(req.body?.intro || {}),
         highlights: Array.isArray(req.body?.intro?.highlights) ? req.body.intro.highlights : []
       },
+      formSettings: { ...fallbackData.formSettings, ...(req.body?.formSettings || {}) },
       hairTreatmentCentre: { ...fallbackData.hairTreatmentCentre, ...(req.body?.hairTreatmentCentre || {}) },
       holisticApproach: { ...fallbackData.holisticApproach, ...(req.body?.holisticApproach || {}) },
       patientFirstApproach: { ...fallbackData.patientFirstApproach, ...(req.body?.patientFirstApproach || {}) },
