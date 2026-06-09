@@ -150,7 +150,8 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
         }
         .dr-nandani-other-intro :global(p),
         .dr-nandani-other-conclusion :global(p) {
-          margin: 0 0 12px;
+          display: block;
+          margin: 0 0 18px;
         }
         .dr-nandani-other-intro :global(p:last-child),
         .dr-nandani-other-conclusion :global(p:last-child) {

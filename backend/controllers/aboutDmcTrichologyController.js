@@ -104,6 +104,14 @@ const fallbackData = {
     paddingTop: '',
     paddingBottom: ''
   },
+  otherSpecialitiesSection: {
+    heading: 'Other Specialities',
+    introParagraph: '',
+    specialitiesList: [],
+    conclusionParagraph: '',
+    image: '',
+    imageAlt: ''
+  },
   testimonialsSection: {
     heading: 'Patient Testimonials',
     testimonials: []
@@ -170,6 +178,11 @@ exports.updateSettings = async (req, res) => {
         ...fallbackData.credentialsSection,
         ...(req.body?.credentialsSection || {}),
         credentialsList: Array.isArray(req.body?.credentialsSection?.credentialsList) ? req.body.credentialsSection.credentialsList : []
+      },
+      otherSpecialitiesSection: {
+        ...fallbackData.otherSpecialitiesSection,
+        ...(req.body?.otherSpecialitiesSection || {}),
+        specialitiesList: Array.isArray(req.body?.otherSpecialitiesSection?.specialitiesList) ? req.body.otherSpecialitiesSection.specialitiesList : []
       },
       testimonialsSection: {
         ...fallbackData.testimonialsSection,

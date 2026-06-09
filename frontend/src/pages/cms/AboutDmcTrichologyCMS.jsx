@@ -28,6 +28,7 @@ function normalizeAboutDmcData(source = {}) {
   const timeline = source.timeline || {};
   const educationExperience = source.educationExperience || {};
   const credentialsSection = source.credentialsSection || {};
+  const otherSpecialitiesSection = source.otherSpecialitiesSection || {};
   const holistic = source.holisticApproach || {};
   const patientFirst = source.patientFirstApproach || {};
   const expertise = source.ourExpertise || {};
@@ -85,6 +86,9 @@ function normalizeAboutDmcData(source = {}) {
       year: "DMC Protocol"
     }
   ];
+  const specialitiesList = Array.isArray(otherSpecialitiesSection.specialitiesList) && otherSpecialitiesSection.specialitiesList.length > 0
+    ? otherSpecialitiesSection.specialitiesList
+    : bulletPoints.map(title => ({ title }));
 
   return {
     ...source,
@@ -134,6 +138,15 @@ function normalizeAboutDmcData(source = {}) {
       rightHeading: credentialsSection.rightHeading || patientFirst.heading || "Commitment",
       rightText: credentialsSection.rightText || patientFirst.description || "",
       bannerImage: credentialsSection.bannerImage || expertise.backgroundImage || heroImage
+    },
+    otherSpecialitiesSection: {
+      ...otherSpecialitiesSection,
+      heading: otherSpecialitiesSection.heading || expertiseDetails.heading || "Other Specialities",
+      introParagraph: otherSpecialitiesSection.introParagraph || expertiseDetails.description || expertise.description || "",
+      specialitiesList,
+      conclusionParagraph: otherSpecialitiesSection.conclusionParagraph || patientFirst.description || "",
+      image: otherSpecialitiesSection.image || source.intro?.image || firstGalleryImage || heroImage,
+      imageAlt: otherSpecialitiesSection.imageAlt || "DMC Trichology other specialities"
     }
   };
 }
