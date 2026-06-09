@@ -511,13 +511,14 @@ const BlogListing = ({
             color: #000000;
           }
           .blog-card-description {
-            color: #666666;
+            color: #666;
             display: -webkit-box;
             flex-grow: 1;
             font-family: 'Lato', sans-serif;
-            font-size: 14px;
+            font-size: 16px;
             line-height: 1.6;
             margin: 0 0 20px;
+            max-height: 3.2em;
             overflow: hidden;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
