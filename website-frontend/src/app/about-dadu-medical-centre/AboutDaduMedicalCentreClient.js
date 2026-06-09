@@ -280,8 +280,7 @@ export default function AboutDaduMedicalCentreClient({ initialData, initialFaqDa
       <AboutDrNandaniEducationExperience
         data={templateData.educationExperience}
         credentialsData={templateData.credentialsSection}
-        showSecondImage={false}
-        singleImageTall
+        showImages={false}
       />
       <AboutDrNandaniOtherSpecialities data={templateData.otherSpecialitiesSection} />
       <AboutDrNandaniTestimonials data={templateData.testimonialsSection} useDefaultTestimonials={false} />
