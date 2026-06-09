@@ -25,7 +25,29 @@ function richParagraphs(value = "") {
 
 function normalizeAboutDmcData(source = {}) {
   const hero = source.hero || {};
+  const timeline = source.timeline || {};
+  const holistic = source.holisticApproach || {};
+  const patientFirst = source.patientFirstApproach || {};
+  const expertise = source.ourExpertise || {};
+  const expertiseDetails = source.expertiseDetails || {};
   const legacyDescription = hero.description || source.intro?.sectionDescription || "";
+  const legacyTimelineSteps = [
+    {
+      icon: "",
+      title: "Holistic & Integrative Approach",
+      description: holistic.description || ""
+    },
+    {
+      icon: "",
+      title: "Patient-First Approach",
+      description: patientFirst.description || ""
+    },
+    {
+      icon: "",
+      title: "Advanced Expertise",
+      description: expertise.description || expertiseDetails.description || ""
+    }
+  ].filter(step => step.title || step.description);
 
   return {
     ...source,
@@ -41,6 +63,14 @@ function normalizeAboutDmcData(source = {}) {
       ...(source.breadcrumb || {}),
       title: source.breadcrumb?.title || hero.mainHeading || hero.badgeText || "",
       currentPageText: source.breadcrumb?.currentPageText || hero.mainHeading || hero.badgeText || ""
+    },
+    timeline: {
+      ...timeline,
+      eyebrow: timeline.eyebrow || "TRUSTED CARE SERVICES",
+      heading: timeline.heading || patientFirst.heading || "PATIENT-FIRST APPROACH",
+      steps: Array.isArray(timeline.steps) && timeline.steps.length > 0
+        ? timeline.steps
+        : legacyTimelineSteps
     }
   };
 }

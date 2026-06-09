@@ -78,6 +78,11 @@ const fallbackData = {
     buttonText: 'VIEW MORE',
     buttonLink: '/virtual-tour'
   },
+  timeline: {
+    eyebrow: 'TRUSTED CARE SERVICES',
+    heading: '',
+    steps: []
+  },
   testimonialsSection: {
     heading: 'Patient Testimonials',
     testimonials: []
@@ -128,6 +133,11 @@ exports.updateSettings = async (req, res) => {
         ...fallbackData.infrastructure,
         ...(req.body?.infrastructure || {}),
         gallery: Array.isArray(req.body?.infrastructure?.gallery) ? req.body.infrastructure.gallery : []
+      },
+      timeline: {
+        ...fallbackData.timeline,
+        ...(req.body?.timeline || {}),
+        steps: Array.isArray(req.body?.timeline?.steps) ? req.body.timeline.steps : []
       },
       testimonialsSection: {
         ...fallbackData.testimonialsSection,
