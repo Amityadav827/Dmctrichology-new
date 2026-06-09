@@ -2,6 +2,7 @@ import './globals.css';
 import { BuilderProvider } from '../context/BuilderContext';
 import { fetchSiteSettings, fetchHeader, fetchTopBar } from '../services/api';
 import GlobalLayoutWrapper from '../components/GlobalLayoutWrapper';
+import StyledJsxRegistry from '../components/StyledJsxRegistry';
 import CustomScriptsInjector from '../components/CustomScriptsInjector';
 import { Suspense } from 'react';
 import Script from 'next/script';
@@ -70,17 +71,19 @@ export default async function RootLayout({ children }) {
           <noscript dangerouslySetInnerHTML={{ __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }} />
         )}
 
-        <BuilderProvider>
-          <Suspense fallback={null}>
-            <GlobalLayoutWrapper
-              initialHeader={headerRes?.data}
-              initialTopBar={topbarRes?.data}
-              initialSiteSettings={s}
-            >
-              {children}
-            </GlobalLayoutWrapper>
-          </Suspense>
-        </BuilderProvider>
+        <StyledJsxRegistry>
+          <BuilderProvider>
+            <Suspense fallback={null}>
+              <GlobalLayoutWrapper
+                initialHeader={headerRes?.data}
+                initialTopBar={topbarRes?.data}
+                initialSiteSettings={s}
+              >
+                {children}
+              </GlobalLayoutWrapper>
+            </Suspense>
+          </BuilderProvider>
+        </StyledJsxRegistry>
 
         <svg width="0" height="0" className="hidden" style={{ display: 'none' }}>
           <defs>
