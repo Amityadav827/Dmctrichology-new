@@ -481,6 +481,37 @@ export default function DoctorTemplateCMS({
             <ImageField label="Top Image" path="educationExperience.topImage" />
             <ImageField label="Bottom Image" path="educationExperience.bottomImage" />
           </div>
+          <div className="dt-card">
+            <div className="dt-row-title">
+              <h3>Two-Column Editorial Content</h3>
+            </div>
+            <div className="dt-grid">
+              <div className="dt-field">
+                <label>Left Heading</label>
+                <input
+                  value={getDeepValue(data, "credentialsSection.leftHeading") || ""}
+                  onChange={e => update("credentialsSection.leftHeading", e.target.value)}
+                />
+              </div>
+              <RichTextEditor
+                label="Left Content"
+                value={getDeepValue(data, "credentialsSection.leftText")}
+                onChange={value => update("credentialsSection.leftText", value)}
+              />
+              <div className="dt-field">
+                <label>Right Heading</label>
+                <input
+                  value={getDeepValue(data, "credentialsSection.rightHeading") || ""}
+                  onChange={e => update("credentialsSection.rightHeading", e.target.value)}
+                />
+              </div>
+              <RichTextEditor
+                label="Right Content"
+                value={getDeepValue(data, "credentialsSection.rightText")}
+                onChange={value => update("credentialsSection.rightText", value)}
+              />
+            </div>
+          </div>
           <Repeater title="Experience Items" path="educationExperience.experienceItems" fields={[
             { name: "role", label: "Title" },
             { name: "hospital", label: "Subtitle" },
@@ -498,10 +529,6 @@ export default function DoctorTemplateCMS({
             <Field label="Banner Overlay Opacity" path="credentialsSection.overlayOpacity" />
             <Field label="Padding Top" path="credentialsSection.paddingTop" />
             <Field label="Padding Bottom" path="credentialsSection.paddingBottom" />
-            <Field label="Left Heading" path="credentialsSection.leftHeading" />
-            <Field label="Left Editorial Content" path="credentialsSection.leftText" rich />
-            <Field label="Right Heading" path="credentialsSection.rightHeading" />
-            <Field label="Right Editorial Content" path="credentialsSection.rightText" rich />
           </div>
         </>
       )}
