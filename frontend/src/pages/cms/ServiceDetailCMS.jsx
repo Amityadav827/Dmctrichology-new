@@ -2007,7 +2007,15 @@ export default function ServiceDetailCMS() {
     if (!cardInfo.id) return toast.error("No card selected");
     setSavingCard(true);
     try {
-      await axios.put(`/service-listing-cards/${cardInfo.id}`, cardInfo);
+      const rating = Number(cardInfo.rating);
+      const { rating: _rating, ...cardInfoWithoutRating } = cardInfo;
+      const payload = {
+        ...cardInfoWithoutRating,
+        ...(cardInfo.rating === '' || !Number.isFinite(rating)
+          ? {}
+          : { rating: Math.min(5, Math.max(0, rating)) }),
+      };
+      await axios.put(`/service-listing-cards/${cardInfo.id}`, payload);
       toast.success("Service card saved");
       await fetchServices();
     } catch {
@@ -2218,6 +2226,22 @@ export default function ServiceDetailCMS() {
                       onChange={e => setCardInfo(prev => ({ ...prev, image: e.target.value }))}
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-mono outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="/images/services/my-service.webp"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Rating</label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="5"
+                      step="0.1"
+                      value={cardInfo.rating ?? ''}
+                      onChange={e => {
+                        const value = e.target.value;
+                        setCardInfo(prev => ({ ...prev, rating: value === '' ? '' : Math.min(5, Math.max(0, Number(value))) }));
+                      }}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="4.8"
                     />
                   </div>
                   <div>

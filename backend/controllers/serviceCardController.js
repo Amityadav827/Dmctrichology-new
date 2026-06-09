@@ -1,5 +1,11 @@
 const supabase = require('../config/supabase');
 
+const normalizeRating = (value, fallback = 4.8) => {
+  const parsed = Number.parseFloat(value);
+  const rating = Number.isFinite(parsed) ? parsed : Number.parseFloat(fallback);
+  return Math.min(5, Math.max(0, Number.isFinite(rating) ? rating : 4.8));
+};
+
 exports.getServices = async (req, res) => {
   try {
     const { data: services, error } = await supabase
@@ -18,8 +24,20 @@ exports.getServices = async (req, res) => {
           .eq('slug', service.slug)
           .single();
 
+        const blob = service.data || {};
         const detailData = detail?.data || {};
-        const ratingVal = detailData?.banner?.rating ?? 4.8;
+        const ratingConfigured =
+          blob.ratingConfigured === true ||
+          blob.ratingConfigured === 'true' ||
+          blob.ratingConfigured === 1 ||
+          blob.ratingConfigured === '1';
+        const serviceRating = Number.parseFloat(service.rating);
+        const hasServiceRating =
+          service.rating !== null &&
+          service.rating !== undefined &&
+          service.rating !== '' &&
+          (ratingConfigured || (Number.isFinite(serviceRating) && serviceRating > 0));
+        const ratingVal = normalizeRating(hasServiceRating ? service.rating : (detailData?.banner?.rating ?? 4.8));
         const reviewCountVal = detailData?.banner?.reviewCount ?? 1250;
         const durationVal =
           detailData?.banner?.duration ||
@@ -29,7 +47,6 @@ exports.getServices = async (req, res) => {
 
         // Merge data blob so camelCase fields (buttonText, buttonLink, shortDescription, featured)
         // are available at top level. Top-level columns take precedence over blob values.
-        const blob = service.data || {};
         const featuredValue = service.featured ?? blob.featured ?? false;
         return {
           ...blob,
@@ -65,9 +82,15 @@ exports.getServices = async (req, res) => {
 
 exports.createService = async (req, res) => {
   try {
+    const payload = { ...req.body };
+    if (payload.rating !== undefined) {
+      payload.rating = normalizeRating(payload.rating);
+      payload.data = { ...(payload.data || {}), ratingConfigured: true };
+    }
+
     const { data: service, error } = await supabase
       .from('service_cards')
-      .insert(req.body)
+      .insert(payload)
       .select()
       .single();
 
@@ -87,7 +110,7 @@ exports.updateService = async (req, res) => {
     if (b.title !== undefined) update.title = b.title;
     if (b.slug !== undefined) update.slug = b.slug;
     if (b.image !== undefined) update.image = b.image;
-    if (b.rating !== undefined) update.rating = b.rating;
+    if (b.rating !== undefined) update.rating = normalizeRating(b.rating);
     if (b.duration !== undefined) update.duration = b.duration;
     if (b.category !== undefined) update.category = b.category;
     if (b.status !== undefined) update.status = b.status;
@@ -103,6 +126,7 @@ exports.updateService = async (req, res) => {
     if (b.featured !== undefined) blobFields.featured = b.featured;
     if (b.buttonText !== undefined) blobFields.buttonText = b.buttonText;
     if (b.buttonLink !== undefined) blobFields.buttonLink = b.buttonLink;
+    if (b.rating !== undefined) blobFields.ratingConfigured = true;
 
     if (Object.keys(blobFields).length > 0) {
       // Fetch existing data blob to merge into

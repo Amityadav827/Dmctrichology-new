@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Star, StarHalf, Clock } from 'lucide-react';
+import { Star, Clock } from 'lucide-react';
 import EditableText from './Editable/EditableText';
 import EditableImage from './Editable/EditableImage';
 import Link from 'next/link';
@@ -8,21 +8,29 @@ import { useBuilder } from '../context/BuilderContext';
 import EditableSection from './Editable/EditableSection';
 
 const renderListingStars = (rating) => {
-  const stars = [];
-  const numericRating = parseFloat(rating) || 0;
+  const numericRating = normalizeServiceRating(rating);
 
-  for (let i = 1; i <= 5; i++) {
-    if (numericRating >= i) {
-      stars.push(<Star key={i} size={11} fill="#F5B301" color="#F5B301" className="listing-star" />);
-    } else if (numericRating >= i - 0.5) {
-      stars.push(<StarHalf key={i} size={11} fill="#F5B301" color="#F5B301" className="listing-star" />);
-    } else {
-      stars.push(<Star key={i} size={11} color="#D1D5DB" className="listing-star" />);
-    }
-  }
+  return Array.from({ length: 5 }, (_, index) => {
+    const fillPercent = Math.max(0, Math.min(1, numericRating - index)) * 100;
 
-  return stars;
+    return (
+      <span key={index} className="listing-star-wrap" aria-hidden="true">
+        <Star size={11} color="#D1D5DB" className="listing-star" />
+        <span className="listing-star-fill" style={{ width: `${fillPercent}%` }}>
+          <Star size={11} fill="#F5B301" color="#F5B301" className="listing-star" />
+        </span>
+      </span>
+    );
+  });
 };
+
+const normalizeServiceRating = (rating, fallback = 4.8) => {
+  const parsed = Number.parseFloat(rating);
+  const value = Number.isFinite(parsed) ? parsed : fallback;
+  return Math.min(5, Math.max(0, value));
+};
+
+const formatServiceRating = (rating) => normalizeServiceRating(rating).toFixed(1);
 
 const ServiceListing = ({ services: initialServices = [], categories: initialCategories = [] }) => {
   const { isEditMode, siteConfig } = useBuilder();
@@ -164,12 +172,12 @@ const ServiceListing = ({ services: initialServices = [], categories: initialCat
                       <div className="service-meta-row-premium">
                         <span className="rating-num-premium">
                           <EditableText sectionId="service-listing" fieldPath={`${index}.rating`}>
-                            {String(service.rating || "4.8")}
+                            {formatServiceRating(service.rating)}
                           </EditableText>
                         </span>
                         
                         <div className="listing-stars-box">
-                          {renderListingStars(service.rating || 4.8)}
+                          {renderListingStars(service.rating)}
                         </div>
 
                         <span className="meta-separator-premium">•</span>
