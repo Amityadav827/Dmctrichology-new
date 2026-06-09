@@ -32,6 +32,28 @@ function hasFaqContent(faqSection) {
   );
 }
 
+function escapeHtml(value = '') {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function richParagraphs(value = '') {
+  const text = String(value || '').trim();
+  if (!text) return '';
+  if (/<\/?[a-z][\s\S]*>/i.test(text)) return text;
+
+  return text
+    .split(/\n+/)
+    .map(paragraph => paragraph.trim())
+    .filter(Boolean)
+    .map(paragraph => `<p>${escapeHtml(paragraph)}</p>`)
+    .join('');
+}
+
 function normalizeDaduData(pageData = {}) {
   const hero = pageData.hero || {};
   const intro = pageData.intro || {};
@@ -63,6 +85,7 @@ function normalizeDaduData(pageData = {}) {
       ];
 
   const introDescription = hero.description || intro.sectionDescription || hairCentre.description || '';
+  const heroDescription = hero.descriptionParagraph || introDescription || 'DMC Trichology provides advanced skin and hair treatment procedures with a patient-first clinical approach.';
   const hairCentreText = hairCentre.description || '';
   const holisticText = holistic.description || '';
   const patientFirstText = patientFirst.description || '';
@@ -75,7 +98,7 @@ function normalizeDaduData(pageData = {}) {
       mainHeading: hero.mainHeading || hero.badgeText || 'ABOUT DMC TRICHOLOGY',
       doctorName: hero.doctorName || hero.heading || hero.mainHeading || 'About DMC Trichology',
       degreeText: hero.degreeText || hero.subtitle || "INDIA'S PREMIUM HAIR & SCALP SPECIALIST SOLUTION",
-      descriptionParagraph: hero.descriptionParagraph || introDescription || 'DMC Trichology provides advanced skin and hair treatment procedures with a patient-first clinical approach.',
+      descriptionParagraph: richParagraphs(heroDescription),
       mainImage: hero.mainImage || hero.galleryImage || hero.doctorImage || hero.leftImage || hero.heroImage || hero.backgroundImage || primaryImage,
       doctorImage: hero.doctorImage || hero.leftImage || hero.heroImage || primaryImage,
       galleryImage: hero.galleryImage || hero.leftImage || hero.heroImage || primaryImage,

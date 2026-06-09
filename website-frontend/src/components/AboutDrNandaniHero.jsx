@@ -379,7 +379,8 @@ export default function AboutDrNandaniHero({
         }
         .dr-nandani-description :global(p),
         .dr-nandani-description :global(div) {
-          margin: 0 0 14px;
+          display: block;
+          margin: 0 0 18px;
         }
         .dr-nandani-description :global(p:last-child),
         .dr-nandani-description :global(div:last-child) {

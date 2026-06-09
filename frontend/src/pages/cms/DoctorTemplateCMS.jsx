@@ -167,7 +167,8 @@ export default function DoctorTemplateCMS({
   previewPath,
   enableTimelineDescription = false,
   enableTestimonialsVisibility = false,
-  enableFaqVisibility = false
+  enableFaqVisibility = false,
+  normalizeData = data => data
 }) {
   const [data, setData] = useState(defaultData);
   const [active, setActive] = useState("hero");
@@ -180,7 +181,7 @@ export default function DoctorTemplateCMS({
     axios.get(endpoint)
       .then(({ data: res }) => {
         if (mounted && res?.success) {
-          const merged = mergeDefaults(defaultData, res.data || {});
+          const merged = mergeDefaults(defaultData, normalizeData(res.data || {}));
           const hero = merged.hero || {};
           setData({
             ...merged,
@@ -203,7 +204,7 @@ export default function DoctorTemplateCMS({
     try {
       const { data: res } = await axios.put(endpoint, data);
       if (res?.success) {
-        const merged = mergeDefaults(defaultData, res.data || data);
+        const merged = mergeDefaults(defaultData, normalizeData(res.data || data));
         const hero = merged.hero || {};
         setData({
           ...merged,
