@@ -238,9 +238,6 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
           align-items: start;
         }
 
-        .nandani-credentials-tabs-inner-noimg {
-          grid-template-columns: 1fr;
-        }
 
         .nandani-tabs-switcher {
           display: grid;
