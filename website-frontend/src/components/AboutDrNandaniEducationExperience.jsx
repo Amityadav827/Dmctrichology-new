@@ -46,7 +46,7 @@ const defaultEducation = [
   }
 ];
 
-export default function AboutDrNandaniEducationExperience({ data = {}, credentialsData = {}, showCredentialsTab = true, showSecondImage = true }) {
+export default function AboutDrNandaniEducationExperience({ data = {}, credentialsData = {}, showCredentialsTab = true, showSecondImage = true, singleImageTall = false }) {
   const [activeTab, setActiveTab] = useState('experience');
 
   const tabs = useMemo(() => {
@@ -169,7 +169,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
             </div>
           </div>
 
-          <div className={`nandani-tabs-images${showSecondImage ? '' : ' nandani-tabs-images-single'}`} aria-label="Doctor credentials images">
+          <div className={`nandani-tabs-images${showSecondImage ? '' : ' nandani-tabs-images-single'}${singleImageTall ? ' nandani-tabs-images-single-tall' : ''}`} aria-label="Doctor credentials images">
             <div className="nandani-tabs-image-card">
               <EditableImage
                 sectionId="about-nandani-education"
@@ -332,12 +332,13 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
 
         @media (min-width: 981px) {
           .nandani-tabs-images-single {
-            align-self: stretch;
-            padding-top: 0;
+            padding-top: 54px;
           }
           .nandani-tabs-images-single .nandani-tabs-image-card {
-            height: 100%;
-            min-height: 240px;
+            height: 240px;
+          }
+          .nandani-tabs-images-single-tall .nandani-tabs-image-card {
+            height: 508px;
           }
         }
 

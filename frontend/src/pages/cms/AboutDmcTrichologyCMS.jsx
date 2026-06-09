@@ -26,11 +26,19 @@ function richParagraphs(value = "") {
 function normalizeAboutDmcData(source = {}) {
   const hero = source.hero || {};
   const timeline = source.timeline || {};
+  const educationExperience = source.educationExperience || {};
+  const credentialsSection = source.credentialsSection || {};
   const holistic = source.holisticApproach || {};
   const patientFirst = source.patientFirstApproach || {};
   const expertise = source.ourExpertise || {};
   const expertiseDetails = source.expertiseDetails || {};
+  const infrastructure = source.infrastructure || {};
+  const gallery = Array.isArray(infrastructure.gallery) ? infrastructure.gallery : [];
+  const firstGalleryImage = gallery[0]?.image || gallery[0]?.url || "";
+  const secondGalleryImage = gallery[1]?.image || gallery[1]?.url || "";
+  const heroImage = hero.mainImage || hero.galleryImage || hero.doctorImage || hero.leftImage || hero.heroImage || hero.backgroundImage || source.intro?.image || holistic.image || firstGalleryImage || "";
   const legacyDescription = hero.description || source.intro?.sectionDescription || "";
+  const bulletPoints = Array.isArray(expertiseDetails.bulletPoints) ? expertiseDetails.bulletPoints : [];
   const legacyTimelineSteps = [
     {
       icon: "",
@@ -48,6 +56,35 @@ function normalizeAboutDmcData(source = {}) {
       description: expertise.description || expertiseDetails.description || ""
     }
   ].filter(step => step.title || step.description);
+  const fallbackExperienceItems = [
+    {
+      role: "DMC Trichology Clinical Expertise",
+      hospital: "Dadu Medical Centre, New Delhi",
+      duration: "Over decades of research & practice"
+    },
+    {
+      role: "Holistic Hair Loss Evaluation",
+      hospital: "Clinical examination, trichoscopy, blood & hormonal evaluation",
+      duration: "Personalized treatment planning"
+    },
+    {
+      role: "Advanced Hair Restoration Protocols",
+      hospital: "DMC-Golden Touch and non-surgical trichology solutions",
+      duration: "Ongoing"
+    }
+  ];
+  const fallbackEducationItems = [
+    {
+      degree: "Comprehensive Trichology Systems",
+      institution: "Clinical analysis, scalp diagnosis, and lifestyle evaluation",
+      year: "DMC Protocol"
+    },
+    {
+      degree: "Patient Care Methodology",
+      institution: "Counselling, product guidance, nutrition advice, and follow-up care",
+      year: "DMC Protocol"
+    }
+  ];
 
   return {
     ...source,
@@ -71,6 +108,32 @@ function normalizeAboutDmcData(source = {}) {
       steps: Array.isArray(timeline.steps) && timeline.steps.length > 0
         ? timeline.steps
         : legacyTimelineSteps
+    },
+    educationExperience: {
+      ...educationExperience,
+      experienceTabLabel: educationExperience.experienceTabLabel || "Experience",
+      educationTabLabel: educationExperience.educationTabLabel || "Care Systems",
+      credentialsTabLabel: educationExperience.credentialsTabLabel || "Credentials",
+      topImage: educationExperience.topImage || firstGalleryImage || holistic.image || heroImage,
+      bottomImage: educationExperience.bottomImage || secondGalleryImage || source.intro?.image || heroImage,
+      experienceItems: Array.isArray(educationExperience.experienceItems) && educationExperience.experienceItems.length > 0
+        ? educationExperience.experienceItems
+        : fallbackExperienceItems,
+      educationItems: Array.isArray(educationExperience.educationItems) && educationExperience.educationItems.length > 0
+        ? educationExperience.educationItems
+        : fallbackEducationItems
+    },
+    credentialsSection: {
+      ...credentialsSection,
+      heading: credentialsSection.heading || expertiseDetails.heading || "Credentials",
+      credentialsList: Array.isArray(credentialsSection.credentialsList) && credentialsSection.credentialsList.length > 0
+        ? credentialsSection.credentialsList
+        : bulletPoints.map(text => ({ text })),
+      leftHeading: credentialsSection.leftHeading || source.hairTreatmentCentre?.heading || "Expertise",
+      leftText: credentialsSection.leftText || source.hairTreatmentCentre?.description || "",
+      rightHeading: credentialsSection.rightHeading || patientFirst.heading || "Commitment",
+      rightText: credentialsSection.rightText || patientFirst.description || "",
+      bannerImage: credentialsSection.bannerImage || expertise.backgroundImage || heroImage
     }
   };
 }
@@ -82,6 +145,7 @@ export default function AboutDmcTrichologyCMS() {
       uploadEndpoint="/about-dmc-trichology/upload-image"
       title="About DMC Trichology CMS"
       previewPath="/about-dadu-medical-centre"
+      singleEducationImage
       normalizeData={normalizeAboutDmcData}
     />
   );

@@ -83,6 +83,27 @@ const fallbackData = {
     heading: '',
     steps: []
   },
+  educationExperience: {
+    experienceTabLabel: 'Experience',
+    educationTabLabel: 'Care Systems',
+    credentialsTabLabel: 'Credentials',
+    topImage: '',
+    bottomImage: '',
+    experienceItems: [],
+    educationItems: []
+  },
+  credentialsSection: {
+    heading: 'Credentials',
+    credentialsList: [],
+    bannerImage: '',
+    overlayOpacity: 0.35,
+    leftHeading: '',
+    leftText: '',
+    rightHeading: '',
+    rightText: '',
+    paddingTop: '',
+    paddingBottom: ''
+  },
   testimonialsSection: {
     heading: 'Patient Testimonials',
     testimonials: []
@@ -138,6 +159,17 @@ exports.updateSettings = async (req, res) => {
         ...fallbackData.timeline,
         ...(req.body?.timeline || {}),
         steps: Array.isArray(req.body?.timeline?.steps) ? req.body.timeline.steps : []
+      },
+      educationExperience: {
+        ...fallbackData.educationExperience,
+        ...(req.body?.educationExperience || {}),
+        experienceItems: Array.isArray(req.body?.educationExperience?.experienceItems) ? req.body.educationExperience.experienceItems : [],
+        educationItems: Array.isArray(req.body?.educationExperience?.educationItems) ? req.body.educationExperience.educationItems : []
+      },
+      credentialsSection: {
+        ...fallbackData.credentialsSection,
+        ...(req.body?.credentialsSection || {}),
+        credentialsList: Array.isArray(req.body?.credentialsSection?.credentialsList) ? req.body.credentialsSection.credentialsList : []
       },
       testimonialsSection: {
         ...fallbackData.testimonialsSection,

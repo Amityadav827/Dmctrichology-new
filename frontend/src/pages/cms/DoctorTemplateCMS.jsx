@@ -168,6 +168,7 @@ export default function DoctorTemplateCMS({
   enableTimelineDescription = false,
   enableTestimonialsVisibility = false,
   enableFaqVisibility = false,
+  singleEducationImage = false,
   normalizeData = data => data
 }) {
   const [data, setData] = useState(defaultData);
@@ -479,8 +480,8 @@ export default function DoctorTemplateCMS({
             <Field label="Tab 1 Label" path="educationExperience.experienceTabLabel" />
             <Field label="Tab 2 Label" path="educationExperience.educationTabLabel" />
             <Field label="Tab 3 Label" path="educationExperience.credentialsTabLabel" />
-            <ImageField label="Top Image" path="educationExperience.topImage" />
-            <ImageField label="Bottom Image" path="educationExperience.bottomImage" />
+            <ImageField label={singleEducationImage ? "Section Image" : "Top Image"} path="educationExperience.topImage" />
+            {!singleEducationImage && <ImageField label="Bottom Image" path="educationExperience.bottomImage" />}
           </div>
           <div className="dt-card">
             <div className="dt-row-title">
