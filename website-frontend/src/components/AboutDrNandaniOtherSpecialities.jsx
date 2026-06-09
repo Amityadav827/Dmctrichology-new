@@ -83,7 +83,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
         }
         .dr-nandani-other-specialities-card {
           width: 100%;
-          max-width: 1200px;
+          max-width: 1300px;
           margin: 0 auto;
           padding: 40px;
           border-radius: 24px;
