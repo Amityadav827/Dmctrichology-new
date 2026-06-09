@@ -15,6 +15,7 @@ const getBlogTimestamp = (blog = {}) => {
 const mapLatestBlog = (blog = {}) => ({
   image: blog.blogImage || blog.image || blog.bannerImage || 'https://via.placeholder.com/600x400',
   title: blog.title || '',
+  description: String(blog.shortDescription || blog.metaDescription || blog.adminDescription || '').replace(/<[^>]+>/g, '').trim(),
   author: blog.author || 'DMC',
   date: blog.blogDate || blog.date || blog.createdAt || blog.updatedAt,
   buttonText: 'Explore More',
@@ -155,14 +156,13 @@ export default function BlogSection() {
                   </span>
                 </div>
 
-                <h3 className="home-blog-title" style={{ 
-                  fontSize: '24px', 
-                  color: '#000', 
-                  fontFamily: "'Marcellus', serif", 
-                  fontWeight: '400', 
-                  marginBottom: '20px',
-                  lineHeight: '1.3',
-                  flexGrow: 1
+                <h3 className="home-blog-title" style={{
+                  fontSize: '24px',
+                  color: '#000',
+                  fontFamily: "'Marcellus', serif",
+                  fontWeight: '400',
+                  marginBottom: '12px',
+                  lineHeight: '1.3'
                 }}>
                   <Link className="home-blog-title-link" href={blog.buttonLink || '/blog'}>
                     <EditableText sectionId="blogs-home-section" fieldPath={`blogs.${index}.title`} tag="span">
@@ -171,7 +171,22 @@ export default function BlogSection() {
                   </Link>
                 </h3>
 
-                <Link 
+                <p className="home-blog-desc" style={{
+                  fontSize: '14px',
+                  color: '#666',
+                  fontFamily: "'Lato', sans-serif",
+                  lineHeight: '1.6',
+                  margin: '0 0 20px',
+                  flexGrow: 1,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden'
+                }}>
+                  {blog.description}
+                </p>
+
+                <Link
                   className="home-blog-link"
                   href={blog.buttonLink || '#'} 
                   style={{ 
@@ -235,6 +250,10 @@ export default function BlogSection() {
           .home-blog-card:hover .home-blog-title-link,
           .home-blog-card:hover .home-blog-link {
             color: #fff !important;
+          }
+
+          .home-blog-card:hover .home-blog-desc {
+            color: rgba(255, 255, 255, 0.85) !important;
           }
 
           .home-blog-card:hover .home-blog-date-pill {
