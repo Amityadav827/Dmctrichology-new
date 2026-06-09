@@ -71,7 +71,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
       <style jsx>{`
         .dr-nandani-other-specialities-wrapper {
           width: 100%;
-          padding: 0 24px;
+          padding: 0 24px 96px;
           background: #ffffff;
           display: flex;
           justify-content: center;
