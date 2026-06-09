@@ -8,6 +8,7 @@ import BlogFaqAccordion from '../../../components/BlogFaqAccordion';
 import { SidebarSearch, SidebarCategories } from '../../../components/SidebarWidgets';
 import { Calendar, User, MessageCircle, ArrowRight } from 'lucide-react';
 import { formatDate } from '../../../utils/dateFormatter';
+import { getBlogShortDescription } from '../../../utils/blogExcerpt';
 import '../../service.css';
 import '../../blog-detail.css';
 
@@ -85,7 +86,7 @@ export async function generateMetadata({ params }) {
   
   // SEO overrides from dashboard
   const title = blog?.metaTitle || (blog ? `${blog.title} | DMC Trichology` : 'Blog Detail | DMC Trichology');
-  const description = blog?.metaDescription || blog?.shortDescription || blog?.excerpt || 'Read the latest updates and advice from DMC Trichology experts.';
+  const description = blog?.metaDescription || getBlogShortDescription(blog) || blog?.excerpt || 'Read the latest updates and advice from DMC Trichology experts.';
   const keywords = blog?.metaKeywords || "";
   const canonical = blog?.canonicalUrl || `${siteUrl}/blog/${slug}`;
   const image = blog?.blogImage || `${siteUrl}/default-blog.jpg`;
@@ -178,7 +179,7 @@ export default async function BlogDetailPage({ params }) {
         "name": String(blog.author || "Admin"),
         "url": "#"
     }],
-    "description": String(blog.shortDescription || blog.excerpt || "")
+    "description": String(getBlogShortDescription(blog) || blog.excerpt || "")
   };
 
   // FAQ Schema

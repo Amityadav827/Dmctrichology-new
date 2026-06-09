@@ -7,6 +7,7 @@ import EditableText from './Editable/EditableText';
 import { useBuilder } from '../context/BuilderContext';
 import { Search, User } from 'lucide-react';
 import { formatDate } from '../utils/dateFormatter';
+import { getBlogDisplayDescription } from '../utils/blogExcerpt';
 import { fetchBlogCategories, fetchBlogs } from '../services/api';
 
 const BLOGS_PER_PAGE = 10;
@@ -235,32 +236,41 @@ const BlogListing = ({
           <div className={`blog-grid-content ${isLoading ? 'is-loading' : ''}`}>
             <div className="blog-grid">
               {blogs.length > 0 ? (
-                blogs.map((blog) => (
-                  <div key={blog.id || blog._id || blog.slug} className="blog-card">
-                    <div className="blog-card-image">
-                      <Link href={`/blog/${blog.slug}`}>
-                        <img src={blog.blogImage || 'https://via.placeholder.com/600x400'} alt={blog.title} />
-                      </Link>
-                      <div className="blog-card-date-pill">
-                        {formatDate(blog.blogDate || blog.date)}
+                blogs.map((blog) => {
+                  const description = getBlogDisplayDescription(blog);
+
+                  return (
+                    <div key={blog.id || blog._id || blog.slug} className="blog-card">
+                      <div className="blog-card-image">
+                        <Link href={`/blog/${blog.slug}`}>
+                          <img src={blog.blogImage || 'https://via.placeholder.com/600x400'} alt={blog.title} />
+                        </Link>
+                        <div className="blog-card-date-pill">
+                          {formatDate(blog.blogDate || blog.date)}
+                        </div>
                       </div>
-                    </div>
-                    <div className="blog-card-author-row">
-                      <div className="blog-card-author-icon">
-                        <User size={14} />
+                      <div className="blog-card-author-row">
+                        <div className="blog-card-author-icon">
+                          <User size={14} />
+                        </div>
+                        <span className="blog-card-author-name">{blog.author}</span>
                       </div>
-                      <span className="blog-card-author-name">{blog.author}</span>
-                    </div>
-                    <h3 className="blog-card-title">
-                      <Link href={`/blog/${blog.slug}`} className="blog-title-link">
-                        {blog.title}
+                      <h3 className="blog-card-title">
+                        <Link href={`/blog/${blog.slug}`} className="blog-title-link">
+                          {blog.title}
+                        </Link>
+                      </h3>
+                      {description && (
+                        <p className="blog-card-description">
+                          {description}
+                        </p>
+                      )}
+                      <Link href={`/blog/${blog.slug}`} className="explore-link">
+                        Explore More
                       </Link>
-                    </h3>
-                    <Link href={`/blog/${blog.slug}`} className="explore-link">
-                      Explore More
-                    </Link>
-                  </div>
-                ))
+                    </div>
+                  );
+                })
               ) : (
                 <div className="no-blogs-found">
                   No matching blogs found
@@ -496,14 +506,26 @@ const BlogListing = ({
             font-family: 'Marcellus', serif;
             font-size: 22px;
             line-height: 1.4;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             font-weight: 400;
-            flex-grow: 1;
             color: #000000;
+          }
+          .blog-card-description {
+            color: #666666;
+            display: -webkit-box;
+            flex-grow: 1;
+            font-family: 'Lato', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0 0 20px;
+            overflow: hidden;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
           }
 
           .blog-card:hover .blog-card-author-name,
           .blog-card:hover .blog-card-title,
+          .blog-card:hover .blog-card-description,
           .blog-card:hover .blog-title-link,
           .blog-card:hover .explore-link {
             color: #ffffff;

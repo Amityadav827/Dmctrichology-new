@@ -1,6 +1,30 @@
 const supabase = require("../config/supabase");
 const uploadToSupabase = require("../utils/uploadToSupabase");
 
+const stripHtml = (value = "") => String(value)
+  .replace(/<script[\s\S]*?<\/script>/gi, " ")
+  .replace(/<style[\s\S]*?<\/style>/gi, " ")
+  .replace(/<[^>]+>/g, " ")
+  .replace(/&nbsp;/gi, " ")
+  .replace(/&amp;/gi, "&")
+  .replace(/&quot;/gi, '"')
+  .replace(/&#39;/gi, "'")
+  .replace(/&lt;/gi, "<")
+  .replace(/&gt;/gi, ">")
+  .replace(/\s+/g, " ")
+  .trim();
+
+const createShortDescriptionFallback = (fullDescription = "", maxLength = 220) => {
+  const text = stripHtml(fullDescription);
+  if (!text) return "";
+  if (text.length <= maxLength) return text;
+
+  const truncated = text.slice(0, maxLength);
+  const lastSpace = truncated.lastIndexOf(" ");
+  const cleanText = (lastSpace > 140 ? truncated.slice(0, lastSpace) : truncated).trim();
+  return `${cleanText.replace(/[.,;:!?-]+$/, "")}...`;
+};
+
 const mapToSupabase = (data) => {
   const result = {
     title: data.title,
@@ -40,6 +64,14 @@ const mapToSupabase = (data) => {
 
 const mapFromSupabase = (data) => {
   if (!data) return null;
+  const rawShortDescription = data.short_description || "";
+  const hasRawShortDescription = stripHtml(rawShortDescription).length > 0;
+  const rawMetaDescription = data.meta_description || "";
+  const hasRawMetaDescription = stripHtml(rawMetaDescription).length > 0;
+  const displayShortDescription = hasRawShortDescription
+    ? rawShortDescription
+    : (hasRawMetaDescription ? rawMetaDescription : createShortDescriptionFallback(data.full_description));
+
   return {
     _id: data.id,
     id: data.id,
@@ -48,7 +80,8 @@ const mapFromSupabase = (data) => {
     showType: data.show_type,
     layoutType: data.layout_type,
     adminDescription: data.admin_description,
-    shortDescription: data.short_description,
+    shortDescription: displayShortDescription,
+    rawShortDescription,
     fullDescription: data.full_description,
     blogImage: data.blog_image,
     bannerImage: data.banner_image,
@@ -57,7 +90,7 @@ const mapFromSupabase = (data) => {
     slug: data.slug,
     metaTitle: data.meta_title,
     metaKeywords: data.meta_keywords,
-    metaDescription: data.meta_description,
+    metaDescription: rawMetaDescription,
     canonicalUrl: data.canonical_url,
     blogDate: data.blog_date,
     status: data.status || "Published",
@@ -125,7 +158,7 @@ const getBlogs = async (req, res, next) => {
 
     let query = supabase.from('blogs').select('*, category:blog_categories(name)', { count: 'exact' });
     if (search) {
-      query = query.or(`title.ilike.%${search}%,author.ilike.%${search}%,slug.ilike.%${search}%,short_description.ilike.%${search}%`);
+      query = query.or(`title.ilike.%${search}%,author.ilike.%${search}%,slug.ilike.%${search}%,short_description.ilike.%${search}%,meta_description.ilike.%${search}%,full_description.ilike.%${search}%`);
     }
 
     if (status) {

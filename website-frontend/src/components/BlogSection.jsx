@@ -5,6 +5,7 @@ import { fetchBlogs, fetchHomeBlog } from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import { formatDate } from '../utils/dateFormatter';
+import { getBlogDisplayDescription } from '../utils/blogExcerpt';
 
 const getBlogTimestamp = (blog = {}) => {
   const dateValue = blog.blogDate || blog.date || blog.createdAt || blog.updatedAt;
@@ -15,7 +16,7 @@ const getBlogTimestamp = (blog = {}) => {
 const mapLatestBlog = (blog = {}) => ({
   image: blog.blogImage || blog.image || blog.bannerImage || 'https://via.placeholder.com/600x400',
   title: blog.title || '',
-  description: String(blog.shortDescription || blog.metaDescription || blog.adminDescription || '').replace(/<[^>]+>/g, '').trim(),
+  description: getBlogDisplayDescription(blog),
   author: blog.author || 'DMC',
   date: blog.blogDate || blog.date || blog.createdAt || blog.updatedAt,
   buttonText: 'Explore More',

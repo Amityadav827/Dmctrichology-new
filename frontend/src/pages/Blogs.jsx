@@ -576,7 +576,7 @@ function Blogs() {
       title: item.title || "",
       author: item.author || "",
       adminDescription: item.adminDescription || "",
-      shortDescription: item.shortDescription || "",
+      shortDescription: item.rawShortDescription ?? item.shortDescription ?? "",
       fullDescription: item.fullDescription || "",
       altTag: item.altTag || "",
       tags: item.tags ? (Array.isArray(item.tags) ? item.tags.join(", ") : item.tags) : "",
