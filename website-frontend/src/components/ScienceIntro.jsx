@@ -127,8 +127,8 @@ const ScienceIntro = ({ data: initialData = {} }) => {
 
         .science-intro-content h2 {
           font-family: 'Marcellus', serif;
-          font-size: clamp(40px, 4.1vw, 64px);
-          line-height: 1.18;
+          font-size: 44px;
+          line-height: 1.2;
           font-weight: 400;
           color: #222222;
           margin: 0 0 34px;
@@ -137,8 +137,8 @@ const ScienceIntro = ({ data: initialData = {} }) => {
 
         .science-intro-description {
           font-family: 'Lato', sans-serif;
-          font-size: 17px;
-          line-height: 2.05;
+          font-size: 16px;
+          line-height: 1.9;
           color: #444444;
           margin: 0;
           max-width: 760px;
