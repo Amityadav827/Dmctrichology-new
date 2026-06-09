@@ -46,7 +46,7 @@ const defaultEducation = [
   }
 ];
 
-export default function AboutDrNandaniEducationExperience({ data = {}, credentialsData = {} }) {
+export default function AboutDrNandaniEducationExperience({ data = {}, credentialsData = {}, showCredentialsTab = true, showSecondImage = true }) {
   const [activeTab, setActiveTab] = useState('experience');
 
   const tabs = useMemo(() => {
@@ -56,7 +56,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
       date: ""
     }));
 
-    return [
+    const builtTabs = [
       {
         id: 'experience',
         label: data.experienceTabLabel || data.experienceTitle || "Experience",
@@ -99,7 +99,9 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
         ]
       }
     ];
-  }, [data, credentialsData]);
+
+    return showCredentialsTab ? builtTabs : builtTabs.filter(tab => tab.id !== 'credentials');
+  }, [data, credentialsData, showCredentialsTab]);
 
   const active = tabs.find(tab => tab.id === activeTab) || tabs[0];
   const topImage = data.topImage || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
@@ -111,7 +113,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
       <section className="nandani-credentials-tabs-section">
         <div className="nandani-credentials-tabs-inner">
           <div className="nandani-tabs-content">
-            <div className="nandani-tabs-switcher" role="tablist" aria-label="Doctor credentials tabs">
+            <div className="nandani-tabs-switcher" role="tablist" aria-label="Doctor credentials tabs" style={{ gridTemplateColumns: `repeat(${tabs.length}, 1fr)` }}>
               {tabs.map(tab => (
                 <button
                   key={tab.id}
@@ -167,7 +169,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
             </div>
           </div>
 
-          <div className="nandani-tabs-images" aria-label="Doctor credentials images">
+          <div className={`nandani-tabs-images${showSecondImage ? '' : ' nandani-tabs-images-single'}`} aria-label="Doctor credentials images">
             <div className="nandani-tabs-image-card">
               <EditableImage
                 sectionId="about-nandani-education"
@@ -177,15 +179,17 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
                 className="nandani-tabs-editable-image"
               />
             </div>
-            <div className="nandani-tabs-image-card">
-              <EditableImage
-                sectionId="about-nandani-education"
-                fieldPath="educationExperience.bottomImage"
-                src={bottomImage}
-                alt="Dr. Nandani Dadu credentials bottom"
-                className="nandani-tabs-editable-image"
-              />
-            </div>
+            {showSecondImage && (
+              <div className="nandani-tabs-image-card">
+                <EditableImage
+                  sectionId="about-nandani-education"
+                  fieldPath="educationExperience.bottomImage"
+                  src={bottomImage}
+                  alt="Dr. Nandani Dadu credentials bottom"
+                  className="nandani-tabs-editable-image"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -324,6 +328,17 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
         .nandani-tabs-image-card :global(.nandani-tabs-editable-image) {
           width: 100%;
           height: 100%;
+        }
+
+        @media (min-width: 981px) {
+          .nandani-tabs-images-single {
+            align-self: stretch;
+            padding-top: 0;
+          }
+          .nandani-tabs-images-single .nandani-tabs-image-card {
+            height: 100%;
+            min-height: 240px;
+          }
         }
 
         .nandani-credentials-editorial {
