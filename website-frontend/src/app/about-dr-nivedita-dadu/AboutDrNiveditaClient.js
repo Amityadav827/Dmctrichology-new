@@ -125,30 +125,14 @@ function normalizeNiveditaData(pageData = {}) {
         }
       ]
     },
-    trustSection: pageData.trustSection || {
+    trustSection: {
       eyebrow: 'TRUSTED CARE SERVICES',
       heading: 'Why Do Patients Trust Dr. Nivedita Dadu As A Dermatologist & Hair Specialist In Delhi?',
       image: otherSpecialities.image || hero.doctorImage || DEFAULT_IMAGE,
       imageAlt: otherSpecialities.imageAlt || 'Dr. Nivedita Dadu consultation',
-      trustPoints: [
-        {
-          title: 'Unparalleled Dermatology Expertise',
-          description: specialist.description1 || 'Dr. Nivedita Dadu is a distinguished dermatologist and trichologist recognized for exceptional patient outcomes.'
-        },
-        {
-          title: 'Comprehensive Hair & Skin Treatments',
-          description: specialist.description2 || 'She combines dermatology and trichological sciences to deliver comprehensive scalp and hair solutions.'
-        },
-        {
-          title: 'Professional Clinical Care',
-          description: careProfessional || 'She maintains a highly professional environment to offer quality clinical care and customized treatment solutions.'
-        },
-        {
-          title: 'Evidence-Based Treatment Planning',
-          description: expertiseIntro || 'Her treatment approach combines advanced technology, patient education, and individualized care.'
-        }
-      ],
-      conclusionParagraph: careIntro || 'Dr. Nivedita Dadu is known for professional-grade, personalized skin and hair care treatments at DMC Trichology.'
+      conclusionParagraph: careIntro || 'Dr. Nivedita Dadu is known for professional-grade, personalized skin and hair care treatments at DMC Trichology.',
+      ...(pageData.trustSection || {}),
+      trustPoints: Array.isArray(pageData.trustSection?.trustPoints) ? pageData.trustSection.trustPoints : []
     },
     educationExperience: {
       ...education,
@@ -286,7 +270,7 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
         data={templateData.trustSection}
         sectionId="about-nivedita-trust"
         label="Why Patients Trust Dr. Nivedita"
-        splitLayout
+        useDefaultPoints={false}
       />
       <AboutDrNandaniEducationExperience
         data={templateData.educationExperience}
