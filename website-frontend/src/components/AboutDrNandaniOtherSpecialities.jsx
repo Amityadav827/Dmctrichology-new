@@ -84,16 +84,18 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
           padding: 40px;
           border-radius: 24px;
           background: #EEF0FA;
-          display: grid;
-          grid-template-columns: minmax(260px, 0.35fr) minmax(0, 0.65fr);
-          gap: 32px;
-          align-items: center;
           box-sizing: border-box;
         }
+        .dr-nandani-other-specialities-card::after {
+          content: "";
+          display: block;
+          clear: both;
+        }
         .dr-nandani-other-image-card {
-          width: 100%;
-          height: 100%;
-          min-height: 346px;
+          float: left;
+          width: 360px;
+          height: 430px;
+          margin: 6px 36px 24px 0;
           border-radius: 20px;
           overflow: hidden;
           background: #d9d9d9;
@@ -105,7 +107,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
           display: block;
         }
         .dr-nandani-other-content {
-          padding: 8px 0;
+          padding: 2px 0;
         }
         .dr-nandani-other-icon {
           width: 60px;
@@ -155,10 +157,11 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
           padding: 0;
         }
         .dr-nandani-other-list {
+          clear: left;
           display: flex;
           flex-direction: column;
           gap: 13px;
-          margin: 24px 0 26px;
+          margin: 28px 0 26px;
         }
         .dr-nandani-other-list-item {
           display: flex;
@@ -187,12 +190,15 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
           font-weight: 700;
         }
         @media (max-width: 1024px) {
-          .dr-nandani-other-specialities-card {
-            grid-template-columns: 1fr;
-            gap: 30px;
-          }
           .dr-nandani-other-image-card {
+            float: none;
+            width: 100%;
+            height: auto;
             min-height: 420px;
+            margin: 0 0 28px;
+          }
+          .dr-nandani-other-list {
+            clear: none;
           }
         }
         @media (max-width: 767px) {
@@ -205,6 +211,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
           }
           .dr-nandani-other-image-card {
             min-height: auto;
+            height: auto;
             aspect-ratio: 1 / 1.08;
           }
           .dr-nandani-other-icon {
