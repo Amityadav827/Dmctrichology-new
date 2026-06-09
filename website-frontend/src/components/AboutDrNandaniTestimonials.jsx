@@ -145,7 +145,7 @@ export default function AboutDrNandaniTestimonials({ data = {}, useDefaultTestim
       <style jsx>{`
         .dmc-testimonials-wrapper {
           width: 100%;
-          padding: 100px 24px;
+          padding: 80px 24px 0;
           background: #ffffff;
           box-sizing: border-box;
           display: flex;
