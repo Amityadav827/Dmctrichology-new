@@ -338,6 +338,17 @@ export default function BlogSection() {
             box-shadow: 0 12px 24px rgba(59, 89, 152, 0.22);
           }
 
+          :global(.view-all-blogs-btn:hover) {
+            background-color: #3B5998 !important;
+            color: #fff !important;
+            border-color: #3B5998 !important;
+            box-shadow: 0 12px 24px rgba(59, 89, 152, 0.22);
+          }
+
+          :global(.view-all-blogs-btn:hover span) {
+            color: #fff !important;
+          }
+
           .blog-btn-arrow-wrap {
             width: 32px;
             height: 32px;
@@ -355,12 +366,22 @@ export default function BlogSection() {
             transition: transform 0.3s ease;
           }
 
+          .view-all-blogs-btn:hover .blog-btn-arrow-wrap {
+            background-color: #fff;
+            transform: rotate(0deg);
+          }
+
           .view-all-blogs-btn:hover .blog-btn-arrow {
-            transform: translateX(2px);
+            filter: brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%);
+          }
+
+          :global(.view-all-blogs-btn:hover .blog-btn-arrow-wrap) {
+            background-color: #fff !important;
+            transform: rotate(0deg) !important;
           }
 
           :global(.view-all-blogs-btn:hover .blog-btn-arrow) {
-            transform: translateX(2px) !important;
+            filter: brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%) !important;
           }
 
           @media (max-width: 1199px) {
