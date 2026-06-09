@@ -4,7 +4,7 @@ import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import RichTextContent from './RichTextContent';
 
-export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
+export default function AboutDrNandaniOtherSpecialities({ data = {}, bottomSpacing = false }) {
   const {
     heading = "Other Specialities",
     introParagraph = "Apart from being a leading expert in Trichological Sciences, Dr. Nandini Dadu is also a diligent specialist in cosmetology, performing a number of cosmetic procedures such as :",
@@ -20,7 +20,7 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
 
   return (
     <EditableSection sectionId="about-nandani-other-specialities" label="Other Specialities Section">
-      <section className="dr-nandani-other-specialities-wrapper">
+      <section className={`dr-nandani-other-specialities-wrapper${bottomSpacing ? ' dr-nandani-other-spacing-bottom' : ''}`}>
         <div className="dr-nandani-other-specialities-card">
           <div className="dr-nandani-other-top">
             <div className="dr-nandani-other-image-card">
@@ -80,6 +80,9 @@ export default function AboutDrNandaniOtherSpecialities({ data = {} }) {
           display: flex;
           justify-content: center;
           box-sizing: border-box;
+        }
+        .dr-nandani-other-specialities-wrapper.dr-nandani-other-spacing-bottom {
+          padding-bottom: 90px;
         }
         .dr-nandani-other-specialities-card {
           width: 100%;

@@ -278,7 +278,7 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
         showCredentialsTab={false}
         showImages={false}
       />
-      <AboutDrNandaniOtherSpecialities data={templateData.otherSpecialitiesSection} />
+      <AboutDrNandaniOtherSpecialities data={templateData.otherSpecialitiesSection} bottomSpacing />
       {!testimonialsHidden && <AboutDrNandaniTestimonials data={templateData.testimonialsSection} />}
     </main>
   );
