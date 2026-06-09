@@ -14,6 +14,11 @@ const fallbackData = {
     isEnabled: true,
     itemsPerPage: 15,
     cards: []
+  },
+  seo: {
+    metaTitle: '',
+    metaDescription: '',
+    ogImage: ''
   }
 };
 
@@ -42,6 +47,10 @@ const normalizePayload = (source = fallbackData) => ({
     cards: Array.isArray(source.feedbackSection?.cards)
       ? source.feedbackSection.cards.map(normalizeCard)
       : []
+  },
+  seo: {
+    ...fallbackData.seo,
+    ...(source.seo || {})
   }
 });
 

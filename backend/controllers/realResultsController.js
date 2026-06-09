@@ -33,6 +33,11 @@ const fallbackData = {
   resultsSection: {
     isEnabled: true,
     cards: defaultCards
+  },
+  seo: {
+    metaTitle: '',
+    metaDescription: '',
+    ogImage: ''
   }
 };
 
@@ -57,6 +62,10 @@ const normalizePayload = (source = fallbackData) => ({
     cards: Array.isArray(source.resultsSection?.cards)
       ? source.resultsSection.cards.map(normalizeCard)
       : defaultCards
+  },
+  seo: {
+    ...fallbackData.seo,
+    ...(source.seo || {})
   }
 });
 

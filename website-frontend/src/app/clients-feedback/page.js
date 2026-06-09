@@ -1,4 +1,5 @@
 import ClientFeedbackPage from '../../components/ClientFeedbackPage';
+import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -14,6 +15,11 @@ const staticFallback = {
     isEnabled: true,
     itemsPerPage: 15,
     cards: []
+  },
+  seo: {
+    metaTitle: '',
+    metaDescription: '',
+    ogImage: ''
   }
 };
 
@@ -36,8 +42,12 @@ async function getPageData() {
 export async function generateMetadata() {
   const data = await getPageData();
   return {
-    title: `${data.hero?.pageTitle || 'Client Feedback'} | DMC Trichology`,
-    description: 'Client feedback and patient experiences at DMC Trichology.',
+    ...buildCmsMetadata({
+      data,
+      titleFallback: 'Client Feedback | DMC Trichology',
+      descriptionFallback: 'Read authentic client feedback and patient experiences at DMC Trichology. Discover real success stories and hair restoration journeys.',
+      imageFallback: data.hero?.bannerImage || data.hero?.backgroundImage || ''
+    }),
     alternates: {
       canonical: '/clients-feedback'
     }

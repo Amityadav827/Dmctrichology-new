@@ -3,6 +3,7 @@ import axios from "../../api/client";
 import toast from "react-hot-toast";
 import { Eye, Image as ImageIcon, Loader2, MessageSquare, Plus, Save, Settings, Trash2 } from "lucide-react";
 import { FRONTEND_URL } from "../../utils/config";
+import SeoMetadataSection from "../../components/cms/SeoMetadataSection";
 
 const emptyData = {
   hero: {
@@ -15,6 +16,11 @@ const emptyData = {
     isEnabled: true,
     itemsPerPage: 15,
     cards: []
+  },
+  seo: {
+    metaTitle: "",
+    metaDescription: "",
+    ogImage: ""
   }
 };
 
@@ -60,7 +66,8 @@ export default function ClientFeedbackCMS() {
             cards: Array.isArray(res.data?.feedbackSection?.cards)
               ? res.data.feedbackSection.cards.map(normalizeCard)
               : []
-          }
+          },
+          seo: { ...emptyData.seo, ...(res.data?.seo || {}) }
         });
       }
     } catch (error) {
@@ -230,6 +237,7 @@ export default function ClientFeedbackCMS() {
         <div className="max-w-[1600px] mx-auto px-4 flex flex-wrap items-center gap-1 border-t border-slate-100 bg-white py-1">
           <SectionTab id="hero" label="HERO BANNER" />
           <SectionTab id="cards" label="FEEDBACK CARDS" />
+          <SectionTab id="seo" label="SEO & METADATA" />
         </div>
       </div>
 
@@ -323,6 +331,13 @@ export default function ClientFeedbackCMS() {
               </div>
             ))}
           </div>
+        )}
+
+        {activeSection === "seo" && (
+          <SeoMetadataSection
+            seo={data.seo || {}}
+            onChange={(field, value) => updateSectionField("seo", field, value)}
+          />
         )}
       </div>
     </div>

@@ -1,4 +1,5 @@
 import RealResultsPage from '../../components/RealResultsPage';
+import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
 
@@ -20,11 +21,14 @@ async function getRealResultsData() {
 
 export async function generateMetadata() {
   const data = await getRealResultsData();
-  const title = data?.hero?.pageTitle || 'Real Results';
 
   return {
-    title: `${title} | DMC Trichology`,
-    description: 'Real before and after treatment results from DMC Trichology.',
+    ...buildCmsMetadata({
+      data,
+      titleFallback: 'Real Results | DMC Trichology',
+      descriptionFallback: 'Explore real hair treatment and hair transplant results achieved at DMC Trichology through advanced restoration solutions.',
+      imageFallback: data?.hero?.bannerImage || data?.hero?.backgroundImage || ''
+    }),
     alternates: {
       canonical: '/results'
     }

@@ -3,6 +3,7 @@ import axios from "../../api/client";
 import toast from "react-hot-toast";
 import { Activity, Eye, Image as ImageIcon, Loader2, Plus, Save, Settings, Trash2 } from "lucide-react";
 import { FRONTEND_URL } from "../../utils/config";
+import SeoMetadataSection from "../../components/cms/SeoMetadataSection";
 
 const resultImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/bif89jyygbycclg8qa92.png";
 
@@ -35,6 +36,11 @@ const emptyData = {
   resultsSection: {
     isEnabled: true,
     cards: defaultCards
+  },
+  seo: {
+    metaTitle: "",
+    metaDescription: "",
+    ogImage: ""
   }
 };
 
@@ -77,7 +83,8 @@ export default function RealResultsCMS() {
             cards: Array.isArray(res.data?.resultsSection?.cards)
               ? res.data.resultsSection.cards.map(normalizeCard)
               : defaultCards
-          }
+          },
+          seo: { ...emptyData.seo, ...(res.data?.seo || {}) }
         });
       }
     } catch (error) {
@@ -245,6 +252,7 @@ export default function RealResultsCMS() {
         <div className="max-w-[1600px] mx-auto px-4 flex flex-wrap items-center gap-1 border-t border-slate-100 bg-white py-1">
           <SectionTab id="hero" label="HERO BANNER" />
           <SectionTab id="cards" label="REAL RESULTS CARDS" />
+          <SectionTab id="seo" label="SEO & METADATA" />
         </div>
       </div>
 
@@ -334,6 +342,13 @@ export default function RealResultsCMS() {
               </div>
             ))}
           </div>
+        )}
+
+        {activeSection === "seo" && (
+          <SeoMetadataSection
+            seo={data.seo || {}}
+            onChange={(field, value) => updateSectionField("seo", field, value)}
+          />
         )}
       </div>
     </div>
