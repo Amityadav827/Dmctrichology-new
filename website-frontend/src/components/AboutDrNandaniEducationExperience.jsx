@@ -46,7 +46,7 @@ const defaultEducation = [
   }
 ];
 
-export default function AboutDrNandaniEducationExperience({ data = {}, credentialsData = {}, showCredentialsTab = true, showSecondImage = true, singleImageTall = false }) {
+export default function AboutDrNandaniEducationExperience({ data = {}, credentialsData = {}, showCredentialsTab = true, showSecondImage = true, singleImageTall = false, showImages = true }) {
   const [activeTab, setActiveTab] = useState('experience');
 
   const tabs = useMemo(() => {
@@ -111,7 +111,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
   return (
     <EditableSection sectionId="about-nandani-education" label="Experience Education Credentials">
       <section className="nandani-credentials-tabs-section">
-        <div className="nandani-credentials-tabs-inner">
+        <div className={`nandani-credentials-tabs-inner${showImages ? '' : ' nandani-credentials-tabs-inner-noimg'}`}>
           <div className="nandani-tabs-content">
             <div className="nandani-tabs-switcher" role="tablist" aria-label="Doctor credentials tabs" style={{ gridTemplateColumns: `repeat(${tabs.length}, 1fr)` }}>
               {tabs.map(tab => (
@@ -169,6 +169,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
             </div>
           </div>
 
+          {showImages && (
           <div className={`nandani-tabs-images${showSecondImage ? '' : ' nandani-tabs-images-single'}${singleImageTall ? ' nandani-tabs-images-single-tall' : ''}`} aria-label="Doctor credentials images">
             <div className="nandani-tabs-image-card">
               <EditableImage
@@ -191,6 +192,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
               </div>
             )}
           </div>
+          )}
         </div>
 
         {hasEditorialContent && (
@@ -234,6 +236,10 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
           grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.72fr);
           gap: 58px;
           align-items: start;
+        }
+
+        .nandani-credentials-tabs-inner-noimg {
+          grid-template-columns: 1fr;
         }
 
         .nandani-tabs-switcher {

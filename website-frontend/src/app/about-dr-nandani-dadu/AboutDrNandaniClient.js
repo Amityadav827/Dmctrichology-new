@@ -190,6 +190,7 @@ export default function AboutDrNandaniClient({ initialData, initialFaqData = nul
       <AboutDrNandaniEducationExperience
         data={pageData.educationExperience || {}}
         credentialsData={pageData.credentialsSection || {}}
+        showImages={false}
       />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection || {}} />
       <AboutDrNandaniTestimonials data={pageData.testimonialsSection || {}} />
