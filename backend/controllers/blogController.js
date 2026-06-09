@@ -116,32 +116,61 @@ const createBlog = async (req, res, next) => {
 const getBlogs = async (req, res, next) => {
   try {
     const search = String(req.query.search || "").trim();
+    const status = String(req.query.status || "").trim();
+    const shouldPaginate = req.query.page !== undefined || req.query.limit !== undefined;
+    const page = Math.max(parseInt(req.query.page || "1", 10) || 1, 1);
+    const limit = Math.min(Math.max(parseInt(req.query.limit || "10", 10) || 10, 1), 1000);
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
 
     let query = supabase.from('blogs').select('*, category:blog_categories(name)', { count: 'exact' });
     if (search) {
-      query = query.or(`title.ilike.%${search}%,author.ilike.%${search}%,slug.ilike.%${search}%`);
+      query = query.or(`title.ilike.%${search}%,author.ilike.%${search}%,slug.ilike.%${search}%,short_description.ilike.%${search}%`);
+    }
+
+    if (status) {
+      query = query.eq('status', status);
     }
 
     if (req.query.categoryId) {
       query = query.eq('category_id', req.query.categoryId);
     }
 
-    const { data, count, error } = await query
-      .order('created_at', { ascending: false });
+    query = query.order('created_at', { ascending: false });
+
+    if (shouldPaginate) {
+      query = query.range(from, to);
+    }
+
+    const { data, count, error } = await query;
 
     if (error) return res.status(500).json({ success: false, message: error.message });
 
-    const formattedBlogs = data.map(blog => mapFromSupabase(blog));
+    const formattedBlogs = (data || []).map(blog => mapFromSupabase(blog));
+    const totalBlogs = count || 0;
+    const totalPages = shouldPaginate ? Math.max(1, Math.ceil(totalBlogs / limit)) : 1;
+    const currentPage = shouldPaginate ? Math.min(page, totalPages) : 1;
+    const hasNextPage = shouldPaginate && currentPage < totalPages;
+    const hasPreviousPage = shouldPaginate && currentPage > 1;
+
     console.log("[getBlogs Backend] Returning count of blogs:", formattedBlogs.length);
     return res.status(200).json({
       success: true,
       count: formattedBlogs.length,
+      blogs: formattedBlogs,
+      totalBlogs,
+      totalPages,
+      currentPage,
+      hasNextPage,
+      hasPreviousPage,
       data: formattedBlogs,
       pagination: {
-        page: 1,
-        limit: formattedBlogs.length || 1,
-        total: count,
-        totalPages: 1,
+        page: currentPage,
+        limit: shouldPaginate ? limit : (formattedBlogs.length || 1),
+        total: totalBlogs,
+        totalPages,
+        hasNextPage,
+        hasPreviousPage,
       },
     });
   } catch (error) {

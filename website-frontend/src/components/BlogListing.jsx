@@ -1,151 +1,242 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import { useBuilder } from '../context/BuilderContext';
 import { Search, User } from 'lucide-react';
 import { formatDate } from '../utils/dateFormatter';
-import { fetchBlogCategories } from '../services/api';
+import { fetchBlogCategories, fetchBlogs } from '../services/api';
 
-const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
+const BLOGS_PER_PAGE = 10;
+
+const getBlogItems = (response) => response?.blogs || response?.data || [];
+
+const normalizePagination = (source = {}, fallbackPage = 1, fallbackTotal = 0) => {
+  const totalBlogs = Number(source.totalBlogs ?? source.pagination?.total ?? fallbackTotal) || 0;
+  const totalPages = Math.max(1, Number(source.totalPages ?? source.pagination?.totalPages ?? 1) || 1);
+  const currentPage = Math.min(
+    Math.max(Number(source.currentPage ?? source.pagination?.page ?? fallbackPage) || 1, 1),
+    totalPages
+  );
+
+  return {
+    totalBlogs,
+    totalPages,
+    currentPage,
+    hasNextPage: Boolean(source.hasNextPage ?? source.pagination?.hasNextPage ?? currentPage < totalPages),
+    hasPreviousPage: Boolean(source.hasPreviousPage ?? source.pagination?.hasPreviousPage ?? currentPage > 1),
+  };
+};
+
+const BlogListing = ({
+  data: initialData,
+  blogs: initialBlogs = [],
+  recentBlogs: initialRecentBlogs = [],
+  pagination: initialPagination,
+  initialFilters = {},
+}) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [pageData, setPageData] = useState(initialData?.listing || {});
   const [blogs, setBlogs] = useState(initialBlogs);
+  const [recentBlogs] = useState(initialRecentBlogs);
   const [dynamicCategories, setDynamicCategories] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(initialFilters.search || "");
+  const [activeCategory, setActiveCategory] = useState(initialFilters.categoryId || "All");
+  const [paginationState, setPaginationState] = useState(() =>
+    normalizePagination(initialPagination, 1, initialBlogs.length)
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const searchDebounceReady = useRef(false);
 
-  console.log("[BlogListing] Component initialized with:", {
-    initialBlogsCount: initialBlogs?.length || 0,
-    blogsStateCount: blogs?.length || 0
-  });
-
-  // Sync state when initialData changes (SSR data)
   useEffect(() => {
     if (initialData?.listing) {
       setPageData(initialData.listing);
     }
-
-    // Check URL params for pre-filtering
-    const params = new URLSearchParams(window.location.search);
-    const search = params.get('search');
-    const cat = params.get('category');
-    if (search) setSearchQuery(search);
-    if (cat) setActiveCategory(cat);
   }, [initialData]);
 
   useEffect(() => {
-    if (initialBlogs) {
-      console.log("[BlogListing] Updating blogs state with initialBlogs:", initialBlogs.length);
-      setBlogs(initialBlogs);
+    setBlogs(initialBlogs);
+    setPaginationState(normalizePagination(initialPagination, 1, initialBlogs.length));
+  }, [initialBlogs, initialPagination]);
+
+  const updateUrl = useCallback(({ page, search, categoryId }) => {
+    if (typeof window === "undefined") return;
+
+    const params = new URLSearchParams(window.location.search);
+    params.delete("page");
+    params.delete("search");
+    params.delete("category");
+    params.delete("categoryId");
+
+    if (page > 1) params.set("page", String(page));
+    if (search?.trim()) params.set("search", search.trim());
+    if (categoryId && categoryId !== "All") params.set("categoryId", categoryId);
+
+    const query = params.toString();
+    window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
+  }, []);
+
+  const loadBlogs = useCallback(async ({ page = 1, search = searchQuery, categoryId = activeCategory } = {}) => {
+    setIsLoading(true);
+
+    try {
+      const trimmedSearch = search.trim();
+      const params = {
+        status: 'Published',
+        page,
+        limit: BLOGS_PER_PAGE,
+        ...(trimmedSearch ? { search: trimmedSearch } : {}),
+        ...(categoryId && categoryId !== "All" ? { categoryId } : {}),
+      };
+
+      const response = await fetchBlogs(params);
+      const nextBlogs = getBlogItems(response);
+      const nextPagination = normalizePagination(response, page, nextBlogs.length);
+
+      setBlogs(nextBlogs);
+      setPaginationState(nextPagination);
+      updateUrl({
+        page: nextPagination.currentPage,
+        search: trimmedSearch,
+        categoryId,
+      });
+    } catch (error) {
+      console.error("[BlogListing] Failed to load paginated blogs:", error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [initialBlogs]);
+  }, [activeCategory, searchQuery, updateUrl]);
 
   useEffect(() => {
     const loadCategories = async () => {
       const res = await fetchBlogCategories();
       if (res?.success) {
-        setDynamicCategories(res.data);
+        setDynamicCategories(res.data || []);
+
+        const params = new URLSearchParams(window.location.search);
+        const categoryName = params.get('category');
+        const categoryId = params.get('categoryId');
+
+        if (!categoryId && categoryName) {
+          const matchedCategory = (res.data || []).find((cat) =>
+            cat.name?.toLowerCase() === categoryName.toLowerCase() ||
+            cat.slug?.toLowerCase() === categoryName.toLowerCase()
+          );
+
+          if (matchedCategory?.id) {
+            setActiveCategory(matchedCategory.id);
+          }
+        }
       }
     };
+
     loadCategories();
   }, []);
+
+  useEffect(() => {
+    if (!searchDebounceReady.current) {
+      searchDebounceReady.current = true;
+      return;
+    }
+
+    const handler = setTimeout(() => {
+      loadBlogs({ page: 1, search: searchQuery, categoryId: activeCategory });
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [activeCategory, loadBlogs, searchQuery]);
 
   const {
     sidebarSearchPlaceholder = "Enter Key Word",
     sidebarCategoriesTitle = "Blog Categories",
     sidebarRecentPostsTitle = "Recent Post",
-    promoImage = "",
-    promoLink = "",
-    promoButtonText = "Special Offer",
-    categories = [],
-    recentPosts = []
   } = pageData;
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [filteredBlogs, setFilteredBlogs] = useState(initialBlogs);
-
-  // Debounced search effect
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      let result = [...blogs];
-
-      // Filter by Search
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        result = result.filter(blog =>
-          blog.title?.toLowerCase().includes(q) ||
-          blog.category?.name?.toLowerCase().includes(q) ||
-          blog.author?.toLowerCase().includes(q) ||
-          blog.shortDescription?.toLowerCase().includes(q)
-        );
-      }
-
-      // Filter by Category
-      if (activeCategory !== "All") {
-        result = result.filter(blog =>
-          blog.category?.name?.toLowerCase() === activeCategory.toLowerCase()
-        );
-      }
-
-      setFilteredBlogs(result);
-    }, 300);
-
-    return () => clearTimeout(handler);
-  }, [searchQuery, activeCategory, blogs]);
-
-  // Handle category click
-  const handleCategoryClick = (catName) => {
-    setActiveCategory(catName);
+  const handleCategoryClick = (categoryId) => {
+    setActiveCategory(categoryId);
   };
 
-  // Real-time sync from Visual Builder
+  const handlePageChange = (page) => {
+    if (page < 1 || page > paginationState.totalPages || page === paginationState.currentPage || isLoading) {
+      return;
+    }
+
+    loadBlogs({ page, search: searchQuery, categoryId: activeCategory });
+  };
+
+  const handlePaginationClick = (event, page, disabled = false) => {
+    event.preventDefault();
+    if (!disabled) {
+      handlePageChange(page);
+    }
+  };
+
+  const getPaginationHref = (page) => {
+    const params = new URLSearchParams();
+    const trimmedSearch = searchQuery.trim();
+
+    if (page > 1) params.set("page", String(page));
+    if (trimmedSearch) params.set("search", trimmedSearch);
+    if (activeCategory && activeCategory !== "All") params.set("categoryId", activeCategory);
+
+    const query = params.toString();
+    return `/blog${query ? `?${query}` : ""}`;
+  };
+
+  const pageNumbers = useMemo(
+    () => Array.from({ length: paginationState.totalPages }, (_, index) => index + 1),
+    [paginationState.totalPages]
+  );
+
+  const recentPosts = recentBlogs.length > 0 ? recentBlogs : blogs.slice(0, 4);
+  const allCategoryCount = dynamicCategories.reduce((total, cat) => total + (Number(cat.count) || 0), 0)
+    || paginationState.totalBlogs
+    || blogs.length;
+
   useEffect(() => {
     if (isEditMode && siteConfig) {
-      const updatedListing = JSON.parse(JSON.stringify(pageData));
-      let hasChanges = false;
+      setPageData((currentPageData) => {
+        const updatedListing = JSON.parse(JSON.stringify(currentPageData));
+        let hasChanges = false;
 
-      Object.keys(siteConfig).forEach(key => {
-        if (key.startsWith('blog-listing.listing.')) {
-          hasChanges = true;
-          const path = key.replace('blog-listing.listing.', '');
+        Object.keys(siteConfig).forEach(key => {
+          if (key.startsWith('blog-listing.listing.')) {
+            hasChanges = true;
+            const path = key.replace('blog-listing.listing.', '');
 
-          if (path.includes('.')) {
-            const parts = path.split('.');
-            let current = updatedListing;
-            for (let i = 0; i < parts.length - 1; i++) {
-              const part = parts[i];
-              if (!current[part]) {
-                current[part] = isNaN(parts[i + 1]) ? {} : [];
+            if (path.includes('.')) {
+              const parts = path.split('.');
+              let current = updatedListing;
+              for (let i = 0; i < parts.length - 1; i++) {
+                const part = parts[i];
+                if (!current[part]) {
+                  current[part] = isNaN(parts[i + 1]) ? {} : [];
+                }
+                current = current[part];
               }
-              current = current[part];
+              current[parts[parts.length - 1]] = siteConfig[key];
+            } else {
+              updatedListing[path] = siteConfig[key];
             }
-            current[parts[parts.length - 1]] = siteConfig[key];
-          } else {
-            updatedListing[path] = siteConfig[key];
           }
-        }
-      });
+        });
 
-      if (hasChanges) {
-        setPageData(updatedListing);
-      }
+        return hasChanges ? updatedListing : currentPageData;
+      });
     }
   }, [isEditMode, siteConfig]);
 
-  console.log("[BlogListing Frontend] Received count:", blogs.length, "Rendering count of blogs in grid:", filteredBlogs.length);
   return (
     <EditableSection sectionId="blog-listing" label="Blog Listing Section">
       <section className="blog-listing-wrapper">
         <div className="blog-container">
-
-          {/* Left Side: Blog Grid */}
-          <div className="blog-grid-content">
+          <div className={`blog-grid-content ${isLoading ? 'is-loading' : ''}`}>
             <div className="blog-grid">
-              {filteredBlogs.length > 0 ? (
-                filteredBlogs.map((blog, idx) => (
-                  <div key={idx} className="blog-card">
-                    {/* Image with date pill overlay — same as homepage */}
+              {blogs.length > 0 ? (
+                blogs.map((blog) => (
+                  <div key={blog.id || blog._id || blog.slug} className="blog-card">
                     <div className="blog-card-image">
                       <Link href={`/blog/${blog.slug}`}>
                         <img src={blog.blogImage || 'https://via.placeholder.com/600x400'} alt={blog.title} />
@@ -154,37 +245,75 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
                         {formatDate(blog.blogDate || blog.date)}
                       </div>
                     </div>
-                    {/* Author row — blue circle icon + name */}
                     <div className="blog-card-author-row">
                       <div className="blog-card-author-icon">
                         <User size={14} />
                       </div>
                       <span className="blog-card-author-name">{blog.author}</span>
                     </div>
-                    {/* Title */}
                     <h3 className="blog-card-title">
                       <Link href={`/blog/${blog.slug}`} className="blog-title-link">
                         {blog.title}
                       </Link>
                     </h3>
-                    {/* Explore link */}
                     <Link href={`/blog/${blog.slug}`} className="explore-link">
                       Explore More
                     </Link>
                   </div>
                 ))
               ) : (
-                <div className="no-blogs-found" style={{ gridColumn: '1/-1', padding: '100px 0', textAlign: 'center', fontFamily: 'Marcellus', fontSize: '24px', color: '#1a3760' }}>
+                <div className="no-blogs-found">
                   No matching blogs found
                 </div>
               )}
             </div>
+
+            {paginationState.totalPages > 1 && (
+              <nav className="blog-pagination" aria-label="Blog pagination">
+                <a
+                  href={getPaginationHref(paginationState.currentPage - 1)}
+                  className={`pagination-button ${!paginationState.hasPreviousPage || isLoading ? 'disabled' : ''}`}
+                  aria-disabled={!paginationState.hasPreviousPage || isLoading}
+                  onClick={(event) => handlePaginationClick(
+                    event,
+                    paginationState.currentPage - 1,
+                    !paginationState.hasPreviousPage || isLoading
+                  )}
+                >
+                  Previous
+                </a>
+
+                {pageNumbers.map((page) => (
+                  <a
+                    key={page}
+                    href={getPaginationHref(page)}
+                    className={`pagination-number ${page === paginationState.currentPage ? 'active' : ''}`}
+                    aria-current={page === paginationState.currentPage ? 'page' : undefined}
+                    aria-disabled={isLoading}
+                    onClick={(event) => handlePaginationClick(event, page, isLoading)}
+                  >
+                    {page}
+                  </a>
+                ))}
+
+                <a
+                  href={getPaginationHref(paginationState.currentPage + 1)}
+                  className={`pagination-button ${!paginationState.hasNextPage || isLoading ? 'disabled' : ''}`}
+                  aria-disabled={!paginationState.hasNextPage || isLoading}
+                  onClick={(event) => handlePaginationClick(
+                    event,
+                    paginationState.currentPage + 1,
+                    !paginationState.hasNextPage || isLoading
+                  )}
+                >
+                  Next
+                </a>
+              </nav>
+            )}
           </div>
 
-          {/* Right Side: Sidebar */}
           <aside className="blog-sidebar">
             <div className="sidebar-inner">
-              {/* Search Widget */}
               <div className="sidebar-widget search-widget">
                 <div className="search-box">
                   <input
@@ -197,7 +326,6 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
                 </div>
               </div>
 
-              {/* Categories Widget */}
               <div className="sidebar-widget">
                 <h4 className="sidebar-title">
                   <EditableText sectionId="blog-listing" fieldPath="listing.sidebarCategoriesTitle">
@@ -207,17 +335,17 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
                 <ul className="category-list">
                   <li
                     className={activeCategory === "All" ? "active" : ""}
-                    onClick={() => setActiveCategory("All")}
+                    onClick={() => handleCategoryClick("All")}
                     style={{ cursor: 'pointer' }}
                   >
                     <span className="category-name">All Categories</span>
-                    <span className="count">({blogs.length})</span>
+                    <span className="count">({allCategoryCount})</span>
                   </li>
-                  {dynamicCategories.map((cat, idx) => (
+                  {dynamicCategories.map((cat) => (
                     <li
-                      key={idx}
-                      className={activeCategory === cat.name ? "active" : ""}
-                      onClick={() => setActiveCategory(cat.name)}
+                      key={cat.id || cat.slug || cat.name}
+                      className={activeCategory === cat.id ? "active" : ""}
+                      onClick={() => handleCategoryClick(cat.id)}
                       style={{ cursor: 'pointer' }}
                     >
                       <span className="category-name">
@@ -231,7 +359,6 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
                 </ul>
               </div>
 
-              {/* Recent Posts Widget */}
               <div className="sidebar-widget">
                 <h4 className="sidebar-title">
                   <EditableText sectionId="blog-listing" fieldPath="listing.sidebarRecentPostsTitle">
@@ -239,8 +366,8 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
                   </EditableText>
                 </h4>
                 <div className="recent-posts">
-                  {(blogs.slice(0, 4)).map((post, idx) => (
-                    <div key={idx} className="recent-post-item">
+                  {recentPosts.map((post) => (
+                    <div key={post.id || post._id || post.slug} className="recent-post-item">
                       <div
                         className="post-thumb"
                         style={{
@@ -264,29 +391,9 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
                   ))}
                 </div>
               </div>
-
-              {/* Promo Banner Widget */}
-              <div className="sidebar-widget promo-widget">
-                <div
-                  className="promo-banner"
-                  style={{
-                    backgroundImage: `url(${promoImage || 'https://via.placeholder.com/320x350/D9D9D9/888888?text=Promo+Banner'})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                  }}
-                >
-                  <div className="promo-overlay">
-                    <EditableText sectionId="blog-listing" fieldPath="listing.promoButtonText">
-                      {promoButtonText}
-                    </EditableText>
-                  </div>
-                </div>
-              </div>
             </div>
           </aside>
-
         </div>
-
 
         <style jsx>{`
           .blog-listing-wrapper {
@@ -301,14 +408,16 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             gap: 40px;
           }
 
-          /* Blog Grid */
+          .blog-grid-content.is-loading {
+            opacity: 0.65;
+            pointer-events: none;
+          }
           .blog-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 30px;
           }
 
-          /* ── Blog Card — matches homepage .home-blog-card exactly ── */
           .blog-card {
             background: #E8EAF6;
             border-radius: 40px;
@@ -319,12 +428,10 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             transition: background 0.3s ease;
             cursor: pointer;
           }
-          /* Hover: card turns solid blue — exactly like homepage */
           .blog-card:hover {
             background: #3B5998;
           }
 
-          /* Image wrapper */
           .blog-card-image {
             width: 100%;
             height: 280px;
@@ -339,7 +446,6 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             object-fit: cover;
           }
 
-          /* Date pill — overlaid top-left on image */
           .blog-card-date-pill {
             position: absolute;
             top: 20px;
@@ -352,13 +458,11 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             font-family: 'Marcellus', serif;
             transition: background 0.3s ease, color 0.3s ease;
           }
-          /* Hover: pill inverts to white */
           .blog-card:hover .blog-card-date-pill {
             background: #ffffff;
             color: #000000;
           }
 
-          /* Author row */
           .blog-card-author-row {
             display: flex;
             align-items: center;
@@ -377,7 +481,6 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             color: #ffffff;
             transition: background 0.3s ease, color 0.3s ease;
           }
-          /* Hover: author icon inverts */
           .blog-card:hover .blog-card-author-icon {
             background: #ffffff;
             color: #3B5998;
@@ -389,7 +492,6 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             transition: color 0.3s ease;
           }
 
-          /* Blog title */
           .blog-card-title {
             font-family: 'Marcellus', serif;
             font-size: 22px;
@@ -400,7 +502,6 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             color: #000000;
           }
 
-          /* Hover: all text turns white */
           .blog-card:hover .blog-card-author-name,
           .blog-card:hover .blog-card-title,
           .blog-card:hover .blog-title-link,
@@ -422,7 +523,57 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             transition: color 0.3s ease;
           }
 
-          /* Sidebar */
+          .no-blogs-found {
+            grid-column: 1/-1;
+            padding: 100px 0;
+            text-align: center;
+            font-family: 'Marcellus', serif;
+            font-size: 24px;
+            color: #1a3760;
+          }
+
+          .blog-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 45px;
+          }
+          .pagination-button,
+          .pagination-number {
+            min-width: 44px;
+            height: 44px;
+            border: 1px solid rgba(59, 89, 152, 0.25);
+            border-radius: 999px;
+            background: #ffffff;
+            color: #3B5998;
+            font-family: 'Lato', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none !important;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+          }
+          .pagination-button {
+            padding: 0 18px;
+          }
+          .pagination-button:hover:not(.disabled),
+          .pagination-number:hover:not(.disabled),
+          .pagination-number.active {
+            background: #3B5998;
+            border-color: #3B5998;
+            color: #ffffff;
+          }
+          .pagination-button.disabled,
+          .pagination-number.disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+          }
+
           .blog-sidebar {
             position: relative;
           }
@@ -441,7 +592,6 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             margin-bottom: 0;
           }
 
-          /* Search Widget */
           .search-box {
             display: flex;
             align-items: center;
@@ -467,7 +617,6 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             flex-shrink: 0;
           }
 
-          /* Sidebar Titles */
           .sidebar-title {
             font-family: 'Marcellus', serif;
             font-size: 32px;
@@ -475,7 +624,6 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             font-weight: 400;
           }
 
-          /* Category List */
           .category-list {
             list-style: none;
             padding: 0;
@@ -489,11 +637,14 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             font-family: 'Lato', sans-serif;
             opacity: 0.9;
           }
+          .category-list li.active {
+            opacity: 1;
+            font-weight: 700;
+          }
           .category-list li:last-child {
             border-bottom: none;
           }
 
-          /* Recent Posts */
           .recent-posts {
             display: flex;
             flex-direction: column;
@@ -532,30 +683,6 @@ const BlogListing = ({ data: initialData, blogs: initialBlogs = [] }) => {
             font-weight: 400;
           }
 
-          /* Promo Widget */
-          .promo-banner {
-            width: 100%;
-            height: 350px;
-            background: #D9D9D9;
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-          }
-          .promo-overlay {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 15px;
-            text-align: center;
-            color: #111;
-            font-family: 'Marcellus', serif;
-            font-weight: bold;
-          }
-
-          /* Responsive */
           @media (max-width: 1200px) {
             .blog-container {
               grid-template-columns: 1fr 320px;
