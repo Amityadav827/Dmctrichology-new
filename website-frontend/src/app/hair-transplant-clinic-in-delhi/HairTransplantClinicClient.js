@@ -30,6 +30,7 @@ export default function HairTransplantClinicClient({ pageData, faqData }) {
       <AboutDrNandaniEducationExperience
         data={pageData.educationExperience}
         credentialsData={pageData.credentialsSection}
+        showImages={false}
       />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection} />
       <AboutDrNandaniTestimonials data={pageData.testimonialsSection} useDefaultTestimonials={false} />
