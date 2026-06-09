@@ -4,7 +4,7 @@ import React from 'react';
 
 export function escapeRichText(value = '') {
   return String(value)
-    .replace(/&/g, '&amp;')
+    .replace(/&(?!(?:amp|lt|gt|quot|#\d+|#x[0-9a-fA-F]+);)/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')

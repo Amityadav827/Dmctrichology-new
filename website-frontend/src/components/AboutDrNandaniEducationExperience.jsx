@@ -343,12 +343,27 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
 
         .nandani-credentials-editorial {
           max-width: 1300px;
-          margin: 54px auto 0;
+          margin: 64px auto 0;
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 48px;
-          border-top: 0;
-          padding-top: 42px;
+          gap: 0;
+          background: #26345c;
+          border-radius: 28px;
+          padding: 64px 70px;
+          box-shadow: 0 30px 60px rgba(38, 52, 92, 0.22);
+        }
+
+        .nandani-credentials-editorial article {
+          padding: 0 50px;
+        }
+
+        .nandani-credentials-editorial article:first-child {
+          padding-left: 0;
+          border-right: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        .nandani-credentials-editorial article:last-child {
+          padding-right: 0;
         }
 
         .nandani-credentials-editorial article h3 {
@@ -356,17 +371,30 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
           font-size: clamp(25px, 2.4vw, 34px);
           line-height: 1.18;
           font-weight: 400;
-          color: #111111;
-          margin: 0 0 18px;
+          color: #ffffff;
+          margin: 0 0 24px;
+          padding-bottom: 16px;
+          position: relative;
+        }
+
+        .nandani-credentials-editorial article h3::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 54px;
+          height: 3px;
+          border-radius: 2px;
+          background: #d4af7a;
         }
 
         :global(.nandani-credentials-rich),
         :global(.nandani-credentials-rich p),
         :global(.nandani-credentials-rich li) {
           font-family: 'Lato', sans-serif;
-          font-size: 15px;
-          line-height: 1.78;
-          color: #333333;
+          font-size: 15.5px;
+          line-height: 1.85;
+          color: rgba(255, 255, 255, 0.82);
         }
 
         :global(.nandani-credentials-rich p) {
@@ -379,7 +407,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
 
         :global(.nandani-credentials-rich strong) {
           font-weight: 800;
-          color: #111111;
+          color: #ffffff;
         }
 
         :global(.nandani-credentials-rich ul),
@@ -401,7 +429,18 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
 
           .nandani-credentials-editorial {
             grid-template-columns: 1fr;
-            gap: 32px;
+            gap: 0;
+            padding: 40px 30px;
+            border-radius: 24px;
+          }
+          .nandani-credentials-editorial article {
+            padding: 0;
+          }
+          .nandani-credentials-editorial article:first-child {
+            border-right: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+            padding-bottom: 34px;
+            margin-bottom: 34px;
           }
         }
 
