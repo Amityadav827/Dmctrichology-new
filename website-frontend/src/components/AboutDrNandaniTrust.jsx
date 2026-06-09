@@ -304,8 +304,7 @@ export default function AboutDrNandaniTrust({
           padding-top: 0;
         }
 
-        .nandani-trust-inner-split .nandani-patient-trust-image,
-        .nandani-trust-inner-reverse .nandani-patient-trust-image {
+        .nandani-patient-trust-inner .nandani-patient-trust-image {
           position: sticky;
           top: 24px;
           align-self: start;
@@ -316,12 +315,11 @@ export default function AboutDrNandaniTrust({
             grid-template-columns: 1fr;
             gap: 42px;
           }
-          .nandani-trust-inner-reverse .nandani-patient-trust-image {
-            order: -1;
+          .nandani-patient-trust-inner .nandani-patient-trust-image {
             position: static;
           }
-          .nandani-trust-inner-split .nandani-patient-trust-image {
-            position: static;
+          .nandani-trust-inner-reverse .nandani-patient-trust-image {
+            order: -1;
           }
 
           .nandani-patient-trust-image,
