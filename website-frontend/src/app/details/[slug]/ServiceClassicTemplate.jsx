@@ -166,7 +166,7 @@ export default function ServiceClassicTemplate({ service, slug, staticFallback }
       {show('hairTransplantWhy') && !isHairCostDelhiPage && showTransplantWhyChoose && (
         <HairTransplantWhyChooseSection
           data={service.hairTransplantWhyChooseSection || null}
-          image={service.benefitsSection?.image || service.idealCandidates?.sectionImage || staticFallback.benefitsSection?.image || ''}
+          image={service.hairTransplantWhyChooseSection?.image || service.benefitsSection?.image || service.idealCandidates?.sectionImage || staticFallback.benefitsSection?.image || ''}
           serviceTitle={service.banner?.title || service.title || ''}
           pageSlug={slug}
         />

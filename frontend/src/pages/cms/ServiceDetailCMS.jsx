@@ -4641,6 +4641,18 @@ export default function ServiceDetailCMS() {
                     />
                   </div>
 
+                  <MediaUploader
+                    label="Section Image (right side)"
+                    value={data.hairTransplantWhyChooseSection?.image || ""}
+                    onChange={val => setData(prev => ({
+                      ...prev,
+                      hairTransplantWhyChooseSection: {
+                        ...(prev.hairTransplantWhyChooseSection || {}),
+                        image: val
+                      }
+                    }))}
+                  />
+
                   {(data.hairTransplantWhyChooseSection?.points || []).map((point, i) => (
                     <div key={i} className="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-3 shadow-sm">
                       <input
