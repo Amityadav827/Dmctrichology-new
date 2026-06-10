@@ -1,4 +1,5 @@
 import AboutDaduMedicalCentreClient from './AboutDaduMedicalCentreClient';
+import SchemaMarkup from '../../components/SchemaMarkup';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -146,5 +147,5 @@ export default async function AboutDaduMedicalCentreRoute() {
     getHomeFaqData()
   ]);
 
-  return <AboutDaduMedicalCentreClient initialData={data} initialFaqData={faqData} />;
+  return (<><SchemaMarkup seo={data?.seo} /><AboutDaduMedicalCentreClient initialData={data} initialFaqData={faqData} /></>);
 }

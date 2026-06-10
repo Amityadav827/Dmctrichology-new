@@ -1,6 +1,7 @@
 import ScienceHero from '@/components/ScienceHero';
 import ScienceIntro from '@/components/ScienceIntro';
 import ScienceDualFeatures from '@/components/ScienceDualFeatures';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { notFound } from 'next/navigation';
 
 export const metadata = {
@@ -80,6 +81,7 @@ export default async function DynamicSlugPage({ params }) {
 
       return (
         <main className="science-dmc-page">
+          <SchemaMarkup seo={pageData?.seo} />
           <ScienceHero data={heroData} />
           <ScienceIntro data={introData} />
           <ScienceDualFeatures data={featuresData} />
@@ -90,6 +92,7 @@ export default async function DynamicSlugPage({ params }) {
     // 3. Render a generic CMS page if it's not the science page
     return (
       <main className="generic-cms-page pt-32 pb-16 min-h-screen">
+        <SchemaMarkup seo={pageData?.seo} />
         <div className="container mx-auto px-4 max-w-4xl">
           <h1 className="text-4xl font-black text-slate-900 mb-8 font-marcellus">{pageData.title}</h1>
           {pageData.content && (

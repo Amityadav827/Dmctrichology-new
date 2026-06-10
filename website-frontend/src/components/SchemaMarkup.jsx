@@ -1,0 +1,24 @@
+// Server component: renders page-specific Schema.org JSON-LD (from CMS seo.schema)
+// into the HTML so search engines can read it. Invalid/empty schema is skipped.
+export default function SchemaMarkup({ seo, schema }) {
+  const raw = String(schema ?? seo?.schema ?? seo?.schemaScript ?? "").trim();
+  if (!raw) return null;
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    // Invalid JSON entered in the dashboard — render nothing rather than break the page.
+    return null;
+  }
+  if (!parsed || (typeof parsed === "object" && Object.keys(parsed).length === 0)) {
+    return null;
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(parsed) }}
+    />
+  );
+}

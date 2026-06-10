@@ -1,4 +1,5 @@
 import HairTransplantClinicClient from './HairTransplantClinicClient';
+import SchemaMarkup from '../../components/SchemaMarkup';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -276,5 +277,5 @@ export async function generateMetadata() {
 
 export default async function HairTransplantClinicPage() {
   const cmsData = await getClinicData();
-  return <HairTransplantClinicClient pageData={cmsData} faqData={hasFaqContent(cmsData.faqSection) ? cmsData.faqSection : faqData} />;
+  return (<><SchemaMarkup seo={cmsData?.seo} /><HairTransplantClinicClient pageData={cmsData} faqData={hasFaqContent(cmsData.faqSection) ? cmsData.faqSection : faqData} /></>);
 }

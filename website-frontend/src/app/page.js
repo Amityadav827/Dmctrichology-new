@@ -14,10 +14,15 @@ import BlogSection from '@/components/BlogSection';
 import PressMediaSection from '@/components/PressMediaSection';
 import ResultsSlider from '@/components/ResultsSlider';
 import GradeSlider from '@/components/GradeSlider';
+import SchemaMarkup from '@/components/SchemaMarkup';
+import { fetchSiteSettings } from '@/services/api';
 
-export default function Home() {
+export default async function Home() {
+  const settingsRes = await fetchSiteSettings().catch(() => null);
+  const siteSchema = settingsRes?.data?.schema || settingsRes?.data?.seo?.schema || '';
   return (
     <div className="home-page">
+      <SchemaMarkup schema={siteSchema} />
       <div style={{ position: 'relative' }}>
         <HeroSlider />
         <div className="hero-right">

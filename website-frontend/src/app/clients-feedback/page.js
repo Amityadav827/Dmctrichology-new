@@ -1,4 +1,5 @@
 import ClientFeedbackPage from '../../components/ClientFeedbackPage';
+import SchemaMarkup from '../../components/SchemaMarkup';
 import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 
 export const dynamic = 'force-dynamic';
@@ -56,5 +57,5 @@ export async function generateMetadata() {
 
 export default async function ClientFeedbackRoute() {
   const data = await getPageData();
-  return <ClientFeedbackPage data={data} />;
+  return (<><SchemaMarkup seo={data?.seo} /><ClientFeedbackPage data={data} /></>);
 }

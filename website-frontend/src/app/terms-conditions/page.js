@@ -1,4 +1,5 @@
 import TermsConditionsPage from '../../components/TermsConditionsPage';
+import SchemaMarkup from '../../components/SchemaMarkup';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -50,5 +51,5 @@ export async function generateMetadata() {
 
 export default async function TermsConditionsRoute() {
   const data = await getPageData();
-  return <TermsConditionsPage data={data} />;
+  return (<><SchemaMarkup seo={data?.seo} /><TermsConditionsPage data={data} /></>);
 }

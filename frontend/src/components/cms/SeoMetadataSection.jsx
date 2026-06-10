@@ -1,5 +1,5 @@
 import React from "react";
-import { Search } from "lucide-react";
+import { Search, Code2, CheckCircle2, AlertCircle } from "lucide-react";
 
 const inputCls =
   "w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all";
@@ -8,6 +8,18 @@ export default function SeoMetadataSection({ seo = {}, onChange }) {
   const update = (field, value) => {
     onChange?.(field, value);
   };
+
+  // Live validation of the JSON-LD schema box
+  const schemaText = seo.schema || "";
+  let schemaValid = null; // null = empty, true = valid JSON, false = invalid
+  if (schemaText.trim()) {
+    try {
+      JSON.parse(schemaText);
+      schemaValid = true;
+    } catch {
+      schemaValid = false;
+    }
+  }
 
   return (
     <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
@@ -42,6 +54,32 @@ export default function SeoMetadataSection({ seo = {}, onChange }) {
           />
         </div>
 
+        <div>
+          <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">
+            Meta Keywords
+          </label>
+          <input
+            type="text"
+            value={seo.keywords || ""}
+            onChange={e => update("keywords", e.target.value)}
+            className={inputCls}
+            placeholder="keyword one, keyword two, ..."
+          />
+        </div>
+
+        <div>
+          <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">
+            Canonical URL
+          </label>
+          <input
+            type="text"
+            value={seo.canonicalUrl || ""}
+            onChange={e => update("canonicalUrl", e.target.value)}
+            className={inputCls}
+            placeholder="https://dmctrichology.com/page"
+          />
+        </div>
+
         <div className="md:col-span-2">
           <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">
             OG Image URL (Social Sharing Image)
@@ -65,6 +103,38 @@ export default function SeoMetadataSection({ seo = {}, onChange }) {
               />
             )}
           </div>
+        </div>
+
+        {/* Structured data / Schema markup (JSON-LD) */}
+        <div className="md:col-span-2">
+          <label className="text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest flex items-center gap-2">
+            <Code2 size={13} className="text-blue-600" />
+            Schema Markup (JSON-LD)
+            {schemaValid === true && (
+              <span className="flex items-center gap-1 text-green-600 normal-case tracking-normal font-bold">
+                <CheckCircle2 size={13} /> Valid JSON
+              </span>
+            )}
+            {schemaValid === false && (
+              <span className="flex items-center gap-1 text-red-500 normal-case tracking-normal font-bold">
+                <AlertCircle size={13} /> Invalid JSON — fix before saving
+              </span>
+            )}
+          </label>
+          <textarea
+            rows={10}
+            value={schemaText}
+            onChange={e => update("schema", e.target.value)}
+            className={`${inputCls} resize-y font-mono text-xs ${
+              schemaValid === false ? "border-red-300 focus:border-red-500 focus:ring-red-500/10" : ""
+            }`}
+            placeholder={`{\n  "@context": "https://schema.org",\n  "@type": "MedicalClinic",\n  "name": "DMC Trichology",\n  "url": "https://dmctrichology.com"\n}`}
+          />
+          <p className="text-[11px] text-slate-400 mt-3 leading-relaxed">
+            Paste valid JSON-LD here. It will be added to this page's &lt;head&gt; as a
+            <span className="font-bold"> &lt;script type="application/ld+json"&gt;</span> tag on save.
+            Leave empty to skip. You can paste output from any schema generator.
+          </p>
         </div>
       </div>
     </div>

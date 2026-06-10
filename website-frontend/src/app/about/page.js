@@ -1,4 +1,5 @@
 import AboutUsClient from '@/components/AboutUsClient';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { fetchAboutUs } from '@/services/api';
 
 // Static fallback data for production safety (SSR Level)
@@ -63,5 +64,5 @@ async function getAboutData() {
 export default async function AboutUsPage() {
   const data = await getAboutData();
 
-  return <AboutUsClient initialData={data} />;
+  return (<><SchemaMarkup seo={data?.seo} /><AboutUsClient initialData={data} /></>);
 }

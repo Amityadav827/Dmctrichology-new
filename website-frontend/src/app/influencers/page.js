@@ -1,4 +1,5 @@
 import InfluencerHero from '../../components/InfluencerHero';
+import SchemaMarkup from '../../components/SchemaMarkup';
 import InfluencerShowcase from '../../components/InfluencerShowcase';
 import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 import '../service.css';
@@ -40,6 +41,7 @@ export default async function InfluencersPage() {
 
   return (
     <div className="bg-white min-h-screen">
+      <SchemaMarkup seo={data?.seo} />
       <InfluencerHero data={hero} />
       <InfluencerShowcase cards={influencerCards} />
     </div>

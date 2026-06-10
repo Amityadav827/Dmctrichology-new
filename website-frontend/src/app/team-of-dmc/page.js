@@ -1,4 +1,5 @@
 import OurTeamPage from '../../components/OurTeamPage';
+import SchemaMarkup from '../../components/SchemaMarkup';
 import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 
 export const dynamic = 'force-dynamic';
@@ -47,5 +48,5 @@ export async function generateMetadata() {
 
 export default async function TeamOfDmcRoute() {
   const data = await getPageData();
-  return <OurTeamPage data={data} />;
+  return (<><SchemaMarkup seo={data?.seo} /><OurTeamPage data={data} /></>);
 }

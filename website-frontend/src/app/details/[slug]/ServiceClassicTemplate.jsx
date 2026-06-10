@@ -23,6 +23,7 @@ import HairTransplantWhyChooseSection from '../../../components/HairTransplantWh
 import HairTransplantResultsSection from '../../../components/HairTransplantResultsSection';
 import HairTransplantVideosSection from '../../../components/HairTransplantVideosSection';
 import ServiceGlobalSections from '../../../components/ServiceGlobalSections';
+import SchemaMarkup from '../../../components/SchemaMarkup';
 
 function getFallbackWhyChoose(service, staticFallback) {
   const dbSection = service.whyChooseUsSection || {};
@@ -134,6 +135,7 @@ export default function ServiceClassicTemplate({ service, slug, staticFallback, 
 
   return (
     <div className="bg-white min-h-screen">
+      <SchemaMarkup seo={service.seo} />
       {show('banner') && <DetailsBanner data={banner || {}} />}
       {show('banner') && <ServiceIntro data={intro || {}} banner={banner || {}} />}
       <ServiceGlobalSections service={service} layout={layout} pageSlug={slug} resultsFallback={resultsFallback} suppressBeforeAfter={show('resultsSection') && !!resultsSection} />

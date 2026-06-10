@@ -17,10 +17,14 @@ export function buildCmsMetadata({ data = {}, titleFallback = '', descriptionFal
   const title = pickText(seo.metaTitle, titleFallback);
   const description = pickText(seo.metaDescription, descriptionFallback);
   const ogImage = pickText(seo.ogImage, imageFallback);
+  const keywords = pickText(seo.keywords);
+  const canonical = pickText(seo.canonicalUrl);
 
   return {
     title,
     description,
+    ...(keywords ? { keywords } : {}),
+    ...(canonical ? { alternates: { canonical } } : {}),
     openGraph: {
       title,
       description,

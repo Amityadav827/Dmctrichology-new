@@ -1,4 +1,5 @@
 import BlogHero from '../../components/BlogHero';
+import SchemaMarkup from '../../components/SchemaMarkup';
 import BlogListing from '../../components/BlogListing';
 import { fetchBlogPage, fetchBlogs } from '../../services/api';
 import '../service.css';
@@ -60,6 +61,7 @@ export default async function BlogPage({ searchParams }) {
 
   return (
     <div className="bg-white min-h-screen">
+      <SchemaMarkup seo={pageSettings?.seo} />
       <BlogHero data={pageSettings.hero} />
       <BlogListing
         data={pageSettings}

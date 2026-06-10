@@ -2,6 +2,7 @@ import ContactHero from '../../components/ContactHero';
 import EnquirySection from '../../components/EnquirySection';
 import MapSection from '../../components/MapSection';
 import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
+import SchemaMarkup from '../../components/SchemaMarkup';
 import '../service.css';
 
 export const dynamic = 'force-dynamic';
@@ -41,6 +42,7 @@ export default async function ContactPage() {
 
   return (
     <div className="bg-white min-h-screen">
+      <SchemaMarkup seo={pageData?.seo} />
       <ContactHero data={hero} />
       <EnquirySection 
         sectionId="contact-consultation" 

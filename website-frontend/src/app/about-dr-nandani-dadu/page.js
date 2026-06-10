@@ -1,4 +1,5 @@
 import AboutDrNandaniClient from './AboutDrNandaniClient';
+import SchemaMarkup from '../../components/SchemaMarkup';
 
 // Premium high-fidelity static fallback dataset for build stability
 const staticFallback = {
@@ -315,5 +316,5 @@ export default async function DrNandaniPage() {
     getHomeFaqData()
   ]);
 
-  return <AboutDrNandaniClient initialData={data} initialFaqData={faqData} />;
+  return (<><SchemaMarkup seo={data?.seo} /><AboutDrNandaniClient initialData={data} initialFaqData={faqData} /></>);
 }

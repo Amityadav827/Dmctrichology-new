@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ServiceSearchSelector from "../../components/ServiceSearchSelector";
+import SeoMetadataSection from "../../components/cms/SeoMetadataSection";
 import { FRONTEND_URL } from "../../utils/config";
 
 const HAIR_COST_DELHI_SLUGS = ["hair-transplant-cost-in-delhi", "hair-transplant-cost-in-india"];
@@ -5407,19 +5408,10 @@ export default function ServiceDetailCMS() {
             
             {/* SEO Settings */}
             {(true || activeTab === 'seo') && (
-              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
-                <h3 className="text-lg font-bold mb-6 text-slate-800">SEO & Meta Attributes</h3>
-                <div className="grid grid-cols-1 gap-6">
-                   <div>
-                      <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Meta Title</label>
-                      <input type="text" value={data.seo?.metaTitle || ""} onChange={e => updateSectionField("seo", "metaTitle", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
-                   </div>
-                   <div>
-                      <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Meta Description</label>
-                      <textarea value={data.seo?.metaDescription || ""} onChange={e => updateSectionField("seo", "metaDescription", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold min-h-[100px]" />
-                   </div>
-                </div>
-              </div>
+              <SeoMetadataSection
+                seo={data.seo || {}}
+                onChange={(field, value) => updateSectionField("seo", field, value)}
+              />
             )}
 
           </div>

@@ -1,4 +1,5 @@
 import VirtualTourHero from '../../components/VirtualTourHero';
+import SchemaMarkup from '../../components/SchemaMarkup';
 import VirtualTourGallery from '../../components/VirtualTourGallery';
 import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 import '../service.css';
@@ -40,6 +41,7 @@ export default async function VirtualTourPage() {
 
   return (
     <div className="bg-white min-h-screen">
+      <SchemaMarkup seo={data?.seo} />
       <VirtualTourHero data={hero} />
       <VirtualTourGallery cards={tourCards} />
     </div>

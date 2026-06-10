@@ -1,4 +1,5 @@
 import RealResultsPage from '../../components/RealResultsPage';
+import SchemaMarkup from '../../components/SchemaMarkup';
 import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
@@ -37,5 +38,5 @@ export async function generateMetadata() {
 
 export default async function Page() {
   const data = await getRealResultsData();
-  return <RealResultsPage data={data || {}} />;
+  return (<><SchemaMarkup seo={data?.seo} /><RealResultsPage data={data || {}} /></>);
 }

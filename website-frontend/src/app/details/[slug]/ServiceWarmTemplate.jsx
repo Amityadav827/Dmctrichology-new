@@ -1,4 +1,5 @@
 import DetailsBanner from '../../../components/DetailsBanner';
+import SchemaMarkup from '../../../components/SchemaMarkup';
 import AboutDrNiveditaAssociations from '../../../components/AboutDrNiveditaAssociations';
 import AboutDrNiveditaFeaturedIn from '../../../components/AboutDrNiveditaFeaturedIn';
 import ServiceStoryOpener from '../../../components/ServiceStoryOpener';
@@ -82,6 +83,7 @@ export default function ServiceWarmTemplate({ service, slug, staticFallback = {}
 
   return (
     <div className="bg-white min-h-screen dmc-service-warm">
+      <SchemaMarkup seo={service.seo} />
       {/* 1. Cinematic hero */}
       <DetailsBanner data={banner || {}} variant="cinematic" />
 

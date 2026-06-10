@@ -1,4 +1,5 @@
 import AboutDrNiveditaClient from './AboutDrNiveditaClient';
+import SchemaMarkup from '../../components/SchemaMarkup';
 
 const fallbackMetadata = {
   title: 'Dr. Nivedita Dadu | Expert Dermatologist & Trichologist in Delhi | DMC Trichology',
@@ -239,5 +240,5 @@ export default async function AboutDrNiveditaPage() {
     getHomeFaqData()
   ]);
 
-  return <AboutDrNiveditaClient initialData={pageData} initialFaqData={faqData} />;
+  return (<><SchemaMarkup seo={pageData?.seo} /><AboutDrNiveditaClient initialData={pageData} initialFaqData={faqData} /></>);
 }

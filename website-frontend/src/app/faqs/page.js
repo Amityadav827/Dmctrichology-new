@@ -1,4 +1,5 @@
 import FaqsPage from '../../components/FaqsPage';
+import SchemaMarkup from '../../components/SchemaMarkup';
 import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 
 export const dynamic = 'force-dynamic';
@@ -47,5 +48,5 @@ export async function generateMetadata() {
 
 export default async function FaqsRoute() {
   const data = await getPageData();
-  return <FaqsPage data={data} />;
+  return (<><SchemaMarkup seo={data?.seo} /><FaqsPage data={data} /></>);
 }

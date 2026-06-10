@@ -1,4 +1,5 @@
 import PressMediaHero from '../../components/PressMediaHero';
+import SchemaMarkup from '../../components/SchemaMarkup';
 import PressMediaShowcase from '../../components/PressMediaShowcase';
 import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 import '../service.css';
@@ -40,6 +41,7 @@ export default async function PressMediaPage() {
 
   return (
     <div className="bg-white min-h-screen">
+      <SchemaMarkup seo={data?.seo} />
       <PressMediaHero data={hero} />
       <PressMediaShowcase cards={mediaCards} />
     </div>
