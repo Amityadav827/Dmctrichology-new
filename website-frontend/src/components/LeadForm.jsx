@@ -10,7 +10,8 @@ export default function LeadForm() {
     mobile: '',
     code: ''
   });
-  const [captcha, setCaptcha] = useState(createCaptcha);
+  // Start empty so server and client first render match; generate on mount (client only).
+  const [captcha, setCaptcha] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -20,6 +21,11 @@ export default function LeadForm() {
   const generateCaptcha = () => {
     setCaptcha(createCaptcha());
   };
+
+  // Generate captcha only on the client after mount (avoids SSR/client hydration mismatch).
+  useEffect(() => {
+    setCaptcha(createCaptcha());
+  }, []);
 
   useEffect(() => {
     // Fetch CMS settings for dynamic stats

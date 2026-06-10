@@ -49,7 +49,7 @@ export const fetchMenu = async () => {
 
 export const fetchHeroSlides = async () => {
   try {
-    const res = await api.get('/hero');
+    const res = await api.get(`/hero?t=${Date.now()}`);
     return res.data;
   } catch (error) {
     console.error('Error fetching hero slides', error);
