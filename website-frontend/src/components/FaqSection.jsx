@@ -26,7 +26,7 @@ function getFaqCategories(source = {}) {
   return flatFaqs.length > 0 ? [{ title: 'General', faqs: flatFaqs }] : [];
 }
 
-export default function FaqSection({ initialData = null }) {
+export default function FaqSection({ initialData = null, iconOverride = null }) {
   const [data, setData] = useState(initialData);
   const [activeTab, setActiveTab] = useState(initialData?.categories?.[0]?.title || '');
 
@@ -153,7 +153,7 @@ export default function FaqSection({ initialData = null }) {
               // Custom icon from the dashboard takes priority; otherwise the
               // existing default icon is used (so nothing changes until one is set).
               const hasCustomIcon = Boolean(faq.icon);
-              const iconSrc = hasCustomIcon ? faq.icon : defaultIconSrc;
+              const iconSrc = iconOverride || (hasCustomIcon ? faq.icon : defaultIconSrc);
               return (
                 <div
                   key={index}

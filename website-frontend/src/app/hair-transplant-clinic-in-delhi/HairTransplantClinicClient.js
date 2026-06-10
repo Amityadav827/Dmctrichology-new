@@ -34,7 +34,7 @@ export default function HairTransplantClinicClient({ pageData, faqData }) {
       />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection} />
       <AboutDrNandaniTestimonials data={pageData.testimonialsSection} useDefaultTestimonials={false} />
-      <FaqSection initialData={faqData} />
+      <FaqSection initialData={faqData} iconOverride="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781108623663-534508060.svg" />
     </main>
   );
 }
