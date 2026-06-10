@@ -62,7 +62,7 @@ export default function FeaturesBar() {
       >
         <div
           className="marquee-container"
-          style={{ width: '100%', overflow: 'hidden' }}
+          style={{ width: '100%', overflow: 'hidden', padding: '16px 0' }}
           onMouseEnter={() => pauseOnHover && setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
@@ -70,20 +70,39 @@ export default function FeaturesBar() {
             {displayItems.map((item, index) => (
               <div
                 key={index}
+                className="marquee-card"
                 style={{
                   flex: '0 0 auto',
-                  width: '200px',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  marginRight: '40px'
+                  gap: '14px',
+                  background: '#FFFFFF',
+                  boxShadow: '0px 4px 12px 0px #00000014',
+                  borderRadius: '14px',
+                  padding: '16px 26px',
+                  marginRight: '24px'
                 }}
               >
                 <img
                   src={item.icon}
                   alt={item.title || `Feature ${(index % activeItems.length) + 1}`}
-                  style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                  className="marquee-card-icon"
+                  style={{ width: '40px', height: '40px', objectFit: 'contain', flexShrink: 0 }}
                 />
+                {item.title && (
+                  <span
+                    className="marquee-card-text"
+                    style={{
+                      fontFamily: "'Marcellus', serif",
+                      fontSize: '15px',
+                      color: '#111111',
+                      whiteSpace: 'nowrap',
+                      lineHeight: 1.3
+                    }}
+                  >
+                    {item.title}
+                  </span>
+                )}
               </div>
             ))}
           </div>
@@ -97,9 +116,9 @@ export default function FeaturesBar() {
             .marquee-content {
               gap: 20px !important;
             }
-            .marquee-content > div {
-              width: clamp(140px, 22vw, 190px) !important;
-              margin-right: 22px !important;
+            .marquee-card {
+              margin-right: 18px !important;
+              padding: 14px 22px !important;
             }
           }
           @media (max-width: 767px) {
@@ -107,9 +126,17 @@ export default function FeaturesBar() {
               padding-top: 34px !important;
               padding-bottom: 34px !important;
             }
-            .marquee-content > div {
-              width: 132px !important;
+            .marquee-card {
               margin-right: 12px !important;
+              padding: 12px 18px !important;
+              gap: 10px !important;
+            }
+            .marquee-card-icon {
+              width: 34px !important;
+              height: 34px !important;
+            }
+            .marquee-card-text {
+              font-size: 14px !important;
             }
           }
         `}</style>
