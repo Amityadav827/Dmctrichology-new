@@ -223,6 +223,7 @@ function Pages() {
     metaKeywords: "",
     metaDescription: "",
     canonicalUrl: "",
+    schema: "",
     slug: ""
   };
 
@@ -261,6 +262,7 @@ function Pages() {
       metaKeywords: item.metaKeywords || "",
       metaDescription: item.metaDescription || "",
       canonicalUrl: item.canonicalUrl || "",
+      schema: item.schema || "",
       slug: item.slug || ""
     });
     setEditingId(item._id);
@@ -563,6 +565,10 @@ function Pages() {
                 <div>
                   <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 500, color: "#374151", marginBottom: "0.375rem" }}>Canonical URL</label>
                   <input type="text" name="canonicalUrl" value={formData.canonicalUrl} onChange={handleChange} placeholder="https://example.com/page" className="form-input" />
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: "0.8rem", fontWeight: 500, color: "#374151", marginBottom: "0.375rem" }}>Schema Markup (JSON-LD)</label>
+                  <textarea name="schema" value={formData.schema || ""} onChange={handleChange} rows="8" placeholder={'{"@context":"https://schema.org","@type":"WebPage"}'} className="form-input" style={{ fontFamily: "monospace", fontSize: "0.75rem" }} />
                 </div>
               </div>
             </div>

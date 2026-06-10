@@ -30,7 +30,15 @@ export async function generateMetadata({ params }) {
       if (res.ok) {
         const json = await res.json();
         const d = json?.data || {};
-        return buildCmsMetadata({ data: d, titleFallback: d.title || 'DMC Trichology', descriptionFallback: '' });
+        // Custom pages store flat metaTitle/metaDescription fields (not nested under seo)
+        const seo = d.seo || {
+          metaTitle: d.metaTitle,
+          metaDescription: d.metaDescription,
+          ogImage: d.ogImage,
+          keywords: d.metaKeywords,
+          canonicalUrl: d.canonicalUrl,
+        };
+        return buildCmsMetadata({ data: { seo }, titleFallback: d.title || 'DMC Trichology', descriptionFallback: '' });
       }
     }
   } catch {
@@ -119,7 +127,7 @@ export default async function DynamicSlugPage({ params }) {
     // 3. Render a generic CMS page if it's not the science page
     return (
       <main className="generic-cms-page pt-32 pb-16 min-h-screen">
-        <SchemaMarkup seo={pageData?.seo} />
+        <SchemaMarkup schema={pageData?.schema || pageData?.seo?.schema} />
         <div className="container mx-auto px-4 max-w-4xl">
           <h1 className="text-4xl font-black text-slate-900 mb-8 font-marcellus">{pageData.title}</h1>
           {pageData.content && (

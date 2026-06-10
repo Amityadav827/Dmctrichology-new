@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
 import { Save, Loader2 } from "lucide-react";
+import SeoMetadataSection from "../../components/cms/SeoMetadataSection";
 
 export default function ServiceHeroCMS() {
   const [hero, setHero] = useState({
@@ -12,6 +13,7 @@ export default function ServiceHeroCMS() {
     bannerHeight: "400px",
   });
 
+  const [seo, setSeo] = useState({ metaTitle: "", metaDescription: "", ogImage: "", keywords: "", canonicalUrl: "", schema: "" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -24,6 +26,9 @@ export default function ServiceHeroCMS() {
       const { data } = await axios.get("/service-page-settings");
       if (data.success && data.data.hero) {
         setHero(data.data.hero);
+      }
+      if (data?.success && data?.data?.seo) {
+        setSeo((prev) => ({ ...prev, ...data.data.seo }));
       }
     } catch (error) {
       toast.error("Failed to load hero settings");
@@ -41,7 +46,7 @@ export default function ServiceHeroCMS() {
     e.preventDefault();
     setSaving(true);
     try {
-      const { data } = await axios.put("/service-page-settings", { hero });
+      const { data } = await axios.put("/service-page-settings", { hero, seo });
       if (data.success) {
         toast.success("Hero banner updated successfully");
       }
@@ -139,6 +144,10 @@ export default function ServiceHeroCMS() {
             />
           </div>
         </div>
+      </div>
+
+      <div className="mt-6">
+        <SeoMetadataSection seo={seo} onChange={(field, value) => setSeo((prev) => ({ ...prev, [field]: value }))} />
       </div>
     </div>
   );

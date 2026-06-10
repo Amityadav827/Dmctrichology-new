@@ -1,10 +1,22 @@
 import ServiceHero from '../../components/ServiceHero';
 import ServiceListing from '../../components/ServiceListing';
+import SchemaMarkup from '../../components/SchemaMarkup';
 import { fetchServicePageSettings, fetchServiceListingCards, fetchServiceListingCategories } from '../../services/serviceApi';
+import { buildCmsMetadata } from '../../utils/pageSeoMetadata';
 import '../service.css';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+
+export async function generateMetadata() {
+  const res = await fetchServicePageSettings().catch(() => null);
+  const seo = res?.data?.seo || {};
+  return buildCmsMetadata({
+    data: { seo },
+    titleFallback: res?.data?.hero?.pageTitle || 'Our Services | DMC Trichology',
+    descriptionFallback: res?.data?.hero?.subtitle || 'Explore hair & skin treatments at DMC Trichology.',
+  });
+}
 
 export default async function ServicePage() {
   const [settingsRes, servicesRes, categoriesRes] = await Promise.all([
@@ -23,6 +35,7 @@ export default async function ServicePage() {
 
   return (
     <div className="bg-white min-h-screen">
+      <SchemaMarkup seo={settingsRes?.data?.seo} />
       <ServiceHero data={settings} />
       <ServiceListing services={services} categories={categories} />
     </div>
