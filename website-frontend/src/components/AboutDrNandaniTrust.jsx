@@ -34,6 +34,7 @@ export default function AboutDrNandaniTrust({
   const eyebrow = data.eyebrow || "TRUSTED CARE SERVICES";
   const heading = data.heading || "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?";
   const image = data.image || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
+  const image2 = data.image2 || image;
   const imageAlt = data.imageAlt || "Hair transplant treatment planning";
   const trustPoints = (data.trustPoints && data.trustPoints.length > 0) ? data.trustPoints : (useDefaultPoints ? defaultTrustPoints : []);
   const conclusion = data.conclusionParagraph || "Dr. Nandani Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandani Dadu now!";
@@ -57,6 +58,17 @@ export default function AboutDrNandaniTrust({
         sectionId={sectionId}
         fieldPath="trustSection.image"
         src={image}
+        alt={imageAlt}
+      />
+    </div>
+  );
+
+  const trustImage2 = (
+    <div className="nandani-patient-trust-image">
+      <EditableImage
+        sectionId={sectionId}
+        fieldPath="trustSection.image2"
+        src={image2}
         alt={imageAlt}
       />
     </div>
@@ -120,7 +132,7 @@ export default function AboutDrNandaniTrust({
                   <RichTextContent value={conclusion} className="nandani-trust-conclusion" />
                 )}
               </div>
-              {trustImage}
+              {trustImage2}
             </div>
           </section>
         </>

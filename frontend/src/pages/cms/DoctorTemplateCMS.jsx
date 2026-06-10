@@ -466,6 +466,7 @@ export default function DoctorTemplateCMS({
               onChange={value => update("trustSection.conclusionParagraph", value)}
             />
             <ImageField label="Section Image" path="trustSection.image" />
+            <ImageField label="Section Image 2 (Split Layout)" path="trustSection.image2" />
           </div>
           <Repeater title="Trust Content Blocks" path="trustSection.trustPoints" fields={[
             { name: "title", label: "Title" },
