@@ -30,6 +30,58 @@ async function fetchServiceData(slug) {
   return servicesData.find(s => s.slug.toLowerCase() === normalizedSlug) || null;
 }
 
+// Fallback before/after results pulled from the homepage Results Slider CMS,
+// so every service page can show results without per-service data entry.
+async function fetchResultsFallback() {
+  try {
+    const res = await fetch(`${API_BASE}/results-slider`, { cache: 'no-store' });
+    if (res.ok) {
+      const json = await res.json();
+      const d = json?.data;
+      if (json?.success && d) {
+        const cards = Array.isArray(d.results) ? d.results.filter(r => r && r.enabled !== false) : [];
+        if (cards.length > 0) {
+          return {
+            isVisible: d.enabled !== false,
+            subtitle: d.badgeText || 'BEFORE AND AFTER',
+            title: d.heading || 'RESULTS THAT SPEAK FOR THEMSELVES',
+            cards
+          };
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Failed to fetch results-slider fallback:', error);
+  }
+  return null;
+}
+
+// Fallback FAQs pulled from the homepage FAQ CMS (first 5 questions),
+// so service pages with no FAQ of their own still show an accordion.
+async function fetchFaqFallback() {
+  try {
+    const res = await fetch(`${API_BASE}/home-faq`, { cache: 'no-store' });
+    if (res.ok) {
+      const json = await res.json();
+      const d = json?.data;
+      if (json?.success && d && Array.isArray(d.categories)) {
+        const all = [];
+        d.categories.forEach(cat => {
+          (cat.faqs || []).forEach(f => {
+            if (f && (f.question || f.answer)) {
+              all.push({ question: f.question || '', answer: f.answer || '' });
+            }
+          });
+        });
+        if (all.length > 0) return all.slice(0, 5);
+      }
+    }
+  } catch (error) {
+    console.error('Failed to fetch home-faq fallback:', error);
+  }
+  return null;
+}
+
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
   const { slug } = resolvedParams;
@@ -72,10 +124,12 @@ export default async function DynamicDetailsPage({ params }) {
 
   const staticFallback = servicesData.find(s => s.slug.toLowerCase() === normalizedSlug) || {};
   const templateVersion = service.templateVersion || service.data?.templateVersion;
+  const resultsFallback = await fetchResultsFallback();
+  const faqFallback = await fetchFaqFallback();
 
   if (templateVersion === 'warm-v2') {
-    return <ServiceWarmTemplate service={service} slug={slug} staticFallback={staticFallback} />;
+    return <ServiceWarmTemplate service={service} slug={slug} staticFallback={staticFallback} resultsFallback={resultsFallback} faqFallback={faqFallback} />;
   }
 
-  return <ServiceClassicTemplate service={service} slug={slug} staticFallback={staticFallback} />;
+  return <ServiceClassicTemplate service={service} slug={slug} staticFallback={staticFallback} resultsFallback={resultsFallback} faqFallback={faqFallback} />;
 }

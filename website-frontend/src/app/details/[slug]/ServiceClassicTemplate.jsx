@@ -106,12 +106,13 @@ function getFallbackNotCandidates(service, staticFallback) {
   };
 }
 
-export default function ServiceClassicTemplate({ service, slug, staticFallback }) {
+export default function ServiceClassicTemplate({ service, slug, staticFallback, resultsFallback, faqFallback }) {
   const { banner, intro, process, beforeAfter, faqEnquiry, idealFrequency } = service;
   const normalizedSlug = String(slug || '').toLowerCase().trim();
 
   const googleReviewCta = service.googleReviewCta || staticFallback.googleReviewCta || null;
-  const resultsSection = service.resultsSection || staticFallback.resultsSection || null;
+  // Always show the homepage Results Slider data on service pages (single source).
+  const resultsSection = resultsFallback || service.resultsSection || staticFallback.resultsSection || null;
   const videosSection = service.videosSection || staticFallback.videosSection || null;
   const enquirySection = service.enquirySection || staticFallback.enquirySection || null;
   const isHairCostDelhiPage = ['hair-transplant-cost-in-delhi', 'hair-transplant-cost-in-india'].includes(normalizedSlug);
@@ -135,7 +136,7 @@ export default function ServiceClassicTemplate({ service, slug, staticFallback }
     <div className="bg-white min-h-screen">
       {show('banner') && <DetailsBanner data={banner || {}} />}
       {show('banner') && <ServiceIntro data={intro || {}} banner={banner || {}} />}
-      <ServiceGlobalSections service={service} layout={layout} pageSlug={slug} />
+      <ServiceGlobalSections service={service} layout={layout} pageSlug={slug} resultsFallback={resultsFallback} suppressBeforeAfter={show('resultsSection') && !!resultsSection} />
       {show('bodyHairIntroSection') && <BodyHairIntroSection data={service.bodyHairIntroSection || null} pageSlug={slug} />}
       {show('contentBlocks') && <ServiceContentBlock data={service.contentBlocks || []} pageSlug={slug} />}
       {show('benefitsSection') && (
@@ -176,7 +177,7 @@ export default function ServiceClassicTemplate({ service, slug, staticFallback }
       {show('editorialFaq') && <ServiceEditorialFaq data={service.editorialFaqSection || null} pageSlug={slug} googleReviewCta={googleReviewCta} />}
       {show('resultsSection') && <HairTransplantResultsSection data={resultsSection} />}
       {show('videosSection') && showVideosSection && <HairTransplantVideosSection data={videosSection} />}
-      {show('faqEnquiry') && <FaqEnquiry data={faqEnquiry || {}} enquirySection={enquirySection} pageSlug={slug} />}
+      {show('faqEnquiry') && <FaqEnquiry data={faqEnquiry || {}} enquirySection={enquirySection} pageSlug={slug} faqFallback={faqFallback} />}
     </div>
   );
 }

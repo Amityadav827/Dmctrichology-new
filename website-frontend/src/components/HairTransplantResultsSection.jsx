@@ -49,7 +49,7 @@ export default function HairTransplantResultsSection({ data }) {
               if (!item) return null;
               return (
                 <SwiperSlide key={idx}>
-                  <article className="hair-transplant-results-card">
+                  <a href="/results" className="hair-transplant-results-card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
                     <h3 className="hair-transplant-results-title">{item?.title || ""}</h3>
                     <div className="hair-transplant-results-images">
                       <div className="hair-transplant-results-image-box">
@@ -70,7 +70,7 @@ export default function HairTransplantResultsSection({ data }) {
                       </div>
                     </div>
                     {item?.sessions && <p className="hair-transplant-results-sessions">{item.sessions}</p>}
-                  </article>
+                  </a>
                 </SwiperSlide>
               );
             })}

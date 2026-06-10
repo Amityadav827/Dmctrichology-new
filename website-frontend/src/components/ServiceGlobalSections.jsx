@@ -268,13 +268,29 @@ function ServiceSectionFive({ data }) {
   );
 }
 
-function ServiceSectionSix({ data }) {
-  const results = (data.results || [])
+function ServiceSectionSix({ data, resultsFallback, suppressBeforeAfter }) {
+  // Always show the homepage Results Slider data (single source for every service page).
+  const homepageResults = (Array.isArray(resultsFallback?.cards) && resultsFallback.cards.length > 0)
+    ? [...resultsFallback.cards, ...resultsFallback.cards].map((c, i) => ({
+        id: `home-${i}`,
+        title: c.title,
+        beforeImage: c.beforeImg,
+        afterImage: c.afterImg,
+        description: c.sessions,
+        isVisible: true,
+        sortOrder: i
+      }))
+    : null;
+
+  const sourceResults = homepageResults || data.results || [];
+  const results = sourceResults
     .filter(result => result && result.isVisible !== false && (result.title || result.beforeImage || result.afterImage || result.description))
     .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
   const trackRef = useRef(null);
 
-  if (!data || data.isVisible === false || results.length === 0) return null;
+  // When the dedicated results section (HairTransplantResultsSection) is active, it already
+  // shows the homepage before/after data — skip this one to avoid a duplicate section.
+  if (suppressBeforeAfter || !data || data.isVisible === false || results.length === 0) return null;
 
   const scrollCards = (direction) => {
     const track = trackRef.current;
@@ -303,7 +319,12 @@ function ServiceSectionSix({ data }) {
           )}
           <div className="service-section-six-track" ref={trackRef}>
             {results.map((result, index) => (
-              <article className="service-section-six-card" key={result.id || `${result.title}-${index}`}>
+              <a
+                href="/results"
+                className="service-section-six-card"
+                key={result.id || `${result.title}-${index}`}
+                style={{ textDecoration: "none", color: "inherit", display: "block" }}
+              >
                 {result.title && <h3>{result.title}</h3>}
                 <div className="service-section-six-images">
                   <div>
@@ -316,7 +337,7 @@ function ServiceSectionSix({ data }) {
                   </div>
                 </div>
                 {result.description && <p>{result.description}</p>}
-              </article>
+              </a>
             ))}
           </div>
           {results.length > 4 && (
@@ -582,7 +603,7 @@ const sectionComponents = {
   section9: ServiceSectionNine
 };
 
-export default function ServiceGlobalSections({ service, layout = {}, pageSlug = "" }) {
+export default function ServiceGlobalSections({ service, layout = {}, pageSlug = "", resultsFallback = null, suppressBeforeAfter = false }) {
   const sections = useMemo(() => {
     return ["section1", "section2", "section3", "section4", "section5", "section9", "section6", "section7", "section8"]
       .map(id => ({ id, data: service?.[id] }))
@@ -595,7 +616,7 @@ export default function ServiceGlobalSections({ service, layout = {}, pageSlug =
     <>
       {sections.map(({ id, data }) => {
         const Component = sectionComponents[id];
-        return <Component key={id} data={data} service={service} pageSlug={pageSlug} />;
+        return <Component key={id} data={data} service={service} pageSlug={pageSlug} resultsFallback={resultsFallback} suppressBeforeAfter={suppressBeforeAfter} />;
       })}
     </>
   );

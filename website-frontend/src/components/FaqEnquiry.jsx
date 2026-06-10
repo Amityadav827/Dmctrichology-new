@@ -6,7 +6,7 @@ import EditableText from './Editable/EditableText';
 import EditableSection from './Editable/EditableSection';
 import { useBuilder } from '../context/BuilderContext';
 
-const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '' }) => {
+const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = null }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [sectionData, setSectionData] = useState(data);
   const [openFaqIndex, setOpenFaqIndex] = useState(0); // First open by default
@@ -56,7 +56,11 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '' }) => {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  const faqs = sectionData?.faqItems || [];
+  // Use the service's own FAQ; if it has none, fall back to the homepage FAQ (first 5).
+  const ownFaqs = (sectionData?.faqItems || []).filter(f => f && (f.question || f.answer));
+  const faqs = ownFaqs.length > 0
+    ? ownFaqs
+    : (Array.isArray(faqFallback) ? faqFallback : []);
   
   // Defensive normalization of enquirySection prop
   const isHairCostDelhiPage = ['hair-transplant-cost-in-delhi', 'hair-transplant-cost-in-india'].includes(String(pageSlug || '').toLowerCase());
