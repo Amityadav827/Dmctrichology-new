@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../api/client";
 import toast from "react-hot-toast";
+import SeoMetadataSection from "../../components/cms/SeoMetadataSection";
 import { 
   Save, 
   Loader2, 
@@ -153,6 +154,7 @@ export default function BlogHeroCMS() {
       <div className="flex gap-1 bg-slate-200/50 p-1 rounded-2xl mb-8 w-fit">
         <button onClick={() => setActiveTab("hero")} className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'hero' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>Hero Banner</button>
         <button onClick={() => setActiveTab("listing")} className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'listing' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>Listing Section</button>
+        <button onClick={() => setActiveTab("seo")} className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'seo' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>SEO &amp; Schema</button>
       </div>
 
       <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -198,6 +200,10 @@ export default function BlogHeroCMS() {
               </div>
             </div>
           </div>
+        )}
+
+        {activeTab === 'seo' && (
+          <SeoMetadataSection seo={data.seo || {}} onChange={(f, v) => updateSectionField("seo", f, v)} />
         )}
 
         {activeTab === 'listing' && (
