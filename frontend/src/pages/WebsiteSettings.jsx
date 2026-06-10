@@ -22,6 +22,7 @@ const DEFAULT_SETTINGS = {
   siteTitle: "",
   defaultMetaDescription: "",
   defaultOgImage: "",
+  schema: "",
   ga4Id: "",
   gtmId: "",
   metaPixelId: "",
@@ -359,6 +360,18 @@ export default function WebsiteSettings() {
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               />
               <p className="text-xs text-gray-400 mt-1">Image shown when the site is shared on WhatsApp, Facebook, Twitter etc.</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Homepage Schema Markup (JSON-LD)</label>
+              <textarea
+                name="schema"
+                value={settings.schema || ""}
+                onChange={handleChange}
+                rows="8"
+                placeholder='{"@context":"https://schema.org","@type":"MedicalClinic","name":"DMC Trichology","url":"https://dmctrichology.com"}'
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-y font-mono text-xs"
+              />
+              <p className="text-xs text-gray-400 mt-1">Added to the homepage &lt;head&gt; as a JSON-LD script. Use for your Organization / MedicalClinic schema.</p>
             </div>
           </div>
         </div>

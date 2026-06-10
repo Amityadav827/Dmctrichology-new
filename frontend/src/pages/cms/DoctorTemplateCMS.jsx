@@ -604,6 +604,7 @@ export default function DoctorTemplateCMS({
           <Field label="Meta Title" path="seo.metaTitle" />
           <Field label="OG Image" path="seo.ogImage" />
           <Field label="Meta Description" path="seo.metaDescription" multiline />
+          <Field label="Schema Markup (JSON-LD)" path="seo.schema" multiline />
         </div>
       )}
 

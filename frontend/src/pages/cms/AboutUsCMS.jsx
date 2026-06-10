@@ -683,8 +683,13 @@ export default function AboutUsCMS() {
                   </div>
                   <div>
                     <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">OG Image URL (Social Sharing)</label>
-                    <input type="text" value={data.seo.ogImage || ""} onChange={e => updateSectionField("seo", "ogImage", e.target.value)} 
+                    <input type="text" value={data.seo.ogImage || ""} onChange={e => updateSectionField("seo", "ogImage", e.target.value)}
                       className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Schema Markup (JSON-LD)</label>
+                    <textarea value={data.seo.schema || ""} onChange={e => updateSectionField("seo", "schema", e.target.value)}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-xs font-mono min-h-[160px]" placeholder='{"@context":"https://schema.org","@type":"MedicalClinic"}' />
                   </div>
                 </div>
              </div>

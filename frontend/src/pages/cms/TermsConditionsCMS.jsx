@@ -169,6 +169,10 @@ export default function TermsConditionsCMS() {
               <label className={labelCls}>OG Image URL</label>
               <input type="text" value={data.seo?.ogImage || ""} onChange={e => setSeo("ogImage", e.target.value)} className={inputCls} placeholder="https://..." />
             </div>
+            <div>
+              <label className={labelCls}>Schema Markup (JSON-LD)</label>
+              <textarea rows={8} value={data.seo?.schema || ""} onChange={e => setSeo("schema", e.target.value)} className={`${inputCls} font-mono`} placeholder='{"@context":"https://schema.org","@type":"WebPage","name":"Terms"}' />
+            </div>
           </div>
         </div>
       )}

@@ -2187,11 +2187,21 @@ export default function AboutDrNandaniCMS() {
                 </div>
                 <div>
                   <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">SEO Meta Description</label>
-                  <textarea 
-                    rows={4} 
-                    value={data.seo?.metaDescription || ""} 
-                    onChange={e => updateSectionField("seo", "metaDescription", e.target.value)} 
-                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none resize-none" 
+                  <textarea
+                    rows={4}
+                    value={data.seo?.metaDescription || ""}
+                    onChange={e => updateSectionField("seo", "metaDescription", e.target.value)}
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Schema Markup (JSON-LD)</label>
+                  <textarea
+                    rows={8}
+                    value={data.seo?.schema || ""}
+                    onChange={e => updateSectionField("seo", "schema", e.target.value)}
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-xs font-mono text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none resize-y"
+                    placeholder='{"@context":"https://schema.org","@type":"Physician","name":"Dr Nandani"}'
                   />
                 </div>
                 <div>
