@@ -127,7 +127,7 @@ export default function LeadForm() {
       </div>
       
       <div className="hero-form-head" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', gap: '15px', height: '50px' }}>
-        <h2 className="section-title" style={{ fontSize: '2.2rem', whiteSpace: 'nowrap', textTransform: 'none' }}>Request A Call</h2>
+        <h2 className="section-title leadform-cap-heading" style={{ fontSize: '2.2rem', whiteSpace: 'nowrap' }}>Request A Call</h2>
         <div className="hero-form-patients" style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ display: 'flex', height: '30px' }}>
             {[

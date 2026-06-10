@@ -60,7 +60,7 @@ export default function HeroSlider() {
                 <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '40px', height: 'auto', objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)' }} />
                 {slide.tag}
               </span>
-              <h1 className="section-title" style={{ fontSize: '54px', marginBottom: '16px', textTransform: 'none' }}>
+              <h1 className="section-title hero-cap-heading" style={{ fontSize: '54px', marginBottom: '16px' }}>
                 <EditableText sectionId="hero" fieldPath={`slides.${index}.title`} tag="span">
                   {slide.title}
                 </EditableText>

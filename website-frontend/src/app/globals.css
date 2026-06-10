@@ -151,6 +151,12 @@ h6 {
   text-transform: uppercase !important;
 }
 
+/* Hero main heading + "Request A Call" form heading: Title Case (capitalize), not ALL CAPS */
+.section-title.hero-cap-heading,
+.section-title.leadform-cap-heading {
+  text-transform: capitalize !important;
+}
+
 /* Why Choose Us — force title to center with bottom spacing */
 .why-choose-us .section-title {
   max-width: 1000px !important;
