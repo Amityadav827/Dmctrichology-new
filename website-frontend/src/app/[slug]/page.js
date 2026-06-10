@@ -2,17 +2,42 @@ import ScienceHero from '@/components/ScienceHero';
 import ScienceIntro from '@/components/ScienceIntro';
 import ScienceDualFeatures from '@/components/ScienceDualFeatures';
 import SchemaMarkup from '@/components/SchemaMarkup';
+import { buildCmsMetadata } from '@/utils/pageSeoMetadata';
 import { notFound } from 'next/navigation';
-
-export const metadata = {
-  title: 'Advanced Hair Restoration Science | DMC Trichology',
-  description: 'Explore the science behind DMC Trichology’s advanced hair restoration and skin care solutions. Rooted in research, powered by innovation.',
-};
 
 // Disable static generation because this is now a dynamic catch-all route for CMS pages
 export const dynamic = 'force-dynamic';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://dmctrichology-1.onrender.com/api';
+
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const isScience = slug === 'science-at-dmc' || slug === 'science-at-dmc-trichology';
+  try {
+    if (isScience) {
+      const res = await fetch(`${API_BASE}/science-dmc`, { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        const cfg = json?.data?.config || json?.data || {};
+        return buildCmsMetadata({
+          data: { seo: cfg.seo || {} },
+          titleFallback: cfg.hero?.title || 'Advanced Hair Restoration Science | DMC Trichology',
+          descriptionFallback: 'Explore the science behind DMC Trichology’s advanced hair restoration and skin care solutions.',
+        });
+      }
+    } else {
+      const res = await fetch(`${API_BASE}/pages/slug/${slug}`, { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        const d = json?.data || {};
+        return buildCmsMetadata({ data: d, titleFallback: d.title || 'DMC Trichology', descriptionFallback: '' });
+      }
+    }
+  } catch {
+    // fall through to default
+  }
+  return { title: 'DMC Trichology' };
+}
 
 export default async function DynamicSlugPage({ params }) {
   const { slug } = await params;
@@ -50,6 +75,7 @@ export default async function DynamicSlugPage({ params }) {
         features: {},
         consultation: {}
       };
+      let scienceSeo = null;
 
       try {
         const scienceRes = await fetch(`${API_BASE}/science-dmc`, {
@@ -67,6 +93,7 @@ export default async function DynamicSlugPage({ params }) {
               features: config.dualFeatureSection || config.features || {},
               consultation: config.consultationSection || config.consultation || {}
             };
+            scienceSeo = config.seo || rawData.seo || null;
           }
         }
       } catch (err) {
@@ -81,7 +108,7 @@ export default async function DynamicSlugPage({ params }) {
 
       return (
         <main className="science-dmc-page">
-          <SchemaMarkup seo={pageData?.seo} />
+          <SchemaMarkup seo={scienceSeo || pageData?.seo} />
           <ScienceHero data={heroData} />
           <ScienceIntro data={introData} />
           <ScienceDualFeatures data={featuresData} />

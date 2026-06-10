@@ -12,6 +12,7 @@ import {
   Columns,
   MessageSquare
 } from 'lucide-react';
+import SeoMetadataSection from '../../components/cms/SeoMetadataSection';
 
 const ImgPreview = ({ src, className = '' }) => {
   if (!src) return null;
@@ -171,6 +172,7 @@ export default function ScienceDmcCMS() {
           { id: 'intro', icon: AlignLeft, label: 'Intro Section' },
           { id: 'dual', icon: Columns, label: 'Dual Features' },
           { id: 'consult', icon: MessageSquare, label: 'Consultation Form' },
+          { id: 'seo', icon: Settings, label: 'SEO & Schema' },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -185,6 +187,10 @@ export default function ScienceDmcCMS() {
           </button>
         ))}
       </div>
+
+      {activeTab === 'seo' && (
+        <SeoMetadataSection seo={data.seo || {}} onChange={(f, v) => updateSection('seo', f, v)} />
+      )}
 
       {activeTab === 'hero' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
