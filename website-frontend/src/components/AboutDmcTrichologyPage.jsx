@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { submitLead } from '../services/api';
 
@@ -24,10 +24,16 @@ function AboutDmcHero({ data = {} }) {
   };
   const createCaptcha = () => Math.random().toString(36).slice(2, 8).toUpperCase();
   const [formData, setFormData] = useState({ name: '', mobile: '', captchaInput: '' });
-  const [captcha, setCaptcha] = useState(createCaptcha);
+  // Start empty so server and client first render match; generate on mount (client only).
+  const [captcha, setCaptcha] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+
+  // Generate captcha only on the client after mount (avoids SSR/client hydration mismatch).
+  useEffect(() => {
+    setCaptcha(createCaptcha());
+  }, []);
 
   const hasContent = [
     heroData.backgroundImage,

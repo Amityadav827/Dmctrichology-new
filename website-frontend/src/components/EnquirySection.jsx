@@ -20,7 +20,8 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
     service: '',
     message: ''
   });
-  const [captcha, setCaptcha] = useState(createCaptcha);
+  // Start empty so server and client first render match; generate on mount (client only).
+  const [captcha, setCaptcha] = useState('');
   const [captchaInput, setCaptchaInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -43,6 +44,11 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
   const generateCaptcha = () => {
     setCaptcha(createCaptcha());
   };
+
+  // Generate captcha only on the client after mount (avoids SSR/client hydration mismatch).
+  useEffect(() => {
+    setCaptcha(createCaptcha());
+  }, []);
 
   useEffect(() => {
     // Fetch CMS services for dynamic service enquiry options
