@@ -373,7 +373,7 @@ export default function Footer({ siteSettings }) {
                 <form onSubmit={handleSubmitNewsletter}>
                   <div className="footer-newsletter-input-row" style={{
                     display: 'flex',
-                    backgroundColor: '#000',
+                    backgroundColor: '#3b5998',
                     borderRadius: '50px',
                     padding: '0',
                     marginBottom: '20px',
@@ -381,6 +381,7 @@ export default function Footer({ siteSettings }) {
                   }}>
                     <input
                       type="email"
+                      className="footer-newsletter-input"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder={newsletter.placeholder}
@@ -400,11 +401,11 @@ export default function Footer({ siteSettings }) {
                       className="footer-submit-btn"
                       type="submit"
                       disabled={loading}
-                      style={{ 
-                        backgroundColor: '#fff', 
-                        color: '#000', 
-                        border: 'revert', 
-                        borderRadius: '50px', 
+                      style={{
+                        backgroundColor: '#fff',
+                        color: '#000',
+                        border: 'none',
+                        borderRadius: '50px',
                         padding: '12px 12px 12px 24px', 
                         fontWeight: '600', 
                         fontSize: '14px',
@@ -416,7 +417,9 @@ export default function Footer({ siteSettings }) {
                     >
                       <EditableText sectionId="footer-section" fieldPath="newsletter.buttonText" tag="span">{loading ? "Submitting..." : newsletter.buttonText}</EditableText>
                       <span className="footer-submit-arrow">
-                        <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777622110/dmc-trichology/mzd4ynevgozuwiehhwah.png" alt="email" style={{ width: '24px' }} />
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M7 17 17 7M9 7h8v8" />
+                        </svg>
                       </span>
                     </button>
                   </div>
@@ -493,6 +496,10 @@ export default function Footer({ siteSettings }) {
         </div>
 
         <style jsx>{`
+          .footer-newsletter-input::placeholder {
+            color: #ffffff !important;
+            opacity: 0.78;
+          }
           .social-icon-link:hover img {
             transform: translateY(-5px) scale(1.15);
             filter: brightness(1.2);
@@ -516,6 +523,7 @@ export default function Footer({ siteSettings }) {
             width: 28px;
             height: 28px;
             border-radius: 50%;
+            background-color: #3b5998;
             display: inline-flex;
             align-items: center;
             justify-content: center;
