@@ -100,10 +100,15 @@ const IdealFrequency = ({ data = {} }) => {
               </EditableText>
             </p>
 
-            <Link href={sectionData.ctaButtonLink || '/contact'} className="details-cta-btn">
+            <Link href={sectionData.ctaButtonLink || '/contact-us'} className="details-cta-btn">
               <EditableText sectionId="ideal-frequency-section" fieldPath="idealFrequency.ctaButtonText">
                 {sectionData.ctaButtonText || 'Book a free online consultation'}
               </EditableText>
+              <span className="details-cta-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#3b5998" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M7 17 17 7M9 7h8v8" />
+                </svg>
+              </span>
             </Link>
           </div>
 

@@ -969,20 +969,47 @@
 }
 
 .details-cta-btn {
-  display: inline-block;
-  border: 1px solid #333;
-  padding: 12px 24px;
-  border-radius: 4px;
-  font-family: 'Lato', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background-color: #3b5998;
+  border: 1px solid #3b5998;
+  padding: 10px 10px 10px 26px;
+  border-radius: 50px;
+  font-family: 'Marcellus', serif;
   font-size: 14px;
-  color: #333;
+  color: #ffffff;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .details-cta-btn:hover {
-  background: #333;
-  color: #fff;
+  box-shadow: 0 12px 24px rgba(59, 89, 152, 0.22);
+  transform: translateY(-2px);
+}
+
+.details-cta-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+
+.details-cta-btn:hover .details-cta-arrow {
+  transform: rotate(45deg);
+}
+
+.details-cta-arrow svg {
+  width: 13px;
+  height: 13px;
+  display: block;
 }
 
 /* ─── RESPONSIVE ADDITIONS ─────────────────────────────────────── */
@@ -5818,15 +5845,46 @@
 .service-section-three-button {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  min-width: 240px;
-  min-height: 32px;
-  border: 1px solid rgba(0,0,0,0.45);
-  border-radius: 4px;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 44px;
+  padding: 8px 8px 8px 26px;
+  border: 1px solid #3b5998;
+  border-radius: 50px;
+  background: #3b5998;
+  color: #ffffff;
+  font-family: 'Marcellus', serif;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.service-section-three-button:hover {
+  box-shadow: 0 12px 24px rgba(59, 89, 152, 0.22);
+  transform: translateY(-2px);
+}
+
+.service-section-three-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   background: #ffffff;
-  color: #111111;
-  font-family: 'Lato', sans-serif;
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+
+.service-section-three-button:hover .service-section-three-arrow {
+  transform: rotate(45deg);
+}
+
+.service-section-three-arrow svg {
+  width: 13px;
+  height: 13px;
+  display: block;
 }
 
 .service-section-four,

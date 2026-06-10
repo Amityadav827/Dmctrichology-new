@@ -177,7 +177,16 @@ function ServiceSectionThree({ data }) {
           {data.ctaTitle && <h3>{data.ctaTitle}</h3>}
           {data.image && <img src={data.image} alt={data.ctaTitle || data.title || "Consultation"} loading="lazy" />}
           {data.ctaDescription && <p>{data.ctaDescription}</p>}
-          {data.ctaButtonText && <span className="service-section-three-button">{data.ctaButtonText}</span>}
+          {data.ctaButtonText && (
+            <a href={data.ctaButtonLink || '/contact-us'} className="service-section-three-button">
+              {data.ctaButtonText}
+              <span className="service-section-three-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#3b5998" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M7 17 17 7M9 7h8v8" />
+                </svg>
+              </span>
+            </a>
+          )}
         </div>
       </div>
     </section>
