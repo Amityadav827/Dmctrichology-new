@@ -17,6 +17,25 @@ const normalizeMapItem = (map = {}, index = 0) => ({
   isEnabled: map.isEnabled !== false
 });
 
+const isEmbeddableMapUrl = (url = '') => {
+  const value = String(url || '').trim();
+  return value.includes('/maps/embed') || value.includes('output=embed');
+};
+
+const getMapEmbedUrl = (map = {}) => {
+  const rawUrl = String(map.googleMapEmbedUrl || '').trim();
+  if (isEmbeddableMapUrl(rawUrl)) return rawUrl;
+
+  const query = [
+    map.branchName,
+    map.city,
+    map.area,
+    rawUrl
+  ].filter(Boolean).join(', ');
+
+  return `https://www.google.com/maps?q=${encodeURIComponent(query || 'DMC Trichology')}&output=embed`;
+};
+
 const getEnabledMaps = (mapData = {}) => {
   const legacyMap = normalizeMapItem({
     id: 'legacy-map-1',
@@ -69,7 +88,7 @@ const MapSection = ({ data: initialData }) => {
           {enabledMaps.map((mapItem, index) => (
             <div className="map-frame" key={mapItem.id || `${mapItem.googleMapEmbedUrl}-${index}`}>
               <iframe
-                src={mapItem.googleMapEmbedUrl || DEFAULT_MAP_EMBED_URL}
+                src={getMapEmbedUrl(mapItem) || DEFAULT_MAP_EMBED_URL}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -106,7 +125,7 @@ const MapSection = ({ data: initialData }) => {
           .map-section--grid {
             height: auto;
             background-color: #fff;
-            padding: 0;
+            padding: 0 5% 100px 5%;
           }
 
           .map-section--grid .map-grid {
