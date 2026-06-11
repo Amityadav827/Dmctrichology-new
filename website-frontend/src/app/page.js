@@ -15,14 +15,20 @@ import PressMediaSection from '@/components/PressMediaSection';
 import ResultsSlider from '@/components/ResultsSlider';
 import GradeSlider from '@/components/GradeSlider';
 import SchemaMarkup from '@/components/SchemaMarkup';
-import { fetchSiteSettings } from '@/services/api';
+import FaqSchema from '@/components/FaqSchema';
+import { fetchSiteSettings, fetchHomeFAQ } from '@/services/api';
 
 export default async function Home() {
-  const settingsRes = await fetchSiteSettings().catch(() => null);
+  const [settingsRes, faqRes] = await Promise.all([
+    fetchSiteSettings().catch(() => null),
+    fetchHomeFAQ().catch(() => null),
+  ]);
   const siteSchema = settingsRes?.data?.schema || settingsRes?.data?.seo?.schema || '';
+  const homeFaqs = (faqRes?.data?.categories || []).flatMap((c) => c?.faqs || c?.questions || []);
   return (
     <div className="home-page">
       <SchemaMarkup schema={siteSchema} />
+      <FaqSchema faqs={homeFaqs} />
       <div style={{ position: 'relative' }}>
         <HeroSlider />
         <div className="hero-right">
