@@ -12,9 +12,72 @@ import {
   Image as ImageIcon,
   CheckCircle2,
   Plus,
-  Trash2
+  Trash2,
+  GripVertical
 } from "lucide-react";
 import SeoMetadataSection from "../../components/cms/SeoMetadataSection";
+
+const DEFAULT_MAP_ITEM = {
+  id: "",
+  branchName: "",
+  city: "",
+  area: "",
+  googleMapEmbedUrl: "",
+  displayOrder: 10,
+  isEnabled: true
+};
+
+const normalizeMapItem = (item = {}, index = 0) => ({
+  id: item.id || `map-${Date.now()}-${index}`,
+  branchName: item.branchName || item.name || item.area || `Map ${index + 1}`,
+  city: item.city || "",
+  area: item.area || "",
+  googleMapEmbedUrl: item.googleMapEmbedUrl || item.embedUrl || "",
+  displayOrder: Number.isFinite(Number(item.displayOrder)) ? Number(item.displayOrder) : (index + 1) * 10,
+  isEnabled: item.isEnabled !== false
+});
+
+const normalizeMapData = (map = {}) => {
+  const legacyMap = normalizeMapItem({
+    id: "legacy-map-1",
+    branchName: map.branchName || map.area || map.city || "Map 1",
+    city: map.city || "",
+    area: map.area || "",
+    googleMapEmbedUrl: map.googleMapEmbedUrl || "",
+    displayOrder: 10,
+    isEnabled: true
+  }, 0);
+  const maps = Array.isArray(map.maps) && map.maps.length > 0
+    ? map.maps.map(normalizeMapItem)
+    : [legacyMap];
+  const sortedMaps = maps.sort((a, b) => Number(a.displayOrder || 0) - Number(b.displayOrder || 0));
+  const firstMap = sortedMaps[0] || legacyMap;
+
+  return {
+    ...map,
+    multipleMapsEnabled: map.multipleMapsEnabled === true,
+    maps: sortedMaps,
+    city: map.city || firstMap.city || "",
+    area: map.area || firstMap.area || "",
+    googleMapEmbedUrl: map.googleMapEmbedUrl || firstMap.googleMapEmbedUrl || ""
+  };
+};
+
+const prepareMapForSave = (map = {}) => {
+  const maps = (Array.isArray(map.maps) ? map.maps : [])
+    .map(normalizeMapItem)
+    .map((item, index) => ({ ...item, displayOrder: item.displayOrder ?? ((index + 1) * 10) }))
+    .sort((a, b) => Number(a.displayOrder || 0) - Number(b.displayOrder || 0));
+  const firstMap = maps[0] || normalizeMapItem(map, 0);
+
+  return {
+    ...map,
+    maps,
+    city: firstMap.city || map.city || "",
+    area: firstMap.area || map.area || "",
+    googleMapEmbedUrl: firstMap.googleMapEmbedUrl || map.googleMapEmbedUrl || ""
+  };
+};
 
 export default function ContactPageCMS() {
   const [data, setData] = useState({
@@ -43,7 +106,9 @@ export default function ContactPageCMS() {
       mapHeight: "600px",
       cardBackground: "#2D4A8A",
       iconColor: "#C8102E",
-      textColor: "#FFFFFF"
+      textColor: "#FFFFFF",
+      multipleMapsEnabled: false,
+      maps: []
     },
     seo: {
       metaTitle: "",
@@ -54,6 +119,7 @@ export default function ContactPageCMS() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("hero");
+  const [dragMapIndex, setDragMapIndex] = useState(null);
 
   useEffect(() => {
     axios.get("/contact-page")
@@ -64,7 +130,7 @@ export default function ContactPageCMS() {
             ...res.data.data,
             hero: { ...prev.hero, ...(res.data.data.hero || {}) },
             consultation: { ...prev.consultation, ...(res.data.data.consultation || {}) },
-            map: { ...prev.map, ...(res.data.data.map || {}) },
+            map: normalizeMapData({ ...prev.map, ...(res.data.data.map || {}) }),
             seo: { ...prev.seo, ...(res.data.data.seo || {}) }
           }));
         }
@@ -78,6 +144,53 @@ export default function ContactPageCMS() {
       ...prev,
       [section]: { ...prev[section], [field]: val }
     }));
+  };
+
+  const updateMapField = (index, field, value) => {
+    setData(prev => {
+      const maps = [...(prev.map?.maps || [])];
+      maps[index] = { ...(maps[index] || DEFAULT_MAP_ITEM), [field]: value };
+      return { ...prev, map: { ...prev.map, maps } };
+    });
+  };
+
+  const addMap = () => {
+    setData(prev => {
+      const maps = [...(prev.map?.maps || [])];
+      maps.push({
+        ...DEFAULT_MAP_ITEM,
+        id: `map-${Date.now()}`,
+        branchName: `Map ${maps.length + 1}`,
+        city: prev.map?.city || "",
+        area: "",
+        displayOrder: (maps.length + 1) * 10
+      });
+      return { ...prev, map: { ...prev.map, multipleMapsEnabled: true, maps } };
+    });
+  };
+
+  const removeMap = (index) => {
+    setData(prev => {
+      const maps = (prev.map?.maps || []).filter((_, i) => i !== index)
+        .map((item, i) => ({ ...item, displayOrder: (i + 1) * 10 }));
+      return { ...prev, map: { ...prev.map, maps } };
+    });
+  };
+
+  const moveMap = (from, to) => {
+    if (from === null || to === null || from === to) return;
+    setData(prev => {
+      const maps = [...(prev.map?.maps || [])];
+      const [item] = maps.splice(from, 1);
+      maps.splice(to, 0, item);
+      return {
+        ...prev,
+        map: {
+          ...prev.map,
+          maps: maps.map((mapItem, index) => ({ ...mapItem, displayOrder: (index + 1) * 10 }))
+        }
+      };
+    });
   };
 
   const addServiceOption = () => {
@@ -100,7 +213,7 @@ export default function ContactPageCMS() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await axios.put("/contact-page", data);
+      await axios.put("/contact-page", { ...data, map: prepareMapForSave(data.map) });
       toast.success("Contact page saved successfully");
     } catch {
       toast.error("Save failed");
@@ -290,34 +403,99 @@ export default function ContactPageCMS() {
         )}
 
         {activeTab === 'map' && (
-          <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
-            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8 flex items-center gap-2">
-              <MapPin size={14} className="text-blue-600" /> Map & Location Details
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">City Name</label>
-                <input type="text" value={data.map.city} onChange={e => updateSectionField("map", "city", e.target.value)}
-                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none transition-all" />
+          <div className="space-y-8">
+            <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-8">
+                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
+                  <MapPin size={14} className="text-blue-600" /> Map & Location Details
+                </h2>
+                <button type="button" onClick={addMap} className="flex items-center gap-2 px-5 py-3 bg-blue-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg shadow-blue-100">
+                  <Plus size={16} /> Add Map
+                </button>
               </div>
-              <div>
-                <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Area Name</label>
-                <input type="text" value={data.map.area} onChange={e => updateSectionField("map", "area", e.target.value)}
-                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none transition-all" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Google Map Embed URL</label>
-                <input type="text" value={data.map.googleMapEmbedUrl} onChange={e => updateSectionField("map", "googleMapEmbedUrl", e.target.value)}
-                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none transition-all" placeholder="Paste <iframe> src URL here..." />
-              </div>
-              <div>
-                <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Floating Card Background</label>
-                <div className="flex gap-4 items-center">
-                  <input type="color" value={data.map.cardBackground} onChange={e => updateSectionField("map", "cardBackground", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer" />
-                  <input type="text" value={data.map.cardBackground} onChange={e => updateSectionField("map", "cardBackground", e.target.value)} className="flex-1 px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none" />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <label className="flex items-center gap-3 md:col-span-2">
+                  <input
+                    type="checkbox"
+                    checked={data.map?.multipleMapsEnabled === true}
+                    onChange={e => updateSectionField("map", "multipleMapsEnabled", e.target.checked)}
+                    className="w-4 h-4"
+                  />
+                  <span className="text-sm font-black text-slate-700">Enable Multiple Maps</span>
+                </label>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Map Height (e.g. 600px)</label>
+                  <input type="text" value={data.map?.mapHeight || "600px"} onChange={e => updateSectionField("map", "mapHeight", e.target.value)}
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none transition-all" />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Floating Card Background</label>
+                  <div className="flex gap-4 items-center">
+                    <input type="color" value={data.map?.cardBackground || "#2D4A8A"} onChange={e => updateSectionField("map", "cardBackground", e.target.value)} className="w-12 h-12 rounded-xl cursor-pointer" />
+                    <input type="text" value={data.map?.cardBackground || "#2D4A8A"} onChange={e => updateSectionField("map", "cardBackground", e.target.value)} className="flex-1 px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none" />
+                  </div>
                 </div>
               </div>
             </div>
+
+            {(data.map?.maps || []).map((mapItem, index) => (
+              <div
+                key={mapItem.id || index}
+                draggable
+                onDragStart={() => setDragMapIndex(index)}
+                onDragOver={e => e.preventDefault()}
+                onDrop={() => {
+                  moveMap(dragMapIndex, index);
+                  setDragMapIndex(null);
+                }}
+                className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-8"
+              >
+                <div className="flex items-center justify-between gap-4 mb-8">
+                  <div className="flex items-center gap-3">
+                    <GripVertical size={18} className="text-slate-300 cursor-move" />
+                    <h3 className="text-lg font-black text-slate-800">Map {index + 1}</h3>
+                  </div>
+                  <button type="button" onClick={() => removeMap(index)} className="w-10 h-10 flex items-center justify-center bg-rose-50 text-rose-600 rounded-2xl hover:bg-rose-100 transition-all">
+                    <Trash2 size={17} />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <label className="flex items-center gap-3 md:col-span-2">
+                    <input type="checkbox" checked={mapItem.isEnabled !== false} onChange={e => updateMapField(index, "isEnabled", e.target.checked)} />
+                    <span className="text-sm font-black text-slate-700">Enable Map</span>
+                  </label>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Branch Name</label>
+                    <input type="text" value={mapItem.branchName || ""} onChange={e => updateMapField(index, "branchName", e.target.value)}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none transition-all" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Display Order</label>
+                    <input type="number" value={mapItem.displayOrder ?? ((index + 1) * 10)} onChange={e => updateMapField(index, "displayOrder", Number(e.target.value))}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none transition-all" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">City Name</label>
+                    <input type="text" value={mapItem.city || ""} onChange={e => updateMapField(index, "city", e.target.value)}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none transition-all" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Area Name</label>
+                    <input type="text" value={mapItem.area || ""} onChange={e => updateMapField(index, "area", e.target.value)}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none transition-all" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Google Map Embed URL</label>
+                    <input type="text" value={mapItem.googleMapEmbedUrl || ""} onChange={e => updateMapField(index, "googleMapEmbedUrl", e.target.value)}
+                      className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none transition-all" placeholder="Paste Google Maps embed src URL here..." />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
