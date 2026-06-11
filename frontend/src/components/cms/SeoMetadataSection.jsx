@@ -4,22 +4,44 @@ import { Search, Code2, CheckCircle2, AlertCircle } from "lucide-react";
 const inputCls =
   "w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all";
 
+const extractSchemaJson = (value = "") => {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+
+  const jsonLdScript = raw.match(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/i);
+  if (jsonLdScript) return jsonLdScript[1].trim();
+
+  const anyScript = raw.match(/<script\b[^>]*>([\s\S]*?)<\/script>/i);
+  if (anyScript) return anyScript[1].trim();
+
+  return raw;
+};
+
+const validateSchemaJson = (value = "") => {
+  const normalized = extractSchemaJson(value);
+  if (!normalized) return { normalized, valid: null };
+
+  try {
+    JSON.parse(normalized);
+    return { normalized, valid: true };
+  } catch {
+    return { normalized, valid: false };
+  }
+};
+
 export default function SeoMetadataSection({ seo = {}, onChange }) {
   const update = (field, value) => {
     onChange?.(field, value);
   };
 
-  // Live validation of the JSON-LD schema box
-  const schemaText = seo.schema || "";
-  let schemaValid = null; // null = empty, true = valid JSON, false = invalid
-  if (schemaText.trim()) {
-    try {
-      JSON.parse(schemaText);
-      schemaValid = true;
-    } catch {
-      schemaValid = false;
-    }
-  }
+  const updateSchema = (value) => {
+    update("schema", extractSchemaJson(value));
+  };
+
+  // Live validation of the JSON-LD schema box. Script-wrapped JSON-LD is
+  // normalized to the inner JSON before validation and save.
+  const schemaText = seo.schema ?? seo.schemaScript ?? "";
+  const { valid: schemaValid } = validateSchemaJson(schemaText);
 
   return (
     <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
@@ -117,14 +139,14 @@ export default function SeoMetadataSection({ seo = {}, onChange }) {
             )}
             {schemaValid === false && (
               <span className="flex items-center gap-1 text-red-500 normal-case tracking-normal font-bold">
-                <AlertCircle size={13} /> Invalid JSON — fix before saving
+                <AlertCircle size={13} /> Invalid JSON - fix before saving
               </span>
             )}
           </label>
           <textarea
             rows={10}
             value={schemaText}
-            onChange={e => update("schema", e.target.value)}
+            onChange={e => updateSchema(e.target.value)}
             className={`${inputCls} resize-y font-mono text-xs ${
               schemaValid === false ? "border-red-300 focus:border-red-500 focus:ring-red-500/10" : ""
             }`}
@@ -133,7 +155,7 @@ export default function SeoMetadataSection({ seo = {}, onChange }) {
           <p className="text-[11px] text-slate-400 mt-3 leading-relaxed">
             Paste valid JSON-LD here. It will be added to this page's &lt;head&gt; as a
             <span className="font-bold"> &lt;script type="application/ld+json"&gt;</span> tag on save.
-            Leave empty to skip. You can paste output from any schema generator.
+            Leave empty to skip. You can paste pure JSON or a full script tag from any schema generator.
           </p>
         </div>
       </div>

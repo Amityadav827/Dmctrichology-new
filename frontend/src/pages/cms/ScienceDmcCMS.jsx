@@ -38,6 +38,35 @@ const Field = ({ label, children }) => (
 const inputCls = 'w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-medium outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all';
 const textareaCls = 'w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-medium outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all min-h-[120px]';
 
+const extractSchemaJson = (value = '') => {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+
+  const jsonLdScript = raw.match(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/i);
+  if (jsonLdScript) return jsonLdScript[1].trim();
+
+  const anyScript = raw.match(/<script\b[^>]*>([\s\S]*?)<\/script>/i);
+  if (anyScript) return anyScript[1].trim();
+
+  return raw;
+};
+
+const prepareSciencePayload = (data) => {
+  const payload = { ...data };
+  if (!payload.seo) return payload;
+
+  payload.seo = { ...payload.seo };
+
+  if (payload.seo.schema !== undefined || payload.seo.schemaScript !== undefined) {
+    const schema = extractSchemaJson(payload.seo.schema ?? payload.seo.schemaScript);
+    if (schema) JSON.parse(schema);
+    payload.seo.schema = schema;
+    delete payload.seo.schemaScript;
+  }
+
+  return payload;
+};
+
 export default function ScienceDmcCMS() {
   const [data, setData] = useState({
     hero: {},
@@ -71,11 +100,15 @@ export default function ScienceDmcCMS() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await axios.put('/science-dmc', data);
+      const payload = prepareSciencePayload(data);
+      await axios.put('/science-dmc', payload);
       toast.success('Saved successfully');
       fetchData();
     } catch (err) {
-      toast.error('Failed to save');
+      const message = err instanceof SyntaxError
+        ? 'Invalid JSON-LD schema. Paste valid JSON or a valid script tag.'
+        : err?.response?.data?.message || 'Failed to save';
+      toast.error(message);
       console.error(err);
     } finally {
       setSaving(false);
