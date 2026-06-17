@@ -169,14 +169,14 @@ export default function AboutDrNandaniTrust({
         }
 
         .nandani-patient-trust-image {
+          aspect-ratio: 7 / 6;
+          background: #d7d9e4;
+          border-radius: 30px;
           width: 100%;
           max-width: 100%;
-          border-radius: 30px;
-          overflow: hidden;
           min-height: 0;
-          aspect-ratio: 5 / 6;
-          box-shadow: 0 24px 54px rgba(59, 89, 152, 0.14);
-          background: #d7d9e4;
+          overflow: hidden;
+          box-shadow: 0 24px 54px #3b599824;
         }
 
         .nandani-patient-trust-image :global(img) {
@@ -348,7 +348,7 @@ export default function AboutDrNandaniTrust({
           }
 
           .nandani-patient-trust-image {
-            aspect-ratio: 4 / 5;
+            aspect-ratio: 6 / 5;
           }
         }
 
@@ -369,9 +369,6 @@ export default function AboutDrNandaniTrust({
             min-height: 0;
           }
 
-          .nandani-patient-trust-image {
-            aspect-ratio: 5 / 4;
-          }
         }
 
         @media (max-width: 767px) {
