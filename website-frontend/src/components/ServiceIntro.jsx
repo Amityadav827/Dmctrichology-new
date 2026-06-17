@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Star, StarHalf, Clock, ChevronLeft, ChevronRight, Play, X } from 'lucide-react';
+import { Star, StarHalf, Clock, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import EditableText from './Editable/EditableText';
 import EditableSection from './Editable/EditableSection';
 import { useBuilder } from '../context/BuilderContext';
@@ -15,6 +15,8 @@ const DUMMY_MEDIA = [
     thumbnail: ''
   }
 ];
+
+const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
 
 // ─── Normalize any legacy data structure → unified introMedia ─────────────────
 function normalizeMedia(intro = {}) {
@@ -76,7 +78,8 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
-  const [consultationData, setConsultationData] = useState({ name: '', phone: '', address: '' });
+  const [consultationData, setConsultationData] = useState({ name: '', phone: '', email: '', captchaInput: '' });
+  const [consultationCaptcha, setConsultationCaptcha] = useState('');
   const [consultationLoading, setConsultationLoading] = useState(false);
   const [consultationError, setConsultationError] = useState('');
   const [consultationSuccess, setConsultationSuccess] = useState(false);
@@ -89,6 +92,10 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
     if (banner) setBannerData(banner);
     setSelectedIndex(0);
   }, [data, banner]);
+
+  useEffect(() => {
+    setConsultationCaptcha(createCaptcha());
+  }, []);
 
   // ── Real-time sync from Visual Builder ──────────────────────────────────────
   useEffect(() => {
@@ -146,16 +153,10 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
     resetConsultationMessages();
   };
 
-  const openConsultationModal = () => {
-    setIsConsultationOpen(true);
-    resetConsultationMessages();
-  };
-
-  const closeConsultationModal = () => {
+  const toggleConsultationForm = () => {
     if (consultationLoading) return;
-    setIsConsultationOpen(false);
-    setConsultationError('');
-    setConsultationSuccess(false);
+    setIsConsultationOpen(prev => !prev);
+    resetConsultationMessages();
   };
 
   const handleConsultationSubmit = async (event) => {
@@ -167,7 +168,11 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
 
     if (!consultationData.name.trim()) return setConsultationError('Please enter your name.');
     if (!consultationData.phone.trim()) return setConsultationError('Please enter your phone number.');
-    if (!consultationData.address.trim()) return setConsultationError('Please enter your address.');
+    if (consultationData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(consultationData.email.trim())) {
+      return setConsultationError('Please enter a valid email address.');
+    }
+    if (!consultationData.captchaInput.trim()) return setConsultationError('Please enter the verification code.');
+    if (consultationData.captchaInput.trim() !== consultationCaptcha) return setConsultationError('Invalid verification code.');
 
     setConsultationLoading(true);
     try {
@@ -179,13 +184,13 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
       const phoneKey = phoneValue.replace(/\D/g, '') || 'no-phone';
       const payload = {
         name: consultationData.name.trim(),
-        email: `${phoneKey}@no-email.dmc-trichology.local`,
+        email: consultationData.email.trim().toLowerCase() || `${phoneKey}@no-email.dmc-trichology.local`,
         mobile: phoneValue,
         service: 'Book Consultation',
         enquiry_type: 'Book Consultation',
         service_slug: serviceSlug,
         source: 'Book Consultation Popup',
-        message: `Book Consultation Popup\nService: ${serviceTitle}\nAddress: ${consultationData.address.trim()}\nPage: ${currentPath || 'N/A'}`
+        message: `Book Consultation\nService: ${serviceTitle}\nPage: ${currentPath || 'N/A'}`
       };
 
       const response = await fetch(`${API_URL}/contact`, {
@@ -200,7 +205,8 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
       }
 
       setConsultationSuccess(true);
-      setConsultationData({ name: '', phone: '', address: '' });
+      setConsultationData({ name: '', phone: '', email: '', captchaInput: '' });
+      setConsultationCaptcha(createCaptcha());
     } catch (error) {
       setConsultationError(error.message || 'Something went wrong. Please try again.');
     } finally {
@@ -230,13 +236,12 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
   // ── Keyboard nav ─────────────────────────────────────────────────────────────
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.key === 'Escape' && isConsultationOpen) closeConsultationModal();
       if (e.key === 'ArrowLeft') goPrev();
       if (e.key === 'ArrowRight') goNext();
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [goPrev, goNext, isConsultationOpen, consultationLoading]);
+  }, [goPrev, goNext]);
 
   // ─── VIDEO: autoplay when slide changes ──────────────────────────────────────
   useEffect(() => {
@@ -383,7 +388,9 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
             <button
               type="button"
               className="details-consultation-cta"
-              onClick={openConsultationModal}
+              onClick={toggleConsultationForm}
+              aria-expanded={isConsultationOpen}
+              aria-controls="details-inline-consultation-form"
             >
               Book Consultation
             </button>
@@ -436,31 +443,79 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
                 </EditableText>
               </p>
             )}
+
+            <div
+              id="details-inline-consultation-form"
+              className={`details-consultation-inline-wrap${isConsultationOpen ? ' is-open' : ''}`}
+              aria-hidden={!isConsultationOpen}
+            >
+              <div className="details-consultation-inline-panel">
+                <h2 className="details-consultation-inline-title">Book Consultation</h2>
+                <form className="details-consultation-inline-form" onSubmit={handleConsultationSubmit}>
+                  <div className="details-consultation-inline-grid">
+                    <input
+                      name="name"
+                      value={consultationData.name}
+                      onChange={handleConsultationChange}
+                      placeholder="Name*"
+                      disabled={consultationLoading}
+                      required
+                    />
+                    <input
+                      name="phone"
+                      type="tel"
+                      value={consultationData.phone}
+                      onChange={handleConsultationChange}
+                      placeholder="Phone Number*"
+                      disabled={consultationLoading}
+                      required
+                    />
+                    <input
+                      name="email"
+                      type="email"
+                      value={consultationData.email}
+                      onChange={handleConsultationChange}
+                      placeholder="E-Mail Address"
+                      disabled={consultationLoading}
+                    />
+                    <div className="details-consultation-inline-captcha">
+                      <button
+                        type="button"
+                        className="details-consultation-inline-code"
+                        onClick={() => !consultationLoading && setConsultationCaptcha(createCaptcha())}
+                        title="Click to regenerate code"
+                        disabled={consultationLoading}
+                      >
+                        {consultationCaptcha}
+                      </button>
+                      <input
+                        name="captchaInput"
+                        value={consultationData.captchaInput}
+                        onChange={handleConsultationChange}
+                        placeholder="Enter Code"
+                        disabled={consultationLoading}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <button className="details-consultation-inline-submit" type="submit" disabled={consultationLoading}>
+                    <span>{consultationLoading ? 'Submitting...' : 'Submit'}</span>
+                    <span className="icon-circle btn-arrow-circle" aria-hidden="true">
+                      <img
+                        src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781696270154-446102211.png"
+                        alt=""
+                        className="details-consultation-inline-arrow-icon"
+                      />
+                    </span>
+                  </button>
+                  {consultationError && <p className="details-consultation-error">{consultationError}</p>}
+                  {consultationSuccess && <p className="details-consultation-success">Consultation request submitted successfully.</p>}
+                </form>
+              </div>
+            </div>
           </div>
 
         </div>
-
-        {isConsultationOpen && (
-          <div className="details-consultation-modal" role="dialog" aria-modal="true" aria-labelledby="details-consultation-title">
-            <button className="details-consultation-backdrop" type="button" aria-label="Close consultation form" onClick={closeConsultationModal} />
-            <div className="details-consultation-dialog">
-              <button className="details-consultation-close" type="button" aria-label="Close consultation form" onClick={closeConsultationModal} disabled={consultationLoading}>
-                <X size={18} />
-              </button>
-              <h2 id="details-consultation-title">Book Consultation</h2>
-              <form onSubmit={handleConsultationSubmit}>
-                <input name="name" value={consultationData.name} onChange={handleConsultationChange} placeholder="Name *" disabled={consultationLoading} required />
-                <input name="phone" type="tel" value={consultationData.phone} onChange={handleConsultationChange} placeholder="Phone Number *" disabled={consultationLoading} required />
-                <input name="address" value={consultationData.address} onChange={handleConsultationChange} placeholder="Address *" disabled={consultationLoading} required />
-                <button type="submit" disabled={consultationLoading}>
-                  {consultationLoading ? 'Submitting...' : 'Submit'}
-                </button>
-                {consultationError && <p className="details-consultation-error">{consultationError}</p>}
-                {consultationSuccess && <p className="details-consultation-success">Consultation request submitted successfully.</p>}
-              </form>
-            </div>
-          </div>
-        )}
       </section>
     </EditableSection>
   );
