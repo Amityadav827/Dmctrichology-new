@@ -592,7 +592,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                    <div style={{ padding: '15px 20px', backgroundColor: '#3B5998', borderRadius: '30px', color: '#fff', fontWeight: 'bold', letterSpacing: '4px', userSelect: 'none' }}>{captcha}</div>
                    <input type="text" value={captchaInput} onChange={e => setCaptchaInput(e.target.value)} placeholder={isContactForm ? "Enter Code*" : "Code*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif" }} disabled={loading} required />
                 </div>
-                {!isContactForm && (
+                {isContactForm && (
                 <div style={{ gridColumn: 'span 2' }}>
                    <textarea name="message" value={formData.message} onChange={handleChange} placeholder={messagePlaceholder} className="premium-textarea" style={{ width: '100%', padding: '20px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", minHeight: '100px', resize: 'none', transition: 'all 0.3s ease' }} disabled={loading}></textarea>
                 </div>
