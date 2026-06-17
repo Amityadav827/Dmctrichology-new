@@ -14,6 +14,8 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
   const [data, setData] = useState(propData || {});
   const hideContactBadge = sectionId === "contact-consultation";
   const isContactForm = sectionId === "contact-consultation";
+  const isHomepageConsultationForm = sectionId === "consultation-section";
+  const usesContactStyleFields = isContactForm || isHomepageConsultationForm;
   
   const [formData, setFormData] = useState({
     name: '',
@@ -218,11 +220,11 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       setError('Please enter your name.');
       return;
     }
-    if (isContactForm && formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+    if (usesContactStyleFields && formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       setError('Please enter a valid email address.');
       return;
     }
-    if (!isContactForm && (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()))) {
+    if (!usesContactStyleFields && (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()))) {
       setError('Please enter a valid email address.');
       return;
     }
@@ -231,11 +233,11 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       setError('Please enter a valid 10-digit mobile number.');
       return;
     }
-    if (!isContactForm && !formData.service) {
+    if (!usesContactStyleFields && !formData.service) {
       setError('Please select a type of service enquiry.');
       return;
     }
-    if (!isContactForm && !selectedDateTime) {
+    if (!usesContactStyleFields && !selectedDateTime) {
       setError('Please select a valid appointment date and time.');
       return;
     }
@@ -247,7 +249,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
     setLoading(true);
     try {
       const isContactPage = typeof window !== "undefined" && window.location.pathname.includes("contact-us");
-      const endpoint = isContactPage ? "contact" : "appointment";
+      const endpoint = usesContactStyleFields ? "contact" : "appointment";
 
       let finalMessage = formData.message.trim();
       if (isContactPage && selectedDateTime) {
@@ -259,8 +261,8 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
         mobile: trimmedMobile,
-        service: isContactForm ? '' : formData.service,
-        appointmentDate: isContactForm ? '' : selectedDateTime,
+        service: usesContactStyleFields ? '' : formData.service,
+        appointmentDate: usesContactStyleFields ? '' : selectedDateTime,
         message: finalMessage,
         source: isContactPage ? "contact-us-page" : "consultation-form"
       };
@@ -425,12 +427,12 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder={namePlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required />
                 </div>
                 <div>
-                   <input type={isContactForm ? "tel" : "email"} name={isContactForm ? "mobile" : "email"} value={isContactForm ? formData.mobile : formData.email} onChange={handleChange} placeholder={isContactForm ? "Phone Number*" : emailPlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required />
+                   <input type={usesContactStyleFields ? "tel" : "email"} name={usesContactStyleFields ? "mobile" : "email"} value={usesContactStyleFields ? formData.mobile : formData.email} onChange={handleChange} placeholder={usesContactStyleFields ? "Phone Number*" : emailPlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required />
                 </div>
                 <div>
-                   <input type={isContactForm ? "email" : "text"} name={isContactForm ? "email" : "mobile"} value={isContactForm ? formData.email : formData.mobile} onChange={handleChange} placeholder={isContactForm ? "E-Mail Address" : "Mobile Number*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required={!isContactForm} />
+                   <input type={usesContactStyleFields ? "email" : "text"} name={usesContactStyleFields ? "email" : "mobile"} value={usesContactStyleFields ? formData.email : formData.mobile} onChange={handleChange} placeholder={usesContactStyleFields ? "E-Mail Address" : "Mobile Number*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required={!usesContactStyleFields} />
                 </div>
-                {!isContactForm && (
+                {!usesContactStyleFields && (
                 <div style={{ position: 'relative' }}>
                    <select name="service" value={formData.service} onChange={handleChange} className="premium-select" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", appearance: 'none', cursor: 'pointer', transition: 'all 0.3s ease' }} disabled={loading} required>
                      <option value="">Type Of Service Enquiry*</option>
@@ -482,7 +484,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                 )}
                 
                 {/* Date & Time Picker */}
-                {!isContactForm && (
+                {!usesContactStyleFields && (
                 <div style={{ position: 'relative' }} ref={calendarRef}>
                    <input 
                      type="text" 
@@ -590,9 +592,9 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                    <div style={{ padding: '15px 20px', backgroundColor: '#3B5998', borderRadius: '30px', color: '#fff', fontWeight: 'bold', letterSpacing: '4px', userSelect: 'none' }}>{captcha}</div>
-                   <input type="text" value={captchaInput} onChange={e => setCaptchaInput(e.target.value)} placeholder={isContactForm ? "Enter Code*" : "Code*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif" }} disabled={loading} required />
+                   <input type="text" value={captchaInput} onChange={e => setCaptchaInput(e.target.value)} placeholder={usesContactStyleFields ? "Enter Code*" : "Code*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif" }} disabled={loading} required />
                 </div>
-                {isContactForm && (
+                {usesContactStyleFields && (
                 <div style={{ gridColumn: 'span 2' }}>
                    <textarea name="message" value={formData.message} onChange={handleChange} placeholder={messagePlaceholder} className="premium-textarea" style={{ width: '100%', padding: '20px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", minHeight: '100px', resize: 'none', transition: 'all 0.3s ease' }} disabled={loading}></textarea>
                 </div>
