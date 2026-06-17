@@ -941,6 +941,32 @@
   color: #999;
 }
 
+.details-captcha-row {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.details-captcha-code {
+  width: 100%;
+  background: #ffffff;
+  border: none;
+  padding: 16px 20px;
+  border-radius: 100px;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #3B5998;
+  letter-spacing: 3px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.details-captcha-code:disabled {
+  cursor: not-allowed;
+}
+
 .details-form-select {
   appearance: none;
   color: #999;
@@ -972,37 +998,60 @@
 
 .details-submit-btn {
   width: 100%;
-  background: #ffffff;
-  border: none;
+  background: #3B5998;
+  border: 1px solid #ffffff;
   padding: 16px 20px;
   border-radius: 100px;
   font-family: 'Lato', sans-serif;
   font-size: 14px;
   font-weight: 700;
-  color: #3B5998;
+  color: #ffffff;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
   margin-top: 24px;
+  position: relative;
+  overflow: hidden;
   transition: all 0.3s ease;
 }
 
 .details-submit-btn:hover {
-  background: #f0f0f0;
+  background: #334f87;
 }
 
-.details-btn-icon {
-  background: #3B5998;
-  color: #fff;
-  width: 24px;
-  height: 24px;
+.details-submit-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.details-submit-btn .btn-arrow-circle {
+  position: absolute;
+  right: 8px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
+  background: #3B5998;
+  border: 1px solid #ffffff;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.details-btn-arrow {
   font-size: 12px;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+
+.details-submit-btn:hover .btn-arrow-circle {
+  transform: rotate(45deg);
+}
+
+.details-submit-btn:hover .details-btn-arrow {
+  transform: translate(1px, -1px);
 }
 
 /* ─── IDEAL FREQUENCY SECTION ─────────────────────────────────────── */
@@ -6434,6 +6483,29 @@
   color: #333333;
 }
 
+.service-section-eight-captcha-row {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.service-section-eight-captcha-code {
+  width: 100%;
+  border: 0;
+  border-radius: 999px;
+  min-height: 48px;
+  padding: 0 22px;
+  background: #ffffff;
+  color: #3B5998;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  cursor: pointer;
+  user-select: none;
+}
+
 .service-section-eight-select {
   position: relative;
   z-index: 5;
@@ -6478,9 +6550,10 @@
 }
 
 .service-section-eight-submit {
-  background: #EDEEF8;
-  background-color: #EDEEF8;
-  color: #3B5998;
+  background: #3B5998;
+  background-color: #3B5998;
+  border: 1px solid #ffffff;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6495,8 +6568,8 @@
 
 .service-section-eight-submit:hover {
   transform: none;
-  background-color: #ffffff;
-  color: #3B5998;
+  background-color: #334f87;
+  color: #ffffff;
   box-shadow: 0 14px 30px rgba(15, 35, 79, 0.24);
 }
 
@@ -6515,24 +6588,26 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #ffffff;
   background-color: #3B5998;
+  border: 1px solid #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease;
 }
 
-.service-section-eight-submit .btn-arrow-icon {
-  width: 12px;
-  height: 12px;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
+.service-section-eight-arrow-glyph {
+  font-size: 12px;
+  line-height: 1;
   transition: transform 0.25s ease;
 }
 
 .service-section-eight-submit:hover .btn-arrow-circle {
   transform: rotate(45deg);
+}
+
+.service-section-eight-submit:hover .service-section-eight-arrow-glyph {
+  transform: translate(1px, -1px);
 }
 
 .service-section-eight-error,

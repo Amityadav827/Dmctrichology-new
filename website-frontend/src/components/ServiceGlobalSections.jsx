@@ -1,7 +1,20 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight, Minus, Play, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Minus, Play, Plus } from "lucide-react";
+
+const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
+
+const toDisplayServiceName = (slug = "") => {
+  const text = String(slug || "").trim();
+  if (!text) return "Service Details Consultation";
+
+  return text
+    .split("-")
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+};
 
 function renderRichText(value = "") {
   return String(value)
@@ -382,27 +395,20 @@ function ServiceSectionSeven({ data }) {
   );
 }
 
-function ServiceSectionEight({ data, service, pageSlug }) {
+function ServiceSectionEight({ data, pageSlug }) {
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", address: "", service: "", date: "" });
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: "", phone: "", email: "", captchaInput: "" });
+  const [captcha, setCaptcha] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
-  const selectRef = useRef(null);
 
   useEffect(() => {
     setOpenFaqIndex(0);
   }, [data]);
 
   useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
+    setCaptcha(createCaptcha());
   }, []);
 
   if (!data || data.isVisible === false) return null;
@@ -410,14 +416,6 @@ function ServiceSectionEight({ data, service, pageSlug }) {
   const faqs = (data.faqs || [])
     .filter(faq => faq && faq.isVisible !== false && (faq.question || faq.answer))
     .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
-
-  const serviceOptions = (
-    service?.enquirySection?.serviceOptions?.length
-      ? service.enquirySection.serviceOptions
-      : service?.faqEnquiry?.serviceOptions?.length
-        ? service.faqEnquiry.serviceOptions
-        : ["Laser Hair Removal", "Hair Transplant", "Hair Fall Treatment", "Skin Rejuvenation", "Other"]
-  );
 
   if (!data.title && faqs.length === 0 && !data.formTitle) return null;
 
@@ -439,23 +437,25 @@ function ServiceSectionEight({ data, service, pageSlug }) {
     setSuccess(false);
 
     if (!formData.name.trim()) return setError("Please enter your name.");
+    const digitsOnlyPhone = formData.phone.replace(/\D+/g, "");
+    if (!digitsOnlyPhone) return setError("Please enter your phone number.");
+    if (digitsOnlyPhone.length < 10) return setError("Please enter a valid phone number.");
     if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) return setError("Please enter a valid email address.");
-    if (!formData.phone.trim()) return setError("Please enter your phone number.");
-    if (!formData.address.trim()) return setError("Please enter your address.");
-    if (!formData.service) return setError("Please select a type of service.");
-    if (!formData.date) return setError("Please select a date and time.");
+    if (!formData.captchaInput.trim()) return setError("Please enter the verification code.");
+    if (formData.captchaInput.trim() !== captcha) return setError("Invalid verification code.");
 
     setLoading(true);
     try {
+      const serviceName = toDisplayServiceName(pageSlug);
       const payload = {
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
-        mobile: formData.phone.trim(),
-        enquiry_type: formData.service,
-        preferred_date: formData.date,
+        mobile: digitsOnlyPhone,
+        service: serviceName,
+        enquiry_type: serviceName,
         service_slug: pageSlug || "unknown",
         source: "service-details-enquiry",
-        message: `Treatment Enquiry for: ${formData.service}\nPhone Number: ${formData.phone.trim()}\nAddress: ${formData.address.trim()}\nPreferred Date: ${formData.date}\nService Slug: ${pageSlug || "unknown"}`
+        message: `Service Details Consultation enquiry submitted from ${serviceName}\nService Slug: ${pageSlug || "unknown"}`
       };
       const isLocal = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
       const API_URL = process.env.NEXT_PUBLIC_API_URL || (isLocal ? "http://localhost:10000/api" : "https://dmctrichology-1.onrender.com/api");
@@ -467,7 +467,8 @@ function ServiceSectionEight({ data, service, pageSlug }) {
       const result = await response.json();
       if (result.success) {
         setSuccess(true);
-        setFormData({ name: "", email: "", phone: "", address: "", service: "", date: "" });
+        setFormData({ name: "", phone: "", email: "", captchaInput: "" });
+        setCaptcha(createCaptcha());
       } else {
         setError(result.message || "Failed to submit enquiry.");
       }
@@ -507,37 +508,32 @@ function ServiceSectionEight({ data, service, pageSlug }) {
           {data.formTitle && <h3>{data.formTitle}</h3>}
           <form onSubmit={handleSubmit}>
             <input name="name" value={formData.name} onChange={handleInputChange} placeholder="Name*" disabled={loading} required />
-            <input name="email" type="email" value={formData.email} onChange={handleInputChange} placeholder="E-Mail Address" disabled={loading} />
             <input name="phone" type="tel" value={formData.phone} onChange={handleInputChange} placeholder="Phone Number*" disabled={loading} required />
-            <input name="address" value={formData.address} onChange={handleInputChange} placeholder="Address*" disabled={loading} required />
-            <div className="service-section-eight-select" ref={selectRef}>
-              <button type="button" onClick={() => !loading && setDropdownOpen(open => !open)} disabled={loading}>
-                <span>{formData.service || "Type Of Service Enquiry*"}</span>
-                <ChevronDown size={15} />
+            <input name="email" type="email" value={formData.email} onChange={handleInputChange} placeholder="E-Mail Address" disabled={loading} />
+            <div className="service-section-eight-captcha-row">
+              <button
+                type="button"
+                className="service-section-eight-captcha-code"
+                onClick={() => !loading && setCaptcha(createCaptcha())}
+                title="Click to regenerate code"
+                disabled={loading}
+              >
+                {captcha}
               </button>
-              {dropdownOpen && (
-                <div className="service-section-eight-select-menu">
-                  {serviceOptions.map((option, index) => (
-                    <button
-                      type="button"
-                      key={`${option}-${index}`}
-                      onClick={() => {
-                        setFormData(prev => ({ ...prev, service: option }));
-                        setDropdownOpen(false);
-                        resetMessages();
-                      }}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              )}
+              <input
+                name="captchaInput"
+                type="text"
+                value={formData.captchaInput}
+                onChange={handleInputChange}
+                placeholder="Enter Code"
+                disabled={loading}
+                required
+              />
             </div>
-            <input name="date" type="datetime-local" value={formData.date} onChange={handleInputChange} disabled={loading} required />
             <button className="service-section-eight-submit" type="submit" disabled={loading}>
               <span>{loading ? "Submitting..." : "Submit"}</span>
               <div className="icon-circle btn-arrow-circle">
-                <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ngfngyyxjj86kvn5nd5n.png" alt="arrow" className="btn-arrow-icon" />
+                <span className="service-section-eight-arrow-glyph" aria-hidden="true">↗</span>
               </div>
             </button>
             {error && <p className="service-section-eight-error">{error}</p>}

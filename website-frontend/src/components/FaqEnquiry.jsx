@@ -1,28 +1,39 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import EditableText from './Editable/EditableText';
 import EditableSection from './Editable/EditableSection';
 import { useBuilder } from '../context/BuilderContext';
 
+const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
+
+const toDisplayServiceName = (slug = '') => {
+  const text = String(slug || '').trim();
+  if (!text) return 'Service Details Consultation';
+
+  return text
+    .split('-')
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+};
+
 const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = null }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [sectionData, setSectionData] = useState(data);
-  const [openFaqIndex, setOpenFaqIndex] = useState(0); // First open by default
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   const [formData, setFormData] = useState({
     name: '',
+    phone: '',
     email: '',
-    service: '',
-    date: ''
+    captchaInput: ''
   });
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [captcha, setCaptcha] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-
-  const selectRef = useRef(null);
 
   useEffect(() => {
     if (data) setSectionData(data);
@@ -45,24 +56,15 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
     }
   }, [isEditMode, siteConfig]);
 
-  // Click outside to close custom select dropdown
   useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (selectRef.current && !selectRef.current.contains(e.target)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
+    setCaptcha(createCaptcha());
   }, []);
 
-  // Use the service's own FAQ; if it has none, fall back to the homepage FAQ (first 5).
   const ownFaqs = (sectionData?.faqItems || []).filter(f => f && (f.question || f.answer));
   const faqs = ownFaqs.length > 0
     ? ownFaqs
     : (Array.isArray(faqFallback) ? faqFallback : []);
-  
-  // Defensive normalization of enquirySection prop
+
   const isHairCostDelhiPage = ['hair-transplant-cost-in-delhi', 'hair-transplant-cost-in-india'].includes(String(pageSlug || '').toLowerCase());
   const consultationHeading = 'REQUEST A CONSULTATION';
   const consultationDescription = 'Clinic Timings ( By Appointments Only )\nMonday to Saturday : 9:00 AM to 8:00 PM\nSunday : 10:00 AM to 7:00 PM';
@@ -80,9 +82,6 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
     ? consultationDescription
     : (normalizedEnquiry.description || '');
   const showEnquiry = normalizedEnquiry.isVisible !== false;
-  const serviceOptions = (normalizedEnquiry.serviceOptions && Array.isArray(normalizedEnquiry.serviceOptions) && normalizedEnquiry.serviceOptions.length > 0)
-    ? normalizedEnquiry.serviceOptions 
-    : (sectionData?.serviceOptions || []);
   const leftDescriptionLines = String(leftDescription)
     .split(/\n+/)
     .map(line => line.trim())
@@ -97,7 +96,7 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
   };
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     if (success) setSuccess(false);
     if (error) setError('');
   };
@@ -113,34 +112,47 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
       setError('Please enter your name.');
       return;
     }
-    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+
+    const digitsOnlyPhone = formData.phone.replace(/\D+/g, '');
+    if (!digitsOnlyPhone) {
+      setError('Please enter your phone number.');
+      return;
+    }
+    if (digitsOnlyPhone.length < 10) {
+      setError('Please enter a valid phone number.');
+      return;
+    }
+
+    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       setError('Please enter a valid email address.');
       return;
     }
-    if (!formData.service) {
-      setError('Please select a type of service.');
+
+    if (!formData.captchaInput.trim()) {
+      setError('Please enter the verification code.');
       return;
     }
-    if (!formData.date) {
-      setError('Please select a date.');
+    if (formData.captchaInput.trim() !== captcha) {
+      setError('Invalid verification code.');
       return;
     }
 
     setLoading(true);
     try {
+      const serviceName = toDisplayServiceName(pageSlug);
       const payload = {
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
-        mobile: '0000000000', // Default mobile fallback for details enquiry form
-        enquiry_type: formData.service,
-        preferred_date: formData.date,
+        mobile: digitsOnlyPhone,
+        service: serviceName,
+        enquiry_type: serviceName,
         service_slug: pageSlug || 'unknown',
         source: 'service-details-enquiry',
-        message: `Treatment Enquiry for: ${formData.service}\nPreferred Date: ${formData.date}\nService Slug: ${pageSlug || 'unknown'}`
+        message: `Service Details Consultation enquiry submitted from ${serviceName}\nService Slug: ${pageSlug || 'unknown'}`
       };
 
-      const isLocal = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || (isLocal ? "http://localhost:10000/api" : 'https://dmctrichology-1.onrender.com/api');
+      const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || (isLocal ? 'http://localhost:10000/api' : 'https://dmctrichology-1.onrender.com/api');
 
       const response = await fetch(`${API_URL}/contact`, {
         method: 'POST',
@@ -151,7 +163,8 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
       const result = await response.json();
       if (result.success) {
         setSuccess(true);
-        setFormData({ name: '', email: '', service: '', date: '' });
+        setFormData({ name: '', phone: '', email: '', captchaInput: '' });
+        setCaptcha(createCaptcha());
       } else {
         setError(result.message || 'Failed to submit enquiry.');
       }
@@ -166,37 +179,7 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
   return (
     <EditableSection sectionId="faq-enquiry-section" label="FAQ & Enquiry">
       <section className="details-faq-enquiry-section" data-section-id="faq-enquiry-section">
-        
-        {/* Custom Premium Dropdown Styles & Scrollbar */}
-        <style dangerouslySetInnerHTML={{ __html: `
-          .luxury-select-item:hover {
-            background-color: rgba(61, 90, 153, 0.08) !important;
-            color: #3B5998 !important;
-          }
-          .luxury-select-item.selected:hover {
-            background-color: #3B5998 !important;
-            color: #ffffff !important;
-          }
-          .luxury-select-menu::-webkit-scrollbar {
-            width: 4px;
-          }
-          .luxury-select-menu::-webkit-scrollbar-track {
-            background: #f8fafc;
-            border-radius: 4px;
-          }
-          .luxury-select-menu::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-          }
-          @keyframes fadeInMenu {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-        `}} />
-
         <div className="details-fe-container">
-          
-          {/* LEFT: FAQ */}
           <div className="details-fe-left" style={!showEnquiry ? { width: '100%', maxWidth: 'none', flex: '0 0 100%' } : undefined}>
             <h2 className="dmc-heading details-fe-title" style={{ marginBottom: '16px' }}>
               <EditableText sectionId="faq-enquiry-section" fieldPath="faqEnquiry.faqTitle">
@@ -231,11 +214,11 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
                         {openFaqIndex === index ? <Minus size={18} /> : <Plus size={18} />}
                       </div>
                     </button>
-                    <div 
+                    <div
                       className="details-faq-answer"
-                      style={{ 
+                      style={{
                         maxHeight: openFaqIndex === index ? '500px' : '0',
-                        opacity: openFaqIndex === index ? 1 : 0 
+                        opacity: openFaqIndex === index ? 1 : 0
                       }}
                     >
                       <div className="details-faq-answer-inner">
@@ -248,11 +231,10 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
             </div>
           </div>
 
-          {/* RIGHT: Enquiry Form */}
           {showEnquiry && (
             <div className="details-fe-right">
-              <div 
-                className="details-enquiry-card" 
+              <div
+                className="details-enquiry-card"
                 style={normalizedEnquiry.backgroundColor ? { backgroundColor: normalizedEnquiry.backgroundColor } : undefined}
               >
                 <h3 className="details-enquiry-title">
@@ -267,143 +249,71 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
                     ))}
                   </div>
                 )}
-                
+
                 <form className="details-enquiry-form" onSubmit={handleSubmit}>
                   <div className="details-form-group">
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      placeholder={sectionData?.namePlaceholder || "Name*"} 
-                      className="details-form-input" 
-                      required 
+                      placeholder="Name*"
+                      className="details-form-input"
+                      required
                       disabled={loading}
                     />
                   </div>
                   <div className="details-form-group">
-                    <input 
-                      type="email" 
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="Phone Number*"
+                      className="details-form-input"
+                      required
+                      disabled={loading}
+                    />
+                  </div>
+                  <div className="details-form-group">
+                    <input
+                      type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder={sectionData?.emailPlaceholder || "E-Mail Address*"} 
-                      className="details-form-input" 
-                      required 
+                      placeholder="E-Mail Address"
+                      className="details-form-input"
                       disabled={loading}
                     />
                   </div>
-
-                  {/* Luxury Custom Select Dropdown */}
-                  <div className="details-form-group luxury-select-wrapper" ref={selectRef} style={{ position: 'relative', zIndex: 99 }}>
-                    <div 
-                      onClick={() => !loading && setDropdownOpen(!dropdownOpen)}
-                      className="details-form-input details-form-select-trigger" 
-                      style={{ 
-                        cursor: loading ? 'not-allowed' : 'pointer',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        userSelect: 'none',
-                        color: formData.service ? '#333333' : '#999999',
-                        padding: '16px 20px',
-                        backgroundColor: '#ffffff',
-                        borderRadius: '100px',
-                        fontFamily: "'Lato', sans-serif",
-                        fontSize: '14px',
-                        outline: 'none',
-                        transition: 'all 0.3s ease',
-                        border: 'none',
-                        boxShadow: 'none'
-                      }}
-                    >
-                      <span>{formData.service || sectionData?.servicePlaceholder || "Type Of Service Enquiry*"}</span>
-                      <span style={{ 
-                        fontSize: '10px',
-                        transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                        transition: 'transform 0.25s ease',
-                        color: '#999999',
-                        display: 'inline-block'
-                      }}>▼</span>
-                    </div>
-
-                    {dropdownOpen && (
-                      <div 
-                        className="luxury-select-menu"
-                        style={{
-                          position: 'absolute',
-                          top: '115%',
-                          left: '0',
-                          width: '100%',
-                          backgroundColor: '#ffffff',
-                          borderRadius: '20px',
-                          border: '1px solid rgba(0, 0, 0, 0.04)',
-                          boxShadow: '0 15px 35px rgba(61, 90, 153, 0.15)',
-                          padding: '6px',
-                          zIndex: 9999,
-                          maxHeight: '200px',
-                          overflowY: 'auto',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '2px',
-                          animation: 'fadeInMenu 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards'
-                        }}
+                  <div className="details-form-group">
+                    <div className="details-captcha-row">
+                      <button
+                        type="button"
+                        className="details-captcha-code"
+                        onClick={() => !loading && setCaptcha(createCaptcha())}
+                        title="Click to regenerate code"
+                        disabled={loading}
                       >
-                        {serviceOptions.map((opt, i) => {
-                          const isSelected = formData.service === opt;
-                          return (
-                            <button
-                              key={i}
-                              type="button"
-                              onClick={() => {
-                                setFormData(prev => ({ ...prev, service: opt }));
-                                setDropdownOpen(false);
-                                if (success) setSuccess(false);
-                                if (error) setError('');
-                              }}
-                              className={`luxury-select-item ${isSelected ? 'selected' : ''}`}
-                              style={{
-                                width: '100%',
-                                padding: '11px 18px',
-                                border: 'none',
-                                borderRadius: '12px',
-                                textAlign: 'left',
-                                backgroundColor: isSelected ? '#3B5998' : 'transparent',
-                                color: isSelected ? '#ffffff' : '#333333',
-                                fontSize: '13px',
-                                fontFamily: "'Lato', sans-serif",
-                                fontWeight: isSelected ? '700' : '500',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease',
-                              }}
-                            >
-                              {opt}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="details-form-group date-wrapper">
-                    <input 
-                      type="date" 
-                      name="date"
-                      value={formData.date}
-                      onChange={handleInputChange}
-                      placeholder={sectionData?.datePlaceholder || "Select Date & Time*"} 
-                      className="details-form-input details-form-date" 
-                      required 
-                      disabled={loading}
-                    />
+                        {captcha}
+                      </button>
+                      <input
+                        type="text"
+                        name="captchaInput"
+                        value={formData.captchaInput}
+                        onChange={handleInputChange}
+                        placeholder="Enter Code"
+                        className="details-form-input"
+                        required
+                        disabled={loading}
+                      />
+                    </div>
                   </div>
                   <button type="submit" className="details-submit-btn" disabled={loading}>
-                    <span>
-                      <EditableText sectionId="faq-enquiry-section" fieldPath="faqEnquiry.buttonText">
-                        {loading ? 'Submitting...' : (normalizedEnquiry.submitButtonText || sectionData?.buttonText || 'Schedule Your Visit')}
-                      </EditableText>
+                    <span>{loading ? 'Submitting...' : 'Submit'}</span>
+                    <span className="icon-circle btn-arrow-circle" aria-hidden="true">
+                      <span className="details-btn-arrow">↗</span>
                     </span>
-                    <span className="details-btn-icon">↗</span>
                   </button>
                   {error && (
                     <p style={{ color: '#ef4444', fontSize: '12px', fontWeight: 'bold', marginTop: '12px', textAlign: 'center' }}>
@@ -412,14 +322,13 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
                   )}
                   {success && (
                     <p style={{ color: '#16a34a', fontSize: '12px', fontWeight: 'bold', marginTop: '12px', textAlign: 'center' }}>
-                      ✓ Enquiry submitted successfully!
+                      Enquiry submitted successfully!
                     </p>
                   )}
                 </form>
               </div>
             </div>
           )}
-
         </div>
       </section>
     </EditableSection>
