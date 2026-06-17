@@ -13,6 +13,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
   const { isEditMode, siteConfig } = useBuilder();
   const [data, setData] = useState(propData || {});
   const hideContactBadge = sectionId === "contact-consultation";
+  const isContactForm = sectionId === "contact-consultation";
   
   const [formData, setFormData] = useState({
     name: '',
@@ -217,7 +218,11 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       setError('Please enter your name.');
       return;
     }
-    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+    if (isContactForm && formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+    if (!isContactForm && (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()))) {
       setError('Please enter a valid email address.');
       return;
     }
@@ -226,11 +231,11 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       setError('Please enter a valid 10-digit mobile number.');
       return;
     }
-    if (!formData.service) {
+    if (!isContactForm && !formData.service) {
       setError('Please select a type of service enquiry.');
       return;
     }
-    if (!selectedDateTime) {
+    if (!isContactForm && !selectedDateTime) {
       setError('Please select a valid appointment date and time.');
       return;
     }
@@ -254,8 +259,8 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
         mobile: trimmedMobile,
-        service: formData.service,
-        appointmentDate: selectedDateTime,
+        service: isContactForm ? '' : formData.service,
+        appointmentDate: isContactForm ? '' : selectedDateTime,
         message: finalMessage,
         source: isContactPage ? "contact-us-page" : "consultation-form"
       };
@@ -420,11 +425,12 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder={namePlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required />
                 </div>
                 <div>
-                   <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder={emailPlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required />
+                   <input type={isContactForm ? "tel" : "email"} name={isContactForm ? "mobile" : "email"} value={isContactForm ? formData.mobile : formData.email} onChange={handleChange} placeholder={isContactForm ? "Phone Number*" : emailPlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required />
                 </div>
                 <div>
-                   <input type="text" name="mobile" value={formData.mobile} onChange={handleChange} placeholder="Mobile Number*" className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required />
+                   <input type={isContactForm ? "email" : "text"} name={isContactForm ? "email" : "mobile"} value={isContactForm ? formData.email : formData.mobile} onChange={handleChange} placeholder={isContactForm ? "E-Mail Address" : "Mobile Number*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required={!isContactForm} />
                 </div>
+                {!isContactForm && (
                 <div style={{ position: 'relative' }}>
                    <select name="service" value={formData.service} onChange={handleChange} className="premium-select" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", appearance: 'none', cursor: 'pointer', transition: 'all 0.3s ease' }} disabled={loading} required>
                      <option value="">Type Of Service Enquiry*</option>
@@ -473,8 +479,10 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                    </div>
                    <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777623764/dmc-trichology/qcrzwotm1zyqsdbu6ttb.png" style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', width: '12px', pointerEvents: 'none' }} alt="icon" />
                 </div>
+                )}
                 
                 {/* Date & Time Picker */}
+                {!isContactForm && (
                 <div style={{ position: 'relative' }} ref={calendarRef}>
                    <input 
                      type="text" 
@@ -578,14 +586,17 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                      </div>
                    )}
                 </div>
+                )}
                 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                    <div style={{ padding: '15px 20px', backgroundColor: '#3B5998', borderRadius: '30px', color: '#fff', fontWeight: 'bold', letterSpacing: '4px', userSelect: 'none' }}>{captcha}</div>
-                   <input type="text" value={captchaInput} onChange={e => setCaptchaInput(e.target.value)} placeholder="Code*" className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif" }} disabled={loading} required />
+                   <input type="text" value={captchaInput} onChange={e => setCaptchaInput(e.target.value)} placeholder={isContactForm ? "Enter Code*" : "Code*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif" }} disabled={loading} required />
                 </div>
+                {!isContactForm && (
                 <div style={{ gridColumn: 'span 2' }}>
                    <textarea name="message" value={formData.message} onChange={handleChange} placeholder={messagePlaceholder} className="premium-textarea" style={{ width: '100%', padding: '20px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", minHeight: '100px', resize: 'none', transition: 'all 0.3s ease' }} disabled={loading}></textarea>
                 </div>
+                )}
                 <div style={{ gridColumn: 'span 2' }}>
                   <button type="submit" className="premium-submit-btn" style={{ width: '100%', padding: '15px', borderRadius: '30px', backgroundColor: '#3B5998', color: '#fff', border: 'none', fontSize: '16px', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: "'Marcellus', serif", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', position: 'relative', overflow: 'hidden' }} disabled={loading}>
                     <EditableText sectionId={sectionId} fieldPath="buttonText" tag="span">{loading ? 'Scheduling...' : buttonText}</EditableText>
