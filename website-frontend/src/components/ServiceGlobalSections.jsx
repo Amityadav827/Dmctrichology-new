@@ -126,8 +126,7 @@ function ServiceSectionTwo({ data }) {
     <section className="service-global-section service-section-two">
       <div className="service-global-container service-section-two-grid">
         <div className="service-section-two-content">
-          {data.badge && <span className="service-section-two-badge">{data.badge}</span>}
-          {data.title && <h2>{data.title}</h2>}
+          <h2>Ideal Candidates</h2>
           {points.length > 0 && (
             <ul>
               {points.map((point, index) => (
@@ -138,7 +137,7 @@ function ServiceSectionTwo({ data }) {
         </div>
         {data.image && (
           <div className="service-section-two-image-wrap">
-            <img src={data.image} alt={data.title || "Service detail"} loading="lazy" />
+            <img src={data.image} alt="Ideal Candidates" loading="lazy" />
           </div>
         )}
       </div>
@@ -159,8 +158,7 @@ function ServiceSectionThree({ data }) {
     <section className="service-global-section service-section-three">
       <div className="service-global-container service-section-three-panel">
         <div className="service-section-three-card">
-          {data.title && <h2>{data.title}</h2>}
-          {data.subtitle && <p className="service-section-three-subtitle">{data.subtitle}</p>}
+          <h2>Ideal Candidates</h2>
           {candidates.length > 0 && (
             <div className="service-section-three-list-box">
               <h3>Ideal Candidates</h3>
@@ -174,8 +172,7 @@ function ServiceSectionThree({ data }) {
         </div>
 
         <div className="service-section-three-cta">
-          {data.ctaTitle && <h3>{data.ctaTitle}</h3>}
-          {data.image && <img src={data.image} alt={data.ctaTitle || data.title || "Consultation"} loading="lazy" />}
+          {data.image && <img src={data.image} alt="Ideal Candidates" loading="lazy" />}
           {data.ctaDescription && <p>{data.ctaDescription}</p>}
           {data.ctaButtonText && (
             <a href={data.ctaButtonLink || '/contact-us'} className="service-section-three-button">

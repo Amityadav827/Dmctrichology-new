@@ -344,13 +344,6 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
           {/* ─── RIGHT: Content Column ─── */}
           <div className="details-content-col">
 
-            {/* Badge */}
-            <span className="details-badge">
-              <EditableText sectionId="details-banner" fieldPath="banner.badgeText">
-                {bannerData.badgeText || 'PREMIUM TREATMENT'}
-              </EditableText>
-            </span>
-
             {/* Title */}
             <h1 className="details-title">
               <EditableText sectionId="details-banner" fieldPath="banner.title">
@@ -386,6 +379,14 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
                 </div>
               )}
             </div>
+
+            <button
+              type="button"
+              className="details-consultation-cta"
+              onClick={openConsultationModal}
+            >
+              Book Consultation
+            </button>
 
             {/* Intro Heading */}
             {intro.introHeading && (
@@ -435,14 +436,6 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
                 </EditableText>
               </p>
             )}
-
-            <button
-              type="button"
-              className="details-consultation-cta"
-              onClick={openConsultationModal}
-            >
-              Book Consultation
-            </button>
           </div>
 
         </div>

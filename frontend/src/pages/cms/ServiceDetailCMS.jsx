@@ -165,14 +165,14 @@ const serviceGlobalSectionDefaults = {
     isVisible: true,
     sortOrder: 20,
     badge: "",
-    title: "",
+    title: "Ideal Candidates",
     points: [],
     image: ""
   },
   section3: {
     isVisible: true,
     sortOrder: 30,
-    title: "",
+    title: "Ideal Candidates",
     subtitle: "",
     candidates: [],
     image: "",
@@ -230,8 +230,8 @@ const serviceGlobalSectionDefaults = {
 const withGlobalSectionDefaults = (payload = {}) => ({
   ...payload,
   section1: { ...serviceGlobalSectionDefaults.section1, ...(payload.section1 || {}) },
-  section2: { ...serviceGlobalSectionDefaults.section2, ...(payload.section2 || {}) },
-  section3: { ...serviceGlobalSectionDefaults.section3, ...(payload.section3 || {}) },
+  section2: { ...serviceGlobalSectionDefaults.section2, ...(payload.section2 || {}), badge: "", title: "Ideal Candidates" },
+  section3: { ...serviceGlobalSectionDefaults.section3, ...(payload.section3 || {}), title: "Ideal Candidates", subtitle: "", ctaTitle: "" },
   section4: { ...serviceGlobalSectionDefaults.section4, ...(payload.section4 || {}) },
   section5: { ...serviceGlobalSectionDefaults.section5, ...(payload.section5 || {}) },
   section6: { ...serviceGlobalSectionDefaults.section6, ...(payload.section6 || {}) },
@@ -944,6 +944,9 @@ export default function ServiceDetailCMS() {
       .then(res => {
         if (res.data?.data) {
           const fetchedData = res.data.data;
+          if (fetchedData.banner) {
+            fetchedData.banner.badgeText = "";
+          }
           // Normalize intro media — convert any legacy format to introMedia
           if (fetchedData.intro) {
             const intro = fetchedData.intro;
@@ -1139,7 +1142,7 @@ export default function ServiceDetailCMS() {
             slug: selectedSlug,
             title: serviceInfo.title || "",
             category: serviceInfo.category || "",
-            banner: { badgeText: "PREMIUM TREATMENT", title: serviceInfo.title || "", subtitle: "", duration: "45 mins", buttonText: "Book Consultation", backgroundImage: "" },
+            banner: { badgeText: "", title: serviceInfo.title || "", subtitle: "", duration: "45 mins", buttonText: "Book Consultation", backgroundImage: "" },
             intro: { badgeText: "ABOUT THE TREATMENT", title: serviceInfo.title || "", rating: "4.9", duration: "45 mins", longDescription: "", benefits: [], introMedia: [] },
             process: { sectionTitle: "How it works?", processSteps: [], isVisible: true },
             idealFrequency: { frequencyTitle: "Treatment Frequency & Suitability", frequencyDescription: "", idealForPoints: [], notIdealForPoints: [], ctaTitle: "", ctaDescription: "", ctaButtonText: "", ctaButtonLink: "", ctaImage: "" },
@@ -2312,10 +2315,6 @@ export default function ServiceDetailCMS() {
                 <h3 className="text-lg font-bold mb-6 text-slate-800 flex items-center gap-2"><Layout size={18} className="text-blue-500"/> Hero Banner Section</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Badge Text</label>
-                    <input type="text" value={data.banner.badgeText || ""} onChange={e => updateSectionField("banner", "badgeText", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
-                  </div>
-                  <div>
                     <label className="block text-[10px] font-black uppercase text-slate-500 mb-3 tracking-widest">Banner Title</label>
                     <input type="text" value={data.banner.title || ""} onChange={e => updateSectionField("banner", "title", e.target.value)} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold" />
                   </div>
@@ -2463,18 +2462,14 @@ export default function ServiceDetailCMS() {
                     <MediaUploader label="Right Image" value={data.section2?.image || ""} onChange={val => updateSectionField("section2", "image", val)} />
                   </div>
                   <div className="lg:col-span-2 space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
                         <input type="number" value={data.section2?.sortOrder ?? 20} onChange={e => updateSectionField("section2", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Badge</label>
-                        <input type="text" value={data.section2?.badge || ""} onChange={e => updateSectionField("section2", "badge", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Benefits Section" />
-                      </div>
-                      <div>
                         <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Title</label>
-                        <input type="text" value={data.section2?.title || ""} onChange={e => updateSectionField("section2", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="What Sets It Apart" />
+                        <input type="text" value={data.section2?.title || "Ideal Candidates"} onChange={e => updateSectionField("section2", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Ideal Candidates" />
                       </div>
                     </div>
 
@@ -2518,23 +2513,18 @@ export default function ServiceDetailCMS() {
                     <MediaUploader label="CTA Illustration/Image" value={data.section3?.image || ""} onChange={val => updateSectionField("section3", "image", val)} />
                   </div>
                   <div className="lg:col-span-2 space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
                         <input type="number" value={data.section3?.sortOrder ?? 30} onChange={e => updateSectionField("section3", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
                       </div>
                       <div>
                         <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Title</label>
-                        <input value={data.section3?.title || ""} onChange={e => updateSectionField("section3", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Who It's For" />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Subtitle</label>
-                        <input value={data.section3?.subtitle || ""} onChange={e => updateSectionField("section3", "subtitle", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="After 6-8 sessions..." />
+                        <input value={data.section3?.title || "Ideal Candidates"} onChange={e => updateSectionField("section3", "title", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Ideal Candidates" />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <input value={data.section3?.ctaTitle || ""} onChange={e => updateSectionField("section3", "ctaTitle", e.target.value)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="CTA title" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <input value={data.section3?.ctaDescription || ""} onChange={e => updateSectionField("section3", "ctaDescription", e.target.value)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="CTA description" />
                       <input value={data.section3?.ctaButtonText || ""} onChange={e => updateSectionField("section3", "ctaButtonText", e.target.value)} className="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Button text" />
                     </div>
