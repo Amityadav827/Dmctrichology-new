@@ -12,7 +12,7 @@ const whiteIconFilter = 'brightness(0) invert(1)';
 const EnquirySection = ({ sectionId = "consultation-section", data: propData, label = "Request Consultation" }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [data, setData] = useState(propData || {});
-  const hideContactBadge = sectionId === "contact-consultation";
+  const hideContactBadge = sectionId === "contact-consultation" || sectionId === "consultation-section";
   const isContactForm = sectionId === "contact-consultation";
   const isHomepageConsultationForm = sectionId === "consultation-section";
   const usesContactStyleFields = isContactForm || isHomepageConsultationForm;
