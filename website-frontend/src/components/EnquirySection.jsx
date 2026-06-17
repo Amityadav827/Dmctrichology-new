@@ -12,6 +12,7 @@ const whiteIconFilter = 'brightness(0) invert(1)';
 const EnquirySection = ({ sectionId = "consultation-section", data: propData, label = "Request Consultation" }) => {
   const { isEditMode, siteConfig } = useBuilder();
   const [data, setData] = useState(propData || {});
+  const hideContactBadge = sectionId === "contact-consultation";
   
   const [formData, setFormData] = useState({
     name: '',
@@ -313,12 +314,14 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
             
             {/* Header and Contact Info */}
             <div style={{ flex: '1 1 250px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
-                <img src={iconUrl} alt="icon" style={{ width: '40px', height: 'auto', filter: blueIconFilter }} />
-                <EditableText sectionId={sectionId} fieldPath="badgeText" tag="span" className="section-subtitle">
-                  {badgeText}
-                </EditableText>
-              </div>
+              {!hideContactBadge && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
+                  <img src={iconUrl} alt="icon" style={{ width: '40px', height: 'auto', filter: blueIconFilter }} />
+                  <EditableText sectionId={sectionId} fieldPath="badgeText" tag="span" className="section-subtitle">
+                    {badgeText}
+                  </EditableText>
+                </div>
+              )}
               <h2 className="section-title">
                 <EditableText sectionId={sectionId} fieldPath="heading" tag="span">
                   {heading}

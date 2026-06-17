@@ -37,7 +37,10 @@ export default async function ContactPage() {
   const pageData = await fetchContactPage();
 
   const hero = pageData?.hero || {};
-  const consultation = pageData?.consultation || {};
+  const consultation = {
+    ...(pageData?.consultation || {}),
+    badgeText: '',
+  };
   const map = pageData?.map || {};
 
   return (
