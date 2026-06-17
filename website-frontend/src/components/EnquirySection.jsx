@@ -381,7 +381,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
             </div>
 
             {/* Form */}
-            <div style={{ flex: '1 1 150px', paddingTop: '0px', position: 'relative', zIndex: 2 }}>
+            <div style={{ flex: '1 1 150px', paddingTop: usesContactStyleFields ? '24px' : '0px', position: 'relative', zIndex: 2 }}>
               <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                 <div style={{ gridColumn: 'span 2' }}>
                    {success && (
@@ -594,11 +594,6 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                    <div style={{ padding: '15px 20px', backgroundColor: '#3B5998', borderRadius: '30px', color: '#fff', fontWeight: 'bold', letterSpacing: '4px', userSelect: 'none' }}>{captcha}</div>
                    <input type="text" value={captchaInput} onChange={e => setCaptchaInput(e.target.value)} placeholder={usesContactStyleFields ? "Enter Code*" : "Code*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif" }} disabled={loading} required />
                 </div>
-                {usesContactStyleFields && (
-                <div style={{ gridColumn: 'span 2' }}>
-                   <textarea name="message" value={formData.message} onChange={handleChange} placeholder={messagePlaceholder} className="premium-textarea" style={{ width: '100%', padding: '20px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", minHeight: '100px', resize: 'none', transition: 'all 0.3s ease' }} disabled={loading}></textarea>
-                </div>
-                )}
                 <div style={{ gridColumn: 'span 2' }}>
                   <button type="submit" className="premium-submit-btn" style={{ width: '100%', padding: '15px', borderRadius: '30px', backgroundColor: '#3B5998', color: '#fff', border: 'none', fontSize: '16px', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: "'Marcellus', serif", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', position: 'relative', overflow: 'hidden' }} disabled={loading}>
                     <EditableText sectionId={sectionId} fieldPath="buttonText" tag="span">{loading ? 'Scheduling...' : buttonText}</EditableText>
@@ -614,7 +609,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
           </div>
 
           {/* Bottom Row: Full Width Image */}
-          <div style={{ width: '100%', marginTop: '-110px', position: 'relative', zIndex: 1 }}>
+          <div style={{ width: '100%', marginTop: usesContactStyleFields ? '-50px' : '-110px', position: 'relative', zIndex: 1 }}>
             <img 
               src={beforeImage} 
               alt="Consultation Result" 
