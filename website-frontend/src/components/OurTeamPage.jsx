@@ -89,9 +89,6 @@ function TeamMembersSection({ data = {} }) {
                 >
                   <div className="our-team-selector-copy">
                     <span className="our-team-selector-name">{member.name}</span>
-                    {hasText(member.designation) && (
-                      <span className="our-team-selector-role">{member.designation}</span>
-                    )}
                   </div>
                   <span className="our-team-selector-arrow" aria-hidden="true">
                     <img src={arrowIcon} alt="" />
@@ -190,13 +187,13 @@ export default function OurTeamPage({ data = {} }) {
         }
 
         .our-team-members {
-          background: #E8EAF6;
-          padding: 100px 5%;
+          background: #ffffff;
+          padding: 100px clamp(24px, 4vw, 72px) 110px;
           box-sizing: border-box;
         }
 
         .our-team-members-inner {
-          max-width: 1400px;
+          max-width: 1480px;
           margin: 0 auto;
         }
 
@@ -232,21 +229,21 @@ export default function OurTeamPage({ data = {} }) {
           font-size: clamp(38px, 4vw, 58px);
           line-height: 1.08;
           font-weight: 400;
-          max-width: 760px;
+          max-width: 820px;
         }
 
         .our-team-doctors-shell {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 40px;
+          display: grid;
+          grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+          gap: 48px;
           align-items: flex-start;
         }
 
         .our-team-selector-list {
-          flex: 1 1 320px;
           display: flex;
           flex-direction: column;
           gap: 20px;
+          min-width: 0;
         }
 
         .our-team-selector-card {
@@ -277,7 +274,6 @@ export default function OurTeamPage({ data = {} }) {
         .our-team-selector-copy {
           display: flex;
           flex-direction: column;
-          gap: 6px;
           min-width: 0;
         }
 
@@ -285,13 +281,6 @@ export default function OurTeamPage({ data = {} }) {
           font-family: 'Marcellus', serif;
           font-size: 18px;
           line-height: 1.35;
-        }
-
-        .our-team-selector-role {
-          font-family: 'Lato', sans-serif;
-          font-size: 13px;
-          line-height: 1.45;
-          opacity: 0.9;
         }
 
         .our-team-selector-arrow {
@@ -312,7 +301,6 @@ export default function OurTeamPage({ data = {} }) {
         }
 
         .our-team-detail-card {
-          flex: 2 1 640px;
           background: #3B5998;
           border-radius: 40px;
           padding: 30px;
@@ -321,6 +309,7 @@ export default function OurTeamPage({ data = {} }) {
           gap: 30px;
           box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
           box-sizing: border-box;
+          min-width: 0;
         }
 
         .our-team-detail-image-wrap {
@@ -420,11 +409,12 @@ export default function OurTeamPage({ data = {} }) {
 
         @media (max-width: 1199px) {
           .our-team-members {
-            padding: 80px 5%;
+            padding: 84px clamp(20px, 3.5vw, 40px) 96px;
           }
 
           .our-team-doctors-shell {
-            gap: 28px;
+            grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+            gap: 32px;
           }
 
           .our-team-members-header h2 {
@@ -438,9 +428,9 @@ export default function OurTeamPage({ data = {} }) {
             padding: 70px 5% 52px;
           }
 
-          .our-team-selector-list,
-          .our-team-detail-card {
-            flex-basis: 100%;
+          .our-team-doctors-shell {
+            grid-template-columns: 1fr;
+            gap: 28px;
           }
         }
 
@@ -455,7 +445,7 @@ export default function OurTeamPage({ data = {} }) {
           }
 
           .our-team-members {
-            padding: 48px 16px;
+            padding: 48px 16px 64px;
           }
 
           .our-team-members-header {
