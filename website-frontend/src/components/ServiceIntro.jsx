@@ -387,14 +387,6 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
               )}
             </div>
 
-            <button
-              type="button"
-              className="details-consultation-cta"
-              onClick={openConsultationModal}
-            >
-              Book Consultation
-            </button>
-
             {/* Intro Heading */}
             {intro.introHeading && (
               <h3 className="details-subtitle">
@@ -443,6 +435,14 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
                 </EditableText>
               </p>
             )}
+
+            <button
+              type="button"
+              className="details-consultation-cta"
+              onClick={openConsultationModal}
+            >
+              Book Consultation
+            </button>
           </div>
 
         </div>
