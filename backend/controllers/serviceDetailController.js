@@ -5,6 +5,34 @@ const slugAliases = {
   'hair-transplant-cost-in-delhi': 'hair-transplant-cost-in-india'
 };
 
+const resolveDisplayRating = (...values) => {
+  for (const value of values) {
+    const parsed = Number.parseFloat(value);
+    if (Number.isFinite(parsed) && parsed >= 1 && parsed <= 5) {
+      return parsed;
+    }
+  }
+  return null;
+};
+
+const hydrateDisplayMeta = (payload = {}) => {
+  const banner = payload.banner && typeof payload.banner === 'object'
+    ? { ...payload.banner }
+    : {};
+
+  const resolvedRating = resolveDisplayRating(
+    banner.rating,
+    payload?.intro?.rating,
+    payload?.rating
+  );
+
+  if (resolvedRating !== null) {
+    banner.rating = resolvedRating;
+  }
+
+  return { ...payload, banner };
+};
+
 const getSlugLookupCandidates = (slug) => {
   const candidates = [slug];
   if (slugAliases[slug]) candidates.push(slugAliases[slug]);
@@ -45,7 +73,7 @@ exports.getServiceDetailBySlug = async (req, res) => {
     ? { ...serviceDetail.data, slug: serviceDetail.slug }
     : { ...serviceDetail, slug };
 
-  res.status(200).json({ success: true, data: { ...responseData, slug } });
+  res.status(200).json({ success: true, data: { ...hydrateDisplayMeta(responseData), slug } });
 };
 
 // Create or Update service details
