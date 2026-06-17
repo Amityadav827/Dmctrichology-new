@@ -77,7 +77,6 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
   const [bannerData, setBannerData] = useState(banner);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isConsultationOpen, setIsConsultationOpen] = useState(false);
   const [consultationData, setConsultationData] = useState({ name: '', phone: '', email: '', captchaInput: '' });
   const [consultationCaptcha, setConsultationCaptcha] = useState('');
   const [consultationLoading, setConsultationLoading] = useState(false);
@@ -150,12 +149,6 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
 
   const handleConsultationChange = (event) => {
     setConsultationData(prev => ({ ...prev, [event.target.name]: event.target.value }));
-    resetConsultationMessages();
-  };
-
-  const toggleConsultationForm = () => {
-    if (consultationLoading) return;
-    setIsConsultationOpen(prev => !prev);
     resetConsultationMessages();
   };
 
@@ -385,16 +378,6 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
               )}
             </div>
 
-            <button
-              type="button"
-              className="details-consultation-cta"
-              onClick={toggleConsultationForm}
-              aria-expanded={isConsultationOpen}
-              aria-controls="details-inline-consultation-form"
-            >
-              Book Consultation
-            </button>
-
             {/* Intro Heading */}
             {intro.introHeading && (
               <h3 className="details-subtitle">
@@ -444,13 +427,9 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
               </p>
             )}
 
-            <div
-              id="details-inline-consultation-form"
-              className={`details-consultation-inline-wrap${isConsultationOpen ? ' is-open' : ''}`}
-              aria-hidden={!isConsultationOpen}
-            >
+            <div id="details-inline-consultation-form" className="details-consultation-inline-wrap">
               <div className="details-consultation-inline-panel">
-                <h2 className="details-consultation-inline-title">Book Consultation</h2>
+                <h2 className="details-consultation-inline-title">Book a Consultation</h2>
                 <form className="details-consultation-inline-form" onSubmit={handleConsultationSubmit}>
                   <div className="details-consultation-inline-grid">
                     <input
@@ -471,6 +450,7 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
                       required
                     />
                     <input
+                      className="details-consultation-inline-field-full"
                       name="email"
                       type="email"
                       value={consultationData.email}
@@ -478,7 +458,7 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
                       placeholder="E-Mail Address"
                       disabled={consultationLoading}
                     />
-                    <div className="details-consultation-inline-captcha">
+                    <div className="details-consultation-inline-captcha details-consultation-inline-field-full">
                       <button
                         type="button"
                         className="details-consultation-inline-code"

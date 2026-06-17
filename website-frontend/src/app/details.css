@@ -297,57 +297,14 @@
   color: #888;
 }
 
-.details-consultation-cta {
-  color: #fff;
-  cursor: pointer;
-  background: #3b5998;
-  border: 0;
-  border-radius: 999px;
-  width: fit-content;
-  margin: 0px 0 0px;
-  padding: 12px 22px;
-  font-family: 'Marcellus', serif;
-  font-size: 14px;
-  line-height: 1;
-  transition: transform .24s, box-shadow .24s, background-color .24s;
-  box-shadow: 0 10px 24px #3b59982e;
-}
-
-.details-consultation-cta:hover {
-  background: #2f477a;
-  box-shadow: 0 14px 30px rgba(59, 89, 152, 0.28);
-  transform: translateY(-1px);
-}
-
-.details-consultation-cta:active {
-  transform: translateY(0);
-}
-
 .details-consultation-inline-wrap {
-  display: grid;
-  grid-template-rows: 0fr;
-  opacity: 0;
-  margin-top: 0;
-  transition: grid-template-rows 0.32s ease, opacity 0.24s ease, margin-top 0.24s ease;
-}
-
-.details-consultation-inline-wrap.is-open {
-  grid-template-rows: 1fr;
-  opacity: 1;
-  margin-top: 24px;
+  margin-top: 28px;
 }
 
 .details-consultation-inline-panel {
-  min-height: 0;
-  overflow: hidden;
   border-radius: 24px;
   background: #eef2fb;
-  padding: 0 24px;
-}
-
-.details-consultation-inline-wrap.is-open .details-consultation-inline-panel {
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding: 24px;
 }
 
 .details-consultation-inline-title {
@@ -368,6 +325,10 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px 16px;
+}
+
+.details-consultation-inline-field-full {
+  grid-column: 1 / -1;
 }
 
 .details-consultation-inline-grid input {
@@ -732,16 +693,7 @@
   }
 
   .details-consultation-inline-panel {
-    padding-left: 18px;
-    padding-right: 18px;
-  }
-
-  .details-consultation-inline-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .details-consultation-inline-captcha {
-    grid-template-columns: 96px minmax(0, 1fr);
+    padding: 20px 18px;
   }
 
   .details-consultation-inline-submit {
@@ -754,6 +706,20 @@
 
   .process-card {
     flex: 0 0 calc(80% - 10px);
+  }
+}
+
+@media (max-width: 992px) {
+  .details-consultation-inline-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .details-consultation-inline-captcha {
+    grid-template-columns: 1fr;
+  }
+
+  .details-consultation-inline-code {
+    min-height: 44px;
   }
 }
 
