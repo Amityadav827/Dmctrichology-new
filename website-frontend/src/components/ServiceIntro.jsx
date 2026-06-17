@@ -449,16 +449,7 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
                       disabled={consultationLoading}
                       required
                     />
-                    <input
-                      className="details-consultation-inline-field-full"
-                      name="email"
-                      type="email"
-                      value={consultationData.email}
-                      onChange={handleConsultationChange}
-                      placeholder="E-Mail Address"
-                      disabled={consultationLoading}
-                    />
-                    <div className="details-consultation-inline-captcha details-consultation-inline-field-full">
+                    <div className="details-consultation-inline-action-row details-consultation-inline-field-full">
                       <button
                         type="button"
                         className="details-consultation-inline-code"
@@ -476,18 +467,18 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
                         disabled={consultationLoading}
                         required
                       />
+                      <button className="details-consultation-inline-submit" type="submit" disabled={consultationLoading}>
+                        <span>{consultationLoading ? 'Submitting...' : 'Submit'}</span>
+                        <span className="icon-circle btn-arrow-circle" aria-hidden="true">
+                          <img
+                            src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781696270154-446102211.png"
+                            alt=""
+                            className="details-consultation-inline-arrow-icon"
+                          />
+                        </span>
+                      </button>
                     </div>
                   </div>
-                  <button className="details-consultation-inline-submit" type="submit" disabled={consultationLoading}>
-                    <span>{consultationLoading ? 'Submitting...' : 'Submit'}</span>
-                    <span className="icon-circle btn-arrow-circle" aria-hidden="true">
-                      <img
-                        src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781696270154-446102211.png"
-                        alt=""
-                        className="details-consultation-inline-arrow-icon"
-                      />
-                    </span>
-                  </button>
                   {consultationError && <p className="details-consultation-error">{consultationError}</p>}
                   {consultationSuccess && <p className="details-consultation-success">Consultation request submitted successfully.</p>}
                 </form>

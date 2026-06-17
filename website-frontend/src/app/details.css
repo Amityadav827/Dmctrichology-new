@@ -302,9 +302,7 @@
 }
 
 .details-consultation-inline-panel {
-  border-radius: 24px;
-  background: #eef2fb;
-  padding: 24px;
+  padding: 0;
 }
 
 .details-consultation-inline-title {
@@ -349,10 +347,11 @@
   box-shadow: 0 0 0 4px rgba(59, 89, 152, 0.12);
 }
 
-.details-consultation-inline-captcha {
+.details-consultation-inline-action-row {
   display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
+  grid-template-columns: 110px minmax(0, 1fr) auto;
   gap: 12px;
+  align-items: center;
 }
 
 .details-consultation-inline-code {
@@ -385,7 +384,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 4px auto 0;
+  margin: 0;
   padding: 0 56px 0 24px;
   position: relative;
   overflow: hidden;
@@ -693,7 +692,7 @@
   }
 
   .details-consultation-inline-panel {
-    padding: 20px 18px;
+    padding: 0;
   }
 
   .details-consultation-inline-submit {
@@ -714,7 +713,7 @@
     grid-template-columns: 1fr;
   }
 
-  .details-consultation-inline-captcha {
+  .details-consultation-inline-action-row {
     grid-template-columns: 1fr;
   }
 
