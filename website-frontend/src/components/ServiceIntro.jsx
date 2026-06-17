@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Star, StarHalf, Clock, ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { Star, StarHalf, Clock, ChevronLeft, ChevronRight, Play, X } from 'lucide-react';
 import EditableText from './Editable/EditableText';
 import EditableSection from './Editable/EditableSection';
 import { useBuilder } from '../context/BuilderContext';
@@ -75,6 +75,11 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
   const [bannerData, setBannerData] = useState(banner);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isConsultationOpen, setIsConsultationOpen] = useState(false);
+  const [consultationData, setConsultationData] = useState({ name: '', phone: '', address: '' });
+  const [consultationLoading, setConsultationLoading] = useState(false);
+  const [consultationError, setConsultationError] = useState('');
+  const [consultationSuccess, setConsultationSuccess] = useState(false);
   const videoRef = useRef(null);
   const thumbsRef = useRef(null);
 
@@ -129,6 +134,79 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
   const shouldShowClosingText = closingText && !genericClosingPattern.test(closingText);
   const currentItem = mediaItems[selectedIndex] || mediaItems[0];
   const isVideo = currentItem?.type === 'video';
+  const serviceTitle = bannerData.title || intro.title || 'Service Detail';
+
+  const resetConsultationMessages = () => {
+    if (consultationError) setConsultationError('');
+    if (consultationSuccess) setConsultationSuccess(false);
+  };
+
+  const handleConsultationChange = (event) => {
+    setConsultationData(prev => ({ ...prev, [event.target.name]: event.target.value }));
+    resetConsultationMessages();
+  };
+
+  const openConsultationModal = () => {
+    setIsConsultationOpen(true);
+    resetConsultationMessages();
+  };
+
+  const closeConsultationModal = () => {
+    if (consultationLoading) return;
+    setIsConsultationOpen(false);
+    setConsultationError('');
+    setConsultationSuccess(false);
+  };
+
+  const handleConsultationSubmit = async (event) => {
+    event.preventDefault();
+    if (consultationLoading) return;
+
+    setConsultationError('');
+    setConsultationSuccess(false);
+
+    if (!consultationData.name.trim()) return setConsultationError('Please enter your name.');
+    if (!consultationData.phone.trim()) return setConsultationError('Please enter your phone number.');
+    if (!consultationData.address.trim()) return setConsultationError('Please enter your address.');
+
+    setConsultationLoading(true);
+    try {
+      const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || (isLocal ? 'http://localhost:10000/api' : 'https://dmctrichology-1.onrender.com/api');
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+      const serviceSlug = currentPath.split('/details/')[1] || '';
+      const phoneValue = consultationData.phone.trim();
+      const phoneKey = phoneValue.replace(/\D/g, '') || 'no-phone';
+      const payload = {
+        name: consultationData.name.trim(),
+        email: `${phoneKey}@no-email.dmc-trichology.local`,
+        mobile: phoneValue,
+        service: 'Book Consultation',
+        enquiry_type: 'Book Consultation',
+        service_slug: serviceSlug,
+        source: 'Book Consultation Popup',
+        message: `Book Consultation Popup\nService: ${serviceTitle}\nAddress: ${consultationData.address.trim()}\nPage: ${currentPath || 'N/A'}`
+      };
+
+      const response = await fetch(`${API_URL}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Failed to submit consultation request.');
+      }
+
+      setConsultationSuccess(true);
+      setConsultationData({ name: '', phone: '', address: '' });
+    } catch (error) {
+      setConsultationError(error.message || 'Something went wrong. Please try again.');
+    } finally {
+      setConsultationLoading(false);
+    }
+  };
 
   // ── Navigation ───────────────────────────────────────────────────────────────
   const navigate = useCallback((newIndex) => {
@@ -152,12 +230,13 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
   // ── Keyboard nav ─────────────────────────────────────────────────────────────
   useEffect(() => {
     const handleKey = (e) => {
+      if (e.key === 'Escape' && isConsultationOpen) closeConsultationModal();
       if (e.key === 'ArrowLeft') goPrev();
       if (e.key === 'ArrowRight') goNext();
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [goPrev, goNext]);
+  }, [goPrev, goNext, isConsultationOpen, consultationLoading]);
 
   // ─── VIDEO: autoplay when slide changes ──────────────────────────────────────
   useEffect(() => {
@@ -308,6 +387,14 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
               )}
             </div>
 
+            <button
+              type="button"
+              className="details-consultation-cta"
+              onClick={openConsultationModal}
+            >
+              Book Consultation
+            </button>
+
             {/* Intro Heading */}
             {intro.introHeading && (
               <h3 className="details-subtitle">
@@ -359,6 +446,28 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
           </div>
 
         </div>
+
+        {isConsultationOpen && (
+          <div className="details-consultation-modal" role="dialog" aria-modal="true" aria-labelledby="details-consultation-title">
+            <button className="details-consultation-backdrop" type="button" aria-label="Close consultation form" onClick={closeConsultationModal} />
+            <div className="details-consultation-dialog">
+              <button className="details-consultation-close" type="button" aria-label="Close consultation form" onClick={closeConsultationModal} disabled={consultationLoading}>
+                <X size={18} />
+              </button>
+              <h2 id="details-consultation-title">Book Consultation</h2>
+              <form onSubmit={handleConsultationSubmit}>
+                <input name="name" value={consultationData.name} onChange={handleConsultationChange} placeholder="Name *" disabled={consultationLoading} required />
+                <input name="phone" type="tel" value={consultationData.phone} onChange={handleConsultationChange} placeholder="Phone Number *" disabled={consultationLoading} required />
+                <input name="address" value={consultationData.address} onChange={handleConsultationChange} placeholder="Address *" disabled={consultationLoading} required />
+                <button type="submit" disabled={consultationLoading}>
+                  {consultationLoading ? 'Submitting...' : 'Submit'}
+                </button>
+                {consultationError && <p className="details-consultation-error">{consultationError}</p>}
+                {consultationSuccess && <p className="details-consultation-success">Consultation request submitted successfully.</p>}
+              </form>
+            </div>
+          </div>
+        )}
       </section>
     </EditableSection>
   );
