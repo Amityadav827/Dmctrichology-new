@@ -533,7 +533,12 @@ function ServiceSectionEight({ data, pageSlug }) {
             <button className="service-section-eight-submit" type="submit" disabled={loading}>
               <span>{loading ? "Submitting..." : "Submit"}</span>
               <div className="icon-circle btn-arrow-circle">
-                <span className="service-section-eight-arrow-glyph" aria-hidden="true">↗</span>
+                <img
+                  src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781696270154-446102211.png"
+                  alt=""
+                  className="service-section-eight-arrow-icon"
+                  aria-hidden="true"
+                />
               </div>
             </button>
             {error && <p className="service-section-eight-error">{error}</p>}

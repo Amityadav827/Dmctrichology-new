@@ -6563,6 +6563,7 @@
   overflow: hidden;
   font-family: 'Marcellus', serif;
   font-size: 14px;
+  font-weight: 700;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -6588,7 +6589,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #3B5998;
+  background-color: #ffffff;
   border: 1px solid #ffffff;
   display: flex;
   align-items: center;
@@ -6596,9 +6597,10 @@
   transition: transform 0.3s ease;
 }
 
-.service-section-eight-arrow-glyph {
-  font-size: 12px;
-  line-height: 1;
+.service-section-eight-arrow-icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
   transition: transform 0.25s ease;
 }
 
@@ -6606,7 +6608,7 @@
   transform: rotate(45deg);
 }
 
-.service-section-eight-submit:hover .service-section-eight-arrow-glyph {
+.service-section-eight-submit:hover .service-section-eight-arrow-icon {
   transform: translate(1px, -1px);
 }
 
