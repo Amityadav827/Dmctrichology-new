@@ -15,7 +15,14 @@ const staticFallback = {
   },
   teamMembers: {
     isEnabled: true,
+    badgeText: 'OUR MEDICAL EXPERTS',
+    heading: 'Meet Our Expert Doctors',
     members: []
+  },
+  seo: {
+    metaTitle: '',
+    metaDescription: '',
+    ogImage: ''
   }
 };
 
@@ -28,7 +35,27 @@ async function getPageData() {
 
     if (!response.ok) return staticFallback;
     const result = await response.json();
-    return result.success ? { ...staticFallback, ...(result.data || {}) } : staticFallback;
+    if (!result.success) return staticFallback;
+
+    return {
+      ...staticFallback,
+      ...(result.data || {}),
+      hero: {
+        ...staticFallback.hero,
+        ...(result.data?.hero || {})
+      },
+      teamMembers: {
+        ...staticFallback.teamMembers,
+        ...(result.data?.teamMembers || {}),
+        members: Array.isArray(result.data?.teamMembers?.members)
+          ? result.data.teamMembers.members
+          : staticFallback.teamMembers.members
+      },
+      seo: {
+        ...staticFallback.seo,
+        ...(result.data?.seo || {})
+      }
+    };
   } catch (error) {
     console.error('SSR Fetch Error (Our Team page):', error);
     return staticFallback;

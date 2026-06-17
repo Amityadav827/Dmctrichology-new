@@ -15,6 +15,8 @@ const emptyData = {
   },
   teamMembers: {
     isEnabled: true,
+    badgeText: "OUR MEDICAL EXPERTS",
+    heading: "Meet Our Expert Doctors",
     members: []
   },
   seo: {
@@ -49,7 +51,8 @@ export default function OurTeamCMS() {
                   ...member,
                   shortDescription: member.shortDescription || member.description || "",
                   description: member.description || member.shortDescription || "",
-                  sortOrder: member.sortOrder ?? ((index + 1) * 10)
+                  sortOrder: member.sortOrder ?? ((index + 1) * 10),
+                  isVisible: member.isVisible !== false
                 }))
               : emptyData.teamMembers.members
           },
@@ -82,7 +85,17 @@ export default function OurTeamCMS() {
         ...prev.teamMembers,
         members: [
           ...(prev.teamMembers?.members || []),
-          { image: "", name: "", designation: "", qualification: "", shortDescription: "", description: "", profileLink: "", sortOrder: ((prev.teamMembers?.members || []).length + 1) * 10 }
+          {
+            image: "",
+            name: "",
+            designation: "",
+            qualification: "",
+            shortDescription: "",
+            description: "",
+            profileLink: "",
+            sortOrder: ((prev.teamMembers?.members || []).length + 1) * 10,
+            isVisible: true
+          }
         ]
       }
     }));
@@ -245,7 +258,7 @@ export default function OurTeamCMS() {
         {activeSection === "members" && (
           <div className="space-y-8">
             <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center justify-between gap-4 mb-8">
                 <label className="flex items-center gap-3">
                   <input type="checkbox" checked={!!data.teamMembers?.isEnabled} onChange={e => updateSectionField("teamMembers", "isEnabled", e.target.checked)} />
                   <span className="text-sm font-black text-slate-700">Enable Team Members</span>
@@ -254,15 +267,45 @@ export default function OurTeamCMS() {
                   <Plus size={16} /> Add Member
                 </button>
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Section Badge Text</label>
+                  <input
+                    value={data.teamMembers?.badgeText || ""}
+                    onChange={e => updateSectionField("teamMembers", "badgeText", e.target.value)}
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none"
+                    placeholder="OUR MEDICAL EXPERTS"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Section Heading</label>
+                  <input
+                    value={data.teamMembers?.heading || ""}
+                    onChange={e => updateSectionField("teamMembers", "heading", e.target.value)}
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none"
+                    placeholder="Meet Our Expert Doctors"
+                  />
+                </div>
+              </div>
             </div>
 
             {(data.teamMembers?.members || []).map((member, index) => (
               <div key={index} className="bg-white rounded-[32px] border border-slate-200 shadow-sm p-10">
                 <div className="flex items-center justify-between gap-4 mb-8">
                   <h3 className="text-lg font-black text-slate-800">Member {index + 1}</h3>
-                  <button type="button" onClick={() => removeMember(index)} className="w-10 h-10 flex items-center justify-center bg-rose-50 text-rose-600 rounded-2xl hover:bg-rose-100 transition-all">
-                    <Trash2 size={17} />
-                  </button>
+                  <div className="flex items-center gap-4">
+                    <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-500">
+                      <input
+                        type="checkbox"
+                        checked={member.isVisible !== false}
+                        onChange={e => updateMember(index, "isVisible", e.target.checked)}
+                      />
+                      Visible
+                    </label>
+                    <button type="button" onClick={() => removeMember(index)} className="w-10 h-10 flex items-center justify-center bg-rose-50 text-rose-600 rounded-2xl hover:bg-rose-100 transition-all">
+                      <Trash2 size={17} />
+                    </button>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <input value={member.name || ""} onChange={e => updateMember(index, "name", e.target.value)} placeholder="Name" className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none" />

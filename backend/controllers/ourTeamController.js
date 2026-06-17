@@ -13,6 +13,8 @@ const fallbackData = {
   },
   teamMembers: {
     isEnabled: true,
+    badgeText: 'OUR MEDICAL EXPERTS',
+    heading: 'Meet Our Expert Doctors',
     members: []
   },
   seo: {
@@ -30,7 +32,8 @@ const normalizeMember = (member = {}, index = 0) => ({
   shortDescription: member.shortDescription || member.description || '',
   description: member.description || member.shortDescription || '',
   profileLink: member.profileLink || '',
-  sortOrder: Number.isFinite(Number(member.sortOrder)) ? Number(member.sortOrder) : (index + 1) * 10
+  sortOrder: Number.isFinite(Number(member.sortOrder)) ? Number(member.sortOrder) : (index + 1) * 10,
+  isVisible: member.isVisible !== false
 });
 
 const normalizePayload = (source = fallbackData) => ({
