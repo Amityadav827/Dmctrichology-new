@@ -327,10 +327,6 @@
   gap: 14px 16px;
 }
 
-.details-consultation-inline-field-full {
-  grid-column: 1 / -1;
-}
-
 .details-consultation-inline-grid input {
   width: 100%;
   border: 1px solid #e3e6ef;
@@ -351,7 +347,7 @@
 
 .details-consultation-inline-action-row {
   display: grid;
-  grid-template-columns: 110px minmax(0, 1fr) auto;
+  grid-template-columns: 110px minmax(0, 1fr);
   gap: 12px;
   align-items: center;
 }
@@ -390,6 +386,7 @@
   padding: 0 56px 0 24px;
   position: relative;
   overflow: hidden;
+  justify-self: start;
   transition: background-color 0.22s ease, box-shadow 0.22s ease;
 }
 
@@ -721,6 +718,10 @@
 
   .details-consultation-inline-code {
     min-height: 44px;
+  }
+
+  .details-consultation-inline-submit {
+    width: 100%;
   }
 }
 
