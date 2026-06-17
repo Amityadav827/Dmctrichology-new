@@ -161,7 +161,6 @@ function ServiceSectionThree({ data }) {
           <h2>Ideal Candidates</h2>
           {candidates.length > 0 && (
             <div className="service-section-three-list-box">
-              <h3>Ideal Candidates</h3>
               <ul>
                 {candidates.map((candidate, index) => (
                   <li key={candidate.id || index}>{candidate.text || candidate.candidateText}</li>
