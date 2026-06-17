@@ -299,6 +299,8 @@
 
 .details-consultation-inline-wrap {
   margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #e3e6ef;
 }
 
 .details-consultation-inline-panel {
