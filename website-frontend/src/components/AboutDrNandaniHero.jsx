@@ -24,6 +24,7 @@ export default function AboutDrNandaniHero({
     descriptionParagraph = "Dr. Nandini Dadu, MBBS, a Board-Certified Trichologist, has been studying hair and scalp treatments for over ten years. Throughout her career, she has successfully treated severe cases with excellent outcomes and has attained the title of the best hair transplant surgeon in Delhi.",
     namePlaceholder = "Name*",
     phonePlaceholder = "Mobile Number*",
+    emailPlaceholder = "E-Mail Address",
     captchaPlaceholder = "Code*",
     submitButtonText = "Schedule Your Visit"
   } = data;
@@ -58,6 +59,7 @@ export default function AboutDrNandaniHero({
   const [formData, setFormData] = useState({
     name: '',
     mobile: '',
+    email: '',
     captchaInput: ''
   });
   const [captcha, setCaptcha] = useState('');
@@ -90,6 +92,9 @@ export default function AboutDrNandaniHero({
     if (!trimmedMobile || !/^\d{10}$/.test(trimmedMobile)) {
       return setError('Please enter a valid 10-digit mobile number.');
     }
+    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      return setError('Please enter a valid email address.');
+    }
     if (!formData.captchaInput.trim() || formData.captchaInput.trim() !== captcha) {
       return setError('Invalid verification code.');
     }
@@ -99,6 +104,7 @@ export default function AboutDrNandaniHero({
       await api.post(leadEndpoint, {
         name: formData.name.trim(),
         mobile: trimmedMobile,
+        email: formData.email.trim() ? formData.email.trim().toLowerCase() : '',
         service: leadService
       });
 
@@ -106,6 +112,7 @@ export default function AboutDrNandaniHero({
       setFormData({
         name: '',
         mobile: '',
+        email: '',
         captchaInput: ''
       });
       generateCaptcha();
@@ -193,6 +200,7 @@ export default function AboutDrNandaniHero({
                 <div className="dr-nandani-form-grid">
                   <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder={namePlaceholder} disabled={loading} required />
                   <input type="tel" name="mobile" value={formData.mobile} onChange={handleChange} placeholder={phonePlaceholder} disabled={loading} required />
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder={emailPlaceholder} disabled={loading} />
                   <div className="dr-nandani-captcha-row">
                     <button type="button" onClick={generateCaptcha} title="Click to regenerate captcha">{captcha}</button>
                     <input type="text" name="captchaInput" value={formData.captchaInput} onChange={handleChange} placeholder={captchaPlaceholder} disabled={loading} required />

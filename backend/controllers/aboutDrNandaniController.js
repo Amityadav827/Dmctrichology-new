@@ -203,7 +203,7 @@ exports.uploadImage = async (req, res) => {
 
 exports.createLead = async (req, res, next) => {
   try {
-    const { name, mobile, service } = req.body;
+    const { name, mobile, email, service } = req.body;
 
     if (!name || !name.trim()) {
       return res.status(400).json({ success: false, message: "Please enter your name." });
@@ -211,8 +211,12 @@ exports.createLead = async (req, res, next) => {
     if (!mobile || !mobile.trim()) {
       return res.status(400).json({ success: false, message: "Please enter your mobile number." });
     }
+    if (email && email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return res.status(400).json({ success: false, message: "Please enter a valid email address." });
+    }
 
     const trimmedMobile = mobile.trim().replace(/\s+/g, '');
+    const trimmedEmail = email && email.trim() ? email.trim().toLowerCase() : null;
     if (!/^\d{10}$/.test(trimmedMobile)) {
       return res.status(400).json({ success: false, message: "Please enter a valid 10-digit mobile number." });
     }
@@ -237,6 +241,7 @@ exports.createLead = async (req, res, next) => {
       .from('science_consultation_leads')
       .insert({
         name: name.trim(),
+        email: trimmedEmail,
         mobile: trimmedMobile,
         service: service ? service.trim() : "Dr. Nandani Dadu Consultation",
         status: "new"
