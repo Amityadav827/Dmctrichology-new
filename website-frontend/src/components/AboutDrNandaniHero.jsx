@@ -448,7 +448,6 @@ export default function AboutDrNandaniHero({
           box-shadow: 0 0 0 4px rgba(59, 89, 152, 0.08);
         }
         .dr-nandani-captcha-row {
-          grid-column: 1 / -1;
           display: grid;
           grid-template-columns: 100px 1fr;
           gap: 0;
