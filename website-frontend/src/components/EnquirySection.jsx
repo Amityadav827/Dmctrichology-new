@@ -8,6 +8,10 @@ import { useBuilder } from '../context/BuilderContext';
 const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
 const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
 const whiteIconFilter = 'brightness(0) invert(1)';
+const homepageLocationOptions = [
+  'A2/6, Block A, Vasant Vihar, New Delhi, Delhi 110057, India',
+  'J-12/25, 1st Floor, Block J, Rajouri Garden Extension, Rajouri Garden, New Delhi, Delhi, 110027, India'
+];
 
 const EnquirySection = ({ sectionId = "consultation-section", data: propData, label = "Request Consultation" }) => {
   const { isEditMode, siteConfig } = useBuilder();
@@ -22,7 +26,8 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
     email: '',
     mobile: '',
     service: '',
-    message: ''
+    message: '',
+    preferredLocation: ''
   });
   // Start empty so server and client first render match; generate on mount (client only).
   const [captcha, setCaptcha] = useState('');
@@ -37,12 +42,14 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
   // Date & Time Picker states
   const [showCalendar, setShowCalendar] = useState(false);
   const [showServiceDropdown, setShowServiceDropdown] = useState(false);
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDateTime, setSelectedDateTime] = useState(''); // Stores final backend payload format
   
   const calendarRef = useRef(null);
   const serviceDropdownRef = useRef(null);
+  const locationDropdownRef = useRef(null);
 
   // Generate 4-digit captcha
   const generateCaptcha = () => {
@@ -108,6 +115,9 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       if (serviceDropdownRef.current && !serviceDropdownRef.current.contains(event.target)) {
         setShowServiceDropdown(false);
       }
+      if (locationDropdownRef.current && !locationDropdownRef.current.contains(event.target)) {
+        setShowLocationDropdown(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -136,6 +146,13 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (success) setSuccess(false);
+    if (error) setError('');
+  };
+
+  const handleLocationSelect = (location) => {
+    setFormData((prev) => ({ ...prev, preferredLocation: location }));
+    setShowLocationDropdown(false);
     if (success) setSuccess(false);
     if (error) setError('');
   };
@@ -233,6 +250,10 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       setError('Please enter a valid 10-digit mobile number.');
       return;
     }
+    if (isHomepageConsultationForm && !formData.preferredLocation) {
+      setError('Please select your preferred location.');
+      return;
+    }
     if (!usesContactStyleFields && !formData.service) {
       setError('Please select a type of service enquiry.');
       return;
@@ -241,7 +262,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       setError('Please select a valid appointment date and time.');
       return;
     }
-    if (!captchaInput.trim() || captchaInput.trim() !== captcha) {
+    if (!isHomepageConsultationForm && (!captchaInput.trim() || captchaInput.trim() !== captcha)) {
       setError('Invalid verification code.');
       return;
     }
@@ -252,6 +273,9 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       const endpoint = usesContactStyleFields ? "contact" : "appointment";
 
       let finalMessage = formData.message.trim();
+      if (isHomepageConsultationForm && formData.preferredLocation) {
+        finalMessage = `Preferred Location: ${formData.preferredLocation}`;
+      }
       if (isContactPage && selectedDateTime) {
         const formattedDate = new Date(selectedDateTime).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         finalMessage = `${finalMessage ? finalMessage + '\n\n' : ''}[Preferred Appointment: ${formattedDate}]`;
@@ -261,10 +285,11 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
         mobile: trimmedMobile,
-        service: usesContactStyleFields ? '' : formData.service,
+        service: isHomepageConsultationForm ? formData.preferredLocation : (usesContactStyleFields ? '' : formData.service),
+        enquiry_type: isHomepageConsultationForm ? formData.preferredLocation : undefined,
         appointmentDate: usesContactStyleFields ? '' : selectedDateTime,
         message: finalMessage,
-        source: isContactPage ? "contact-us-page" : "consultation-form"
+        source: isContactPage ? "contact-us-page" : (isHomepageConsultationForm ? "homepage-consultation-form" : "consultation-form")
       };
       const isLocal = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
       const API_URL = process.env.NEXT_PUBLIC_API_URL || (isLocal ? "http://localhost:10000/api" : 'https://dmctrichology-1.onrender.com/api');
@@ -277,7 +302,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       const result = await response.json();
       if (result.success) {
         setSuccess(true);
-        setFormData({ name: '', email: '', mobile: '', service: '', message: '' });
+        setFormData({ name: '', email: '', mobile: '', service: '', message: '', preferredLocation: '' });
         setSelectedDate('');
         setSelectedTime('');
         setSelectedDateTime('');
@@ -429,9 +454,42 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                 <div>
                    <input type={usesContactStyleFields ? "tel" : "email"} name={usesContactStyleFields ? "mobile" : "email"} value={usesContactStyleFields ? formData.mobile : formData.email} onChange={handleChange} placeholder={usesContactStyleFields ? "Phone Number*" : emailPlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required />
                 </div>
-                <div>
-                   <input type={usesContactStyleFields ? "email" : "text"} name={usesContactStyleFields ? "email" : "mobile"} value={usesContactStyleFields ? formData.email : formData.mobile} onChange={handleChange} placeholder={usesContactStyleFields ? "E-Mail Address" : "Mobile Number*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required={!usesContactStyleFields} />
-                </div>
+                {isHomepageConsultationForm ? (
+                  <div style={{ gridColumn: 'span 2', position: 'relative' }} ref={locationDropdownRef}>
+                    <button
+                      type="button"
+                      className="consultation-location-trigger"
+                      onClick={() => !loading && setShowLocationDropdown((open) => !open)}
+                      disabled={loading}
+                      aria-expanded={showLocationDropdown}
+                    >
+                      <span>{formData.preferredLocation || 'Preferred Location *'}</span>
+                      <img
+                        src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/qcrzwotm1zyqsdbu6ttb.png"
+                        alt="Select location"
+                        className="consultation-location-icon"
+                      />
+                    </button>
+                    {showLocationDropdown && (
+                      <div className="consultation-location-menu">
+                        {homepageLocationOptions.map((location) => (
+                          <button
+                            key={location}
+                            type="button"
+                            className="consultation-location-option"
+                            onClick={() => handleLocationSelect(location)}
+                          >
+                            {location}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                     <input type={usesContactStyleFields ? "email" : "text"} name={usesContactStyleFields ? "email" : "mobile"} value={usesContactStyleFields ? formData.email : formData.mobile} onChange={handleChange} placeholder={usesContactStyleFields ? "E-Mail Address" : "Mobile Number*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required={!usesContactStyleFields} />
+                  </div>
+                )}
                 {!usesContactStyleFields && (
                 <div style={{ position: 'relative' }}>
                    <select name="service" value={formData.service} onChange={handleChange} className="premium-select" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", appearance: 'none', cursor: 'pointer', transition: 'all 0.3s ease' }} disabled={loading} required>
@@ -590,10 +648,12 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                 </div>
                 )}
                 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                   <div style={{ padding: '15px 20px', backgroundColor: '#3B5998', borderRadius: '30px', color: '#fff', fontWeight: 'bold', letterSpacing: '4px', userSelect: 'none' }}>{captcha}</div>
-                   <input type="text" value={captchaInput} onChange={e => setCaptchaInput(e.target.value)} placeholder={usesContactStyleFields ? "Enter Code*" : "Code*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif" }} disabled={loading} required />
-                </div>
+                {!isHomepageConsultationForm && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                     <div style={{ padding: '15px 20px', backgroundColor: '#3B5998', borderRadius: '30px', color: '#fff', fontWeight: 'bold', letterSpacing: '4px', userSelect: 'none' }}>{captcha}</div>
+                     <input type="text" value={captchaInput} onChange={e => setCaptchaInput(e.target.value)} placeholder={usesContactStyleFields ? "Enter Code*" : "Code*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif" }} disabled={loading} required />
+                  </div>
+                )}
                 <div style={{ gridColumn: 'span 2' }}>
                   <button type="submit" className="premium-submit-btn" style={{ width: '100%', padding: '15px', borderRadius: '30px', backgroundColor: '#3B5998', color: '#fff', border: 'none', fontSize: '16px', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: "'Marcellus', serif", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', position: 'relative', overflow: 'hidden' }} disabled={loading}>
                     <EditableText sectionId={sectionId} fieldPath="buttonText" tag="span">{loading ? 'Scheduling...' : buttonText}</EditableText>
@@ -626,6 +686,72 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
           .premium-submit-btn:hover { transform: none; box-shadow: 0 15px 30px rgba(59, 89, 152, 0.28); background-color: #314b82 !important; }
           .premium-submit-btn:hover .consultation-btn-arrow { transform: rotate(0deg) translateX(5px); }
           .premium-submit-btn:active { transform: none; }
+          .consultation-location-trigger {
+            width: 100%;
+            min-height: 54px;
+            padding: 15px 52px 15px 25px;
+            border: none;
+            border-radius: 30px;
+            background: #F2F2F2;
+            color: #7a7a7a;
+            font-family: 'Marcellus', serif;
+            font-size: 14px;
+            line-height: 1.35;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+          }
+          .consultation-location-trigger:hover {
+            background: #ededed;
+          }
+          .consultation-location-trigger:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 2px #3B5998;
+            background: #ffffff;
+          }
+          .consultation-location-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            width: 12px;
+            transform: translateY(-50%);
+            pointer-events: none;
+          }
+          .consultation-location-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid rgba(59, 89, 152, 0.18);
+            border-radius: 20px;
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            z-index: 60;
+            animation: fadeInUp 0.22s ease;
+          }
+          .consultation-location-option {
+            width: 100%;
+            padding: 14px 22px;
+            border: 0;
+            border-bottom: 1px solid rgba(59, 89, 152, 0.08);
+            background: #ffffff;
+            color: #333333;
+            font-family: 'Marcellus', serif;
+            font-size: 14px;
+            line-height: 1.45;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+          }
+          .consultation-location-option:hover {
+            background: #f5f7fd;
+            color: #3B5998;
+          }
+          .consultation-location-option:last-child {
+            border-bottom: 0;
+          }
           .responsive-service-dropdown {
             display: none;
           }
