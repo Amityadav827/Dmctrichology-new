@@ -56,10 +56,6 @@ export default function HeroSlider() {
             }}></div>
 
             <div className={`slide-content ${index === currentSlide && contentReady ? 'slide-content-animate' : ''}`}>
-              <span className="section-subtitle" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962112281-lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '40px', height: 'auto', objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)' }} />
-                {slide.tag}
-              </span>
               <h1 className="section-title hero-cap-heading" style={{ fontSize: '54px', marginBottom: '16px' }}>
                 <EditableText sectionId="hero" fieldPath={`slides.${index}.title`} tag="span">
                   {slide.title}

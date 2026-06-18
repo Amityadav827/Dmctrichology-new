@@ -134,11 +134,6 @@ export default function LeadForm() {
         }
       `}} />
 
-      <div className="hero-form-eyebrow" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', height: '30px' }}>
-        <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962112281-lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '30px', height: '30px', objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)' }} />
-        <span className="section-subtitle" style={{ fontSize: '11px' }}>Book a Session</span>
-      </div>
-      
       <div className="hero-form-head" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', gap: '15px', height: '50px' }}>
         <h2 className="section-title leadform-cap-heading" style={{ fontSize: '2.2rem', whiteSpace: 'nowrap' }}>Request A Call</h2>
         <div className="hero-form-patients" style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '10px' }}>
