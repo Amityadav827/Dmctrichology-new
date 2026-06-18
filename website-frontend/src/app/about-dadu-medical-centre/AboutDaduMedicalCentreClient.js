@@ -269,22 +269,23 @@ export default function AboutDaduMedicalCentreClient({ initialData, initialFaqDa
         formSettings={templateData.formSettings}
         leadEndpoint="/contact"
         leadService="About Dadu Medical Centre Consultation Form"
+        showEyebrow={false}
         sectionIds={{
           hero: 'about-dadu-medical-centre-hero',
           breadcrumb: 'about-dadu-medical-centre-breadcrumb'
         }}
       />
-      <AboutDrNandaniSpecialist data={templateData.specialist} />
-      <AboutDrNandaniTimeline data={templateData.timeline} />
-      <AboutDrNandaniTrust data={templateData.trustSection} splitLayout />
+      <AboutDrNandaniSpecialist data={templateData.specialist} showEyebrow={false} />
+      <AboutDrNandaniTimeline data={templateData.timeline} showEyebrow={false} />
+      <AboutDrNandaniTrust data={templateData.trustSection} splitLayout showEyebrow={false} />
       <AboutDrNandaniEducationExperience
         data={templateData.educationExperience}
         credentialsData={templateData.credentialsSection}
         showImages={false}
       />
       <AboutDrNandaniOtherSpecialities data={templateData.otherSpecialitiesSection} />
-      <AboutDrNandaniTestimonials data={templateData.testimonialsSection} useDefaultTestimonials={false} />
-      <FaqSection initialData={faqData} />
+      <AboutDrNandaniTestimonials data={templateData.testimonialsSection} useDefaultTestimonials={false} showEyebrow={false} />
+      <FaqSection initialData={faqData} showBadge={false} />
     </main>
   );
 }

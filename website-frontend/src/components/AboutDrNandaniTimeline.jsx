@@ -38,7 +38,7 @@ function DefaultFeatureIcon() {
   );
 }
 
-export default function AboutDrNandaniTimeline({ data = {}, showDescription = false, layoutVariant = "default" }) {
+export default function AboutDrNandaniTimeline({ data = {}, showDescription = false, layoutVariant = "default", showEyebrow = true }) {
   const eyebrow = data.eyebrow || "TRUSTED CARE SERVICES";
   const heading = data.heading || "What Makes Dr. Nandini Dadu The Best Hair Transplant Surgeon In Delhi?";
   const description = data.description || "";
@@ -49,12 +49,14 @@ export default function AboutDrNandaniTimeline({ data = {}, showDescription = fa
     <EditableSection sectionId="about-nandani-timeline" label="Dr Nandini Feature List">
       <section className={`nandani-feature-list-section ${isClinicCompact ? "clinic-compact-timeline" : ""}`}>
         <div className="nandani-feature-list-inner">
-          <div className="nandani-section-eyebrow">
-            <span />
-            <EditableText sectionId="about-nandani-timeline" fieldPath="timeline.eyebrow" tag="small">
-              {eyebrow}
-            </EditableText>
-          </div>
+          {showEyebrow && (
+            <div className="nandani-section-eyebrow">
+              <span />
+              <EditableText sectionId="about-nandani-timeline" fieldPath="timeline.eyebrow" tag="small">
+                {eyebrow}
+              </EditableText>
+            </div>
+          )}
 
           <h2 className="nandani-feature-list-title">
             <EditableText sectionId="about-nandani-timeline" fieldPath="timeline.heading" tag="span">
