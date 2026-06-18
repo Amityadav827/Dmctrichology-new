@@ -24,6 +24,10 @@ function renderRichText(value = "") {
     .map((paragraph, index) => <p key={index}>{paragraph}</p>);
 }
 
+function shouldShowSectionLabel(label = "") {
+  return String(label || "").trim().toLowerCase() !== "techniques";
+}
+
 function normalizeMedia(items = []) {
   return (Array.isArray(items) ? items : [])
     .filter(item => item && item.isVisible !== false && (item.url || item.thumbnail))
@@ -117,7 +121,7 @@ function ServiceSectionOne({ data }) {
         </div>
 
         <div className="service-section-one-content">
-          {data.label && <span className="dmc-kicker">{data.label}</span>}
+          {data.label && shouldShowSectionLabel(data.label) && <span className="dmc-kicker">{data.label}</span>}
           {data.title && <h2 className="dmc-heading">{data.title}</h2>}
           {data.description && <div className="service-section-one-description">{renderRichText(data.description)}</div>}
         </div>

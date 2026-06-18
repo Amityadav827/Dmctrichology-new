@@ -233,7 +233,7 @@ const withGlobalSectionDefaults = (payload = {}) => ({
   section2: { ...serviceGlobalSectionDefaults.section2, ...(payload.section2 || {}), badge: "", title: "Ideal Candidates" },
   section3: { ...serviceGlobalSectionDefaults.section3, ...(payload.section3 || {}), title: "Ideal Candidates", subtitle: "", ctaTitle: "" },
   section4: { ...serviceGlobalSectionDefaults.section4, ...(payload.section4 || {}) },
-  section5: { ...serviceGlobalSectionDefaults.section5, ...(payload.section5 || {}) },
+  section5: { ...serviceGlobalSectionDefaults.section5, ...(payload.section5 || {}), badge: "" },
   section6: { ...serviceGlobalSectionDefaults.section6, ...(payload.section6 || {}) },
   section7: { ...serviceGlobalSectionDefaults.section7, ...(payload.section7 || {}) },
   section8: { ...serviceGlobalSectionDefaults.section8, ...(payload.section8 || {}) },
@@ -946,6 +946,9 @@ export default function ServiceDetailCMS() {
           const fetchedData = res.data.data;
           if (fetchedData.banner) {
             fetchedData.banner.badgeText = "";
+          }
+          if (fetchedData.section5) {
+            fetchedData.section5.badge = "";
           }
           // Normalize intro media — convert any legacy format to introMedia
           if (fetchedData.intro) {
@@ -1960,7 +1963,14 @@ export default function ServiceDetailCMS() {
     if (!data) return;
     setSaving(true);
     try {
-      await axios.put(`/service-details/${selectedSlug}`, { ...data, sectionsLayout });
+      await axios.put(`/service-details/${selectedSlug}`, {
+        ...data,
+        section5: {
+          ...(data.section5 || {}),
+          badge: ""
+        },
+        sectionsLayout
+      });
       toast.success("Service details saved successfully");
     } catch (err) {
       const message = err.response?.data?.error || err.response?.data?.message || err.message || "Save failed";
@@ -2612,7 +2622,7 @@ export default function ServiceDetailCMS() {
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                   <div>
                     <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2"><ImageIcon size={18} className="text-blue-500"/> Section 5</h3>
-                    <p className="text-xs text-slate-400 mt-1">Two-column large image with badge, heading, and rich text content.</p>
+                    <p className="text-xs text-slate-400 mt-1">Two-column large image with heading and rich text content.</p>
                   </div>
                   {renderSectionVisibilityToggle("section5")}
                 </div>
@@ -2622,14 +2632,10 @@ export default function ServiceDetailCMS() {
                     <MediaUploader label="Large Image" value={data.section5?.image || ""} onChange={val => updateSectionField("section5", "image", val)} />
                   </div>
                   <div className="lg:col-span-2 space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Sort Order</label>
                         <input type="number" value={data.section5?.sortOrder ?? 50} onChange={e => updateSectionField("section5", "sortOrder", parseInt(e.target.value, 10) || 0)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Badge</label>
-                        <input value={data.section5?.badge || ""} onChange={e => updateSectionField("section5", "badge", e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold" placeholder="Techniques" />
                       </div>
                       <div>
                         <label className="block text-[10px] font-black uppercase text-slate-500 mb-2 tracking-widest">Title</label>
