@@ -8,7 +8,7 @@ import EditableText from "./Editable/EditableText";
 const legacyFallbackImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1779383176156-167720490.webp";
 const fallbackImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780906825092-79561886.webp";
 
-export default function AboutDrNandaniLandscapeImage({ data = {}, fallbackSrc = "" }) {
+export default function AboutDrNandaniLandscapeImage({ data = {}, fallbackSrc = "", showEyebrow = true }) {
   const sourceImage = data.image || fallbackSrc || fallbackImage;
   const image = sourceImage === legacyFallbackImage ? fallbackImage : sourceImage;
   const imageAlt = data.imageAlt || "Dr. Nandani Dadu hair restoration care";
@@ -27,12 +27,14 @@ export default function AboutDrNandaniLandscapeImage({ data = {}, fallbackSrc = 
         style={{ backgroundColor, paddingTop, paddingBottom }}
       >
         <div className="nandani-landscape-image-inner" style={{ maxWidth: contentMaxWidth }}>
-          <div className="nandani-landscape-eyebrow">
-            <span />
-            <EditableText sectionId="about-nandani-timeline" fieldPath="timeline.eyebrow" tag="small">
-              {eyebrow}
-            </EditableText>
-          </div>
+          {showEyebrow && (
+            <div className="nandani-landscape-eyebrow">
+              <span />
+              <EditableText sectionId="about-nandani-timeline" fieldPath="timeline.eyebrow" tag="small">
+                {eyebrow}
+              </EditableText>
+            </div>
+          )}
 
           <h2 className="nandani-landscape-title">
             <EditableText sectionId="about-nandani-timeline" fieldPath="timeline.heading" tag="span">

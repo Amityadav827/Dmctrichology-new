@@ -13,7 +13,8 @@ export default function AboutDrNandaniHero({
   formSettings = {},
   leadEndpoint = '/about-dr-nandani/lead',
   leadService = 'Dr. Nandani Consultation Form',
-  sectionIds = {}
+  sectionIds = {},
+  showEyebrow = true
 }) {
   const heroSectionId = sectionIds.hero || 'about-nandani-hero';
   const breadcrumbSectionId = sectionIds.breadcrumb || 'about-nandani-breadcrumb';
@@ -170,11 +171,13 @@ export default function AboutDrNandaniHero({
 
             <div className="dr-nandani-info-form-column">
               <div className="dr-nandani-doctor-copy">
-                <span className="dr-nandani-eyebrow">
-                  <EditableText sectionId={heroSectionId} fieldPath="mainHeading" tag="span">
-                    {mainHeading}
-                  </EditableText>
-                </span>
+                {showEyebrow && (
+                  <span className="dr-nandani-eyebrow">
+                    <EditableText sectionId={heroSectionId} fieldPath="mainHeading" tag="span">
+                      {mainHeading}
+                    </EditableText>
+                  </span>
+                )}
                 <h2>
                   <EditableText sectionId={heroSectionId} fieldPath="doctorName" tag="span">
                     {doctorName}

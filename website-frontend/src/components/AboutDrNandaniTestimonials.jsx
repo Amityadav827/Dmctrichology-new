@@ -50,7 +50,7 @@ function StarRating({ count = 5 }) {
   );
 }
 
-export default function AboutDrNandaniTestimonials({ data = {}, useDefaultTestimonials = true }) {
+export default function AboutDrNandaniTestimonials({ data = {}, useDefaultTestimonials = true, showEyebrow = true }) {
   const {
     heading = "Patient Testimonials",
     patientImage = defaultPatientImage,
@@ -107,10 +107,12 @@ export default function AboutDrNandaniTestimonials({ data = {}, useDefaultTestim
           </div>
 
           <div className="dmc-testimonial-content" key={activeIndex}>
-            <span className="dmc-testimonial-eyebrow">
-              <span />
-              TRUSTED CARE SERVICES
-            </span>
+            {showEyebrow && (
+              <span className="dmc-testimonial-eyebrow">
+                <span />
+                TRUSTED CARE SERVICES
+              </span>
+            )}
 
             <h2>
               <EditableText sectionId="about-nandani-testimonials" fieldPath="testimonialsSection.heading">

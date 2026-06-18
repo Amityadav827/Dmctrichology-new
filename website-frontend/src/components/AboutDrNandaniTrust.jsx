@@ -29,7 +29,8 @@ export default function AboutDrNandaniTrust({
   sectionId = "about-nandani-trust",
   label = "Why Patients Trust Dr. Nandani",
   splitLayout = false,
-  useDefaultPoints = true
+  useDefaultPoints = true,
+  showEyebrow = true
 }) {
   const eyebrow = data.eyebrow || "TRUSTED CARE SERVICES";
   const heading = data.heading || "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?";
@@ -74,14 +75,14 @@ export default function AboutDrNandaniTrust({
     </div>
   );
 
-  const eyebrowBlock = (
+  const eyebrowBlock = showEyebrow ? (
     <div className="nandani-section-eyebrow">
       <span />
       <EditableText sectionId={sectionId} fieldPath="trustSection.eyebrow" tag="small">
         {eyebrow}
       </EditableText>
     </div>
-  );
+  ) : null;
 
   const headingBlock = (
     <h2>

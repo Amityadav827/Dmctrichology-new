@@ -4,7 +4,7 @@ import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import RichTextContent from './RichTextContent';
 
-export default function AboutDrNandaniSpecialist({ data = {} }) {
+export default function AboutDrNandaniSpecialist({ data = {}, showEyebrow = true }) {
   const {
     heading = "Best Hair Specialist in Delhi",
     description1 = "Dr. Nandini Dadu is a well-known former consultant at ARTEMIS HOSPITAL in Gurgaon. Over the years, she has provided insights to several dignitaries and celebrities in New Delhi. She is the best hair specialist in Delhi. She works in close collaboration with doctors at Hair Care & Transplant Surgeons and is always looking for new, cutting-edge products for hair and scalp care treatments.",
@@ -29,10 +29,12 @@ export default function AboutDrNandaniSpecialist({ data = {} }) {
       <section className="dr-nandani-specialist-section">
         <div className="dr-nandani-specialist-shell">
           <div className="dr-nandani-specialist-copy">
-            <span className="dr-nandani-section-eyebrow">
-              <span />
-              WHY CHOOSE US SERVICES
-            </span>
+            {showEyebrow && (
+              <span className="dr-nandani-section-eyebrow">
+                <span />
+                WHY CHOOSE US SERVICES
+              </span>
+            )}
             <h2>
               <EditableText sectionId="about-nandani-specialist" fieldPath="specialist.heading" tag="span">
                 {heading}

@@ -180,21 +180,23 @@ export default function AboutDrNandaniClient({ initialData, initialFaqData = nul
         data={pageData.hero || {}}
         breadcrumbData={pageData.breadcrumb || {}}
         formSettings={pageData.formSettings || {}}
+        showEyebrow={false}
       />
-      <AboutDrNandaniSpecialist data={pageData.specialist || {}} />
+      <AboutDrNandaniSpecialist data={pageData.specialist || {}} showEyebrow={false} />
       <AboutDrNandaniLandscapeImage
         data={pageData.timeline || {}}
         fallbackSrc={pageData.trustSection?.image || pageData.hero?.doctorImage}
+        showEyebrow={false}
       />
-      <AboutDrNandaniTrust data={pageData.trustSection || {}} />
+      <AboutDrNandaniTrust data={pageData.trustSection || {}} showEyebrow={false} />
       <AboutDrNandaniEducationExperience
         data={pageData.educationExperience || {}}
         credentialsData={pageData.credentialsSection || {}}
         showImages={false}
       />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection || {}} />
-      <AboutDrNandaniTestimonials data={pageData.testimonialsSection || {}} />
-      <FaqSection initialData={faqData} />
+      <AboutDrNandaniTestimonials data={pageData.testimonialsSection || {}} showEyebrow={false} />
+      <FaqSection initialData={faqData} showBadge={false} />
     </main>
   );
 }
