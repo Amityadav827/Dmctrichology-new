@@ -50,12 +50,6 @@ const ScienceIntro = ({ data: initialData = {} }) => {
       <section className="science-intro-section">
         <div className="science-intro-container">
           <div className="science-intro-content">
-            <div className="science-eyebrow">
-              <span></span>
-              <i></i>
-              <p>BEST HAIR TRANSPLANT SURGEON IN DELHI</p>
-            </div>
-
             <h2>
               <EditableText sectionId="science-intro" fieldPath="introSection.heading" tag="span">
                 {String(data?.heading || 'Golden Touch Technique® Hair Transplantation')}
