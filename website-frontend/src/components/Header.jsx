@@ -65,7 +65,7 @@ export default function Header({ initialHeader, siteSettings }) {
                 {buttonText}
               </EditableText>
               <div className="icon-circle btn-arrow-circle" style={{ width: '32px', height: '32px', backgroundColor: '#ffffff' }}>
-                <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ngfngyyxjj86kvn5nd5n.png" alt="arrow" className="btn-arrow-icon" style={{ width: '12px', height: '12px', objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)' }} />
+                <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781767815987-926134594.png" alt="arrow" className="btn-arrow-icon" style={{ width: '12px', height: '12px', objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)' }} />
               </div>
             </a>
           </div>

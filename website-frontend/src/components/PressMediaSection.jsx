@@ -181,7 +181,7 @@ export default function PressMediaSection() {
                     justifyContent: 'center',
                     transition: 'transform 0.3s ease'
                   }}>
-                     <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ngfngyyxjj86kvn5nd5n.png" alt="arrow" className="btn-arrow-icon" style={{ width: '18px', filter: 'brightness(0) invert(1)' }} />
+                     <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781767815987-926134594.png" alt="arrow" className="btn-arrow-icon" style={{ width: '18px', filter: 'brightness(0) invert(1)' }} />
                   </div>
                 </a>
 
