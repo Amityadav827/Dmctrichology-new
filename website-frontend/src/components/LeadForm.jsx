@@ -1,32 +1,32 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { submitLead, fetchSiteSettings } from '../services/api';
 
-const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
+const LOCATION_OPTIONS = [
+  {
+    value: "A2/6, Block A, Vasant Vihar, New Delhi, Delhi 110057, India",
+    label: "Vasant Vihar",
+    description: "A2/6, Block A, Vasant Vihar, New Delhi, Delhi 110057, India"
+  },
+  {
+    value: "J-12/25, 1st Floor, Block J, Rajouri Garden Extension, Rajouri Garden, New Delhi, Delhi, 110027, India",
+    label: "Rajouri Garden",
+    description: "J-12/25, 1st Floor, Block J, Rajouri Garden Extension, Rajouri Garden, New Delhi, Delhi, 110027, India"
+  }
+];
 
 export default function LeadForm() {
   const [formData, setFormData] = useState({
     name: '',
     mobile: '',
-    email: '',
-    code: ''
+    preferredLocation: ''
   });
-  // Start empty so server and client first render match; generate on mount (client only).
-  const [captcha, setCaptcha] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [settings, setSettings] = useState(null);
-
-  // Function to generate random 4-digit number
-  const generateCaptcha = () => {
-    setCaptcha(createCaptcha());
-  };
-
-  // Generate captcha only on the client after mount (avoids SSR/client hydration mismatch).
-  useEffect(() => {
-    setCaptcha(createCaptcha());
-  }, []);
+  const [locationMenuOpen, setLocationMenuOpen] = useState(false);
+  const locationMenuRef = useRef(null);
 
   useEffect(() => {
     // Fetch CMS settings for dynamic stats
@@ -43,6 +43,17 @@ export default function LeadForm() {
     loadSettings();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (locationMenuRef.current && !locationMenuRef.current.contains(event.target)) {
+        setLocationMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   // Success auto-hide timer after 4 seconds
   useEffect(() => {
     if (success) {
@@ -56,6 +67,17 @@ export default function LeadForm() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     // Reset success/error states on typing
+    if (success) setSuccess(false);
+    if (error) setError('');
+  };
+
+  const selectedLocation = LOCATION_OPTIONS.find(
+    (option) => option.value === formData.preferredLocation
+  );
+
+  const handleLocationSelect = (locationValue) => {
+    setFormData((prev) => ({ ...prev, preferredLocation: locationValue }));
+    setLocationMenuOpen(false);
     if (success) setSuccess(false);
     if (error) setError('');
   };
@@ -83,18 +105,8 @@ export default function LeadForm() {
       return;
     }
 
-    if (!formData.code.trim()) {
-      setError('Please enter the verification code.');
-      return;
-    }
-
-    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      setError('Please enter a valid email address.');
-      return;
-    }
-
-    if (formData.code.trim() !== captcha) {
-      setError('Invalid captcha. Please enter the correct code.');
+    if (!formData.preferredLocation.trim()) {
+      setError('Please select your preferred location.');
       return;
     }
 
@@ -102,12 +114,11 @@ export default function LeadForm() {
     try {
       await submitLead({
         name: formData.name.trim(),
-        email: formData.email.trim().toLowerCase(),
-        mobile: trimmedMobile
+        mobile: trimmedMobile,
+        preferredLocation: formData.preferredLocation
       });
       setSuccess(true);
-      setFormData({ name: '', mobile: '', email: '', code: '' });
-      generateCaptcha(); // Regenerate captcha after successful submit
+      setFormData({ name: '', mobile: '', preferredLocation: '' });
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong. Please try again.');
     } finally {
@@ -243,35 +254,112 @@ export default function LeadForm() {
           </div>
         </div>
 
-        <div className="form-row hero-email-code-row" style={{ alignItems: 'stretch' }}>
-          <div className="form-group hero-email-form-group">
-            <input
-              type="email"
-              name="email"
-              placeholder="E-MAIL ADDRESS"
+        <div className="form-row" style={{ display: 'block' }}>
+          <div className="form-group" style={{ width: '100%', marginBottom: 0, position: 'relative' }} ref={locationMenuRef}>
+            <button
+              type="button"
               className="form-input"
-              value={formData.email}
-              onChange={handleChange}
-              style={{ backgroundColor: 'transparent', border: '1px solid #ddd', borderRadius: '12px' }}
+              onClick={() => !loading && setLocationMenuOpen((prev) => !prev)}
               disabled={loading}
-            />
-          </div>
-          <div className="hero-captcha-row" style={{ display: 'flex', flex: '0 0 310px', width: '100%', maxWidth: '310px', alignItems: 'stretch', border: '1px solid #ddd', borderRadius: '12px', overflow: 'hidden' }}>
-            <div className="hero-captcha-code" style={{ flex: '0 0 92px', backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50px', borderRight: '1px solid #ddd', userSelect: 'none' }}>
-              <span style={{ color: '#888', letterSpacing: '4px', fontWeight: 'bold' }}>{captcha}</span>
-            </div>
-            <div className="hero-captcha-input" style={{ flex: 1 }}>
-              <input 
-                type="text" 
-                name="code" 
-                placeholder="ENTER CODE" 
-                className="form-input" 
-                value={formData.code} 
-                onChange={handleChange} 
-                style={{ backgroundColor: 'transparent', border: 'none', height: '50px', borderRadius: 0, width: '100%' }}
-                disabled={loading}
-                required 
-              />
+              aria-haspopup="listbox"
+              aria-expanded={locationMenuOpen}
+              style={{
+                backgroundColor: 'transparent',
+                border: locationMenuOpen ? '1px solid #3B5998' : '1px solid #ddd',
+                borderRadius: locationMenuOpen ? '12px 12px 0 0' : '12px',
+                width: '100%',
+                minHeight: '62px',
+                height: 'auto',
+                padding: '14px 52px 14px 20px',
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                position: 'relative',
+                color: selectedLocation ? '#333333' : '#888',
+                fontFamily: "'Marcellus', serif",
+                fontSize: '14px',
+                lineHeight: 1.5,
+                cursor: loading ? 'not-allowed' : 'pointer'
+              }}
+            >
+              <span style={{ display: 'block', paddingRight: '12px' }}>
+                {selectedLocation ? selectedLocation.description : 'PREFERRED LOCATION *'}
+              </span>
+              <span
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  right: '20px',
+                  top: '50%',
+                  transform: locationMenuOpen ? 'translateY(-50%) rotate(180deg)' : 'translateY(-50%) rotate(0deg)',
+                  transition: 'transform 0.28s cubic-bezier(0.22, 1, 0.36, 1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '18px',
+                  height: '18px'
+                }}
+              >
+                <img
+                  src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781783268360-703155124.png"
+                  alt=""
+                  style={{ width: '18px', height: '18px', objectFit: 'contain' }}
+                />
+              </span>
+            </button>
+
+            <div
+              role="listbox"
+              aria-label="Preferred location"
+              style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                right: 0,
+                backgroundColor: '#ffffff',
+                border: '1px solid #3B5998',
+                borderTop: 'none',
+                borderRadius: '0 0 16px 16px',
+                boxShadow: '0 18px 34px rgba(59, 89, 152, 0.16)',
+                overflow: 'hidden',
+                zIndex: 20,
+                opacity: locationMenuOpen ? 1 : 0,
+                transform: locationMenuOpen ? 'translateY(0) scaleY(1)' : 'translateY(-8px) scaleY(0.96)',
+                transformOrigin: 'top center',
+                maxHeight: locationMenuOpen ? '260px' : '0px',
+                pointerEvents: locationMenuOpen ? 'auto' : 'none',
+                transition: 'opacity 0.24s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), max-height 0.28s cubic-bezier(0.22, 1, 0.36, 1)'
+              }}
+            >
+              {LOCATION_OPTIONS.map((location, index) => {
+                const isSelected = formData.preferredLocation === location.value;
+                return (
+                  <button
+                    key={location.value}
+                    type="button"
+                    role="option"
+                    aria-selected={isSelected}
+                    onClick={() => handleLocationSelect(location.value)}
+                    style={{
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '14px 18px',
+                      background: isSelected ? 'rgba(59, 89, 152, 0.08)' : '#ffffff',
+                      border: 'none',
+                      borderTop: index === 0 ? '1px solid rgba(59, 89, 152, 0.08)' : '1px solid rgba(226, 232, 240, 0.9)',
+                      cursor: 'pointer',
+                      transition: 'background-color 0.2s ease'
+                    }}
+                  >
+                    <span style={{ display: 'block', color: '#3B5998', fontFamily: "'Marcellus', serif", fontSize: '15px', marginBottom: '4px' }}>
+                      {location.label}
+                    </span>
+                    <span style={{ display: 'block', color: '#666', fontFamily: 'Lato, sans-serif', fontSize: '12px', lineHeight: 1.5 }}>
+                      {location.description}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>

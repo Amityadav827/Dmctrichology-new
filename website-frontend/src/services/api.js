@@ -282,6 +282,25 @@ export const submitComment = async (data) => {
 
 export const submitLead = async (data) => {
   try {
+    if (data?.preferredLocation) {
+      const locationLabel = data.preferredLocation.includes("Vasant Vihar")
+        ? "Vasant Vihar"
+        : data.preferredLocation.includes("Rajouri Garden")
+          ? "Rajouri Garden"
+          : "Preferred Location";
+
+      const res = await api.post('/contact', {
+        name: data.name,
+        email: "",
+        mobile: data.mobile,
+        service: `Request A Call - ${locationLabel}`,
+        enquiry_type: `Request A Call - ${locationLabel}`,
+        source: "homepage-request-a-call",
+        message: `Preferred Location: ${data.preferredLocation}`
+      });
+      return res.data;
+    }
+
     const res = await api.post('/callback', data);
     return res.data;
   } catch (error) {
