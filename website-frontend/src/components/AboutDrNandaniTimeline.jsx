@@ -40,13 +40,13 @@ function DefaultFeatureIcon() {
 
 export default function AboutDrNandaniTimeline({ data = {}, showDescription = false, layoutVariant = "default" }) {
   const eyebrow = data.eyebrow || "TRUSTED CARE SERVICES";
-  const heading = data.heading || "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?";
+  const heading = data.heading || "What Makes Dr. Nandini Dadu The Best Hair Transplant Surgeon In Delhi?";
   const description = data.description || "";
   const steps = (data.steps && data.steps.length > 0) ? data.steps : defaultSteps;
   const isClinicCompact = layoutVariant === "clinicCompact";
 
   return (
-    <EditableSection sectionId="about-nandani-timeline" label="Dr Nandani Feature List">
+    <EditableSection sectionId="about-nandani-timeline" label="Dr Nandini Feature List">
       <section className={`nandani-feature-list-section ${isClinicCompact ? "clinic-compact-timeline" : ""}`}>
         <div className="nandani-feature-list-inner">
           <div className="nandani-section-eyebrow">
@@ -351,3 +351,4 @@ export default function AboutDrNandaniTimeline({ data = {}, showDescription = fa
     </EditableSection>
   );
 }
+

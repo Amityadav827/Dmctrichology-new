@@ -194,7 +194,7 @@ function Sidebar() {
             {isAboutUsOpen && (
               <div className="service-details-subnav">
                 <NavLink to="/cms/about-dr-nandani" className={getNavClass}>
-                  <User size={14} /> Dr Nandani
+                  <User size={14} /> Dr Nandini
                 </NavLink>
                 <NavLink to="/cms/about-dr-nivedita" className={getNavClass}>
                   <User size={14} /> Dr Nivedita
@@ -297,7 +297,7 @@ function Sidebar() {
                   <FlaskConical size={16} /> Science Consultation Leads
                 </NavLink>
                 <NavLink to="/leads/dr-nandani" className={getNavClass}>
-                  <User size={16} /> Dr Nandani Leads
+                  <User size={16} /> Dr Nandini Leads
                 </NavLink>
                 <NavLink to="/leads/newsletter" className={getNavClass}>
                   <Users size={16} /> Newsletter Subscribers
@@ -484,3 +484,4 @@ function Sidebar() {
 }
 
 export default Sidebar;
+

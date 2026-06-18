@@ -12,7 +12,7 @@ export default function AboutDrNandaniHero({
   breadcrumbData = {},
   formSettings = {},
   leadEndpoint = '/about-dr-nandani/lead',
-  leadService = 'Dr. Nandani Consultation Form',
+  leadService = 'Dr. Nandini Consultation Form',
   sectionIds = {},
   showEyebrow = true
 }) {
@@ -20,7 +20,7 @@ export default function AboutDrNandaniHero({
   const breadcrumbSectionId = sectionIds.breadcrumb || 'about-nandani-breadcrumb';
   const {
     mainHeading = "BEST HAIR TRANSPLANT SURGEON IN DELHI",
-    doctorName = "Dr. Nandani Dadu",
+    doctorName = "Dr. Nandini Dadu",
     degreeText = "MD (Dermatology)",
     descriptionParagraph = "Dr. Nandini Dadu, MBBS, a Board-Certified Trichologist, has been studying hair and scalp treatments for over ten years. Throughout her career, she has successfully treated severe cases with excellent outcomes and has attained the title of the best hair transplant surgeon in Delhi.",
     namePlaceholder = "Name*",
@@ -31,12 +31,12 @@ export default function AboutDrNandaniHero({
   } = data;
 
   const {
-    title = "About Dr. Nandani Dadu",
+    title = "About Dr. Nandini Dadu",
     parentLabel = "Home",
     parentUrl = "/",
-    currentPageText = "About Dr. Nandani Dadu"
+    currentPageText = "About Dr. Nandini Dadu"
   } = breadcrumbData;
-  const resolvedTitle = title && title !== "Hair Specialist in Delhi" ? title : "About Dr. Nandani Dadu";
+  const resolvedTitle = title && title !== "Hair Specialist in Delhi" ? title : "About Dr. Nandini Dadu";
   const resolvedCurrentPageText = currentPageText && currentPageText !== "Hair Specialist in Delhi" ? currentPageText : resolvedTitle;
 
   const formTitle = formSettings?.title || "Request Private Consultation";
@@ -619,3 +619,4 @@ export default function AboutDrNandaniHero({
     </>
   );
 }
+

@@ -25,7 +25,7 @@ export default function AboutDrNandaniSpecialist({ data = {}, showEyebrow = true
   const hasTreatmentContent = Boolean(String(highlightedText || '').trim()) || visibleBullets.length > 0;
 
   return (
-    <EditableSection sectionId="about-nandani-specialist" label="Why Choose Dr Nandani">
+    <EditableSection sectionId="about-nandani-specialist" label="Why Choose Dr Nandini">
       <section className="dr-nandani-specialist-section">
         <div className="dr-nandani-specialist-shell">
           <div className="dr-nandani-specialist-copy">
@@ -250,3 +250,4 @@ export default function AboutDrNandaniSpecialist({ data = {}, showEyebrow = true
     </EditableSection>
   );
 }
+

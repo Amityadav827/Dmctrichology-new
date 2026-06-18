@@ -7,7 +7,7 @@ import EditableSection from './Editable/EditableSection';
 export default function HeroSlider() {
   const [slides, setSlides] = useState([
     {
-      backgroundImage: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png',
+      backgroundImage: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/ulx0crddeqpeygupa13q.png',
       tag: 'TRUSTED CARE',
       title: 'Recover Stronger, Move Freely, Live Pain-Free',
       description: 'Experience Compassionate Care And Advanced Trichology Solutions For Healthier, Stronger Hair.'
@@ -57,7 +57,7 @@ export default function HeroSlider() {
 
             <div className={`slide-content ${index === currentSlide && contentReady ? 'slide-content-animate' : ''}`}>
               <span className="section-subtitle" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '40px', height: 'auto', objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)' }} />
+                <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962112281-lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '40px', height: 'auto', objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)' }} />
                 {slide.tag}
               </span>
               <h1 className="section-title hero-cap-heading" style={{ fontSize: '54px', marginBottom: '16px' }}>

@@ -11,9 +11,9 @@ const fallbackImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/objec
 export default function AboutDrNandaniLandscapeImage({ data = {}, fallbackSrc = "", showEyebrow = true }) {
   const sourceImage = data.image || fallbackSrc || fallbackImage;
   const image = sourceImage === legacyFallbackImage ? fallbackImage : sourceImage;
-  const imageAlt = data.imageAlt || "Dr. Nandani Dadu hair restoration care";
+  const imageAlt = data.imageAlt || "Dr. Nandini Dadu hair restoration care";
   const eyebrow = data.eyebrow || "TRUSTED CARE SERVICES";
-  const heading = data.heading || "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?";
+  const heading = data.heading || "What Makes Dr. Nandini Dadu The Best Hair Transplant Surgeon In Delhi?";
   const backgroundColor = data.sectionBgColor || "#ffffff";
   const paddingTop = data.paddingTop || "56px";
   const paddingBottom = data.paddingBottom || "56px";
@@ -21,7 +21,7 @@ export default function AboutDrNandaniLandscapeImage({ data = {}, fallbackSrc = 
   const maxHeight = data.maxHeight || "340px";
 
   return (
-    <EditableSection sectionId="about-nandani-timeline" label="Dr Nandani Landscape Image">
+    <EditableSection sectionId="about-nandani-timeline" label="Dr Nandini Landscape Image">
       <section
         className="nandani-landscape-image-section"
         style={{ backgroundColor, paddingTop, paddingBottom }}
@@ -144,3 +144,4 @@ export default function AboutDrNandaniLandscapeImage({ data = {}, fallbackSrc = 
     </EditableSection>
   );
 }
+

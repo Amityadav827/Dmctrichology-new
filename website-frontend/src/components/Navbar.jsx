@@ -6,7 +6,7 @@ import { ChevronDown, Menu as MenuIcon, X } from 'lucide-react';
 export default function Navbar({ cmsMenu, logoUrl }) {
   const [defaultMenuItems] = useState([
     { label: 'Home', link: '/' },
-    { label: 'About Us', link: '/about', dropdown: [{label: 'Dr. Nandani Dadu', link: '/about/dr-nandani'}] },
+    { label: 'About Us', link: '/about', dropdown: [{label: 'Dr. Nandini Dadu', link: '/about/dr-nandani'}] },
     { label: 'Services', link: '/service', dropdown: [{label: 'Hair Transplant', link: '/fue-hair-transplant'}] },
     { label: 'Results', link: '/results' },
     { label: 'Testimonials', link: '/testimonials' },
@@ -146,3 +146,4 @@ export default function Navbar({ cmsMenu, logoUrl }) {
     </div>
   );
 }
+

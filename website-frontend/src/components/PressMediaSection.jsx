@@ -69,9 +69,9 @@ export default function PressMediaSection() {
         .sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
     : [];
   const logos = dbLogos.length > 0 ? dbLogos : [
-    { image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/rervxi6jq1fl20lu2fps.png", title: "Press logo", link: "#" },
-    { image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/pvyogcawczl9mv7wb82v.png", title: "Press logo", link: "#" },
-    { image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777700309/dmc-trichology/tixdm9gnhknxtwvlj3xd.png", title: "Press logo", link: "#" }
+    { image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962165590-rervxi6jq1fl20lu2fps.png", title: "Press logo", link: "#" },
+    { image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/pvyogcawczl9mv7wb82v.png", title: "Press logo", link: "#" },
+    { image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962163328-tixdm9gnhknxtwvlj3xd.png", title: "Press logo", link: "#" }
   ];
 
   // Duplicate logos for a smoother infinite effect
@@ -132,7 +132,7 @@ export default function PressMediaSection() {
                       {[1, 2, 3, 4, 5].map((s) => (
                         <img 
                           key={s} 
-                          src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ujqfjbjqbnxpcngqssi3.png" 
+                            src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/ujqfjbjqbnxpcngqssi3.png" 
                           alt="star" 
                           style={{ width: '20px', height: '20px' }} 
                         />

@@ -70,9 +70,9 @@ export default function AboutDrNandaniCMS() {
           timeline: {
             ...(res.data.timeline || {}),
             eyebrow: res.data.timeline?.eyebrow || "TRUSTED CARE SERVICES",
-            heading: res.data.timeline?.heading || "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?",
+            heading: res.data.timeline?.heading || "What Makes Dr. Nandini Dadu The Best Hair Transplant Surgeon In Delhi?",
             image: (res.data.timeline?.image === legacyTimelineImage ? defaultTimelineImage : (res.data.timeline?.image || res.data.trustSection?.image || defaultTimelineImage)),
-            imageAlt: res.data.timeline?.imageAlt || "Dr. Nandani Dadu hair restoration care",
+            imageAlt: res.data.timeline?.imageAlt || "Dr. Nandini Dadu hair restoration care",
             sectionBgColor: res.data.timeline?.sectionBgColor || "#FFFFFF",
             contentMaxWidth: res.data.timeline?.contentMaxWidth || "1220px",
             maxHeight: res.data.timeline?.maxHeight || "340px",
@@ -82,7 +82,7 @@ export default function AboutDrNandaniCMS() {
           trustSection: {
             ...(res.data.trustSection || {}),
             eyebrow: res.data.trustSection?.eyebrow || "TRUSTED CARE SERVICES",
-            heading: res.data.trustSection?.heading || "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?",
+            heading: res.data.trustSection?.heading || "Why Do Patients Trust Dr. Nandini Dadu As A Hair Transplant Doctor In Delhi?",
             image: res.data.trustSection?.image || "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png"
           },
           educationExperience: {
@@ -142,7 +142,7 @@ export default function AboutDrNandaniCMS() {
     try {
       const { data: res } = await axios.put("/about-dr-nandani", data);
       if (res.success) {
-        toast.success("Dr. Nandani Dadu CMS saved successfully");
+        toast.success("Dr. Nandini Dadu CMS saved successfully");
         setData(res.data);
       }
     } catch (error) {
@@ -203,7 +203,7 @@ export default function AboutDrNandaniCMS() {
       <div className="flex h-screen items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-10 w-10 animate-spin text-indigo-600" />
-          <p className="text-slate-500 font-medium animate-pulse">Loading Dr. Nandani CMS...</p>
+          <p className="text-slate-500 font-medium animate-pulse">Loading Dr. Nandini CMS...</p>
         </div>
       </div>
     );
@@ -233,7 +233,7 @@ export default function AboutDrNandaniCMS() {
               <Settings className="text-white" size={20} />
             </div>
             <div>
-              <h1 className="text-xl font-black text-slate-800 tracking-tight">About Dr. Nandani Dadu CMS</h1>
+              <h1 className="text-xl font-black text-slate-800 tracking-tight">About Dr. Nandini Dadu CMS</h1>
               <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Section 1 isolated builder</p>
             </div>
           </div>
@@ -2201,7 +2201,7 @@ export default function AboutDrNandaniCMS() {
                     value={data.seo?.schema || ""}
                     onChange={e => updateSectionField("seo", "schema", e.target.value)}
                     className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-xs font-mono text-slate-800 focus:bg-white focus:border-indigo-300 transition-all outline-none resize-y"
-                    placeholder='{"@context":"https://schema.org","@type":"Physician","name":"Dr Nandani"}'
+                    placeholder='{"@context":"https://schema.org","@type":"Physician","name":"Dr Nandini"}'
                   />
                 </div>
                 <div>
@@ -2227,3 +2227,4 @@ export default function AboutDrNandaniCMS() {
     </div>
   );
 }
+

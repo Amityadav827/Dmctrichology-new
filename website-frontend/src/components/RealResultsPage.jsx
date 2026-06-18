@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-const resultImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/bif89jyygbycclg8qa92.png';
+const resultImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962134454-bif89jyygbycclg8qa92.png';
 
 const defaultCards = [
   ['Korean Facial Illumination', 'After 6 sessions'],

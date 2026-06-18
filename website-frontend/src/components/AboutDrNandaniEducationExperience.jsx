@@ -176,7 +176,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
                 sectionId="about-nandani-education"
                 fieldPath="educationExperience.topImage"
                 src={topImage}
-                alt="Dr. Nandani Dadu credentials top"
+                alt="Dr. Nandini Dadu credentials top"
                 className="nandani-tabs-editable-image"
               />
             </div>
@@ -186,7 +186,7 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
                   sectionId="about-nandani-education"
                   fieldPath="educationExperience.bottomImage"
                   src={bottomImage}
-                  alt="Dr. Nandani Dadu credentials bottom"
+                  alt="Dr. Nandini Dadu credentials bottom"
                   className="nandani-tabs-editable-image"
                 />
               </div>
@@ -478,3 +478,4 @@ export default function AboutDrNandaniEducationExperience({ data = {}, credentia
     </EditableSection>
   );
 }
+

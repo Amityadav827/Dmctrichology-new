@@ -6,12 +6,12 @@ import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
 const defaultItems = [
-  { title: 'At-Home Sessions', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/dujziywmelzwixisgvyb.png', link: '', enabled: true },
-  { title: 'Dermatologist Monitored', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/rhqehubr894icsuzfcew.png', link: '', enabled: true },
-  { title: 'Shark Tank Approved', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/gqnszoyafmildmq6l9mm.png', link: '', enabled: true },
-  { title: 'US FDA Approved', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/eqmyy5zthf9zi92xyvxm.png', link: '', enabled: true },
-  { title: 'Quick & Lasting Results', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/oihmmdhj7lbltqp9qgrj.png', link: '', enabled: true },
-  { title: '100% Safe', icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777546337/dmc-trichology/pdc64p00mfiv0080ippb.png', link: '', enabled: true }
+  { title: 'At-Home Sessions', icon: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/dujziywmelzwixisgvyb.png', link: '', enabled: true },
+  { title: 'Dermatologist Monitored', icon: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/rhqehubr894icsuzfcew.png', link: '', enabled: true },
+  { title: 'Shark Tank Approved', icon: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/gqnszoyafmildmq6l9mm.png', link: '', enabled: true },
+  { title: 'US FDA Approved', icon: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/eqmyy5zthf9zi92xyvxm.png', link: '', enabled: true },
+  { title: 'Quick & Lasting Results', icon: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/oihmmdhj7lbltqp9qgrj.png', link: '', enabled: true },
+  { title: '100% Safe', icon: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/pdc64p00mfiv0080ippb.png', link: '', enabled: true }
 ];
 
 export default function FeaturesBar() {

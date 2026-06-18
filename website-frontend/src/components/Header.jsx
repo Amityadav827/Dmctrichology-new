@@ -38,7 +38,7 @@ export default function Header({ initialHeader, siteSettings }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const logoUrl = headerData?.logoUrl || siteSettings?.logo || 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530477/dmc-trichology/pntwhlftziotd6k0kdkg.png';
+  const logoUrl = headerData?.logoUrl || siteSettings?.logo || 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962107138-pntwhlftziotd6k0kdkg.png';
   const buttonText = headerData?.appointmentButtonText || siteSettings?.appointmentButtonText || 'Book Appointment';
   const buttonLink = headerData?.appointmentButtonLink || '#book';
   const websiteName = siteSettings?.websiteName || 'DMC Trichology';

@@ -135,7 +135,7 @@ export default function LeadForm() {
       `}} />
 
       <div className="hero-form-eyebrow" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', height: '30px' }}>
-        <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '30px', height: '30px', objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)' }} />
+        <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962112281-lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '30px', height: '30px', objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)' }} />
         <span className="section-subtitle" style={{ fontSize: '11px' }}>Book a Session</span>
       </div>
       
@@ -171,7 +171,7 @@ export default function LeadForm() {
                 <span style={{ fontSize: '10px', color: '#FFA500', lineHeight: 1, letterSpacing: '1px' }}>{settings.ratingText}</span>
               ) : (
                 Array.from({ length: Number(settings?.ratingStars || 5) }).map((_, idx) => (
-                  <img key={idx} src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ujqfjbjqbnxpcngqssi3.png" alt="star" style={{ width: '10px', height: '10px' }} />
+                  <img key={idx} src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/ujqfjbjqbnxpcngqssi3.png" alt="star" style={{ width: '10px', height: '10px' }} />
                 ))
               )}
             </div>

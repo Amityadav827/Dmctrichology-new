@@ -10,8 +10,8 @@ const AboutUsStory = ({ data = {} }) => {
     sectionTitle = "THE LEGACY", 
     heading = "A Journey Of Medical Excellence & Artistic Vision", 
     description = "Founded over a decade ago, DMC Trichology was born from a commitment to bring world-class hair restoration to India. Our approach combines US-FDA approved technologies with a deep understanding of facial aesthetics.", 
-    mainImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png", 
-    secondaryImage = "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png", 
+    mainImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962145221-sfqfld2ikbs00iqncyse.png", 
+    secondaryImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/ulx0crddeqpeygupa13q.png", 
     experienceYears = 15, 
     points = [] 
   } = data;

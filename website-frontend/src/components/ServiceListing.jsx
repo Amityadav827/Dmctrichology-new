@@ -219,7 +219,7 @@ const ServiceListing = ({ services: initialServices = [], categories: initialCat
                       <EditableImage
                         sectionId="service-listing"
                         fieldPath={`${index}.image`}
-                        src={service.image || "https://res.cloudinary.com/dseixl6px/image/upload/v1777709679/dmc-trichology/dnnerjyyebzufaoya4hd.png"}
+                        src={service.image || "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/dnnerjyyebzufaoya4hd.png"}
                         alt={service.title}
                         className="h-full w-full"
                         imgClassName="h-full w-full object-cover"

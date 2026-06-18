@@ -9,9 +9,9 @@ import { extractServiceSlugFromPath } from "../utils/serviceRoutes";
 const hasValue = (value) => typeof value === 'string' && value.trim() && value.trim() !== '#';
 
 const socialIconByName = {
-  facebook: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/jkidxsr5nbpwq7y7x0x0.png",
-  instagram: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/pzzrzqodtujxvlktyk2s.png",
-  youtube: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/dgkcwru8nqurjw7f1lz6.png",
+  facebook: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962108233-jkidxsr5nbpwq7y7x0x0.png",
+  instagram: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962107675-pzzrzqodtujxvlktyk2s.png",
+  youtube: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962109429-dgkcwru8nqurjw7f1lz6.png",
 };
 
 const defaultSocialLinks = {
@@ -208,7 +208,7 @@ export default function Footer({ siteSettings }) {
   const disclaimer = data?.disclaimer || "Content is for awareness and education only, not medical advice. Consult a qualified trichologist or dermatologist for proper diagnosis and treatment. Results may vary for each individual.";
   
   const branding = data?.branding || {
-    logo: "https://res.cloudinary.com/dseixl6px/image/upload/v1777702974/dmc-trichology/ecj7tvcjxbkqhzixfdql.png",
+    logo: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/ecj7tvcjxbkqhzixfdql.png",
     aboutText: "One of the best Skin and Hair treatment centres in India, DMC-TRICHOLOGY® provides an array of both cosmetological and trichological treatment procedures."
   };
 

@@ -159,7 +159,7 @@ const generateServiceData = (title, slug, type) => {
         {
           title: `${title} Explained`,
           videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          thumbnail: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png",
+          thumbnail: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/ulx0crddeqpeygupa13q.png",
           isYoutubeStyleButtonEnabled: true
         },
         {
@@ -174,7 +174,7 @@ const generateServiceData = (title, slug, type) => {
       sectionTitle: c.processTitle,
       processSteps: c.processSteps.map(step => ({
         ...step,
-        image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png"
+        image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962145221-sfqfld2ikbs00iqncyse.png"
       }))
     },
     idealFrequency: {
@@ -216,26 +216,26 @@ const generateServiceData = (title, slug, type) => {
       cards: [
         {
           title: "Korean Facial Illumination",
-          beforeImg: "https://res.cloudinary.com/dseixl6px/image/upload/v1777612758/dmc-trichology/dvy3knew0pzq1gg8fr8q.png",
-          afterImg: "https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/uttbdof06l4xbpvexlv9.png",
+          beforeImg: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962132671-dvy3knew0pzq1gg8fr8q.png",
+          afterImg: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962133782-uttbdof06l4xbpvexlv9.png",
           sessions: "After 6 sessions"
         },
         {
           title: "Acne Arrestor Facial With Salicylic Peel",
-          beforeImg: "https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/g7fs5kfpckmmcjwg5sk0.png",
-          afterImg: "https://res.cloudinary.com/dseixl6px/image/upload/v1777612758/dmc-trichology/zxyvkmr0uf8pf5qxgfvf.png",
+          beforeImg: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962128093-g7fs5kfpckmmcjwg5sk0.png",
+          afterImg: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962131881-zxyvkmr0uf8pf5qxgfvf.png",
           sessions: "After 4 sessions"
         },
         {
           title: "Elastin Boost Facial",
-          beforeImg: "https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/meeed3zg8w5j3xhkcfxc.png",
-          afterImg: "https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/w6qder12vvhxrbhzskgw.png",
+          beforeImg: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962131147-meeed3zg8w5j3xhkcfxc.png",
+          afterImg: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962129505-w6qder12vvhxrbhzskgw.png",
           sessions: "After 5 sessions"
         },
         {
           title: "Derma Revive Facial",
-          beforeImg: "https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/dh6webh6x4l7qfrlzxtl.png",
-          afterImg: "https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/bif89jyygbycclg8qa92.png",
+          beforeImg: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962128773-dh6webh6x4l7qfrlzxtl.png",
+          afterImg: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962134454-bif89jyygbycclg8qa92.png",
           sessions: "After 4 sessions"
         }
       ],
@@ -253,7 +253,7 @@ const generateServiceData = (title, slug, type) => {
         },
         {
           title: "Female Hair Transplant | Good or Bad ? | Dadu Medical Centre",
-          thumbnail: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png",
+          thumbnail: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/ulx0crddeqpeygupa13q.png",
           videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
         },
         {

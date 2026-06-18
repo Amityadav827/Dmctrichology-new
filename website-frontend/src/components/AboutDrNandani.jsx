@@ -31,15 +31,15 @@ const AboutDrNandani = ({ data = {} }) => {
   const testimonials = [
     {
       name: "Sonadhan Chakma",
-      text: "Dr. Nandani Dadu is an excellent hair specialist in Delhi. I visited her clinic for hair loss treatment, and the results have been outstanding. She is very knowledgeable and patient, taking time to explain the root cause of the problem and the available treatments. The clinic is well-maintained, and the staff is polite and professional."
+      text: "Dr. Nandini Dadu is an excellent hair specialist in Delhi. I visited her clinic for hair loss treatment, and the results have been outstanding. She is very knowledgeable and patient, taking time to explain the root cause of the problem and the available treatments. The clinic is well-maintained, and the staff is polite and professional."
     },
     {
       name: "Akhilesh Singh",
-      text: "Dr. Nandani Dadu is the best hair transplant surgeon in Delhi. I underwent a hair transplant procedure at her clinic, and the results have been amazing. She uses advanced techniques and ensures minimal discomfort during the process. Her attention to detail and dedication to patient care is impressive."
+      text: "Dr. Nandini Dadu is the best hair transplant surgeon in Delhi. I underwent a hair transplant procedure at her clinic, and the results have been amazing. She uses advanced techniques and ensures minimal discomfort during the process. Her attention to detail and dedication to patient care is impressive."
     },
     {
       name: "Naveen Yadav",
-      text: "Dr. Nandani Dadu is undoubtedly the best hair specialist in Delhi. She helped me regain confidence with her effective treatment for hair thinning. Her approach is personalized, focusing on understanding individual needs. The clinic is equipped with modern facilities, and the entire team ensures a comfortable experience."
+      text: "Dr. Nandini Dadu is undoubtedly the best hair specialist in Delhi. She helped me regain confidence with her effective treatment for hair thinning. Her approach is personalized, focusing on understanding individual needs. The clinic is equipped with modern facilities, and the entire team ensures a comfortable experience."
     }
   ];
 
@@ -50,7 +50,7 @@ const AboutDrNandani = ({ data = {} }) => {
         <div className="dr-nandani-hero-container">
           <motion.div {...fadeUp(0)} className="dr-nandani-hero-content">
             <span className="dr-nandani-subtitle">Best Hair Transplant Surgeon In Delhi</span>
-            <h1 className="dr-nandani-hero-title">Dr. Nandani Dadu</h1>
+            <h1 className="dr-nandani-hero-title">Dr. Nandini Dadu</h1>
             <p className="dr-nandani-qualification">M.B.B.S</p>
             <p className="dr-nandani-hero-desc">
               Dr. Nandini Dadu, MBBS, a Board-Certified Trichologist, has been studying hair and scalp treatments for over ten years. Throughout her career, she has successfully treated severe cases with excellent outcomes and has attained the title of the best hair transplant surgeon in Delhi. She is also known as one of India's leading experts in the practice and for her research on hair loss prevention.
@@ -136,7 +136,7 @@ const AboutDrNandani = ({ data = {} }) => {
       <section className="dr-nandani-trust">
         <div className="dr-nandani-container">
           <motion.h2 {...fadeUp(0)} className="dr-nandani-section-title">
-            Why Do Patients Trust Dr. Nandani Dadu As a Hair Transplant Doctor in Delhi?
+            Why Do Patients Trust Dr. Nandini Dadu As a Hair Transplant Doctor in Delhi?
           </motion.h2>
 
           <div className="dr-nandani-trust-grid">
@@ -144,7 +144,7 @@ const AboutDrNandani = ({ data = {} }) => {
               {
                 icon: <Star size={28} />,
                 title: "Unparalleled Expertise",
-                desc: "Dr. Nandani Dadu performs the best hair loss, thinning, and baldness procedures. She has continuously contributed to improving many lives by providing excellent hair transplant results."
+                desc: "Dr. Nandini Dadu performs the best hair loss, thinning, and baldness procedures. She has continuously contributed to improving many lives by providing excellent hair transplant results."
               },
               {
                 icon: <Briefcase size={28} />,
@@ -275,3 +275,4 @@ const AboutDrNandani = ({ data = {} }) => {
 };
 
 export default AboutDrNandani;
+

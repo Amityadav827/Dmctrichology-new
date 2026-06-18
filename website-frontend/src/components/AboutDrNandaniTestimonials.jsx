@@ -9,28 +9,28 @@ const defaultPatientImage = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1
 
 const defaultTestimonials = [
   {
-    text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
+    text: "Dr. Nandini Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
     patientName: "Sanadhan Chaima",
     image: defaultPatientImage,
     disclaimer: "*Opinions/Results May Vary From Person To Person.",
     stars: 5
   },
   {
-    text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
+    text: "Dr. Nandini Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
     patientName: "Sanadhan Chaima",
     image: defaultPatientImage,
     disclaimer: "*Opinions/Results May Vary From Person To Person.",
     stars: 5
   },
   {
-    text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
+    text: "Dr. Nandini Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
     patientName: "Sanadhan Chaima",
     image: defaultPatientImage,
     disclaimer: "*Opinions/Results May Vary From Person To Person.",
     stars: 5
   },
   {
-    text: "Dr. Nandani Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
+    text: "Dr. Nandini Dadu Is An Excellent Hair Specialist In Delhi. I Visited Her Clinic For Hair Loss Treatment, And The Results Have Been Outstanding. She Is Very Knowledgeable And Patient, Taking Time To Explain Everything Clearly.",
     patientName: "Sanadhan Chaima",
     image: defaultPatientImage,
     disclaimer: "*Opinions/Results May Vary From Person To Person.",
@@ -363,3 +363,4 @@ export default function AboutDrNandaniTestimonials({ data = {}, useDefaultTestim
     </EditableSection>
   );
 }
+

@@ -10,7 +10,7 @@ import { extractServiceSlugFromPath } from '../utils/serviceRoutes';
 const DUMMY_MEDIA = [
   {
     type: 'image',
-    url: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png',
+    url: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/ulx0crddeqpeygupa13q.png',
     title: 'Premium Hair Treatment',
     alt: 'Premium Hair Treatment at DMC Trichology',
     thumbnail: ''

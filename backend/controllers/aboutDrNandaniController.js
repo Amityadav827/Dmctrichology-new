@@ -11,7 +11,7 @@ const fallbackData = {
     mainImage: "",
     doctorImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png",
     mainHeading: "BEST HAIR TRANSPLANT SURGEON IN DELHI",
-    doctorName: "Dr. Nandani Dadu",
+    doctorName: "Dr. Nandini Dadu",
     degreeText: "MD (Dermatology)",
     descriptionParagraph: "Dr. Nandini Dadu, MBBS, a Board-Certified Trichologist, has been studying hair and scalp treatments for over ten years. Throughout her career, she has successfully treated severe cases with excellent outcomes and has attained the title of the best hair transplant surgeon in Delhi.",
     pageEyebrow: "About DMC Trichology",
@@ -43,9 +43,9 @@ const fallbackData = {
   },
   timeline: {
     eyebrow: "TRUSTED CARE SERVICES",
-    heading: "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?",
+    heading: "What Makes Dr. Nandini Dadu The Best Hair Transplant Surgeon In Delhi?",
     image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780906825092-79561886.webp",
-    imageAlt: "Dr. Nandani Dadu hair restoration care",
+    imageAlt: "Dr. Nandini Dadu hair restoration care",
     sectionBgColor: "#FFFFFF",
     contentMaxWidth: "1220px",
     maxHeight: "340px",
@@ -54,13 +54,13 @@ const fallbackData = {
   },
   trustSection: {
     eyebrow: "TRUSTED CARE SERVICES",
-    heading: "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?",
+    heading: "Why Do Patients Trust Dr. Nandini Dadu As A Hair Transplant Doctor In Delhi?",
     image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png",
     imageAlt: "Hair transplant treatment planning",
     trustPoints: [
       {
         title: "Unparalleled Expertise",
-        description: "Dr. Nandani Dadu performs the best hair loss, thinning, and baldness procedures. She has continuously contributed to improving many lives by providing excellent hair transplant results. Through her honesty, hard work, and passionate service, she aims to change every frown into a smile."
+        description: "Dr. Nandini Dadu performs the best hair loss, thinning, and baldness procedures. She has continuously contributed to improving many lives by providing excellent hair transplant results. Through her honesty, hard work, and passionate service, she aims to change every frown into a smile."
       },
       {
         title: "Vast Hair Restoration Procedures",
@@ -75,7 +75,7 @@ const fallbackData = {
         description: "When it comes to hair transplants, the key factor is that the results should look natural. Dr. Dadu utilises her artistic abilities to provide a natural hairline. It gives patients confidence and leaves no proof that they underwent a hair transplant."
       }
     ],
-    conclusionParagraph: "Dr. Nandani Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandani Dadu now!",
+    conclusionParagraph: "Dr. Nandini Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandini Dadu now!",
     backgroundColor: "#e8eaf6",
     contentMaxWidth: "1300px",
     paddingTop: "92px",
@@ -143,7 +143,7 @@ const fallbackData = {
     patientImage: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780711038023-933757138.webp",
     testimonials: [
       {
-        text: "Dr. Nandani Dadu is an excellent hair specialist in Delhi. I visited her clinic for hair loss treatment, and the results have been outstanding. She is very knowledgeable and patient, taking time to explain everything clearly.",
+        text: "Dr. Nandini Dadu is an excellent hair specialist in Delhi. I visited her clinic for hair loss treatment, and the results have been outstanding. She is very knowledgeable and patient, taking time to explain everything clearly.",
         patientName: "Sanadhan Chaima",
         image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780711038023-933757138.webp",
         disclaimer: "* Opinions/Results may vary from person to person.",
@@ -167,7 +167,7 @@ exports.getSettings = async (req, res) => {
     }
     return res.status(200).json({ success: true, data: row.data || {} });
   } catch (error) {
-    console.error("Error fetching Dr. Nandani page settings:", error);
+    console.error("Error fetching Dr. Nandini page settings:", error);
     return res.status(500).json({ success: false, message: "Server error fetching settings" });
   }
 };
@@ -179,7 +179,7 @@ exports.updateSettings = async (req, res) => {
     if (error) throw error;
     return res.status(200).json({ success: true, data: req.body, message: "Settings updated successfully" });
   } catch (error) {
-    console.error("Error updating Dr. Nandani page settings:", error);
+    console.error("Error updating Dr. Nandini page settings:", error);
     return res.status(500).json({ success: false, message: "Server error updating settings" });
   }
 };
@@ -192,7 +192,7 @@ exports.uploadImage = async (req, res) => {
     const publicUrl = await uploadToSupabase(req.file, 'dr_nandani_assets');
     return res.status(200).json({ success: true, url: publicUrl });
   } catch (error) {
-    console.error("Error uploading Dr. Nandani asset:", error);
+    console.error("Error uploading Dr. Nandini asset:", error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -243,7 +243,7 @@ exports.createLead = async (req, res, next) => {
         name: name.trim(),
         email: trimmedEmail,
         mobile: trimmedMobile,
-        service: service ? service.trim() : "Dr. Nandani Dadu Consultation",
+        service: service ? service.trim() : "Dr. Nandini Dadu Consultation",
         status: "new"
       })
       .select()
@@ -254,18 +254,18 @@ exports.createLead = async (req, res, next) => {
     sendLeadToTelecrm({
       name: lead.name,
       mobile: lead.mobile,
-      source: "Dr. Nandani Consultation Form"
+      source: "Dr. Nandini Consultation Form"
     }).catch((crmError) => {
-      console.error("TeleCRM Dr. Nandani lead sync failed:", crmError.response?.data || crmError.message);
+      console.error("TeleCRM Dr. Nandini lead sync failed:", crmError.response?.data || crmError.message);
     });
 
     return res.status(201).json({
       success: true,
       data: lead,
-      message: "Lead created successfully in Dr. Nandani leads"
+      message: "Lead created successfully in Dr. Nandini leads"
     });
   } catch (error) {
-    console.error("Error creating Dr. Nandani lead:", error);
+    console.error("Error creating Dr. Nandini lead:", error);
     next(error);
   }
 };
@@ -313,7 +313,7 @@ exports.getLeads = async (req, res, next) => {
       }
     });
   } catch (error) {
-    console.error("Error fetching Dr. Nandani leads:", error);
+    console.error("Error fetching Dr. Nandini leads:", error);
     next(error);
   }
 };
@@ -439,3 +439,4 @@ exports.exportCsv = async (req, res, next) => {
     next(error);
   }
 };
+

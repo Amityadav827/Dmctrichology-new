@@ -22,7 +22,7 @@ export default function AboutDrNandaniCredentials({ data = {} }) {
   } = data;
 
   return (
-    <EditableSection sectionId="about-nandani-credentials" label="Dr Nandani Credentials">
+    <EditableSection sectionId="about-nandani-credentials" label="Dr Nandini Credentials">
       <div 
         className="nandani-credentials-section-wrapper"
         style={{
@@ -274,3 +274,4 @@ export default function AboutDrNandaniCredentials({ data = {} }) {
     </EditableSection>
   );
 }
+

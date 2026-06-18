@@ -98,7 +98,7 @@ function DrNandaniLeads() {
       const currentIds = (response.data || []).map(i => i._id);
       setSelectedIds(prev => prev.filter(id => currentIds.includes(id)));
     } catch (error) {
-      toast.error("Unable to load Dr. Nandani leads");
+      toast.error("Unable to load Dr. Nandini leads");
     } finally {
       setLoading(false);
     }
@@ -120,7 +120,7 @@ function DrNandaniLeads() {
 
     try {
       await deleteDrNandaniLead(id);
-      toast.success("Lead deleted successfully from Dr. Nandani Leads");
+      toast.success("Lead deleted successfully from Dr. Nandini Leads");
       fetchItems(pagination.page);
     } catch (error) {
       setItems(previousItems);
@@ -236,8 +236,8 @@ function DrNandaniLeads() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-[28px] shadow-sm border border-slate-100">
         <div>
-          <h3 className="text-2xl font-bold text-slate-900">Dr. Nandani Dadu Leads</h3>
-          <p className="text-sm text-slate-500 mt-1">Monitor and manage leads from Dr. Nandani Dadu's isolated private desk consultation form</p>
+          <h3 className="text-2xl font-bold text-slate-900">Dr. Nandini Dadu Leads</h3>
+          <p className="text-sm text-slate-500 mt-1">Monitor and manage leads from Dr. Nandini Dadu's isolated private desk consultation form</p>
         </div>
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
           {selectedIds.length > 0 && (
@@ -343,7 +343,7 @@ function DrNandaniLeads() {
       </div>
 
       {loading && items.length === 0 ? (
-        <Loader label="Retrieving Dr. Nandani leads..." />
+        <Loader label="Retrieving Dr. Nandini leads..." />
       ) : items.length === 0 ? (
         /* Empty State Card */
         <div className="bg-white/50 backdrop-blur-md rounded-[28px] border border-slate-100 p-12 text-center max-w-xl mx-auto my-12 shadow-sm">
@@ -352,7 +352,7 @@ function DrNandaniLeads() {
           </div>
           <h4 className="text-xl font-bold text-gray-800 mb-2">No leads yet</h4>
           <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">
-            Submissions from Dr. Nandani Dadu's private desk consultation form will appear here.
+            Submissions from Dr. Nandini Dadu's private desk consultation form will appear here.
           </p>
         </div>
       ) : (
@@ -678,3 +678,4 @@ function DrNandaniLeads() {
 }
 
 export default DrNandaniLeads;
+

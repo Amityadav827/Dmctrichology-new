@@ -5,8 +5,8 @@ import Link from 'next/link';
 
 const hasText = (value) => String(value || '').trim().length > 0;
 const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
-const headingIcon = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png';
-const arrowIcon = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777613952/dmc-trichology/xc065ftxo6zamcldpd59.png';
+const headingIcon = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962112281-lsmvsocjusyrery1hjum.png';
+const arrowIcon = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/xc065ftxo6zamcldpd59.png';
 
 const getMemberKey = (member = {}, index = 0) =>
   `${member.name || 'member'}-${member.sortOrder ?? index}-${index}`;

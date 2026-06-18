@@ -15,7 +15,7 @@ const fadeUp = (delay = 0) => ({
 export default function AboutDrNandaniIntro({ data = {} }) {
   const {
     heading = "Delhi's Premier Hair Specialist & Clinical Director",
-    description = "<p>Dr. Nandani Dadu is highly regarded as one of India's finest hair restoration specialists, merging state-of-the-art US-FDA approved technologies with refined artistic precision. As the Clinical Director, she has spent over a decade perfecting custom trichological protocols that deliver exceptional, natural-looking hair density.</p><p>Her signature therapies combine advanced cellular growth treatments, high-density FUE transplants, and custom scalp rejuvenation programs designed uniquely for each patient's physiological profile.</p>",
+    description = "<p>Dr. Nandini Dadu is highly regarded as one of India's finest hair restoration specialists, merging state-of-the-art US-FDA approved technologies with refined artistic precision. As the Clinical Director, she has spent over a decade perfecting custom trichological protocols that deliver exceptional, natural-looking hair density.</p><p>Her signature therapies combine advanced cellular growth treatments, high-density FUE transplants, and custom scalp rejuvenation programs designed uniquely for each patient's physiological profile.</p>",
     bulletList = [
       "Clinical expertise with 15+ years of specialized hair treatment experience.",
       "Customized high-density hairline designs backed by medical science.",
@@ -242,3 +242,4 @@ export default function AboutDrNandaniIntro({ data = {} }) {
     </EditableSection>
   );
 }
+

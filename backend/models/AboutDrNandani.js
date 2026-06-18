@@ -6,7 +6,7 @@ const AboutDrNandaniSchema = new mongoose.Schema({
     mainImage: { type: String, default: "" },
     doctorImage: { type: String, default: "https://res.cloudinary.com/dseixl6px/image/upload/v1777595561/dmc-trichology/f8w7h9n3lqj306r8rxtk.png" },
     mainHeading: { type: String, default: "BEST HAIR TRANSPLANT SURGEON IN DELHI" },
-    doctorName: { type: String, default: "Dr. Nandani Dadu" },
+    doctorName: { type: String, default: "Dr. Nandini Dadu" },
     degreeText: { type: String, default: "MD (Dermatology)" },
     descriptionParagraph: { type: String, default: "Dr. Nandini Dadu, MBBS, a Board-Certified Trichologist, has been studying hair and scalp treatments for over ten years. Throughout her career, she has successfully treated severe cases with excellent outcomes and has attained the title of the best hair transplant surgeon in Delhi." },
     pageEyebrow: { type: String, default: "About DMC Trichology" },
@@ -33,7 +33,7 @@ const AboutDrNandaniSchema = new mongoose.Schema({
     heading: { type: String, default: "Delhi's Premier Hair Specialist & Clinical Director" },
     description: { 
       type: String, 
-      default: "<p>Dr. Nandani Dadu is highly regarded as one of India's finest hair restoration specialists, merging state-of-the-art US-FDA approved technologies with refined artistic precision. As the Clinical Director, she has spent over a decade perfecting custom trichological protocols that deliver exceptional, natural-looking hair density.</p><p>Her signature therapies combine advanced cellular growth treatments, high-density FUE transplants, and custom scalp rejuvenation programs designed uniquely for each patient's physiological profile.</p>" 
+      default: "<p>Dr. Nandini Dadu is highly regarded as one of India's finest hair restoration specialists, merging state-of-the-art US-FDA approved technologies with refined artistic precision. As the Clinical Director, she has spent over a decade perfecting custom trichological protocols that deliver exceptional, natural-looking hair density.</p><p>Her signature therapies combine advanced cellular growth treatments, high-density FUE transplants, and custom scalp rejuvenation programs designed uniquely for each patient's physiological profile.</p>" 
     },
     bulletList: {
       type: [String],
@@ -50,12 +50,12 @@ const AboutDrNandaniSchema = new mongoose.Schema({
   formSettings: {
     title: { type: String, default: "Request Private Consultation" },
     subtitle: { type: String, default: "Reserve your bespoke scalp assessment and consultation session." },
-    successMessage: { type: String, default: "Your consultation request has been successfully submitted to Dr. Nandani Dadu's private desk. Our concierge team will reach out to you shortly." }
+    successMessage: { type: String, default: "Your consultation request has been successfully submitted to Dr. Nandini Dadu's private desk. Our concierge team will reach out to you shortly." }
   },
 
   seo: {
-    metaTitle: { type: String, default: "Dr. Nandani Dadu | Best Hair Restoration Specialist & Trichologist" },
-    metaDescription: { type: String, default: "Consult Delhi's premier hair restoration specialist, Dr. Nandani Dadu. Experience luxury clinical consultations, high-density transplants, and customized scalp treatments." },
+    metaTitle: { type: String, default: "Dr. Nandini Dadu | Best Hair Restoration Specialist & Trichologist" },
+    metaDescription: { type: String, default: "Consult Delhi's premier hair restoration specialist, Dr. Nandini Dadu. Experience luxury clinical consultations, high-density transplants, and customized scalp treatments." },
     ogImage: { type: String, default: "" }
   },
 
@@ -88,9 +88,9 @@ const AboutDrNandaniSchema = new mongoose.Schema({
 
   timeline: {
     eyebrow: { type: String, default: "TRUSTED CARE SERVICES" },
-    heading: { type: String, default: "What Makes Dr. Nandani Dadu The Best Hair Transplant Surgeon In Delhi?" },
+    heading: { type: String, default: "What Makes Dr. Nandini Dadu The Best Hair Transplant Surgeon In Delhi?" },
     image: { type: String, default: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1780906825092-79561886.webp" },
-    imageAlt: { type: String, default: "Dr. Nandani Dadu hair restoration care" },
+    imageAlt: { type: String, default: "Dr. Nandini Dadu hair restoration care" },
     sectionBgColor: { type: String, default: "#FFFFFF" },
     contentMaxWidth: { type: String, default: "1220px" },
     maxHeight: { type: String, default: "340px" },
@@ -134,7 +134,7 @@ const AboutDrNandaniSchema = new mongoose.Schema({
   
   trustSection: {
     eyebrow: { type: String, default: "TRUSTED CARE SERVICES" },
-    heading: { type: String, default: "Why Do Patients Trust Dr. Nandani Dadu As A Hair Transplant Doctor In Delhi?" },
+    heading: { type: String, default: "Why Do Patients Trust Dr. Nandini Dadu As A Hair Transplant Doctor In Delhi?" },
     image: { type: String, default: "https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png" },
     imageAlt: { type: String, default: "Hair transplant treatment planning" },
     imageMaxWidth: { type: String, default: "100%" },
@@ -142,7 +142,7 @@ const AboutDrNandaniSchema = new mongoose.Schema({
       title: { type: String },
       description: { type: String }
     }],
-    conclusionParagraph: { type: String, default: "Dr. Nandani Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandani Dadu now!" },
+    conclusionParagraph: { type: String, default: "Dr. Nandini Dadu is a renowned hair transplant doctor in Delhi. She is an expert who provides safe, effective, and natural-looking results to all her patients. The doctor performs a thorough scalp examination to determine the extent of hair loss and then suggests the most suitable hair transplant technique. Those willing to restore their hair and are looking for expert help must consult Dr. Nandini Dadu now!" },
     backgroundColor: { type: String, default: "#e8eaf6" },
     contentMaxWidth: { type: String, default: "1300px" },
     paddingTop: { type: String, default: "92px" },
@@ -202,3 +202,4 @@ const AboutDrNandaniSchema = new mongoose.Schema({
 }, { timestamps: true, collection: 'aboutdrnandani' });
 
 module.exports = mongoose.model('AboutDrNandani', AboutDrNandaniSchema);
+

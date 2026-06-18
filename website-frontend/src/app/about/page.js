@@ -20,8 +20,8 @@ const staticFallback = {
     heading: "A Legacy Of Clinical Excellence",
     description: "Founded in 2008 by Dr. Gaurav Garg, DMC Trichology has pioneered the field of hair restoration in India.",
     points: [{ text: "US-FDA Approved Technologies" }, { text: "Award-winning Surgeons" }, { text: "Gold Standard Protocols" }],
-    mainImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ulx0crddeqpeygupa13q.png",
-    secondaryImage: "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/jkidxsr5nbpwq7y7x0x0.png"
+    mainImage: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/ulx0crddeqpeygupa13q.png",
+    secondaryImage: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962108233-jkidxsr5nbpwq7y7x0x0.png"
   },
   vision: {
     visionText: "To be the global benchmark in hair restoration, merging advanced science with artistic excellence.",

@@ -12,7 +12,7 @@ export default function AboutDrNandaniBreadcrumb({ data = {} }) {
   } = data;
 
   return (
-    <EditableSection sectionId="about-nandani-breadcrumb" label="Dr Nandani Breadcrumb">
+    <EditableSection sectionId="about-nandani-breadcrumb" label="Dr Nandini Breadcrumb">
       <div 
         className="dr-nandani-breadcrumb-bar"
         style={{
@@ -55,3 +55,4 @@ export default function AboutDrNandaniBreadcrumb({ data = {} }) {
     </EditableSection>
   );
 }
+

@@ -124,13 +124,13 @@ export default function VisualLiveBuilder() {
     }
     if (currentSlug === 'about-dr-nandani-dadu') {
       return [
-        { id: 'about-nandani-hero', label: 'About Dr Nandani Hero' },
-        { id: 'about-nandani-breadcrumb', label: 'Dr Nandani Breadcrumb' },
-        { id: 'about-nandani-specialist', label: 'Dr Nandani Specialist Info' },
-        { id: 'about-nandani-timeline', label: 'Dr Nandani Timeline' },
-        { id: 'about-nandani-education', label: 'Dr Nandani Edu & Exp' },
-        { id: 'about-nandani-credentials', label: 'Dr Nandani Credentials' },
-        { id: 'about-nandani-trust', label: 'Why Patients Trust Dr. Nandani' },
+        { id: 'about-nandani-hero', label: 'About Dr Nandini Hero' },
+        { id: 'about-nandani-breadcrumb', label: 'Dr Nandini Breadcrumb' },
+        { id: 'about-nandani-specialist', label: 'Dr Nandini Specialist Info' },
+        { id: 'about-nandani-timeline', label: 'Dr Nandini Timeline' },
+        { id: 'about-nandani-education', label: 'Dr Nandini Edu & Exp' },
+        { id: 'about-nandani-credentials', label: 'Dr Nandini Credentials' },
+        { id: 'about-nandani-trust', label: 'Why Patients Trust Dr. Nandini' },
         { id: 'about-nandani-other-specialities', label: 'Other Specialities Section' },
         { id: 'about-nandani-testimonials', label: 'Patient Testimonials Section' },
         { id: 'about-nandani-faq', label: 'FAQ Section' }
@@ -528,14 +528,14 @@ export default function VisualLiveBuilder() {
                             'Science Intro Section': '/cms/science-at-dmc',
                             'Science Dual Features': '/cms/science-at-dmc',
                             'Science Consultation Form': '/cms/science-at-dmc',
-                            'About Dr Nandani Hero': '/cms/about-dr-nandani',
-                            'About Dr Nandani Intro': '/cms/about-dr-nandani',
-                            'Dr Nandani Breadcrumb': '/cms/about-dr-nandani',
-                            'Dr Nandani Specialist Info': '/cms/about-dr-nandani',
-                            'Dr Nandani Timeline': '/cms/about-dr-nandani',
-                            'Dr Nandani Edu & Exp': '/cms/about-dr-nandani',
-                            'Dr Nandani Credentials': '/cms/about-dr-nandani',
-                            'Why Patients Trust Dr. Nandani': '/cms/about-dr-nandani',
+                            'About Dr Nandini Hero': '/cms/about-dr-nandani',
+                            'About Dr Nandini Intro': '/cms/about-dr-nandani',
+                            'Dr Nandini Breadcrumb': '/cms/about-dr-nandani',
+                            'Dr Nandini Specialist Info': '/cms/about-dr-nandani',
+                            'Dr Nandini Timeline': '/cms/about-dr-nandani',
+                            'Dr Nandini Edu & Exp': '/cms/about-dr-nandani',
+                            'Dr Nandini Credentials': '/cms/about-dr-nandani',
+                            'Why Patients Trust Dr. Nandini': '/cms/about-dr-nandani',
                             'Other Specialities Section': '/cms/about-dr-nandani',
                             'Patient Testimonials Section': '/cms/about-dr-nandani',
                             'FAQ Section': '/cms/about-dr-nandani',
@@ -648,3 +648,4 @@ export default function VisualLiveBuilder() {
     </div>
   );
 }
+

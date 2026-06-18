@@ -115,7 +115,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
 
   if (data && data.enabled === false) return null;
 
-  const iconUrl = "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png";
+  const iconUrl = "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962112281-lsmvsocjusyrery1hjum.png";
   const badgeText = data ? (data.badgeText || '') : 'WHY CHOOSE US SERVICES';
   const heading = data ? (data.heading || '') : 'REQUEST A CONSULTATION';
   const subtitle = data ? (data.subtitle || '') : 'Clinic Timings ( By Appointments Only)';
@@ -127,7 +127,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
   const messagePlaceholder = data?.messagePlaceholder || 'Enter Your Message Here*';
   const serviceOptions = Array.isArray(data?.serviceOptions) ? data.serviceOptions : ['Hair Transplant', 'Laser Hair Removal', 'Skin Treatment', 'Others'];
   const buttonText = data ? (data.buttonText || '') : 'Schedule Your Visit';
-  const fallbackBeforeImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777623481/dmc-trichology/sfqfld2ikbs00iqncyse.png';
+  const fallbackBeforeImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962145221-sfqfld2ikbs00iqncyse.png';
   const beforeImage = data?.beforeImage?.trim() || fallbackBeforeImage;
   const bgColor = data ? (data.backgroundColor || '#ffffff') : '#ffffff';
 
@@ -479,7 +479,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                        </div>
                      )}
                    </div>
-                   <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777623764/dmc-trichology/qcrzwotm1zyqsdbu6ttb.png" style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', width: '12px', pointerEvents: 'none' }} alt="icon" />
+                   <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/qcrzwotm1zyqsdbu6ttb.png" style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', width: '12px', pointerEvents: 'none' }} alt="icon" />
                 </div>
                 )}
                 
