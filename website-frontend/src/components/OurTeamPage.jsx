@@ -4,8 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 
 const hasText = (value) => String(value || '').trim().length > 0;
-const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
-const headingIcon = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962112281-lsmvsocjusyrery1hjum.png';
 const arrowIcon = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/xc065ftxo6zamcldpd59.png';
 
 const getMemberKey = (member = {}, index = 0) =>
@@ -56,7 +54,6 @@ function TeamMembersSection({ data = {} }) {
 
   if (data.isEnabled === false || members.length === 0) return null;
 
-  const badgeText = hasText(data.badgeText) ? data.badgeText : 'OUR MEDICAL EXPERTS';
   const heading = hasText(data.heading) ? data.heading : 'Meet Our Expert Doctors';
   const activeMember =
     members.find((member, index) => getMemberKey(member, index) === activeKey) || members[0];
@@ -66,10 +63,6 @@ function TeamMembersSection({ data = {} }) {
     <section className="our-team-members">
       <div className="our-team-members-inner">
         <div className="our-team-members-header">
-          <div className="our-team-members-badge">
-            <img src={headingIcon} alt="" aria-hidden="true" />
-            <span>{badgeText}</span>
-          </div>
           <h2>{heading}</h2>
         </div>
 
@@ -199,27 +192,6 @@ export default function OurTeamPage({ data = {} }) {
 
         .our-team-members-header {
           margin-bottom: 60px;
-        }
-
-        .our-team-members-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          margin-bottom: 15px;
-        }
-
-        .our-team-members-badge img {
-          width: 40px;
-          height: auto;
-          filter: ${blueIconFilter};
-        }
-
-        .our-team-members-badge span {
-          color: #3B5998;
-          font-family: 'Lato', sans-serif;
-          font-size: 14px;
-          font-weight: 700;
-          letter-spacing: 0.18em;
         }
 
         .our-team-members-header h2 {
@@ -450,10 +422,6 @@ export default function OurTeamPage({ data = {} }) {
 
           .our-team-members-header {
             margin-bottom: 32px;
-          }
-
-          .our-team-members-badge span {
-            font-size: 12px;
           }
 
           .our-team-members-header h2 {
