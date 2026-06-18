@@ -20,7 +20,7 @@ const AboutDrNandaniSchema = new mongoose.Schema({
     },
     namePlaceholder: { type: String, default: "Name*" },
     phonePlaceholder: { type: String, default: "Mobile Number*" },
-    emailPlaceholder: { type: String, default: "E-Mail Address*" },
+    emailPlaceholder: { type: String, default: "E-Mail Address" },
     datePlaceholder: { type: String, default: "Select Preferred Date*" },
     messagePlaceholder: { type: String, default: "Enter Your Message Here" },
     captchaPlaceholder: { type: String, default: "Code*" },
