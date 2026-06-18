@@ -41,6 +41,9 @@ export default function AboutDrNandaniHero({
   const formTitle = formSettings?.title || "Request Private Consultation";
   const formSubtitle = formSettings?.subtitle || "Reserve your bespoke scalp assessment and consultation session.";
   const successMessage = formSettings?.successMessage || "Your consultation request has been successfully submitted. Our concierge team will reach out to you shortly.";
+  const resolvedEmailPlaceholder = typeof emailPlaceholder === 'string'
+    ? emailPlaceholder.replace(/\*+\s*$/, '').trim() || "E-Mail Address"
+    : "E-Mail Address";
   const imageValue = (key, fallback = "") => {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
       return typeof data[key] === 'string' ? data[key].trim() : "";
@@ -200,7 +203,7 @@ export default function AboutDrNandaniHero({
                 <div className="dr-nandani-form-grid">
                   <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder={namePlaceholder} disabled={loading} required />
                   <input type="tel" name="mobile" value={formData.mobile} onChange={handleChange} placeholder={phonePlaceholder} disabled={loading} required />
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder={emailPlaceholder} disabled={loading} />
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder={resolvedEmailPlaceholder} disabled={loading} />
                   <div className="dr-nandani-captcha-row">
                     <button type="button" onClick={generateCaptcha} title="Click to regenerate captcha">{captcha}</button>
                     <input type="text" name="captchaInput" value={formData.captchaInput} onChange={handleChange} placeholder={captchaPlaceholder} disabled={loading} required />
