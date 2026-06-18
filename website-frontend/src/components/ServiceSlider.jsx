@@ -12,13 +12,11 @@ import { buildServiceDetailPath } from '../utils/serviceRoutes';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
-
 const defaultServices = [
-  { title: "Follicular Unit Extraction (FUE)", image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777709679/dmc-trichology/dnnerjyyebzufaoya4hd.png", link: "#" },
-  { title: "Follicular Unit Transplantation (FUT)", image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777709678/dmc-trichology/scwz5ugmiwn9npmzpk5d.png", link: "#" },
-  { title: "Hair Replacement In Delhi – Non-Surgical Solutions", image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777709678/dmc-trichology/l141dtwrmlhc3xm8tlir.png", link: "#" },
-  { title: "Scalp Treatments For Healthy Hair", image: "https://res.cloudinary.com/dseixl6px/image/upload/v1777709679/dmc-trichology/kuhwci9p4pp7r7mzmxof.png", link: "#" }
+  { title: "Follicular Unit Extraction (FUE)", image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/dnnerjyyebzufaoya4hd.png", link: "#" },
+  { title: "Follicular Unit Transplantation (FUT)", image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/scwz5ugmiwn9npmzpk5d.png", link: "#" },
+  { title: "Hair Replacement In Delhi – Non-Surgical Solutions", image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/l141dtwrmlhc3xm8tlir.png", link: "#" },
+  { title: "Scalp Treatments For Healthy Hair", image: "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/kuhwci9p4pp7r7mzmxof.png", link: "#" }
 ];
 
 export default function ServiceSlider() {
@@ -37,7 +35,6 @@ export default function ServiceSlider() {
   }, []);
 
   const title = headingData ? (headingData.title || '') : 'Our Hair Transplant Services';
-  const subtitle = headingData ? (headingData.subtitle || '') : 'SERVICES';
   const viewAllText = headingData ? (headingData.viewAllText || 'View All') : 'View All';
   const viewAllLink = headingData ? (headingData.viewAllLink || '/service') : '/service';
 
@@ -60,16 +57,6 @@ export default function ServiceSlider() {
 
           {/* Top Area - Centered */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '60px', position: 'relative' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '15px' }}>
-              <img
-                src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png"
-                alt="icon"
-                style={{ width: '40px', height: 'auto', filter: blueIconFilter }}
-              />
-              <EditableText sectionId="services" fieldPath="subtitle" tag="span" className="section-subtitle">
-                {subtitle}
-              </EditableText>
-            </div>
             <h2 className="section-title">
               <EditableText sectionId="services" fieldPath="title" tag="span">
                 {title}
@@ -80,7 +67,7 @@ export default function ServiceSlider() {
                 {viewAllText}
               </EditableText>
               <img
-                src="https://res.cloudinary.com/dseixl6px/image/upload/v1777623764/dmc-trichology/qcrzwotm1zyqsdbu6ttb.png"
+                src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/qcrzwotm1zyqsdbu6ttb.png"
                 alt="arrow"
                 style={{ width: '10px', height: 'auto', transform: 'rotate(-90deg)' }}
               />
@@ -150,10 +137,10 @@ export default function ServiceSlider() {
 
             {/* Custom Navigation Arrows */}
             <button className="service-prev-btn" style={navBtnStyle('left')}>
-              <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777610955/dmc-trichology/acctki1o9lkpujrsmtqu.png" alt="prev" style={navImgStyle} />
+              <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/acctki1o9lkpujrsmtqu.png" alt="prev" style={navImgStyle} />
             </button>
             <button className="service-next-btn" style={navBtnStyle('right')}>
-              <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777610955/dmc-trichology/aevxkziamfrlmc14tpv1.png" alt="next" style={navImgStyle} />
+              <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/aevxkziamfrlmc14tpv1.png" alt="next" style={navImgStyle} />
             </button>
           </div>
         </div>

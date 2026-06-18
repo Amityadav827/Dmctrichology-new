@@ -28,25 +28,12 @@ const AboutUs = () => {
   ];
 
   const title = data ? (data.title || '') : 'WELCOME TO DMC TRICHOLOGY®';
-  const subtitle = data ? (data.subtitle || '') : 'ABOUT US CARE';
   const description = data ? (data.description || '') : 'At DMC Trichology, Advanced Hair Transplant Techniques Restore Your Hairline And Boost Confidence';
-  const sectionIcon = data?.icon || "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png";
 
   return (
     <EditableSection sectionId="about-us" label="About Us">
       <section className="welcome-section" style={{ padding: '100px 5%', backgroundColor: '#fff', textAlign: 'center' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '24px' }}>
-            <img 
-              src={sectionIcon} 
-              alt="icon" 
-              style={{ width: '40px', height: 'auto', filter: blueIconFilter }} 
-            />
-            <EditableText sectionId="about-us" fieldPath="subtitle" tag="span" className="section-subtitle">
-              {subtitle}
-            </EditableText>
-          </div>
-
           <h2 className="section-title">
             <EditableText sectionId="about-us" fieldPath="title" tag="span">
               {title}
@@ -89,7 +76,7 @@ const AboutUs = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
                   {stat.showDivider !== false && (
                     <img 
-                      src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" 
+                      src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962112281-lsmvsocjusyrery1hjum.png" 
                       alt="divider" 
                       style={{ width: '60px', height: 'auto', marginBottom: '10px', filter: blueIconFilter }} 
                     />

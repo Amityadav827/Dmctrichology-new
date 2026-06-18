@@ -5,8 +5,6 @@ import { fetchSurgeons } from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
-const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
-
 const SurgeonsSection = () => {
   const [data, setData] = useState(null);
   const [activeSurgeon, setActiveSurgeon] = useState(null);
@@ -37,7 +35,6 @@ const SurgeonsSection = () => {
   if (data && data.enabled === false) return null;
 
   const heading = data ? (data.heading || '') : 'Meet Our Hair Transplant Surgeons';
-  const badgeText = data ? (data.badgeText || '') : 'TRUSTED CARE SERVICES';
   const safeSurgeons = Array.isArray(data?.surgeons) ? data.surgeons : [];
 
   // Use activeSurgeon state but ensure it's still in the current data list
@@ -51,16 +48,6 @@ const SurgeonsSection = () => {
           
           {/* Header */}
           <div style={{ marginBottom: '60px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
-              <img 
-                src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" 
-                alt="icon" 
-                style={{ width: '40px', height: 'auto', filter: blueIconFilter }} 
-              />
-              <EditableText sectionId="surgeons-section" fieldPath="badgeText" tag="span" className="section-subtitle">
-                {badgeText}
-              </EditableText>
-            </div>
             <h2 className="section-title">
               <EditableText sectionId="surgeons-section" fieldPath="heading" tag="span">
                 {heading}
@@ -94,7 +81,7 @@ const SurgeonsSection = () => {
                   </span>
                   <div className="surgeon-tab-arrow">
                     <img 
-                      src="https://res.cloudinary.com/dseixl6px/image/upload/v1777613952/dmc-trichology/xc065ftxo6zamcldpd59.png" 
+                      src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/xc065ftxo6zamcldpd59.png" 
                       alt="arrow" 
                       style={{ width: '40px', height: 'auto' }} 
                     />

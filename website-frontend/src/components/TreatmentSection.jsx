@@ -4,8 +4,6 @@ import { fetchTreatmentPlan } from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
-const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
-
 export default function TreatmentSection() {
   const [data, setData] = useState(null);
 
@@ -41,7 +39,6 @@ export default function TreatmentSection() {
 
   if (!data?.enabled && data !== null) return null;
 
-  const badgeText = data?.badgeText || "TREATMENT PLAN";
   const heading = data?.heading || "Know the Right Treatment for You";
   const cards = data?.cards || [];
 
@@ -52,22 +49,6 @@ export default function TreatmentSection() {
           
           {/* Section Header */}
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <div style={{ 
-              display: 'inline-flex', 
-              alignItems: 'center', 
-              gap: '12px', 
-              marginBottom: '20px',
-              flexWrap: 'nowrap'
-            }}>
-               <img 
-                 src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" 
-                 alt="icon" 
-                 style={{ width: '45px', height: 'auto', objectFit: 'contain', filter: blueIconFilter }} 
-               />
-               <EditableText sectionId="treatment-plan-section" fieldPath="badgeText" tag="span" className="section-subtitle" style={{ whiteSpace: 'nowrap' }}>
-                 {badgeText}
-               </EditableText>
-            </div>
             <h2 className="section-title">
               <EditableText sectionId="treatment-plan-section" fieldPath="heading" tag="span">
                 {heading}

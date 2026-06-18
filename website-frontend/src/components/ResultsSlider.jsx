@@ -12,13 +12,11 @@ import EditableText from './Editable/EditableText';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
-
 const defaultResults = [
-  { id: 1, title: 'Korean Facial Illumination', beforeImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612758/dmc-trichology/dvy3knew0pzq1gg8fr8q.png', afterImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/uttbdof06l4xbpvexlv9.png', sessions: 'After 6 sessions' },
-  { id: 2, title: 'Acne Arrestor Facial With Salicylic Peel', beforeImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/g7fs5kfpckmmcjwg5sk0.png', afterImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612758/dmc-trichology/zxyvkmr0uf8pf5qxgfvf.png', sessions: 'After 4 sessions' },
-  { id: 3, title: 'Elastin Boost Facial', beforeImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/meeed3zg8w5j3xhkcfxc.png', afterImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/w6qder12vvhxrbhzskgw.png', sessions: 'After 5 sessions' },
-  { id: 4, title: 'Derma Revive Facial', beforeImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/dh6webh6x4l7qfrlzxtl.png', afterImg: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777612757/dmc-trichology/bif89jyygbycclg8qa92.png', sessions: 'After 4 sessions' }
+  { id: 1, title: 'Korean Facial Illumination', beforeImg: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962132671-dvy3knew0pzq1gg8fr8q.png', afterImg: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962133782-uttbdof06l4xbpvexlv9.png', sessions: 'After 6 sessions' },
+  { id: 2, title: 'Acne Arrestor Facial With Salicylic Peel', beforeImg: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962128093-g7fs5kfpckmmcjwg5sk0.png', afterImg: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962131881-zxyvkmr0uf8pf5qxgfvf.png', sessions: 'After 4 sessions' },
+  { id: 3, title: 'Elastin Boost Facial', beforeImg: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962131147-meeed3zg8w5j3xhkcfxc.png', afterImg: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962129505-w6qder12vvhxrbhzskgw.png', sessions: 'After 5 sessions' },
+  { id: 4, title: 'Derma Revive Facial', beforeImg: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962128773-dh6webh6x4l7qfrlzxtl.png', afterImg: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962134454-bif89jyygbycclg8qa92.png', sessions: 'After 4 sessions' }
 ];
 
 export default function ResultsSlider() {
@@ -35,7 +33,6 @@ export default function ResultsSlider() {
   if (data && data.enabled === false) return null;
 
   const heading = data ? (data.heading || '') : 'Results that speak for themselves';
-  const badgeText = data ? (data.badgeText || '') : 'BEFORE AND AFTER';
   const bgColor = '#E8EAF6';
 
   const safeResults = Array.isArray(data?.results) ? data.results : null;
@@ -52,16 +49,6 @@ export default function ResultsSlider() {
       <section className="results-section" style={{ backgroundColor: bgColor, padding: '60px 5% 40px', position: 'relative', overflow: 'hidden' }}>
         <div className="results-container" style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <div className="section-header" style={{ marginBottom: '50px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
-               <img 
-                 src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" 
-                 alt="icon" 
-                 style={{ width: '50px', height: 'auto', filter: blueIconFilter }} 
-               />
-               <EditableText sectionId="results-slider" fieldPath="badgeText" tag="span" className="section-subtitle">
-                 {badgeText}
-               </EditableText>
-            </div>
             <h2 className="section-title">
               <EditableText sectionId="results-slider" fieldPath="heading" tag="span">
                 {heading}

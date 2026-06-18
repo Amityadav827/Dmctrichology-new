@@ -45,9 +45,9 @@ export default async function Home() {
       <AboutUsCare />
       <SurgeonsSection />
       <EnquirySection />
-      <TestimonialSection />
+      <TestimonialSection showBadge={false} />
       <TreatmentSection />
-      <FaqSection />
+      <FaqSection showBadge={false} />
       <BlogSection />
       <PressMediaSection />
 

@@ -26,7 +26,7 @@ function getFaqCategories(source = {}) {
   return flatFaqs.length > 0 ? [{ title: 'General', faqs: flatFaqs }] : [];
 }
 
-export default function FaqSection({ initialData = null, iconOverride = null }) {
+export default function FaqSection({ initialData = null, iconOverride = null, showBadge = true }) {
   const [data, setData] = useState(initialData);
   const [activeTab, setActiveTab] = useState(initialData?.categories?.[0]?.title || '');
 
@@ -90,12 +90,14 @@ export default function FaqSection({ initialData = null, iconOverride = null }) 
           {/* Header Area */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '60px', flexWrap: 'wrap', gap: '30px' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
-                <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '40px', height: 'auto', filter: blueIconFilter }} />
-                <EditableText sectionId="faq-section" fieldPath="badgeText" tag="span" className="section-subtitle">
-                  {badgeText}
-                </EditableText>
-              </div>
+              {showBadge && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
+                  <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962112281-lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '40px', height: 'auto', filter: blueIconFilter }} />
+                  <EditableText sectionId="faq-section" fieldPath="badgeText" tag="span" className="section-subtitle">
+                    {badgeText}
+                  </EditableText>
+                </div>
+              )}
               <h2 className="section-title">
                 <EditableText sectionId="faq-section" fieldPath="heading" tag="span">
                   {heading}

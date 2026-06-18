@@ -75,7 +75,6 @@ export default function BlogSection() {
 
   if (!data?.enabled && data !== null) return null;
 
-  const badgeText = data?.badgeText || "OUR LATEST BLOGS";
   const heading = data?.heading || "News & Wellness Advice";
   const subtitle = data?.subtitle || "Our Expert Therapists Work With You To Create Tailored Recovery Plans That Target Your Specific Needs And Goals.";
   const blogs = data?.blogs || [];
@@ -87,12 +86,6 @@ export default function BlogSection() {
           
           {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <div className="blog-section-eyebrow" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
-               <span className="blog-section-line" aria-hidden="true"></span>
-               <EditableText sectionId="blogs-home-section" fieldPath="badgeText" tag="span" className="section-subtitle">
-                 {badgeText}
-               </EditableText>
-            </div>
             <h2 className="section-title">
               <EditableText sectionId="blogs-home-section" fieldPath="heading" tag="span">
                 {heading}

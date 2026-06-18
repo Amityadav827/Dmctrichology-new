@@ -193,7 +193,7 @@ const VideoCard = ({ name, image, videoUrl, height = "400px", sectionId, index }
   );
 };
 
-const TestimonialSection = () => {
+const TestimonialSection = ({ showBadge = true }) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -219,12 +219,14 @@ const TestimonialSection = () => {
 
           {/* Header Section */}
           <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
-              <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '32px', height: 'auto', objectFit: 'contain', filter: blueIconFilter }} />
-              <EditableText sectionId="reviews-section" fieldPath="badgeText" tag="span" className="section-subtitle">
-                {subtitle}
-              </EditableText>
-            </div>
+            {showBadge && (
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
+                <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962112281-lsmvsocjusyrery1hjum.png" alt="icon" style={{ width: '32px', height: 'auto', objectFit: 'contain', filter: blueIconFilter }} />
+                <EditableText sectionId="reviews-section" fieldPath="badgeText" tag="span" className="section-subtitle">
+                  {subtitle}
+                </EditableText>
+              </div>
+            )}
             <h2 className="section-title">
               <EditableText sectionId="reviews-section" fieldPath="heading" tag="span">
                 {title}

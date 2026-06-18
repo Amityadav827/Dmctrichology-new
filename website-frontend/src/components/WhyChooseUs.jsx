@@ -4,8 +4,6 @@ import { fetchWhyChooseUs } from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
-const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
-
 const featureIconByTitle = {
   'natural results': '/icons/why-choose-us/natural-results.svg',
   'customized care': '/icons/why-choose-us/customized-care.svg',
@@ -14,10 +12,10 @@ const featureIconByTitle = {
 };
 
 const defaultFeatures = [
-  { icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777548895/dmc-trichology/tcy9wy64djnagoimcfnx.png', title: 'Natural Results', desc: 'Every Hairline Is Designed To Match Your Facial Structure For A Natural Look.', side: 'left', enabled: true },
-  { icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777548895/dmc-trichology/ecjlnpbmt8rk3ebxazva.png', title: 'Customized Care', desc: 'Every Hair Loss Condition Is Different And Also Unique.', side: 'left', enabled: true },
-  { icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777548895/dmc-trichology/kganja8haq69bvurxro8.png', title: 'Reduce Surgical', desc: 'Techniques Like FUE Ensure Minimal Discomfort, No Linear Scars, And Quick Recovery.', side: 'right', enabled: true },
-  { icon: 'https://res.cloudinary.com/dseixl6px/image/upload/v1777548895/dmc-trichology/j8gecypsa2honobtknua.png', title: 'Complete Aftercare', desc: 'Our Team Supports You From Consultation To Full Hair Growth.', side: 'right', enabled: true }
+  { icon: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962123778-tcy9wy64djnagoimcfnx.png', title: 'Natural Results', desc: 'Every Hairline Is Designed To Match Your Facial Structure For A Natural Look.', side: 'left', enabled: true },
+  { icon: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962122900-ecjlnpbmt8rk3ebxazva.png', title: 'Customized Care', desc: 'Every Hair Loss Condition Is Different And Also Unique.', side: 'left', enabled: true },
+  { icon: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962125631-kganja8haq69bvurxro8.png', title: 'Reduce Surgical', desc: 'Techniques Like FUE Ensure Minimal Discomfort, No Linear Scars, And Quick Recovery.', side: 'right', enabled: true },
+  { icon: 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962125124-j8gecypsa2honobtknua.png', title: 'Complete Aftercare', desc: 'Our Team Supports You From Consultation To Full Hair Growth.', side: 'right', enabled: true }
 ];
 
 const WhyChooseUs = () => {
@@ -36,8 +34,7 @@ const WhyChooseUs = () => {
 
   // Fallbacks only when data === null (not yet loaded from DB)
   const title = data ? (data.title || '') : 'Why DMC Trichology Is The Best Hair Transplant Clinic In Delhi';
-  const subtitle = data ? (data.subtitle || '') : 'Best Hair Graft Clinic';
-  const fallbackCentralImage = 'https://res.cloudinary.com/dseixl6px/image/upload/v1777550637/dmc-trichology/mprq5pm7g2utm2olrnj1.png';
+  const fallbackCentralImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/cloudinary-recovery/mprq5pm7g2utm2olrnj1.png';
   const mobileCentralImage = 'https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/graft-clinic-mobile.png';
   const centralImage = data?.centralImage?.trim() || fallbackCentralImage;
 
@@ -46,8 +43,6 @@ const WhyChooseUs = () => {
   const activeFeatures = (safeFeatures && safeFeatures.length > 0)
     ? safeFeatures.filter(f => f.enabled !== false)
     : defaultFeatures;
-
-  const iconUrl = "https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png";
 
   // Find original index in data.features for persistence mapping
   const getOriginalIndex = (feat) => {
@@ -119,15 +114,8 @@ const WhyChooseUs = () => {
   };
 
   return (
-    <EditableSection sectionId="why-choose-us" label="Why Choose Us">
+      <EditableSection sectionId="why-choose-us" label="Why Choose Us">
       <section className="why-choose-us" style={{ ...sectionPadding, textAlign: 'center', overflow: 'hidden', position: 'relative' }}>
-        <div className="section-tag" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '24px' }}>
-          <img src={iconUrl} alt="icon" style={{ width: '50px', height: 'auto', filter: blueIconFilter }} />
-          <EditableText sectionId="why-choose-us" fieldPath="subtitle" tag="span" className="section-subtitle">
-            {subtitle}
-          </EditableText>
-        </div>
-
         <h2 className="section-title" style={{ maxWidth: '1000px', margin: '0 auto 100px !important', textAlign: 'center' }}>
           <EditableText sectionId="why-choose-us" fieldPath="title" tag="span">
             {title}

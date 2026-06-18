@@ -5,8 +5,6 @@ import { fetchWhyChooseDMC } from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 
-const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
-
 const defaultFeatures = [
   { text: "Golden Technique", enabled: true },
   { text: "Minimal Procedure", enabled: true },
@@ -32,10 +30,9 @@ const AboutUsCare = () => {
   if (data && data.enabled === false) return null;
 
   const heading = data ? (data.heading || '') : 'WHY CHOOSE DMC TRICHOLOGY?';
-  const subtitle = data ? (data.badgeText || '') : 'ABOUT US CARE';
   const description = data ? (data.description || '') : 'At DMC Trichology, A Top Hair Transplant Trichologist With Advanced Training And Expertise, And Committed Staff Members, Work To Provide Our Clients With Excellent Hair Loss And Hair Transplant Results.';
-  const mainImage = data ? (data.mainImage || '') : "https://res.cloudinary.com/dseixl6px/image/upload/v1777615993/dmc-trichology/nymnxvv9rzeyfjeif7oe.png";
-  const bottomImage = data ? (data.bottomImage || '') : "https://res.cloudinary.com/dseixl6px/image/upload/v1777615993/dmc-trichology/xe3vngtetdirbpovotgi.png";
+  const mainImage = data ? (data.mainImage || '') : "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962140217-nymnxvv9rzeyfjeif7oe.png";
+  const bottomImage = data ? (data.bottomImage || '') : "https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1777962141909-xe3vngtetdirbpovotgi.png";
   const bgColor = data ? (data.backgroundColor || '#ffffff') : '#ffffff';
 
   const safeFeatures = Array.isArray(data?.features) ? data.features : null;
@@ -64,17 +61,6 @@ const AboutUsCare = () => {
 
           {/* Right Side: Content */}
           <div style={{ flex: '1 1 350px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-               <img 
-                 src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/lsmvsocjusyrery1hjum.png" 
-                 alt="icon" 
-                 style={{ width: '40px', height: 'auto', filter: blueIconFilter }} 
-               />
-               <EditableText sectionId="why-choose-dmc" fieldPath="badgeText" tag="span" className="section-subtitle">
-                 {subtitle}
-               </EditableText>
-            </div>
-
             <h2 className="section-title">
               <EditableText sectionId="why-choose-dmc" fieldPath="heading" tag="span">
                 {heading}
