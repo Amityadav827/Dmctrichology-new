@@ -40,7 +40,7 @@ const ReviewCard = ({ name, text, sectionId, index }) => (
         - <EditableText sectionId={sectionId} fieldPath={`reviews.${index}.name`} tag="span">{name}</EditableText>.
       </span>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-        <img src="https://res.cloudinary.com/dseixl6px/image/upload/v1777721827/dmc-trichology/ju75pcuuqsccgndqvnno.png" alt="Google Review" style={{ width: '60px', height: 'auto' }} />
+        <img src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781766720399-252497998.png" alt="Google Review" style={{ width: '60px', height: 'auto' }} />
       </div>
     </div>
   </div>
