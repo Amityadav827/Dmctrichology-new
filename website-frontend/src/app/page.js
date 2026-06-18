@@ -29,7 +29,7 @@ export default async function Home() {
     <div className="home-page">
       <SchemaMarkup schema={siteSchema} />
       <FaqSchema faqs={homeFaqs} />
-      <div style={{ position: 'relative' }}>
+      <div className="home-hero-stage" style={{ position: 'relative' }}>
         <HeroSlider />
         <div className="hero-right">
           <LeadForm />
