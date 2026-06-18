@@ -261,7 +261,7 @@ export default function LeadForm() {
               disabled={loading}
             />
           </div>
-          <div className="hero-captcha-row" style={{ flex: '0 0 310px', width: '100%', maxWidth: '310px', alignItems: 'stretch', border: '1px solid #ddd', borderRadius: '12px', overflow: 'hidden' }}>
+          <div className="hero-captcha-row" style={{ display: 'flex', flex: '0 0 310px', width: '100%', maxWidth: '310px', alignItems: 'stretch', border: '1px solid #ddd', borderRadius: '12px', overflow: 'hidden' }}>
             <div className="hero-captcha-code" style={{ flex: '0 0 92px', backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50px', borderRight: '1px solid #ddd', userSelect: 'none' }}>
               <span style={{ color: '#888', letterSpacing: '4px', fontWeight: 'bold' }}>{captcha}</span>
             </div>
