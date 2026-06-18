@@ -19,22 +19,23 @@ export default function HairTransplantClinicClient({ pageData, faqData }) {
         formSettings={pageData.formSettings}
         leadEndpoint="/contact"
         leadService="Hair Transplant Clinic In Delhi Consultation"
+        showEyebrow={false}
         sectionIds={{
           hero: 'hair-transplant-clinic-hero',
           breadcrumb: 'hair-transplant-clinic-breadcrumb'
         }}
       />
-      <AboutDrNandaniSpecialist data={pageData.specialist} />
-      <AboutDrNandaniTimeline data={pageData.timeline} showDescription layoutVariant="clinicCompact" />
-      <AboutDrNandaniTrust data={pageData.trustSection} />
+      <AboutDrNandaniSpecialist data={pageData.specialist} showEyebrow={false} />
+      <AboutDrNandaniTimeline data={pageData.timeline} showDescription layoutVariant="clinicCompact" showEyebrow={false} />
+      <AboutDrNandaniTrust data={pageData.trustSection} showEyebrow={false} />
       <AboutDrNandaniEducationExperience
         data={pageData.educationExperience}
         credentialsData={pageData.credentialsSection}
         showImages={false}
       />
       <AboutDrNandaniOtherSpecialities data={pageData.otherSpecialitiesSection} />
-      <AboutDrNandaniTestimonials data={pageData.testimonialsSection} useDefaultTestimonials={false} />
-      <FaqSection initialData={faqData} iconOverride="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781108623663-534508060.svg" />
+      <AboutDrNandaniTestimonials data={pageData.testimonialsSection} useDefaultTestimonials={false} showEyebrow={false} />
+      <FaqSection initialData={faqData} iconOverride="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781108623663-534508060.svg" showBadge={false} />
     </main>
   );
 }
