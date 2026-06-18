@@ -534,6 +534,7 @@ a {
 .home-page .home-hero-stage .hero-right .form-container {
   width: 100%;
   max-width: none;
+  min-height: 360px;
 }
 
 /* ===================== TOPBAR ===================== */
