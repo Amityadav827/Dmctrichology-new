@@ -8,6 +8,7 @@ export default function LeadForm() {
   const [formData, setFormData] = useState({
     name: '',
     mobile: '',
+    email: '',
     code: ''
   });
   // Start empty so server and client first render match; generate on mount (client only).
@@ -87,6 +88,11 @@ export default function LeadForm() {
       return;
     }
 
+    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
     if (formData.code.trim() !== captcha) {
       setError('Invalid captcha. Please enter the correct code.');
       return;
@@ -96,10 +102,11 @@ export default function LeadForm() {
     try {
       await submitLead({
         name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
         mobile: trimmedMobile
       });
       setSuccess(true);
-      setFormData({ name: '', mobile: '', code: '' });
+      setFormData({ name: '', mobile: '', email: '', code: '' });
       generateCaptcha(); // Regenerate captcha after successful submit
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong. Please try again.');
@@ -241,22 +248,36 @@ export default function LeadForm() {
           </div>
         </div>
 
-        <div className="form-row hero-captcha-row" style={{ alignItems: 'stretch', border: '1px solid #ddd', borderRadius: '12px', overflow: 'hidden' }}>
-          <div className="hero-captcha-code" style={{ flex: '0 0 100px', backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50px', borderRight: '1px solid #ddd', userSelect: 'none' }}>
-            <span style={{ color: '#888', letterSpacing: '4px', fontWeight: 'bold' }}>{captcha}</span>
-          </div>
-          <div className="hero-captcha-input" style={{ flex: 1 }}>
-            <input 
-              type="text" 
-              name="code" 
-              placeholder="ENTER CODE" 
-              className="form-input" 
-              value={formData.code} 
-              onChange={handleChange} 
-              style={{ backgroundColor: 'transparent', border: 'none', height: '50px', borderRadius: 0, width: '100%' }}
+        <div className="form-row hero-email-code-row" style={{ alignItems: 'stretch' }}>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <input
+              type="email"
+              name="email"
+              placeholder="E-MAIL ADDRESS"
+              className="form-input"
+              value={formData.email}
+              onChange={handleChange}
+              style={{ backgroundColor: 'transparent', border: '1px solid #ddd', borderRadius: '12px' }}
               disabled={loading}
-              required 
             />
+          </div>
+          <div className="hero-captcha-row" style={{ flex: '0 0 310px', width: '100%', maxWidth: '310px', alignItems: 'stretch', border: '1px solid #ddd', borderRadius: '12px', overflow: 'hidden' }}>
+            <div className="hero-captcha-code" style={{ flex: '0 0 92px', backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50px', borderRight: '1px solid #ddd', userSelect: 'none' }}>
+              <span style={{ color: '#888', letterSpacing: '4px', fontWeight: 'bold' }}>{captcha}</span>
+            </div>
+            <div className="hero-captcha-input" style={{ flex: 1 }}>
+              <input 
+                type="text" 
+                name="code" 
+                placeholder="ENTER CODE" 
+                className="form-input" 
+                value={formData.code} 
+                onChange={handleChange} 
+                style={{ backgroundColor: 'transparent', border: 'none', height: '50px', borderRadius: 0, width: '100%' }}
+                disabled={loading}
+                required 
+              />
+            </div>
           </div>
         </div>
 
