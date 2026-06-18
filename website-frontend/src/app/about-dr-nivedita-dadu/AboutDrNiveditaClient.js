@@ -260,17 +260,19 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
         formSettings={templateData.formSettings}
         leadEndpoint="/about-dr-nivedita/lead"
         leadService="Dr. Nivedita Consultation Form"
+        showEyebrow={false}
         sectionIds={{
           hero: 'about-nivedita-hero',
           breadcrumb: 'about-nivedita-breadcrumb'
         }}
       />
-      <AboutDrNandaniSpecialist data={templateData.specialist} />
+      <AboutDrNandaniSpecialist data={templateData.specialist} showEyebrow={false} />
       <AboutDrNandaniTrust
         data={templateData.trustSection}
         sectionId="about-nivedita-trust"
         label="Why Patients Trust Dr. Nivedita"
         useDefaultPoints={false}
+        showEyebrow={false}
       />
       <AboutDrNandaniEducationExperience
         data={templateData.educationExperience}
@@ -279,7 +281,7 @@ export default function AboutDrNiveditaClient({ initialData, initialFaqData = nu
         showImages={false}
       />
       <AboutDrNandaniOtherSpecialities data={templateData.otherSpecialitiesSection} bottomSpacing />
-      {!testimonialsHidden && <AboutDrNandaniTestimonials data={templateData.testimonialsSection} />}
+      {!testimonialsHidden && <AboutDrNandaniTestimonials data={templateData.testimonialsSection} showEyebrow={false} />}
     </main>
   );
 }
