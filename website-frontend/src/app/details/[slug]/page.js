@@ -99,7 +99,7 @@ export async function generateMetadata({ params }) {
     title: seo.metaTitle || `${service.banner?.title || service.title} | DMC Trichology`,
     description: seo.metaDescription || service.banner?.subtitle || '',
     alternates: {
-      canonical: seo.canonicalUrl || `/details/${slug}`
+      canonical: seo.canonicalUrl || `/${slug}`
     },
     openGraph: {
       images: seo.ogImage ? [{ url: seo.ogImage }] : []

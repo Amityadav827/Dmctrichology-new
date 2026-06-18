@@ -6,6 +6,7 @@ import EditableImage from './Editable/EditableImage';
 import Link from 'next/link';
 import { useBuilder } from '../context/BuilderContext';
 import EditableSection from './Editable/EditableSection';
+import { buildServiceDetailPath } from '../utils/serviceRoutes';
 
 const renderListingStars = (rating) => {
   const numericRating = normalizeServiceRating(rating);
@@ -202,7 +203,7 @@ const ServiceListing = ({ services: initialServices = [], categories: initialCat
                       {/* CTA Button — small outlined Figma style */}
                       <div className="service-card-footer">
                         <Link
-                          href={`/details/${service.slug}`}
+                          href={buildServiceDetailPath(service.slug)}
                           className="service-card-cta"
                         >
                           <EditableText sectionId="service-listing" fieldPath={`${index}.buttonText`}>

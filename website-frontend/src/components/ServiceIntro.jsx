@@ -4,6 +4,7 @@ import { Star, StarHalf, Clock, ChevronLeft, ChevronRight, Play } from 'lucide-r
 import EditableText from './Editable/EditableText';
 import EditableSection from './Editable/EditableSection';
 import { useBuilder } from '../context/BuilderContext';
+import { extractServiceSlugFromPath } from '../utils/serviceRoutes';
 
 // ─── DUMMY FALLBACK ───────────────────────────────────────────────────────────
 const DUMMY_MEDIA = [
@@ -172,7 +173,7 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
       const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
       const API_URL = process.env.NEXT_PUBLIC_API_URL || (isLocal ? 'http://localhost:10000/api' : 'https://dmctrichology-1.onrender.com/api');
       const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
-      const serviceSlug = currentPath.split('/details/')[1] || '';
+      const serviceSlug = extractServiceSlugFromPath(currentPath);
       const phoneValue = consultationData.phone.trim();
       const phoneKey = phoneValue.replace(/\D/g, '') || 'no-phone';
       const payload = {

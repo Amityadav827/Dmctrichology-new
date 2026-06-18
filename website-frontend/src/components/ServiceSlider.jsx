@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
+import { buildServiceDetailPath } from '../utils/serviceRoutes';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -45,7 +46,7 @@ export default function ServiceSlider() {
     ? cards.map((c, i) => ({
         title: c.title,
         image: c.image || defaultServices[i % defaultServices.length].image,
-        link: c.slug ? `/details/${c.slug}` : '#',
+        link: c.slug ? buildServiceDetailPath(c.slug) : '#',
       }))
     : null;
 

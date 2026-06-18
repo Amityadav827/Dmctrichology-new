@@ -249,7 +249,7 @@ export default function LeadForm() {
         </div>
 
         <div className="form-row hero-email-code-row" style={{ alignItems: 'stretch' }}>
-          <div className="form-group" style={{ marginBottom: 0 }}>
+          <div className="form-group hero-email-form-group">
             <input
               type="email"
               name="email"

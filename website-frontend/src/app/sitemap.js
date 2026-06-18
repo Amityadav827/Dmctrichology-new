@@ -46,12 +46,12 @@ export default async function sitemap() {
     priority: route === '' ? 1.0 : 0.8,
   }));
 
-  // 2. All service detail pages -> /details/{slug}
+  // 2. All service detail pages -> /{slug}
   const services = await safeFetchList('/service-details');
   const serviceEntries = services
     .filter((s) => s && s.slug)
     .map((s) => ({
-      url: `${siteUrl}/details/${s.slug}`,
+      url: `${siteUrl}/${s.slug}`,
       lastModified: s.updatedAt || s.updated_at || now,
       changeFrequency: 'monthly',
       priority: 0.7,

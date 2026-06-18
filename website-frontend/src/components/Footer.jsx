@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { fetchFooter } from "../services/api";
 import EditableSection from "./Editable/EditableSection";
 import EditableText from "./Editable/EditableText";
+import { extractServiceSlugFromPath } from "../utils/serviceRoutes";
 
 const hasValue = (value) => typeof value === 'string' && value.trim() && value.trim() !== '#';
 
@@ -101,8 +102,8 @@ export default function Footer({ siteSettings }) {
         
         // Override with Service Details CTA if on a details page
         try {
-          if (typeof window !== 'undefined' && window.location.pathname.startsWith('/details/')) {
-            const slug = window.location.pathname.split('/').filter(Boolean).pop();
+          if (typeof window !== 'undefined') {
+            const slug = extractServiceSlugFromPath(window.location.pathname);
             if (slug) {
               const isLocal = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
               const API_BASE = process.env.NEXT_PUBLIC_API_URL || (isLocal ? "http://localhost:10000/api" : 'https://dmctrichology-1.onrender.com/api');
