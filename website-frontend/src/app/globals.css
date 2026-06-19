@@ -1360,9 +1360,21 @@ a {
     display: none;
   }
 
+  .header-right {
+    order: 1;
+    margin-left: auto;
+  }
+
+  .mobile-nav {
+    order: 2;
+  }
+
   .header-appointment-btn {
+    display: flex !important;
     padding: 8px !important;
     gap: 0 !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .testimonial-staggered-grid {
@@ -1403,6 +1415,8 @@ a {
   .header-appointment-btn {
     max-width: 48px;
     min-width: 48px;
+    width: 48px;
+    display: flex !important;
   }
 
   .slide.active {

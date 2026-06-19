@@ -70,8 +70,8 @@ export default function FloatingContactCtas() {
         }
 
         .floating-cta-icon {
-          width: 42px;
-          height: 42px;
+          width: 30px;
+          height: 30px;
           object-fit: contain;
           display: block;
         }
@@ -89,8 +89,8 @@ export default function FloatingContactCtas() {
           }
 
           .floating-cta-icon {
-            width: 38px;
-            height: 38px;
+            width: 30px;
+            height: 30px;
           }
         }
       `}</style>
