@@ -1,11 +1,14 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api from '../services/api';
 import EditableSection from './Editable/EditableSection';
 import EditableText from './Editable/EditableText';
 import RichTextContent from './RichTextContent';
 
-const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
+const PREFERRED_LOCATION_OPTIONS = [
+  'A2/6, Block A, Vasant Vihar, New Delhi, Delhi 110057, India',
+  'J-12/25, 1st Floor, Block J, Rajouri Garden Extension, Rajouri Garden, New Delhi, Delhi, 110027, India'
+];
 
 export default function AboutDrNandaniHero({
   data = {},
@@ -25,8 +28,7 @@ export default function AboutDrNandaniHero({
     descriptionParagraph = "Dr. Nandini Dadu, MBBS, a Board-Certified Trichologist, has been studying hair and scalp treatments for over ten years. Throughout her career, she has successfully treated severe cases with excellent outcomes and has attained the title of the best hair transplant surgeon in Delhi.",
     namePlaceholder = "Name*",
     phonePlaceholder = "Mobile Number*",
-    emailPlaceholder = "E-Mail Address",
-    captchaPlaceholder = "Code*",
+    locationPlaceholder = "Preferred Location *",
     submitButtonText = "Schedule Your Visit"
   } = data;
 
@@ -42,9 +44,6 @@ export default function AboutDrNandaniHero({
   const formTitle = formSettings?.title || "Request Private Consultation";
   const formSubtitle = formSettings?.subtitle || "Reserve your bespoke scalp assessment and consultation session.";
   const successMessage = formSettings?.successMessage || "Your consultation request has been successfully submitted. Our concierge team will reach out to you shortly.";
-  const resolvedEmailPlaceholder = typeof emailPlaceholder === 'string'
-    ? emailPlaceholder.replace(/\*+\s*$/, '').trim() || "E-Mail Address"
-    : "E-Mail Address";
   const imageValue = (key, fallback = "") => {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
       return typeof data[key] === 'string' ? data[key].trim() : "";
@@ -63,22 +62,34 @@ export default function AboutDrNandaniHero({
   const [formData, setFormData] = useState({
     name: '',
     mobile: '',
-    email: '',
-    captchaInput: ''
+    preferredLocation: ''
   });
-  const [captcha, setCaptcha] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+  const locationDropdownRef = useRef(null);
 
   useEffect(() => {
-    setCaptcha(createCaptcha());
-  }, []);
+    const handleClickOutside = (event) => {
+      if (locationDropdownRef.current && !locationDropdownRef.current.contains(event.target)) {
+        setShowLocationDropdown(false);
+      }
+    };
 
-  const generateCaptcha = () => setCaptcha(createCaptcha());
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (error) setError('');
+    if (success) setSuccess(false);
+  };
+
+  const handleLocationSelect = (location) => {
+    setFormData((prev) => ({ ...prev, preferredLocation: location }));
+    setShowLocationDropdown(false);
     if (error) setError('');
     if (success) setSuccess(false);
   };
@@ -96,30 +107,33 @@ export default function AboutDrNandaniHero({
     if (!trimmedMobile || !/^\d{10}$/.test(trimmedMobile)) {
       return setError('Please enter a valid 10-digit mobile number.');
     }
-    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      return setError('Please enter a valid email address.');
-    }
-    if (!formData.captchaInput.trim() || formData.captchaInput.trim() !== captcha) {
-      return setError('Invalid verification code.');
+    if (!formData.preferredLocation) {
+      return setError('Please select your preferred location.');
     }
 
     setLoading(true);
     try {
+      const locationLabel = formData.preferredLocation.includes('Vasant Vihar')
+        ? 'Vasant Vihar'
+        : formData.preferredLocation.includes('Rajouri Garden')
+          ? 'Rajouri Garden'
+          : 'Preferred Location';
+
       await api.post(leadEndpoint, {
         name: formData.name.trim(),
         mobile: trimmedMobile,
-        email: formData.email.trim() ? formData.email.trim().toLowerCase() : '',
-        service: leadService
+        email: '',
+        preferredLocation: formData.preferredLocation,
+        message: `Preferred Location: ${formData.preferredLocation}`,
+        service: `${leadService} - ${locationLabel}`
       });
 
       setSuccess(true);
       setFormData({
         name: '',
         mobile: '',
-        email: '',
-        captchaInput: ''
+        preferredLocation: ''
       });
-      generateCaptcha();
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong. Please check your network and try again.');
     } finally {
@@ -206,10 +220,34 @@ export default function AboutDrNandaniHero({
                 <div className="dr-nandani-form-grid">
                   <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder={namePlaceholder} disabled={loading} required />
                   <input type="tel" name="mobile" value={formData.mobile} onChange={handleChange} placeholder={phonePlaceholder} disabled={loading} required />
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder={resolvedEmailPlaceholder} disabled={loading} />
-                  <div className="dr-nandani-captcha-row">
-                    <button type="button" onClick={generateCaptcha} title="Click to regenerate captcha">{captcha}</button>
-                    <input type="text" name="captchaInput" value={formData.captchaInput} onChange={handleChange} placeholder={captchaPlaceholder} disabled={loading} required />
+                  <div className="dr-nandani-location-dropdown" ref={locationDropdownRef}>
+                    <button
+                      type="button"
+                      className="dr-nandani-location-trigger"
+                      onClick={() => !loading && setShowLocationDropdown((open) => !open)}
+                      disabled={loading}
+                      aria-expanded={showLocationDropdown}
+                    >
+                      <span>{formData.preferredLocation || locationPlaceholder}</span>
+                      <img
+                        src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781783268360-703155124.png"
+                        alt="Select location"
+                      />
+                    </button>
+                    {showLocationDropdown && (
+                      <div className="dr-nandani-location-menu">
+                        {PREFERRED_LOCATION_OPTIONS.map((location) => (
+                          <button
+                            key={location}
+                            type="button"
+                            className="dr-nandani-location-option"
+                            onClick={() => handleLocationSelect(location)}
+                          >
+                            {location}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -453,36 +491,79 @@ export default function AboutDrNandaniHero({
           border-color: #3B5998;
           box-shadow: 0 0 0 4px rgba(59, 89, 152, 0.08);
         }
-        .dr-nandani-captcha-row {
-          display: grid;
-          grid-template-columns: 100px 1fr;
-          gap: 0;
+        .dr-nandani-location-dropdown {
+          grid-column: span 2;
+          position: relative;
+        }
+        .dr-nandani-location-trigger {
+          width: 100%;
+          min-height: 50px;
           border: 1px solid #111111;
           border-radius: 12px;
-          overflow: hidden;
-        }
-        .dr-nandani-captcha-row button {
-          min-height: 50px;
-          border: 0;
-          border-right: 1px solid #111111;
-          border-radius: 0;
           background: transparent;
+          padding: 12px 52px 12px 18px;
+          outline: none;
           color: #888888;
           font-family: 'Lato', sans-serif;
-          font-size: 16px;
-          font-weight: 700;
-          letter-spacing: 4px;
+          font-size: 14px;
+          text-align: left;
+          cursor: pointer;
+          transition: all .25s ease;
+          position: relative;
+        }
+        .dr-nandani-location-trigger span {
+          display: block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .dr-nandani-location-trigger img {
+          position: absolute;
+          right: 18px;
+          top: 50%;
+          width: 12px;
+          transform: translateY(-50%);
+          pointer-events: none;
+        }
+        .dr-nandani-location-trigger:hover {
+          border-color: #3B5998;
+        }
+        .dr-nandani-location-trigger:focus-visible {
+          border-color: #3B5998;
+          box-shadow: 0 0 0 4px rgba(59, 89, 152, 0.08);
+        }
+        .dr-nandani-location-menu {
+          position: absolute;
+          top: calc(100% + 8px);
+          left: 0;
+          right: 0;
+          background: #ffffff;
+          border: 1px solid rgba(17, 17, 17, 0.14);
+          border-radius: 16px;
+          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+          overflow: hidden;
+          z-index: 20;
+          animation: drNandaniDropdownFade .2s ease;
+        }
+        .dr-nandani-location-option {
+          width: 100%;
+          border: 0;
+          border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+          background: #ffffff;
+          color: #333333;
+          padding: 14px 18px;
+          font-family: 'Lato', sans-serif;
+          font-size: 14px;
+          line-height: 1.5;
+          text-align: left;
           cursor: pointer;
         }
-        .dr-nandani-captcha-row input,
-        .dr-nandani-captcha-row input:focus {
-          border: 0;
-          border-radius: 0;
-          box-shadow: none;
+        .dr-nandani-location-option:hover {
+          background: #f5f7fd;
+          color: #3B5998;
         }
-        .dr-nandani-captcha-row input::placeholder {
-          text-transform: uppercase;
-          color: #888888;
+        .dr-nandani-location-option:last-child {
+          border-bottom: 0;
         }
         .dr-nandani-submit-btn {
           width: 100%;
@@ -545,6 +626,16 @@ export default function AboutDrNandaniHero({
           background: #fef2f2;
           color: #991b1b;
           border: 1px solid #fecaca;
+        }
+        @keyframes drNandaniDropdownFade {
+          from {
+            opacity: 0;
+            transform: translateY(6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         @media (max-width: 1024px) {
           .dr-nandani-page-hero {
@@ -611,8 +702,8 @@ export default function AboutDrNandaniHero({
           .dr-nandani-form-grid {
             grid-template-columns: 1fr;
           }
-          .dr-nandani-captcha-row {
-            grid-template-columns: 100px 1fr;
+          .dr-nandani-location-dropdown {
+            grid-column: span 1;
           }
         }
       `}</style>
