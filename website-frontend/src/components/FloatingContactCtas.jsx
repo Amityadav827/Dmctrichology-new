@@ -53,25 +53,24 @@ export default function FloatingContactCtas() {
           width: 58px;
           height: 58px;
           border-radius: 999px;
-          background: #3b5998;
-          border: 1px solid rgba(255, 255, 255, 0.9);
-          box-shadow: 0 14px 28px rgba(59, 89, 152, 0.22);
+          background: transparent;
+          border: none;
+          box-shadow: none;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+          transition: transform 0.22s ease, filter 0.22s ease;
           pointer-events: auto;
         }
 
         .floating-cta-button:hover {
           transform: translateY(-2px) scale(1.02);
-          box-shadow: 0 18px 32px rgba(59, 89, 152, 0.28);
-          background: #2f477a;
+          filter: drop-shadow(0 12px 22px rgba(59, 89, 152, 0.22));
         }
 
         .floating-cta-icon {
-          width: 28px;
-          height: 28px;
+          width: 42px;
+          height: 42px;
           object-fit: contain;
           display: block;
         }
@@ -89,8 +88,8 @@ export default function FloatingContactCtas() {
           }
 
           .floating-cta-icon {
-            width: 26px;
-            height: 26px;
+            width: 38px;
+            height: 38px;
           }
         }
       `}</style>
