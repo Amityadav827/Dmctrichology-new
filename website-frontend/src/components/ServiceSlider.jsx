@@ -56,13 +56,13 @@ export default function ServiceSlider() {
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
 
           {/* Top Area - Centered */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '60px', position: 'relative' }}>
+          <div className="service-slider-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '60px', position: 'relative' }}>
             <h2 className="section-title">
               <EditableText sectionId="services" fieldPath="title" tag="span">
                 {title}
               </EditableText>
             </h2>
-            <a href={viewAllLink} style={{ position: 'absolute', right: 0, bottom: '10px', color: '#888', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <a className="service-slider-view-all" href={viewAllLink} style={{ position: 'absolute', right: 0, bottom: '10px', color: '#888', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <EditableText sectionId="services" fieldPath="viewAllText" tag="span">
                 {viewAllText}
               </EditableText>
@@ -172,18 +172,29 @@ export default function ServiceSlider() {
             .service-slider-section {
               padding: 48px 16px !important;
             }
-            .service-slider-section h2 {
-              font-size: 26px !important;
-              line-height: 1.25 !important;
-              text-align: center;
+            .service-slider-header {
+              margin-bottom: 34px !important;
             }
-            .service-slider-section a[style*="position: absolute"] {
+            .service-slider-section h2 {
+              font-size: 24px !important;
+              line-height: 1.18 !important;
+              text-align: center;
+              max-width: 290px;
+            }
+            .service-slider-view-all {
               position: static !important;
-              margin-top: 18px;
+              margin-top: 12px !important;
+              align-self: flex-end;
+              font-size: 13px !important;
             }
             .service-card-item > div {
               height: 260px !important;
               border-radius: 20px !important;
+            }
+            .service-card-item h3 {
+              font-size: 16px !important;
+              line-height: 1.3 !important;
+              min-height: 42px !important;
             }
             .service-prev-btn,
             .service-next-btn {

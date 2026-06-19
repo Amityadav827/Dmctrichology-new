@@ -43,10 +43,10 @@ const AboutUsCare = () => {
   return (
     <EditableSection sectionId="why-choose-dmc" label="Why Choose DMC">
       <section className="about-us-care" style={{ padding: '60px 5%', backgroundColor: bgColor, position: 'relative', overflow: 'hidden' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '40px' }}>
+        <div className="about-us-care-layout" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '40px' }}>
           
           {/* Left Side: Large Image */}
-          <div style={{ flex: '1 1 350px', position: 'relative' }}>
+          <div className="about-us-care-image-column" style={{ flex: '1 1 350px', position: 'relative' }}>
             <div style={{ 
               width: '100%'
             }}>
@@ -60,7 +60,7 @@ const AboutUsCare = () => {
 
 
           {/* Right Side: Content */}
-          <div style={{ flex: '1 1 350px' }}>
+          <div className="about-us-care-content-column" style={{ flex: '1 1 350px' }}>
             <h2 className="section-title">
               <EditableText sectionId="why-choose-dmc" fieldPath="heading" tag="span">
                 {heading}
@@ -81,7 +81,7 @@ const AboutUsCare = () => {
             </p>
 
             {/* Feature Box */}
-            <div style={{ 
+            <div className="about-us-care-feature-box" style={{ 
               display: 'flex', 
               borderRadius: '20px', 
               overflow: 'hidden', 
@@ -91,7 +91,7 @@ const AboutUsCare = () => {
               minHeight: '180px'
             }}>
               {/* Box Left: Image */}
-              <div style={{ width: '40%' }}>
+              <div className="about-us-care-feature-media" style={{ width: '40%' }}>
                 <img 
                   src={bottomImage} 
                   alt="Hair Detail" 
@@ -100,7 +100,7 @@ const AboutUsCare = () => {
               </div>
 
               {/* Box Right: Points with Background */}
-              <div style={{ 
+              <div className="about-us-care-points-grid" style={{ 
                 width: '60%', 
                 padding: '28px 24px', 
                 backgroundColor: '#3B5998',
@@ -136,7 +136,7 @@ const AboutUsCare = () => {
         <style jsx>{`
           @media (max-width: 1024px) {
             .about-us-care { padding: 60px 5% !important; }
-            .about-us-care > div {
+            .about-us-care-layout {
               gap: 32px !important;
             }
             .about-us-care img {
@@ -147,30 +147,52 @@ const AboutUsCare = () => {
             .about-us-care {
               padding: 48px 16px !important;
             }
-            .about-us-care > div {
+            .about-us-care-layout {
               flex-direction: column !important;
               gap: 28px !important;
             }
+            .about-us-care-image-column,
+            .about-us-care-content-column {
+              width: 100% !important;
+              flex: 1 1 100% !important;
+            }
             .about-us-care .section-title {
-              font-size: 26px !important;
+              font-size: 24px !important;
               line-height: 1.2 !important;
               margin-bottom: 14px !important;
             }
-            .about-us-care div[style*="background-color: rgb(59, 89, 152)"],
-            .about-us-care div[style*="backgroundColor: '#3B5998'"] {
-              max-width: 100%;
+            .about-us-care p[style*="max-width: 500px"] {
+              max-width: 100% !important;
+              margin-bottom: 24px !important;
             }
-            .about-us-care div[style*="display: flex"][style*="border-radius: 20px"] {
+            .about-us-care-feature-box {
               flex-direction: column !important;
+              border-radius: 22px !important;
             }
-            .about-us-care div[style*="width: 40%"],
-            .about-us-care div[style*="width: 60%"] {
+            .about-us-care-feature-media,
+            .about-us-care-points-grid {
               width: 100% !important;
             }
-            .about-us-care div[style*="gridTemplateColumns"] {
-              grid-template-columns: 1fr !important;
+            .about-us-care-feature-media img {
+              display: block;
+              width: 100% !important;
+              height: 190px !important;
+              object-fit: cover !important;
             }
-            .points-grid { grid-template-columns: 1fr !important; }
+            .about-us-care-points-grid {
+              grid-template-columns: 1fr 1fr !important;
+              padding: 20px 18px !important;
+              column-gap: 14px !important;
+              row-gap: 14px !important;
+            }
+            .about-us-care-points-grid > div {
+              align-items: flex-start !important;
+              gap: 8px !important;
+            }
+            .about-us-care-points-grid span[style*="font-size: 13px"] {
+              font-size: 11px !important;
+              line-height: 1.3 !important;
+            }
           }
         `}</style>
       </section>
