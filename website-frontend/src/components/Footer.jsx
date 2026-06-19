@@ -217,7 +217,7 @@ export default function Footer({ siteSettings }) {
     description: "We're Here For You Monday To Friday With Tailored Treatments, Hands And A Commitment To Your Recovery Every Step Of The Way.",
     placeholder: "Your Email Address",
     buttonText: "Submit",
-    checkboxLabel: "Subscribe For Health Tips & Updates"
+    checkboxLabel: "Subscribe for Hair Care Insights & Updates"
   };
 
   const socials = [
