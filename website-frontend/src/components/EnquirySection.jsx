@@ -281,6 +281,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
         name: formData.name.trim(),
         email: usesContactStyleFields ? '' : formData.email.trim().toLowerCase(),
         mobile: trimmedMobile,
+        preferredLocation: usesContactStyleFields ? formData.preferredLocation : '',
         service: usesContactStyleFields ? formData.preferredLocation : formData.service,
         enquiry_type: usesContactStyleFields ? formData.preferredLocation : undefined,
         appointmentDate: usesContactStyleFields ? '' : selectedDateTime,

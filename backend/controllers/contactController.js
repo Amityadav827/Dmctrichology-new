@@ -1,11 +1,22 @@
 const supabase = require("../config/supabase");
+const { extractPreferredLocation, syncLeadToTelecrm } = require("../services/telecrmService");
+
+const LOCATION_REQUIRED_SOURCES = new Set([
+  "homepage-request-a-call",
+  "homepage-consultation-form",
+  "contact-us-page",
+  "service-details-enquiry",
+  "consultation-form"
+]);
 
 const createContact = async (req, res, next) => {
   try {
-    const { name, email, mobile, message, service, source, enquiry_type, preferred_date, service_slug } = req.body;
+    const { name, email, mobile, message, service, source, enquiry_type, preferred_date, service_slug, preferredLocation } = req.body;
+    const normalizedSource = source ? source.trim() : 'contact-us-page';
+    const trimmedName = name ? name.trim() : '';
 
     // Validation
-    if (!name || !name.trim()) {
+    if (!trimmedName) {
       return res.status(400).json({ success: false, message: "Please enter your name." });
     }
     // Basic email format check
@@ -17,12 +28,43 @@ const createContact = async (req, res, next) => {
     const normalizedEmail = email && email.trim()
       ? email.trim().toLowerCase()
       : `${trimmedMobile || "no-mobile"}@no-email.dmc-trichology.local`;
+    const resolvedPreferredLocation = extractPreferredLocation({
+      preferredLocation,
+      service,
+      enquiryType: enquiry_type,
+      message
+    });
+
+    if (LOCATION_REQUIRED_SOURCES.has(normalizedSource) && !resolvedPreferredLocation) {
+      return res.status(400).json({ success: false, message: "Please select your preferred location." });
+    }
+
+    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+    const { data: existingLead, error: duplicateError } = await supabase
+      .from('contacts')
+      .select('id')
+      .eq('mobile', trimmedMobile)
+      .eq('source', normalizedSource)
+      .gte('created_at', twoMinutesAgo)
+      .limit(1)
+      .maybeSingle();
+
+    if (duplicateError) {
+      return res.status(500).json({ success: false, message: duplicateError.message });
+    }
+
+    if (existingLead) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already submitted a request. Please wait a moment."
+      });
+    }
 
     // Attempt to insert with full columns
     const { data, error } = await supabase
       .from('contacts')
       .insert([{ 
-        name: name.trim(), 
+        name: trimmedName, 
         email: normalizedEmail, 
         mobile: trimmedMobile, 
         message: message ? message.trim() : "No message provided.", 
@@ -31,7 +73,7 @@ const createContact = async (req, res, next) => {
         enquiry_type: enquiry_type ? enquiry_type.trim() : (service ? service.trim() : null),
         preferred_date: preferred_date || null,
         service_slug: service_slug || null,
-        source: source ? source.trim() : 'contact-us-page'
+        source: normalizedSource
       }])
       .select()
       .single();
@@ -43,19 +85,29 @@ const createContact = async (req, res, next) => {
         const { data: fbData, error: fbError } = await supabase
           .from('contacts')
           .insert([{
-            name: name.trim(), 
+            name: trimmedName, 
             email: normalizedEmail, 
             mobile: trimmedMobile, 
             message: formattedMsg.trim(), 
             status: 'new',
             service: service ? service.trim() : (enquiry_type ? enquiry_type.trim() : null),
             enquiry_type: enquiry_type ? enquiry_type.trim() : (service ? service.trim() : null),
-            source: source ? source.trim() : 'contact-us-page'
+            source: normalizedSource
           }])
           .select()
           .single();
 
         if (fbError) return res.status(500).json({ success: false, message: fbError.message });
+
+        syncLeadToTelecrm({
+          name: trimmedName,
+          mobile: trimmedMobile,
+          email: normalizedEmail,
+          source: normalizedSource,
+          preferredLocation: resolvedPreferredLocation,
+          service: service ? service.trim() : (enquiry_type ? enquiry_type.trim() : ''),
+          message: formattedMsg.trim()
+        }, "Contact lead").catch(() => {});
         
         return res.status(201).json({
           success: true,
@@ -65,6 +117,16 @@ const createContact = async (req, res, next) => {
       
       return res.status(500).json({ success: false, message: error.message });
     }
+
+    syncLeadToTelecrm({
+      name: trimmedName,
+      mobile: trimmedMobile,
+      email: normalizedEmail,
+      source: normalizedSource,
+      preferredLocation: resolvedPreferredLocation,
+      service: service ? service.trim() : (enquiry_type ? enquiry_type.trim() : ''),
+      message: message ? message.trim() : "No message provided."
+    }, "Contact lead").catch(() => {});
 
     return res.status(201).json({
       success: true,

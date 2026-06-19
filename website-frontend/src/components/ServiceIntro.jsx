@@ -198,6 +198,7 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
         name: consultationData.name.trim(),
         email: '',
         mobile: phoneValue,
+        preferredLocation: consultationData.preferredLocation,
         service: `${serviceTitle} - ${locationLabel}`,
         enquiry_type: `${serviceTitle} - ${locationLabel}`,
         service_slug: serviceSlug,

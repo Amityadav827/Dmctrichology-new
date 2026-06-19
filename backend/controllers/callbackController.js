@@ -1,5 +1,5 @@
 const supabase = require("../config/supabase");
-const { sendLeadToTelecrm } = require("../services/telecrmService");
+const { syncLeadToTelecrm } = require("../services/telecrmService");
 
 // Helper to map DB status to Frontend status
 const mapDbToFrontendStatus = (status) => {
@@ -26,21 +26,42 @@ const createCallback = async (req, res, next) => {
       });
     }
 
+    const trimmedName = String(name).trim();
+    const trimmedMobile = String(mobile).trim().replace(/\s+/g, "");
+    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+
+    const { data: existingLead, error: duplicateError } = await supabase
+      .from('callbacks')
+      .select('id')
+      .eq('mobile', trimmedMobile)
+      .gte('created_at', twoMinutesAgo)
+      .limit(1)
+      .maybeSingle();
+
+    if (duplicateError) {
+      return res.status(500).json({ success: false, message: duplicateError.message });
+    }
+
+    if (existingLead) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already submitted a request. Please wait a moment."
+      });
+    }
+
     const { data, error } = await supabase
       .from('callbacks')
-      .insert([{ name, mobile, status: 'new' }])
+      .insert([{ name: trimmedName, mobile: trimmedMobile, status: 'new' }])
       .select()
       .single();
 
     if (error) return res.status(500).json({ success: false, message: error.message });
 
-    sendLeadToTelecrm({
+    syncLeadToTelecrm({
       name: data.name,
       mobile: data.mobile,
       source: "Homepage Callback Form"
-    }).catch((crmError) => {
-      console.error("TeleCRM callback lead sync failed:", crmError.response?.data || crmError.message);
-    });
+    }, "Callback lead").catch(() => {});
 
     return res.status(201).json({
       success: true,

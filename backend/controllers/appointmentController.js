@@ -1,8 +1,9 @@
 const supabase = require("../config/supabase");
+const { extractPreferredLocation, syncLeadToTelecrm } = require("../services/telecrmService");
 
 const createAppointment = async (req, res, next) => {
   try {
-    const { name, email, mobile, service, appointmentDate, message, source } = req.body;
+    const { name, email, mobile, service, appointmentDate, message, source, preferredLocation } = req.body;
 
     // Validation
     if (!name || !name.trim()) {
@@ -75,6 +76,20 @@ const createAppointment = async (req, res, next) => {
       console.error("[createAppointment] Insert Error:", insertError.message);
       return res.status(500).json({ success: false, message: "Something went wrong. Please try again." });
     }
+
+    syncLeadToTelecrm({
+      name: appointment.name,
+      mobile: appointment.mobile,
+      email: appointment.email,
+      source: appointment.source,
+      service: appointment.enquiry_type,
+      preferredLocation: extractPreferredLocation({
+        preferredLocation,
+        service,
+        message
+      }),
+      message: message ? message.trim() : ""
+    }, "Appointment lead").catch(() => {});
 
     return res.status(201).json({
       success: true,

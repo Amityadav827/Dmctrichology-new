@@ -293,6 +293,7 @@ export const submitLead = async (data) => {
         name: data.name,
         email: "",
         mobile: data.mobile,
+        preferredLocation: data.preferredLocation,
         service: `Request A Call - ${locationLabel}`,
         enquiry_type: `Request A Call - ${locationLabel}`,
         source: "homepage-request-a-call",

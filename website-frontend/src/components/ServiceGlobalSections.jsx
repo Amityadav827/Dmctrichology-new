@@ -476,6 +476,7 @@ function ServiceSectionEight({ data, pageSlug }) {
         name: formData.name.trim(),
         email: "",
         mobile: digitsOnlyPhone,
+        preferredLocation: formData.preferredLocation,
         service: `${serviceName} - ${locationLabel}`,
         enquiry_type: `${serviceName} - ${locationLabel}`,
         service_slug: pageSlug || "unknown",

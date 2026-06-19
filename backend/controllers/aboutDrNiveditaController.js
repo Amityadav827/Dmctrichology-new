@@ -1,5 +1,6 @@
 const supabase = require('../config/supabase');
 const uploadToSupabase = require('../utils/uploadToSupabase');
+const { syncLeadToTelecrm } = require('../services/telecrmService');
 
 const CMS_KEY = 'about_dr_nivedita';
 
@@ -72,7 +73,7 @@ exports.uploadImage = async (req, res) => {
 
 exports.createLead = async (req, res, next) => {
   try {
-    const { name, mobile, service } = req.body;
+    const { name, mobile, service, email, preferredLocation, message } = req.body;
 
     if (!name || !name.trim()) {
       return res.status(400).json({ success: false, message: 'Please enter your name.' });
@@ -113,6 +114,16 @@ exports.createLead = async (req, res, next) => {
       .single();
 
     if (error) throw error;
+
+    syncLeadToTelecrm({
+      name: lead.name,
+      mobile: lead.mobile,
+      email: email && email.trim() ? email.trim().toLowerCase() : '',
+      preferredLocation,
+      service: lead.service || 'Dr. Nivedita Dadu Consultation',
+      message: message || '',
+      source: 'Dr. Nivedita Consultation Form'
+    }, 'Dr. Nivedita lead').catch(() => {});
 
     return res.status(201).json({
       success: true,
