@@ -247,6 +247,14 @@ export default function ResultsSlider() {
             .results-section {
               padding: 48px 16px 36px !important;
             }
+            .results-prev-btn,
+            .results-next-btn {
+              width: 42px !important;
+              height: 42px !important;
+              top: 44% !important;
+            }
+            .results-prev-btn { left: 6px !important; }
+            .results-next-btn { right: 6px !important; }
             .results-section .section-header {
               margin-bottom: 28px !important;
             }

@@ -188,7 +188,12 @@ export default function ServiceSlider() {
             .service-prev-btn,
             .service-next-btn {
               display: block !important;
+              width: 44px !important;
+              height: 44px !important;
+              top: 38% !important;
             }
+            .service-prev-btn { left: 6px !important; }
+            .service-next-btn { right: 6px !important; }
           }
           @media (max-width: 390px) {
             .service-card-item > div {

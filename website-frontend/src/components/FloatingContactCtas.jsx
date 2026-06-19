@@ -53,19 +53,20 @@ export default function FloatingContactCtas() {
           width: 58px;
           height: 58px;
           border-radius: 999px;
-          background: transparent;
-          border: none;
-          box-shadow: none;
+          background: #3b5998;
+          border: 2px solid #ffffff;
+          box-shadow: 0 14px 28px rgba(59, 89, 152, 0.22);
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: transform 0.22s ease, filter 0.22s ease;
+          transition: transform 0.22s ease, filter 0.22s ease, box-shadow 0.22s ease;
           pointer-events: auto;
         }
 
         .floating-cta-button:hover {
           transform: translateY(-2px) scale(1.02);
           filter: drop-shadow(0 12px 22px rgba(59, 89, 152, 0.22));
+          box-shadow: 0 18px 32px rgba(59, 89, 152, 0.28);
         }
 
         .floating-cta-icon {
