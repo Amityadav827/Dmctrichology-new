@@ -1352,28 +1352,49 @@ a {
   }
 
   .header-right {
-    order: 1;
-    margin-left: auto;
+    order: 0;
+    margin-left: 0;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
   }
 
   .mobile-nav {
-    order: 2;
+    order: 0;
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
   }
 
   .header-appointment-btn {
     display: flex !important;
-    width: 48px;
-    min-width: 48px;
-    max-width: 48px;
+    width: auto;
+    min-width: 0;
+    max-width: none;
     min-height: 44px;
-    padding: 8px !important;
-    gap: 0 !important;
+    padding: 8px 8px 8px 18px !important;
+    gap: 12px !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: space-between !important;
   }
 
   .header-appointment-btn span {
-    display: none;
+    display: inline !important;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+
+  .header-container {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    column-gap: 10px;
+  }
+
+  .logo {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
   }
 }
 
@@ -1404,24 +1425,39 @@ a {
   }
 
   .header-appointment-btn span {
-    display: none;
+    display: inline !important;
   }
 
   .header-right {
-    order: 1;
-    margin-left: auto;
+    order: 0;
+    margin-left: 0;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
   }
 
   .mobile-nav {
-    order: 2;
+    order: 0;
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
   }
 
   .header-appointment-btn {
     display: flex !important;
-    padding: 8px !important;
-    gap: 0 !important;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    padding: 8px 8px 8px 16px !important;
+    gap: 10px !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: space-between !important;
+  }
+
+  .logo {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
   }
 
   .testimonial-staggered-grid {
@@ -1451,6 +1487,10 @@ a {
   .header-container {
     padding: 8px 10px;
     border-radius: 36px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    column-gap: 8px;
   }
 
   .mobile-toggle {
@@ -1460,10 +1500,37 @@ a {
   }
 
   .header-appointment-btn {
-    max-width: 48px;
-    min-width: 48px;
-    width: 48px;
+    max-width: none;
+    min-width: 0;
+    width: auto;
     display: flex !important;
+    padding: 8px 8px 8px 14px !important;
+    gap: 8px !important;
+    justify-content: space-between !important;
+  }
+
+  .header-appointment-btn span {
+    display: inline !important;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .header-right {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+  }
+
+  .mobile-nav {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .logo {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
   }
 
   .slide.active {
