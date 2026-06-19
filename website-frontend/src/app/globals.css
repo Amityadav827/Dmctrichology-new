@@ -926,6 +926,11 @@ a {
     animation: heroContentInMobile 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
+  .home-page .home-hero-stage {
+    z-index: 20;
+    overflow: visible;
+  }
+
   .hero-right {
     position: relative;
     top: auto;
@@ -934,13 +939,15 @@ a {
     width: 100%;
     padding: 0 0 40px;
     animation: heroFormInMobile 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
-    z-index: 3;
+    z-index: 21;
+    overflow: visible;
   }
 
   .form-container {
     max-width: 100%;
     min-height: unset;
     padding: 20px;
+    overflow: visible !important;
   }
 
   .form-row {

@@ -127,7 +127,7 @@ export default function LeadForm() {
   };
 
   return (
-    <div className="form-container" style={{ backgroundColor: '#E8EAF6', borderRadius: '24px', padding: '24px', position: 'relative' }}>
+    <div className="form-container" style={{ backgroundColor: '#E8EAF6', borderRadius: '24px', padding: '24px', position: 'relative', overflow: 'visible', zIndex: locationMenuOpen ? 1002 : 'auto' }}>
       {/* Dynamic keyframe style block for smooth fade + slide transitions */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes toastFadeSlide {
@@ -255,7 +255,7 @@ export default function LeadForm() {
         </div>
 
         <div className="form-row" style={{ display: 'block' }}>
-          <div className="form-group" style={{ width: '100%', marginBottom: 0, position: 'relative' }} ref={locationMenuRef}>
+          <div className="form-group" style={{ width: '100%', marginBottom: 0, position: 'relative', zIndex: locationMenuOpen ? 1003 : 'auto' }} ref={locationMenuRef}>
             <button
               type="button"
               className="form-input"
@@ -322,7 +322,7 @@ export default function LeadForm() {
                 borderRadius: '0 0 16px 16px',
                 boxShadow: '0 18px 34px rgba(59, 89, 152, 0.16)',
                 overflow: 'hidden',
-                zIndex: 20,
+                zIndex: 1004,
                 opacity: locationMenuOpen ? 1 : 0,
                 transform: locationMenuOpen ? 'translateY(0) scaleY(1)' : 'translateY(-8px) scaleY(0.96)',
                 transformOrigin: 'top center',
