@@ -57,7 +57,7 @@ export default function HairTransplantVideosSection({ data }) {
             <span>{data?.buttonText || "VIEW MORE"}</span>
             <span className="hair-transplant-videos-view-more-arrow" aria-hidden="true">
               <img
-                src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ngfngyyxjj86kvn5nd5n.png"
+                src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781767815987-926134594.png"
                 alt=""
                 className="hair-transplant-videos-view-more-arrow-icon"
               />

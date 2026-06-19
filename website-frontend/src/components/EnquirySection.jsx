@@ -338,10 +338,10 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           
           {/* Top Row: Info Left, Form Right */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '20px', marginBottom: '0' }}>
+          <div className="enquiry-top-row" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '20px', marginBottom: '0' }}>
             
             {/* Header and Contact Info */}
-            <div style={{ flex: '1 1 250px' }}>
+            <div className="enquiry-info-column" style={{ flex: '1 1 250px' }}>
               {!hideContactBadge && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
                   <img src={iconUrl} alt="icon" style={{ width: '40px', height: 'auto', filter: blueIconFilter }} />
@@ -362,7 +362,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
               </p>
 
               {/* Contact Info Grid */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px' }}>
+              <div className="enquiry-contact-grid" style={{ display: 'flex', flexWrap: 'wrap', gap: '30px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#3B5998', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flex: '0 0 36px' }}>
                     <img src="/icons/consultation/phone.svg" alt="icon" style={{ width: '17px', height: '17px', objectFit: 'contain', filter: whiteIconFilter }} />
@@ -402,8 +402,8 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
             </div>
 
             {/* Form */}
-            <div style={{ flex: '1 1 150px', paddingTop: usesContactStyleFields ? '50px' : '0px', position: 'relative', zIndex: 2 }}>
-              <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+            <div className="enquiry-form-column" style={{ flex: '1 1 150px', paddingTop: usesContactStyleFields ? '50px' : '0px', position: 'relative', zIndex: 2 }}>
+              <form className="enquiry-form-grid" onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                 <div style={{ gridColumn: 'span 2' }}>
                    {success && (
                      <div className="consultation-toast" style={{
@@ -665,7 +665,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
           </div>
 
           {/* Bottom Row: Full Width Image */}
-          <div style={{ width: '100%', marginTop: usesContactStyleFields ? '-95px' : '-110px', position: 'relative', zIndex: 1 }}>
+          <div className={`enquiry-bottom-image ${usesContactStyleFields ? 'enquiry-bottom-image-contact' : 'enquiry-bottom-image-default'}`} style={{ width: '100%', marginTop: usesContactStyleFields ? '-95px' : '-110px', position: 'relative', zIndex: 1 }}>
             <img 
               src={beforeImage} 
               alt="Consultation Result" 
@@ -909,19 +909,22 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
             .enquiry-section {
               padding: 48px 16px !important;
             }
-            .enquiry-section > div > div:first-child {
+            .enquiry-top-row {
               flex-direction: column !important;
               gap: 26px !important;
+            }
+            .enquiry-form-column {
+              padding-top: 0 !important;
             }
             .enquiry-section .section-title {
               font-size: 26px !important;
               line-height: 1.2 !important;
               margin-bottom: 14px !important;
             }
-            .enquiry-section form {
+            .enquiry-form-grid {
               grid-template-columns: 1fr !important;
             }
-            .enquiry-section form div {
+            .enquiry-form-grid > div {
               grid-column: span 1 !important;
               min-width: 0;
             }
@@ -931,22 +934,23 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
             .enquiry-section button {
               max-width: 100%;
             }
-            .enquiry-section div[style*="border-left"] {
+            .enquiry-contact-grid > div[style*="borderLeft"],
+            .enquiry-contact-grid > div[style*="border-left"] {
               border-left: 0 !important;
               padding-left: 0 !important;
             }
-            .enquiry-section div[style*="margin-top: -95px"] {
-              margin-top: 20px !important;
+            .enquiry-bottom-image-contact {
+              margin-top: 24px !important;
+              z-index: 0 !important;
             }
-            .enquiry-section div[style*="margin-top: -95px"] img {
+            .enquiry-bottom-image-contact img {
               border-radius: 22px !important;
             }
-            .enquiry-section div[style*="marginTop: '-110px'"],
-            .enquiry-section div[style*="margin-top: -110px"] {
+            .enquiry-bottom-image-default {
               margin-top: 30px !important;
+              z-index: 0 !important;
             }
-            .enquiry-section div[style*="marginTop: '-110px'"] img,
-            .enquiry-section div[style*="margin-top: -110px"] img {
+            .enquiry-bottom-image-default img {
               border-radius: 0 !important;
             }
           }

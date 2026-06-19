@@ -107,7 +107,7 @@ export default function ServiceEditorialFaq({ data, pageSlug = "", googleReviewC
               <span>{normalizedReview.buttonText || "VIEW MORE"}</span>
               <span className="service-edfaq-google-review-arrow" aria-hidden="true">
                 <img
-                  src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ngfngyyxjj86kvn5nd5n.png"
+                  src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781767815987-926134594.png"
                   alt=""
                   className="service-edfaq-google-review-arrow-icon"
                 />

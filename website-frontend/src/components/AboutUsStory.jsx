@@ -118,7 +118,7 @@ const AboutUsStory = ({ data = {} }) => {
                 Discover Our Method
                 <div className="about-story-arrow-circle">
                   <img
-                    src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ngfngyyxjj86kvn5nd5n.png"
+                    src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781767815987-926134594.png"
                     alt=""
                     className="about-story-cta-icon"
                     aria-hidden="true"

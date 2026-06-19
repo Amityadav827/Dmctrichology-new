@@ -211,15 +211,28 @@ const WhyChooseUs = () => {
             margin-bottom: 48px !important;
           }
           .why-choose-stage {
+            height: auto !important;
+            min-height: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            justify-content: flex-start !important;
             gap: 20px;
+            padding-bottom: 0 !important;
           }
           .why-choose-center {
             width: min(420px, 72vw) !important;
             height: auto !important;
             order: -1;
+            margin: 0 auto 12px !important;
           }
           .feature-callout {
             width: 100%;
+            position: static !important;
+            left: auto !important;
+            right: auto !important;
+            top: auto !important;
+            margin: 0 0 18px !important;
           }
         }
         @media (max-width: 767px) {
@@ -237,6 +250,10 @@ const WhyChooseUs = () => {
           }
           .why-choose-center {
             width: min(300px, 86vw) !important;
+          }
+          .feature-callout-left,
+          .feature-callout-right {
+            transform: none !important;
           }
           .card-item {
             width: 100% !important;

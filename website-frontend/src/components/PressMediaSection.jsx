@@ -87,7 +87,7 @@ export default function PressMediaSection() {
             padding: '40px',
             position: 'relative'
           }}>
-            <div style={{ 
+            <div className="press-media-layout" style={{ 
               display: 'flex', 
               justifyContent: 'space-between', 
               alignItems: 'flex-start', 
@@ -96,16 +96,16 @@ export default function PressMediaSection() {
             }}>
               
               {/* Left Side: Heading + Rating */}
-              <div style={{ flex: '1.2', minWidth: '350px' }}>
+              <div className="press-media-left" style={{ flex: '1.2', minWidth: '350px' }}>
                 <h2 className="section-title press-media-title" style={{ margin: '0 0 50px 0', maxWidth: '650px', color: '#fff' }}>
                   <EditableText sectionId="press-media-section" fieldPath="heading" tag="span">
                     {heading}
                   </EditableText>
                 </h2>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '25px', marginTop: '10px' }}>
+                <div className="press-media-rating-row" style={{ display: 'flex', alignItems: 'center', gap: '25px', marginTop: '10px' }}>
                   {/* Avatars */}
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <div className="press-media-avatars" style={{ display: 'flex', alignItems: 'center' }}>
                     {avatars.map((av, i) => (
                       <div key={i} style={{ 
                         width: '54px', 
@@ -122,7 +122,7 @@ export default function PressMediaSection() {
                   </div>
 
                   {/* Rating Info */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <div className="press-media-rating-copy" style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                     <div style={{ fontSize: '16px', fontWeight: '500', color: '#fff', fontFamily: "'Marcellus', serif" }}>
                       <EditableText sectionId="press-media-section" fieldPath="ratingText" tag="span">
                         {ratingText}
@@ -143,7 +143,7 @@ export default function PressMediaSection() {
               </div>
 
               {/* Right Side: Button + Logo Slider */}
-              <div style={{ 
+              <div className="press-media-right" style={{ 
                 flex: '1', 
                 display: 'flex', 
                 flexDirection: 'column', 
@@ -186,7 +186,7 @@ export default function PressMediaSection() {
                 </a>
 
                 {/* Logo Slider Wrapper */}
-                <div style={{ 
+                <div className="press-media-logos" style={{ 
                   width: '100%',
                   marginTop: '40px',
                   overflow: 'hidden'
@@ -264,7 +264,8 @@ export default function PressMediaSection() {
               font-size: clamp(34px, 5vw, 48px) !important;
               line-height: 1.1 !important;
             }
-            .press-media-card div[style*="min-width: 350px"] {
+            .press-media-left,
+            .press-media-right {
               min-width: min(100%, 320px) !important;
             }
           }
@@ -276,23 +277,50 @@ export default function PressMediaSection() {
               padding: 26px 18px !important;
               border-radius: 24px !important;
             }
-            div[style*="flexDirection: column"] { align-items: center !important; }
             .section-title,
             .press-media-title {
               text-align: center !important;
               margin-bottom: 28px !important;
               font-size: 26px !important;
             }
-            div[style*="alignItems: center"] { justify-content: center !important; }
-            div[style*="marginTop: 40px"] { margin-top: 20px !important; }
+            .press-media-layout {
+              flex-direction: column !important;
+              gap: 28px !important;
+            }
+            .press-media-left,
+            .press-media-right {
+              width: 100% !important;
+              min-width: 0 !important;
+              flex: 1 1 100% !important;
+            }
+            .press-media-right {
+              align-items: center !important;
+              gap: 24px !important;
+            }
+            .press-media-rating-row {
+              flex-wrap: wrap !important;
+              justify-content: center !important;
+              gap: 16px !important;
+              margin-top: 0 !important;
+            }
+            .press-media-rating-copy {
+              align-items: center !important;
+              text-align: center !important;
+            }
+            .press-media-logos {
+              margin-top: 0 !important;
+            }
             .free-consult-btn {
               width: 100%;
               justify-content: center;
               padding-left: 18px !important;
             }
-            .press-media-card div[style*="gap: 25px"] {
-              flex-direction: column;
-              gap: 16px !important;
+            .press-media-avatars > div {
+              width: 48px !important;
+              height: 48px !important;
+            }
+            .press-media-right :global(.swiper-slide img) {
+              max-height: 44px !important;
             }
           }
           @media (max-width: 390px) {

@@ -99,7 +99,7 @@ export default function HairTransplantResultsSection({ data }) {
               <span>{data?.buttonText || "VIEW ALL"}</span>
               <span className="hair-transplant-results-btn-arrow" aria-hidden="true">
                 <img
-                  src="https://res.cloudinary.com/dseixl6px/image/upload/v1777530476/dmc-trichology/ngfngyyxjj86kvn5nd5n.png"
+                  src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781767815987-926134594.png"
                   alt=""
                   className="hair-transplant-results-btn-arrow-icon"
                 />
