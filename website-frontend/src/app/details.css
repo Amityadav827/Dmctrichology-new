@@ -6906,7 +6906,15 @@
   }
 
   .service-global-carousel-arrow {
-    display: none;
+    display: flex !important;
+  }
+
+  .service-global-carousel-arrow.left {
+    left: 0 !important;
+  }
+
+  .service-global-carousel-arrow.right {
+    right: 0 !important;
   }
 
   .service-section-two-image-wrap {

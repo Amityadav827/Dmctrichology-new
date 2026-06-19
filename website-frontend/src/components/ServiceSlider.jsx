@@ -184,7 +184,7 @@ export default function ServiceSlider() {
             .service-slider-view-all {
               position: static !important;
               margin-top: 12px !important;
-              align-self: flex-end;
+              align-self: anchor-center;
               font-size: 13px !important;
             }
             .service-card-item > div {
