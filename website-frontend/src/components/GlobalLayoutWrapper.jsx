@@ -5,6 +5,7 @@ import TopBar from '../components/TopBar';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ScrollToTopButton from '../components/ScrollToTopButton';
+import FloatingContactCtas from '../components/FloatingContactCtas';
 
 // Elements below the fold get .sr class and animate in when they enter viewport.
 // Cards in grids get a stagger delay so they appear one after another.
@@ -144,6 +145,7 @@ export default function GlobalLayoutWrapper({ children, initialHeader, initialTo
       </main>
 
       {!isEditingHeader && <Footer siteSettings={initialSiteSettings} />}
+      {!(isEditingHeader || isEditingFooter) && <FloatingContactCtas />}
       {!(isEditingHeader || isEditingFooter) && <ScrollToTopButton />}
     </>
   );
