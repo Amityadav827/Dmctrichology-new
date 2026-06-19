@@ -7,6 +7,10 @@ import EditableSection from './Editable/EditableSection';
 import { useBuilder } from '../context/BuilderContext';
 
 const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
+const PREFERRED_LOCATION_OPTIONS = [
+  'A2/6, Block A, Vasant Vihar, New Delhi, Delhi 110057, India',
+  'J-12/25, 1st Floor, Block J, Rajouri Garden Extension, Rajouri Garden, New Delhi, Delhi, 110027, India'
+];
 
 const toDisplayServiceName = (slug = '') => {
   const text = String(slug || '').trim();
@@ -27,10 +31,8 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    email: '',
-    captchaInput: ''
+    preferredLocation: ''
   });
-  const [captcha, setCaptcha] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -55,10 +57,6 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
       }
     }
   }, [isEditMode, siteConfig]);
-
-  useEffect(() => {
-    setCaptcha(createCaptcha());
-  }, []);
 
   const ownFaqs = (sectionData?.faqItems || []).filter(f => f && (f.question || f.answer));
   const faqs = ownFaqs.length > 0
@@ -123,32 +121,28 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
       return;
     }
 
-    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      setError('Please enter a valid email address.');
-      return;
-    }
-
-    if (!formData.captchaInput.trim()) {
-      setError('Please enter the verification code.');
-      return;
-    }
-    if (formData.captchaInput.trim() !== captcha) {
-      setError('Invalid verification code.');
+    if (!formData.preferredLocation) {
+      setError('Please select your preferred location.');
       return;
     }
 
     setLoading(true);
     try {
       const serviceName = toDisplayServiceName(pageSlug);
+      const locationLabel = formData.preferredLocation.includes('Vasant Vihar')
+        ? 'Vasant Vihar'
+        : formData.preferredLocation.includes('Rajouri Garden')
+          ? 'Rajouri Garden'
+          : 'Preferred Location';
       const payload = {
         name: formData.name.trim(),
-        email: formData.email.trim().toLowerCase(),
+        email: '',
         mobile: digitsOnlyPhone,
-        service: serviceName,
-        enquiry_type: serviceName,
+        service: `${serviceName} - ${locationLabel}`,
+        enquiry_type: `${serviceName} - ${locationLabel}`,
         service_slug: pageSlug || 'unknown',
         source: 'service-details-enquiry',
-        message: `Service Details Consultation enquiry submitted from ${serviceName}\nService Slug: ${pageSlug || 'unknown'}`
+        message: `Service Details Consultation enquiry submitted from ${serviceName}\nPreferred Location: ${formData.preferredLocation}\nService Slug: ${pageSlug || 'unknown'}`
       };
 
       const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
@@ -163,8 +157,7 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
       const result = await response.json();
       if (result.success) {
         setSuccess(true);
-        setFormData({ name: '', phone: '', email: '', captchaInput: '' });
-        setCaptcha(createCaptcha());
+        setFormData({ name: '', phone: '', preferredLocation: '' });
       } else {
         setError(result.message || 'Failed to submit enquiry.');
       }
@@ -276,37 +269,20 @@ const FaqEnquiry = ({ data = {}, enquirySection, pageSlug = '', faqFallback = nu
                     />
                   </div>
                   <div className="details-form-group">
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder="E-Mail Address"
-                      className="details-form-input"
-                      disabled={loading}
-                    />
-                  </div>
-                  <div className="details-form-group">
-                    <div className="details-captcha-row">
-                      <button
-                        type="button"
-                        className="details-captcha-code"
-                        onClick={() => !loading && setCaptcha(createCaptcha())}
-                        title="Click to regenerate code"
-                        disabled={loading}
-                      >
-                        {captcha}
-                      </button>
-                      <input
-                        type="text"
-                        name="captchaInput"
-                        value={formData.captchaInput}
+                    <div className="select-wrapper">
+                      <select
+                        name="preferredLocation"
+                        value={formData.preferredLocation}
                         onChange={handleInputChange}
-                        placeholder="Enter Code"
-                        className="details-form-input"
+                        className="details-form-input details-form-select"
                         required
                         disabled={loading}
-                      />
+                      >
+                        <option value="">Preferred Location *</option>
+                        {PREFERRED_LOCATION_OPTIONS.map((location) => (
+                          <option key={location} value={location}>{location}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                   <button type="submit" className="details-submit-btn" disabled={loading}>

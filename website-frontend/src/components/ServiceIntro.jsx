@@ -18,6 +18,10 @@ const DUMMY_MEDIA = [
 ];
 
 const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
+const PREFERRED_LOCATION_OPTIONS = [
+  'A2/6, Block A, Vasant Vihar, New Delhi, Delhi 110057, India',
+  'J-12/25, 1st Floor, Block J, Rajouri Garden Extension, Rajouri Garden, New Delhi, Delhi, 110027, India'
+];
 
 // ─── Normalize any legacy data structure → unified introMedia ─────────────────
 function normalizeMedia(intro = {}) {
@@ -78,13 +82,14 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
   const [bannerData, setBannerData] = useState(banner);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [consultationData, setConsultationData] = useState({ name: '', phone: '', email: '', captchaInput: '' });
-  const [consultationCaptcha, setConsultationCaptcha] = useState('');
+  const [consultationData, setConsultationData] = useState({ name: '', phone: '', preferredLocation: '' });
   const [consultationLoading, setConsultationLoading] = useState(false);
   const [consultationError, setConsultationError] = useState('');
   const [consultationSuccess, setConsultationSuccess] = useState(false);
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const videoRef = useRef(null);
   const thumbsRef = useRef(null);
+  const locationDropdownRef = useRef(null);
 
   // ── Sync from props ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -94,7 +99,14 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
   }, [data, banner]);
 
   useEffect(() => {
-    setConsultationCaptcha(createCaptcha());
+    const handleClickOutside = (event) => {
+      if (locationDropdownRef.current && !locationDropdownRef.current.contains(event.target)) {
+        setShowLocationDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // ── Real-time sync from Visual Builder ──────────────────────────────────────
@@ -153,6 +165,12 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
     resetConsultationMessages();
   };
 
+  const handleLocationSelect = (location) => {
+    setConsultationData(prev => ({ ...prev, preferredLocation: location }));
+    setShowLocationDropdown(false);
+    resetConsultationMessages();
+  };
+
   const handleConsultationSubmit = async (event) => {
     event.preventDefault();
     if (consultationLoading) return;
@@ -162,11 +180,7 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
 
     if (!consultationData.name.trim()) return setConsultationError('Please enter your name.');
     if (!consultationData.phone.trim()) return setConsultationError('Please enter your phone number.');
-    if (consultationData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(consultationData.email.trim())) {
-      return setConsultationError('Please enter a valid email address.');
-    }
-    if (!consultationData.captchaInput.trim()) return setConsultationError('Please enter the verification code.');
-    if (consultationData.captchaInput.trim() !== consultationCaptcha) return setConsultationError('Invalid verification code.');
+    if (!consultationData.preferredLocation) return setConsultationError('Please select your preferred location.');
 
     setConsultationLoading(true);
     try {
@@ -175,16 +189,20 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
       const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
       const serviceSlug = extractServiceSlugFromPath(currentPath);
       const phoneValue = consultationData.phone.trim();
-      const phoneKey = phoneValue.replace(/\D/g, '') || 'no-phone';
+      const locationLabel = consultationData.preferredLocation.includes('Vasant Vihar')
+        ? 'Vasant Vihar'
+        : consultationData.preferredLocation.includes('Rajouri Garden')
+          ? 'Rajouri Garden'
+          : 'Preferred Location';
       const payload = {
         name: consultationData.name.trim(),
-        email: consultationData.email.trim().toLowerCase() || `${phoneKey}@no-email.dmc-trichology.local`,
+        email: '',
         mobile: phoneValue,
-        service: 'Book Consultation',
-        enquiry_type: 'Book Consultation',
+        service: `${serviceTitle} - ${locationLabel}`,
+        enquiry_type: `${serviceTitle} - ${locationLabel}`,
         service_slug: serviceSlug,
-        source: 'Book Consultation Popup',
-        message: `Book Consultation\nService: ${serviceTitle}\nPage: ${currentPath || 'N/A'}`
+        source: 'service-details-enquiry',
+        message: `Book Consultation\nService: ${serviceTitle}\nPreferred Location: ${consultationData.preferredLocation}\nPage: ${currentPath || 'N/A'}`
       };
 
       const response = await fetch(`${API_URL}/contact`, {
@@ -199,8 +217,7 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
       }
 
       setConsultationSuccess(true);
-      setConsultationData({ name: '', phone: '', email: '', captchaInput: '' });
-      setConsultationCaptcha(createCaptcha());
+      setConsultationData({ name: '', phone: '', preferredLocation: '' });
     } catch (error) {
       setConsultationError(error.message || 'Something went wrong. Please try again.');
     } finally {
@@ -450,32 +467,35 @@ const ServiceIntro = ({ data = {}, banner = {} }) => {
                       disabled={consultationLoading}
                       required
                     />
-                    <input
-                      name="email"
-                      type="email"
-                      value={consultationData.email}
-                      onChange={handleConsultationChange}
-                      placeholder="E-Mail Address"
-                      disabled={consultationLoading}
-                    />
-                    <div className="details-consultation-inline-action-row">
+                    <div className="details-consultation-inline-location-row" ref={locationDropdownRef}>
                       <button
                         type="button"
-                        className="details-consultation-inline-code"
-                        onClick={() => !consultationLoading && setConsultationCaptcha(createCaptcha())}
-                        title="Click to regenerate code"
+                        className="details-consultation-inline-location-trigger"
+                        onClick={() => !consultationLoading && setShowLocationDropdown((open) => !open)}
                         disabled={consultationLoading}
+                        aria-expanded={showLocationDropdown}
                       >
-                        {consultationCaptcha}
+                        <span>{consultationData.preferredLocation || 'Preferred Location *'}</span>
+                        <img
+                          src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781783268360-703155124.png"
+                          alt="Select location"
+                          className="details-consultation-inline-location-icon"
+                        />
                       </button>
-                      <input
-                        name="captchaInput"
-                        value={consultationData.captchaInput}
-                        onChange={handleConsultationChange}
-                        placeholder="Enter Code"
-                        disabled={consultationLoading}
-                        required
-                      />
+                      {showLocationDropdown && (
+                        <div className="details-consultation-inline-location-menu">
+                          {PREFERRED_LOCATION_OPTIONS.map((location) => (
+                            <button
+                              key={location}
+                              type="button"
+                              className="details-consultation-inline-location-option"
+                              onClick={() => handleLocationSelect(location)}
+                            >
+                              {location}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <button className="details-consultation-inline-submit" type="submit" disabled={consultationLoading}>

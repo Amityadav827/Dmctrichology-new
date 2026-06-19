@@ -8,7 +8,7 @@ import { useBuilder } from '../context/BuilderContext';
 const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
 const blueIconFilter = 'brightness(0) saturate(100%) invert(31%) sepia(22%) saturate(1838%) hue-rotate(181deg) brightness(91%) contrast(89%)';
 const whiteIconFilter = 'brightness(0) invert(1)';
-const homepageLocationOptions = [
+const preferredLocationOptions = [
   'A2/6, Block A, Vasant Vihar, New Delhi, Delhi 110057, India',
   'J-12/25, 1st Floor, Block J, Rajouri Garden Extension, Rajouri Garden, New Delhi, Delhi, 110027, India'
 ];
@@ -237,10 +237,6 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       setError('Please enter your name.');
       return;
     }
-    if (usesContactStyleFields && formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      setError('Please enter a valid email address.');
-      return;
-    }
     if (!usesContactStyleFields && (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim()))) {
       setError('Please enter a valid email address.');
       return;
@@ -250,7 +246,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       setError('Please enter a valid 10-digit mobile number.');
       return;
     }
-    if (isHomepageConsultationForm && !formData.preferredLocation) {
+    if (usesContactStyleFields && !formData.preferredLocation) {
       setError('Please select your preferred location.');
       return;
     }
@@ -262,7 +258,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       setError('Please select a valid appointment date and time.');
       return;
     }
-    if (!isHomepageConsultationForm && (!captchaInput.trim() || captchaInput.trim() !== captcha)) {
+    if (!usesContactStyleFields && (!captchaInput.trim() || captchaInput.trim() !== captcha)) {
       setError('Invalid verification code.');
       return;
     }
@@ -273,7 +269,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
       const endpoint = usesContactStyleFields ? "contact" : "appointment";
 
       let finalMessage = formData.message.trim();
-      if (isHomepageConsultationForm && formData.preferredLocation) {
+      if (usesContactStyleFields && formData.preferredLocation) {
         finalMessage = `Preferred Location: ${formData.preferredLocation}`;
       }
       if (isContactPage && selectedDateTime) {
@@ -283,10 +279,10 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
 
       const payload = {
         name: formData.name.trim(),
-        email: formData.email.trim().toLowerCase(),
+        email: usesContactStyleFields ? '' : formData.email.trim().toLowerCase(),
         mobile: trimmedMobile,
-        service: isHomepageConsultationForm ? formData.preferredLocation : (usesContactStyleFields ? '' : formData.service),
-        enquiry_type: isHomepageConsultationForm ? formData.preferredLocation : undefined,
+        service: usesContactStyleFields ? formData.preferredLocation : formData.service,
+        enquiry_type: usesContactStyleFields ? formData.preferredLocation : undefined,
         appointmentDate: usesContactStyleFields ? '' : selectedDateTime,
         message: finalMessage,
         source: isContactPage ? "contact-us-page" : (isHomepageConsultationForm ? "homepage-consultation-form" : "consultation-form")
@@ -454,7 +450,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                 <div>
                    <input type={usesContactStyleFields ? "tel" : "email"} name={usesContactStyleFields ? "mobile" : "email"} value={usesContactStyleFields ? formData.mobile : formData.email} onChange={handleChange} placeholder={usesContactStyleFields ? "Phone Number*" : emailPlaceholder} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif", transition: 'all 0.3s ease' }} disabled={loading} required />
                 </div>
-                {isHomepageConsultationForm ? (
+                {usesContactStyleFields ? (
                   <div style={{ gridColumn: 'span 2', position: 'relative' }} ref={locationDropdownRef}>
                     <button
                       type="button"
@@ -472,7 +468,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                     </button>
                     {showLocationDropdown && (
                       <div className="consultation-location-menu">
-                        {homepageLocationOptions.map((location) => (
+                        {preferredLocationOptions.map((location) => (
                           <button
                             key={location}
                             type="button"
@@ -648,7 +644,7 @@ const EnquirySection = ({ sectionId = "consultation-section", data: propData, la
                 </div>
                 )}
                 
-                {!isHomepageConsultationForm && (
+                {!usesContactStyleFields && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                      <div style={{ padding: '15px 20px', backgroundColor: '#3B5998', borderRadius: '30px', color: '#fff', fontWeight: 'bold', letterSpacing: '4px', userSelect: 'none' }}>{captcha}</div>
                      <input type="text" value={captchaInput} onChange={e => setCaptchaInput(e.target.value)} placeholder={usesContactStyleFields ? "Enter Code*" : "Code*"} className="premium-input" style={{ width: '100%', padding: '15px 25px', borderRadius: '30px', border: 'none', backgroundColor: '#F2F2F2', outline: 'none', fontFamily: "'Marcellus', serif" }} disabled={loading} required />

@@ -352,6 +352,88 @@
   align-items: center;
 }
 
+.details-consultation-inline-location-row {
+  grid-column: span 2;
+  position: relative;
+}
+
+.details-consultation-inline-location-trigger {
+  width: 100%;
+  border: 1px solid #e3e6ef;
+  border-radius: 999px;
+  min-height: 48px;
+  padding: 0 18px;
+  background: #ffffff;
+  color: #7d7d7d;
+  font-family: 'Marcellus', serif;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.details-consultation-inline-location-trigger:focus-visible,
+.details-consultation-inline-location-trigger:hover {
+  border-color: #3B5998;
+  box-shadow: 0 0 0 4px rgba(59, 89, 152, 0.12);
+}
+
+.details-consultation-inline-location-trigger span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.details-consultation-inline-location-icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.details-consultation-inline-location-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: #ffffff;
+  border: 1px solid #d9dfec;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+}
+
+.details-consultation-inline-location-option {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #edf1f7;
+  background: #ffffff;
+  color: #333333;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: left;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.details-consultation-inline-location-option:last-child {
+  border-bottom: 0;
+}
+
+.details-consultation-inline-location-option:hover {
+  background: #f4f7fb;
+  color: #2f477a;
+}
+
 .details-consultation-inline-code {
   width: 100%;
   border: 1px solid #e3e6ef;
@@ -368,8 +450,8 @@
 }
 
 .details-consultation-inline-submit {
-  width: fit-content;
-  min-width: 220px;
+  width: 100%;
+  min-width: 0;
   border: 1px solid #ffffff;
   border-radius: 999px;
   min-height: 48px;
@@ -386,7 +468,7 @@
   padding: 0 56px 0 24px;
   position: relative;
   overflow: hidden;
-  justify-self: start;
+  justify-self: stretch;
   transition: background-color 0.22s ease, box-shadow 0.22s ease;
 }
 
@@ -710,6 +792,10 @@
 @media (max-width: 992px) {
   .details-consultation-inline-grid {
     grid-template-columns: 1fr;
+  }
+
+  .details-consultation-inline-location-row {
+    grid-column: span 1;
   }
 
   .details-consultation-inline-action-row {

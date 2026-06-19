@@ -4,6 +4,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Minus, Play, Plus } from "lucide-react";
 
 const createCaptcha = () => Math.floor(1000 + Math.random() * 9000).toString();
+const PREFERRED_LOCATION_OPTIONS = [
+  'A2/6, Block A, Vasant Vihar, New Delhi, Delhi 110057, India',
+  'J-12/25, 1st Floor, Block J, Rajouri Garden Extension, Rajouri Garden, New Delhi, Delhi, 110027, India'
+];
 
 const toDisplayServiceName = (slug = "") => {
   const text = String(slug || "").trim();
@@ -401,18 +405,26 @@ function ServiceSectionSeven({ data }) {
 
 function ServiceSectionEight({ data, pageSlug }) {
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
-  const [formData, setFormData] = useState({ name: "", phone: "", email: "", captchaInput: "" });
-  const [captcha, setCaptcha] = useState("");
+  const [formData, setFormData] = useState({ name: "", phone: "", preferredLocation: "" });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+  const locationDropdownRef = useRef(null);
 
   useEffect(() => {
     setOpenFaqIndex(0);
   }, [data]);
 
   useEffect(() => {
-    setCaptcha(createCaptcha());
+    const handleClickOutside = (event) => {
+      if (locationDropdownRef.current && !locationDropdownRef.current.contains(event.target)) {
+        setShowLocationDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   if (!data || data.isVisible === false) return null;
@@ -433,6 +445,12 @@ function ServiceSectionEight({ data, pageSlug }) {
     resetMessages();
   };
 
+  const handleLocationSelect = (location) => {
+    setFormData((prev) => ({ ...prev, preferredLocation: location }));
+    setShowLocationDropdown(false);
+    resetMessages();
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (loading) return;
@@ -444,22 +462,25 @@ function ServiceSectionEight({ data, pageSlug }) {
     const digitsOnlyPhone = formData.phone.replace(/\D+/g, "");
     if (!digitsOnlyPhone) return setError("Please enter your phone number.");
     if (digitsOnlyPhone.length < 10) return setError("Please enter a valid phone number.");
-    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) return setError("Please enter a valid email address.");
-    if (!formData.captchaInput.trim()) return setError("Please enter the verification code.");
-    if (formData.captchaInput.trim() !== captcha) return setError("Invalid verification code.");
+    if (!formData.preferredLocation) return setError("Please select your preferred location.");
 
     setLoading(true);
     try {
       const serviceName = toDisplayServiceName(pageSlug);
+      const locationLabel = formData.preferredLocation.includes("Vasant Vihar")
+        ? "Vasant Vihar"
+        : formData.preferredLocation.includes("Rajouri Garden")
+          ? "Rajouri Garden"
+          : "Preferred Location";
       const payload = {
         name: formData.name.trim(),
-        email: formData.email.trim().toLowerCase(),
+        email: "",
         mobile: digitsOnlyPhone,
-        service: serviceName,
-        enquiry_type: serviceName,
+        service: `${serviceName} - ${locationLabel}`,
+        enquiry_type: `${serviceName} - ${locationLabel}`,
         service_slug: pageSlug || "unknown",
         source: "service-details-enquiry",
-        message: `Service Details Consultation enquiry submitted from ${serviceName}\nService Slug: ${pageSlug || "unknown"}`
+        message: `Service Details Consultation enquiry submitted from ${serviceName}\nPreferred Location: ${formData.preferredLocation}\nService Slug: ${pageSlug || "unknown"}`
       };
       const isLocal = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
       const API_URL = process.env.NEXT_PUBLIC_API_URL || (isLocal ? "http://localhost:10000/api" : "https://dmctrichology-1.onrender.com/api");
@@ -471,8 +492,7 @@ function ServiceSectionEight({ data, pageSlug }) {
       const result = await response.json();
       if (result.success) {
         setSuccess(true);
-        setFormData({ name: "", phone: "", email: "", captchaInput: "" });
-        setCaptcha(createCaptcha());
+        setFormData({ name: "", phone: "", preferredLocation: "" });
       } else {
         setError(result.message || "Failed to submit enquiry.");
       }
@@ -513,26 +533,33 @@ function ServiceSectionEight({ data, pageSlug }) {
           <form onSubmit={handleSubmit}>
             <input name="name" value={formData.name} onChange={handleInputChange} placeholder="Name*" disabled={loading} required />
             <input name="phone" type="tel" value={formData.phone} onChange={handleInputChange} placeholder="Phone Number*" disabled={loading} required />
-            <input name="email" type="email" value={formData.email} onChange={handleInputChange} placeholder="E-Mail Address" disabled={loading} />
-            <div className="service-section-eight-captcha-row">
+            <div className="service-section-eight-select" ref={locationDropdownRef}>
               <button
                 type="button"
-                className="service-section-eight-captcha-code"
-                onClick={() => !loading && setCaptcha(createCaptcha())}
-                title="Click to regenerate code"
+                onClick={() => !loading && setShowLocationDropdown((open) => !open)}
                 disabled={loading}
+                aria-expanded={showLocationDropdown}
               >
-                {captcha}
+                <span>{formData.preferredLocation || "Preferred Location *"}</span>
+                <img
+                  src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781783268360-703155124.png"
+                  alt="Select location"
+                  style={{ width: "12px", height: "12px", flexShrink: 0 }}
+                />
               </button>
-              <input
-                name="captchaInput"
-                type="text"
-                value={formData.captchaInput}
-                onChange={handleInputChange}
-                placeholder="Enter Code"
-                disabled={loading}
-                required
-              />
+              {showLocationDropdown && (
+                <div className="service-section-eight-select-menu">
+                  {PREFERRED_LOCATION_OPTIONS.map((location) => (
+                    <button
+                      key={location}
+                      type="button"
+                      onClick={() => handleLocationSelect(location)}
+                    >
+                      {location}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             <button className="service-section-eight-submit" type="submit" disabled={loading}>
               <span>{loading ? "Submitting..." : "Submit"}</span>
