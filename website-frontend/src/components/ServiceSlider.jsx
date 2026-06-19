@@ -187,7 +187,7 @@ export default function ServiceSlider() {
             }
             .service-prev-btn,
             .service-next-btn {
-              display: none !important;
+              display: block !important;
             }
           }
           @media (max-width: 390px) {

@@ -219,6 +219,12 @@ export default function Footer({ siteSettings }) {
     buttonText: "Submit",
     checkboxLabel: "Subscribe for Hair Care Insights & Updates"
   };
+  const resolvedNewsletter = {
+    ...newsletter,
+    checkboxLabel: newsletter.checkboxLabel === "Subscribe For Health Tips & Updates"
+      ? "Subscribe for Hair Care Insights & Updates"
+      : newsletter.checkboxLabel
+  };
 
   const socials = [
     { name: "facebook", icon: socialIconByName.facebook, url: defaultSocialLinks.facebook },
@@ -364,10 +370,10 @@ export default function Footer({ siteSettings }) {
                 textAlign: 'center'
               }}>
                 <h2 style={{ fontSize: '32px', color: '#1C1C1C', fontFamily: "'Marcellus', serif", marginBottom: '20px', fontWeight: '400' }}>
-                  <EditableText sectionId="footer-section" fieldPath="newsletter.heading" tag="span">{newsletter.heading}</EditableText>
+                  <EditableText sectionId="footer-section" fieldPath="newsletter.heading" tag="span">{resolvedNewsletter.heading}</EditableText>
                 </h2>
                 <p style={{ fontSize: '15px', color: '#555', marginBottom: '35px', lineHeight: '1.6' }}>
-                  <EditableText sectionId="footer-section" fieldPath="newsletter.description" tag="span">{newsletter.description}</EditableText>
+                  <EditableText sectionId="footer-section" fieldPath="newsletter.description" tag="span">{resolvedNewsletter.description}</EditableText>
                 </p>
 
                 {/* Newsletter Input */}
@@ -385,7 +391,7 @@ export default function Footer({ siteSettings }) {
                       className="footer-newsletter-input"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder={newsletter.placeholder}
+                      placeholder={resolvedNewsletter.placeholder}
                       disabled={loading}
                       style={{
                         flex: 1,
@@ -416,7 +422,7 @@ export default function Footer({ siteSettings }) {
                         cursor: loading ? 'not-allowed' : 'pointer'
                       }}
                     >
-                      <EditableText sectionId="footer-section" fieldPath="newsletter.buttonText" tag="span">{loading ? "Submitting..." : newsletter.buttonText}</EditableText>
+                      <EditableText sectionId="footer-section" fieldPath="newsletter.buttonText" tag="span">{loading ? "Submitting..." : resolvedNewsletter.buttonText}</EditableText>
                       <span className="footer-submit-arrow">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M7 17 17 7M9 7h8v8" />
@@ -436,7 +442,7 @@ export default function Footer({ siteSettings }) {
                       disabled={loading}
                     />
                     <label htmlFor="subscribe" style={{ fontSize: '13px', color: '#444', cursor: 'pointer' }}>
-                      <EditableText sectionId="footer-section" fieldPath="newsletter.checkboxLabel" tag="span">{newsletter.checkboxLabel}</EditableText>
+                      <EditableText sectionId="footer-section" fieldPath="newsletter.checkboxLabel" tag="span">{resolvedNewsletter.checkboxLabel}</EditableText>
                     </label>
                   </div>
                 </form>

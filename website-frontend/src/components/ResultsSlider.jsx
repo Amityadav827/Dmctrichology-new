@@ -231,7 +231,7 @@ export default function ResultsSlider() {
           }
           @media (max-width: 1024px) {
             .results-prev-btn, .results-next-btn {
-              display: none !important;
+              display: block !important;
             }
             .results-section {
               padding: 60px 5% !important;
