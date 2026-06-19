@@ -690,6 +690,7 @@ export default function AboutDrNandaniHero({
           }
           .dr-nandani-gallery-main {
             min-height: auto;
+            height: auto !important;
             border-radius: 24px;
           }
           .dr-nandani-gallery-main img {
