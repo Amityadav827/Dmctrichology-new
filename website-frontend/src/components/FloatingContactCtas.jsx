@@ -37,6 +37,33 @@ export default function FloatingContactCtas() {
         ))}
       </div>
 
+      <div className="floating-cta-mobile-bar" aria-label="Quick contact bar">
+        <a href={CALL_URL} aria-label="Call Now" className="floating-cta-mobile-button">
+          <img
+            src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781843137866-347606793.png"
+            alt=""
+            aria-hidden="true"
+            className="floating-cta-mobile-icon"
+          />
+          <span>Call Now</span>
+        </a>
+        <a
+          href={WHATSAPP_URL}
+          aria-label="WhatsApp"
+          className="floating-cta-mobile-button"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="https://fxzkbhhinbjbeegkjnae.supabase.co/storage/v1/object/public/images/gallery/1781843125513-838406967.png"
+            alt=""
+            aria-hidden="true"
+            className="floating-cta-mobile-icon"
+          />
+          <span>WhatsApp</span>
+        </a>
+      </div>
+
       <style jsx>{`
         .floating-cta-stack {
           position: fixed;
@@ -76,21 +103,66 @@ export default function FloatingContactCtas() {
           display: block;
         }
 
-        @media (max-width: 767px) {
+        .floating-cta-mobile-bar {
+          display: none;
+        }
+
+        @media (max-width: 768px) {
           .floating-cta-stack {
-            left: 16px;
-            bottom: 16px;
+            display: none;
+          }
+
+          .floating-cta-mobile-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1200;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: stretch;
+            background: #3b5998;
+            box-shadow: 0 -10px 28px rgba(20, 33, 61, 0.2);
+            padding-bottom: env(safe-area-inset-bottom);
+          }
+
+          .floating-cta-mobile-button {
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 10px;
+            color: #ffffff;
+            text-decoration: none;
+            font-family: 'Marcellus', serif;
+            font-size: 17px;
+            line-height: 1;
+            background: #3b5998;
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            transition: background-color 0.2s ease, transform 0.2s ease;
           }
 
-          .floating-cta-button {
-            width: 54px;
-            height: 54px;
+          .floating-cta-mobile-button + .floating-cta-mobile-button {
+            border-left: 1px solid rgba(255, 255, 255, 0.18);
           }
 
-          .floating-cta-icon {
-            width: 30px;
-            height: 30px;
+          .floating-cta-mobile-button:active {
+            transform: translateY(1px);
+          }
+
+          .floating-cta-mobile-button:hover {
+            background: #344f89;
+          }
+
+          .floating-cta-mobile-icon {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            display: block;
+          }
+
+          :global(body) {
+            padding-bottom: calc(60px + env(safe-area-inset-bottom));
           }
         }
       `}</style>
